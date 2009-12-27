@@ -19,13 +19,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
+#include <KMainWindow>
 
 namespace Ui {
 	class MainWindow;
 }
 
-class MainWindow : public QMainWindow {
+class MainWindow : public KMainWindow {
 	Q_OBJECT
 	public:
 		MainWindow(QWidget *parent = 0);
