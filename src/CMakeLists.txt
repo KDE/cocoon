@@ -1,5 +1,6 @@
 set(cocoon_SRCS
 	main.cpp
+	CommandLineWidget.cpp
 	MainWindow.cpp
 	OpenRepositoryDialog.cpp
 )
@@ -12,7 +13,11 @@ kde4_add_kcfg_files(cocoon_SRCS settings.kcfgc)
 
 kde4_add_executable(cocoon ${cocoon_SRCS})
 
-target_link_libraries(cocoon ${KDE4_KDEUI_LIBS})
+target_link_libraries(cocoon
+	${KDE4_KDEUI_LIBS}
+	${KDE4_KFILE_LIBS}
+	${KDE4_KPARTS_LIBS}
+)
 
 install(TARGETS cocoon ${INSTALL_TARGETS_DEFAULT_ARGS})
 
