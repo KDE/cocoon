@@ -20,6 +20,7 @@ target_link_libraries(cocoon
 	${KDE4_KDEUI_LIBS}
 	${KDE4_KFILE_LIBS}
 	${KDE4_KPARTS_LIBS}
+	CocoonGit
 )
 
 install(TARGETS cocoon ${INSTALL_TARGETS_DEFAULT_ARGS})

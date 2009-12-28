@@ -19,7 +19,7 @@
 #include "OpenRepositoryDialog.h"
 #include "ui_OpenRepositoryDialog.h"
 
-//#include "git/repo.h"
+#include "Git/Repo.h"
 
 #include <KMessageBox>
 
@@ -115,7 +115,12 @@ void OpenRepositoryDialog::on_addButton_clicked()
 
 	// make sure the user has not cancelled the file dialog
 	if (!path.isEmpty()) {
+		// make sure the directory is a Git repo
+		if (Git::Repo::containsRepository(path)) {
 			addRepository(path);
+		} else {
+			KMessageBox::sorry(this, i18n("The selected directory does not contain a Git repository."));
+		}
 	}
 }
 
