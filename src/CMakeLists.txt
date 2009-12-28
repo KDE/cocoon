@@ -1,3 +1,6 @@
+
+add_subdirectory( Git )
+
 set(cocoon_SRCS
 	main.cpp
 	CommandLineWidget.cpp
