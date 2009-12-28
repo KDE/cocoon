@@ -19,10 +19,10 @@
 #ifndef OPENREPOSITORYDIALOG_H
 #define OPENREPOSITORYDIALOG_H
 
-#include <kdialog.h>
+#include <QDialog>
 
 
-class OpenRepositoryDialog : public KDialog
+class OpenRepositoryDialog : public QDialog
 {
 	virtual void accept();
 };

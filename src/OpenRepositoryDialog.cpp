@@ -17,9 +17,10 @@
 */
 
 #include "OpenRepositoryDialog.h"
+	: QDialog(parent)
 
 void OpenRepositoryDialog::accept()
 {
-	KDialog::accept();
+	QDialog::accept();
 }
 
