@@ -21,10 +21,38 @@
 
 #include <QDialog>
 
+namespace Ui {
+	class OpenRepositoryDialog;
+}
 
 class OpenRepositoryDialog : public QDialog
 {
-	virtual void accept();
+	Q_OBJECT
+	public:
+		OpenRepositoryDialog(QWidget *parent = 0);
+		~OpenRepositoryDialog();
+
+		virtual void accept();
+		virtual void reject();
+		QString selectedRepositoryPath() const;
+
+	private:
+		void addRepository(const QString &repoPath);
+		void createActions();
+		void loadRepositories();
+		void saveRepositories();
+		void selectRepository(const int row);
+		void selectRepository(const QString &repoPath);
+
+	private slots:
+		void on_repositoriesListWidget_currentTextChanged(const QString&);
+		void on_addButton_clicked();
+		void on_cloneButton_clicked();
+		void on_newButton_clicked();
+		void on_removeButton_clicked();
+
+	private:
+		Ui::OpenRepositoryDialog *ui;
 };
 
 #endif // OPENREPOSITORYDIALOG_H
