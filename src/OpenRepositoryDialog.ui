@@ -153,10 +153,11 @@
  <tabstops>
   <tabstop>repositorySearchLine</tabstop>
   <tabstop>repositoriesListWidget</tabstop>
-  <tabstop>openButton</tabstop>
   <tabstop>newButton</tabstop>
+  <tabstop>cloneButton</tabstop>
   <tabstop>addButton</tabstop>
   <tabstop>removeButton</tabstop>
+  <tabstop>openButton</tabstop>
   <tabstop>quitButton</tabstop>
  </tabstops>
  <resources/>
