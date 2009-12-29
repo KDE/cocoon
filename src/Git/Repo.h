@@ -44,7 +44,7 @@ class Repo : public QObject
 		explicit Repo(QObject *parent = 0);
 
 	// static
-		static bool containsRepository(const QString &path, const RepoOptions options = None);
+		static bool containsRepository(const QString &path);
 
 	private:
 		QString workingDir;

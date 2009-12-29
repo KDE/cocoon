@@ -18,6 +18,8 @@
 
 #include "Repo.h"
 
+#include "gitrunner.h"
+
 #include <QDir>
 
 using namespace Git;
@@ -29,43 +31,14 @@ Repo::Repo(QObject *parent)
 {
 }
 
-bool Repo::containsRepository(const QString &path, const RepoOptions options)
+bool Repo::containsRepository(const QString &path)
 {
-	QString repoPath = QDir(path).absolutePath();
+	KUrl repoUrl(QDir(path).absolutePath());
 
-	QString bareRepoPath;
-	QString dotGitPath;
+	GitRunner runner;
+	runner.setDirectory(repoUrl);
 
-	if (!(options & Bare)) {
-		dotGitPath = repoPath + "/.git";
-		if (QDir(dotGitPath).exists()) {
-			bareRepoPath = dotGitPath;
-		}
-	}
-
-	if (bareRepoPath.isNull()) {
-		bareRepoPath = repoPath;
-	}
-
-	QDir bareRepoDir = QDir(bareRepoPath);
-	if(bareRepoDir.exists()) { // "*.git" directory exists
-		QStringList dirs, files; // it should contain these dirs and files
-		dirs << "branches" << "objects" << "refs";
-		files << "config" << "description" << "index";
-
-		QStringList entries = bareRepoDir.entryList();
-
-		bool isRepo = true; // will become false if only one item is missing
-
-		/** @todo actually distinguish between dirs and files */
-		foreach(const QString &item, dirs + files) {
-			isRepo = isRepo && entries.contains(item);
-		}
-
-		return isRepo;
-	}
-
-	return false;
+	return runner.isValidDirectory();
 }
 
 #include "Repo.moc"
