@@ -20,6 +20,8 @@
 
 #include "gitrunner.h"
 
+#include <KMessageBox>
+
 #include <QDir>
 
 using namespace Git;
