@@ -45,6 +45,7 @@ class Repo : public QObject
 
 	// static
 		static bool containsRepository(const QString &path);
+		static void init(const QString &newRepoPath);
 
 	private:
 		QString workingDir;

@@ -41,4 +41,16 @@ bool Repo::containsRepository(const QString &path)
 	return runner.isValidDirectory();
 }
 
+void Repo::init(const QString &newRepoPath)
+{
+	KUrl newRepoUrl(QDir(newRepoPath).absolutePath());
+
+	GitRunner runner;
+	runner.setDirectory(newRepoUrl);
+
+	if (runner.init(newRepoUrl) != DvcsJob::JobSucceeded) {
+		KMessageBox::error(0, runner.getResult(), i18n("Git Error"));
+	}
+}
+
 #include "Repo.moc"
