@@ -41,14 +41,16 @@ class Repo : public QObject
 	Q_OBJECT
 
 	public:
-		explicit Repo(QObject *parent = 0);
+		explicit Repo(const QString &workingDir, QObject *parent = 0);
+
+		const QString& workingDir();
 
 	// static
 		static bool containsRepository(const QString &path);
 		static void init(const QString &newRepoPath);
 
 	private:
-		QString workingDir;
+		QString m_workingDir;
 };
 
 }

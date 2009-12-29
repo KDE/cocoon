@@ -28,8 +28,9 @@ using namespace Git;
 
 
 
-Repo::Repo(QObject *parent)
+Repo::Repo(const QString &workingDir, QObject *parent)
 	: QObject(parent)
+	, m_workingDir(workingDir)
 {
 }
 
@@ -53,6 +54,11 @@ void Repo::init(const QString &newRepoPath)
 	if (runner.init(newRepoUrl) != DvcsJob::JobSucceeded) {
 		KMessageBox::error(0, runner.getResult(), i18n("Git Error"));
 	}
+}
+
+const QString& Repo::workingDir()
+{
+	return m_workingDir;
 }
 
 #include "Repo.moc"
