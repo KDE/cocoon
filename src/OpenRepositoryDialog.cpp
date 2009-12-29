@@ -130,6 +130,18 @@ void OpenRepositoryDialog::on_cloneButton_clicked()
 
 void OpenRepositoryDialog::on_newButton_clicked()
 {
+	QString path = QFileDialog::getExistingDirectory(this, i18n("Select a location for the new Git repository"));
+
+	// make sure the user has not cancelled the file dialog
+	if (!path.isEmpty()) {
+		// make sure the directory exists and is empty
+		if (QDir(path).entryList(QDir::NoDotAndDotDot|QDir::Hidden).isEmpty()) {
+			Git::Repo::init(path);
+			addRepository(path);
+		} else {
+			KMessageBox::sorry(this, i18n("Can not create a Git repository in %1.\nThe directory is not empty.", path));
+		}
+	}
 }
 
 void OpenRepositoryDialog::on_removeButton_clicked()
