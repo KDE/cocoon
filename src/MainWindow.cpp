@@ -19,11 +19,17 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
+#include "Git/Repo.h"
+
+
+
 MainWindow::MainWindow(QWidget *parent)
 	: KMainWindow(parent)
 	, ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
+
+	connect(this, SIGNAL(repositoryChanged(const Git::Repo*)), ui->commandLineWidget, SLOT(setRepository(const Git::Repo*)));
 }
 
 MainWindow::~MainWindow()
@@ -41,6 +47,12 @@ void MainWindow::changeEvent(QEvent *e)
 	default:
 		break;
 	}
+}
+
+void MainWindow::setRepository(const QString &repoPath)
+{
+	m_repo = new Git::Repo(repoPath, this);
+	emit repositoryChanged(m_repo);
 }
 
 #include "MainWindow.moc"

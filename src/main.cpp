@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 			repoDialog->exec();
 
 			if(repoDialog->result() == QDialog::Accepted) {
-				//mainWindow->setRepository(Git::Repository(repoDialog->selectedRepositoryPath()));
+				mainWindow->setRepository(repoDialog->selectedRepositoryPath());
 				mainWindow->show();
 				delete repoDialog;
 			} else {

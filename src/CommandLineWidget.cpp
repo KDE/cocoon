@@ -83,8 +83,6 @@ void CommandLineWidget::showTerminal()
 			}
 		} else {
 			m_terminal->showShellInDir(m_repo->workingDir());
-			//cdUrl(m_repo->workingDir());
-			//m_terminal->sendInput("clear\n");
 			m_terminalWidget->setFocus();
 		}
 }

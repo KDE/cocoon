@@ -21,6 +21,10 @@
 
 #include <KMainWindow>
 
+namespace Git {
+	class Repo;
+}
+
 namespace Ui {
 	class MainWindow;
 }
@@ -31,10 +35,16 @@ class MainWindow : public KMainWindow {
 		MainWindow(QWidget *parent = 0);
 		~MainWindow();
 
+		void setRepository(const QString &repoPath);
+
+	signals:
+		void repositoryChanged(const Git::Repo*);
+
 	protected:
 		void changeEvent(QEvent *e);
 
 	private:
+		Git::Repo *m_repo;
 		Ui::MainWindow *ui;
 };
 
