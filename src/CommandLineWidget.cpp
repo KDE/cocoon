@@ -54,7 +54,7 @@ void CommandLineWidget::setRepository(const Git::Repo *repo)
 	m_repo = repo;
 
 	if (sendInput) {
-		cdDirectory(m_repo->workingDir());
+		changeDirectory(m_repo->workingDir());
 	}
 }
 
@@ -100,7 +100,7 @@ void CommandLineWidget::terminalExited()
 	showTerminal();
 }
 
-void CommandLineWidget::cdDirectory(const QString& dir)
+void CommandLineWidget::changeDirectory(const QString& dir)
 {
 	m_terminal->sendInput("cd " + KShell::quoteArg(dir) + '\n');
 }

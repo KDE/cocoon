@@ -49,7 +49,7 @@ class CommandLineWidget : public QWidget
 		virtual void showEvent(QShowEvent* event);
 
 	private:
-		void cdDirectory(const QString& path);
+		void changeDirectory(const QString& path);
 		void showTerminal();
 
 	private:
