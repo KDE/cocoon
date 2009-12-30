@@ -71,12 +71,16 @@ QVariant GitHistoryModel::data(const QModelIndex &index, int role) const
 	switch (index.column()) {
 	case 0:
 		data = commit->message().split("\n")[0];  // commit->summary();
+		break;
 	case 1:
 		data = "author";  // commit->author();
-	case 3:
+		break;
+	case 2:
 		data = "date";  // commit->authoredDate();
-	case 4:
+		break;
+	case 3:
 		data = commit->id();
+		break;
 	}
 
 	switch (role) {
