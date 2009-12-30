@@ -69,6 +69,18 @@ void Repo::init(const QString &newRepoPath)
 	}
 }
 
+QString Repo::currentBranch() const
+{
+	GitRunner runner;
+	runner.setDirectory(workingDir());
+
+	if (runner.currentBranch() == DvcsJob::JobSucceeded) {
+		return runner.getResult();
+	}
+
+	return QString();
+}
+
 const QString& Repo::workingDir() const
 {
 	return m_workingDir;
