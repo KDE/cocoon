@@ -39,6 +39,7 @@ GitHistoryModel::GitHistoryModel(const Git::Repo &repo, QObject *parent)
 
 				connect(repository.qt, SIGNAL('logChanged()'), self, SLOT('reset()'))
 */
+	setBranch(m_branch);
 }
 
 int GitHistoryModel::columnCount(const QModelIndex &parent) const
@@ -131,7 +132,6 @@ const Git::Commit* GitHistoryModel::mapToCommit(const QModelIndex &index) const
 
 void GitHistoryModel::reset()
 {
-//	m_commits = Git::CommitList();
 	loadCommits();
 	QAbstractItemModel::reset();
 }
