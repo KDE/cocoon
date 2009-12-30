@@ -48,7 +48,9 @@ class CommandLineWidget : public QWidget
 
 	private:
 		void changeDirectory(const QString& path);
+		void createTerminal();
 		void showTerminal();
+		void updateTerminal();
 
 	private:
 		QVBoxLayout* m_layout;

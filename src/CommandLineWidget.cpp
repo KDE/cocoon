@@ -45,6 +45,19 @@ CommandLineWidget::~CommandLineWidget()
 {
 }
 
+void CommandLineWidget::createTerminal()
+{
+	KPluginFactory* factory = KPluginLoader("libkonsolepart").factory();
+	KParts::ReadOnlyPart* part = factory ? (factory->create<KParts::ReadOnlyPart>(this)) : 0;
+	if (part != 0) {
+		connect(part, SIGNAL(destroyed(QObject*)), this, SLOT(terminalExited()));
+		m_terminalWidget = part->widget();
+		m_layout->addWidget(m_terminalWidget);
+		m_terminal = qobject_cast<TerminalInterfaceV2 *>(part);
+	}
+
+}
+
 void CommandLineWidget::setRepository(const Git::Repo *repo)
 {
 	const bool sendInput = (m_terminal != 0)
@@ -72,18 +85,10 @@ void CommandLineWidget::showEvent(QShowEvent* event)
 
 void CommandLineWidget::showTerminal()
 {
-		if (m_terminal == 0) {
-			KPluginFactory* factory = KPluginLoader("libkonsolepart").factory();
-			KParts::ReadOnlyPart* part = factory ? (factory->create<KParts::ReadOnlyPart>(this)) : 0;
-			if (part != 0) {
-				connect(part, SIGNAL(destroyed(QObject*)), this, SLOT(terminalExited()));
-				m_terminalWidget = part->widget();
-				m_layout->addWidget(m_terminalWidget);
-				m_terminal = qobject_cast<TerminalInterfaceV2 *>(part);
-			}
+		if (m_terminal) {
+			updateTerminal();
 		} else {
-			m_terminal->showShellInDir(m_repo->workingDir());
-			m_terminalWidget->setFocus();
+			createTerminal();
 		}
 }
 
@@ -91,6 +96,12 @@ void CommandLineWidget::terminalExited()
 {
 	m_terminal = 0;
 	showTerminal();
+}
+
+void CommandLineWidget::updateTerminal()
+{
+	m_terminal->showShellInDir(m_repo->workingDir());
+	m_terminalWidget->setFocus();
 }
 
 void CommandLineWidget::changeDirectory(const QString& dir)
