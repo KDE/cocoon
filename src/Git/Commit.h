@@ -21,7 +21,9 @@
 
 #include <QObject>
 
-class QStringList;
+#include <KDateTime>
+
+#include <QStringList>
 
 
 
@@ -42,17 +44,31 @@ class Commit : public QObject
 		Commit(const Repo *repo);
 		Commit(const QString& treeish);
 
-		const QString& id() const;
-		const QString  shortId() const;
-		const QString& message() const;
+		const QString&     author() const;
+		const KDateTime&   authoredAt() const;
+		const QString&     committer() const;
+		const KDateTime&   committedAt() const;
+		const QString&     id() const;
+		const QStringList& parents() const;
+		const QString&     message() const;
+		const QString      shortId() const;
+		const QString&     summary() const;
+		const QString&     tree() const;
 
 	// static
 		static CommitList fromRawRevList(const Repo *repo, QStringList &lines);
 
 	private:
+		QString     m_author;
+		KDateTime   m_authoredAt;
+		QString     m_committer;
+		KDateTime   m_committedAt;
+		QString     m_id;
+		QString     m_message;
+		QStringList m_parents;
 		const Repo *m_repo;
-		QString m_id;
-		QString m_message;
+		QString     m_summary;
+		QString     m_tree;
 };
 
 }

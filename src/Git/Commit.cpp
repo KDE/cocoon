@@ -32,6 +32,26 @@ Commit::Commit(const Repo *repo)
 {
 }
 
+const QString& Commit::author() const
+{
+	return m_author;
+}
+
+const KDateTime& Commit::authoredAt() const
+{
+	return m_authoredAt;
+}
+
+const QString& Commit::committer() const
+{
+	return m_committer;
+}
+
+const KDateTime& Commit::committedAt() const
+{
+	return m_committedAt;
+}
+
 CommitList Commit::fromRawRevList(const Repo *repo, QStringList &lines)
 {
 	CommitList commits;
@@ -63,16 +83,34 @@ CommitList Commit::fromRawRevList(const Repo *repo, QStringList &lines)
 	return commits;
 }
 
-const QString& Commit::id() const {
+const QString& Commit::id() const
+{
 	return m_id;
 }
 
-const QString& Commit::message() const {
+const QString& Commit::message() const
+{
 	return m_message;
 }
 
-const QString Commit::shortId() const {
+const QStringList& Commit::parents() const
+{
+	return m_parents;
+}
+
+const QString Commit::shortId() const
+{
 	return m_id.left(7);
+}
+
+const QString& Commit::summary() const
+{
+	return m_summary;
+}
+
+const QString& Commit::tree() const
+{
+	return m_tree;
 }
 
 #include "Commit.moc"
