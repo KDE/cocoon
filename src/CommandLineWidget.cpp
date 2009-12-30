@@ -87,13 +87,6 @@ void CommandLineWidget::showTerminal()
 		}
 }
 
-QSize CommandLineWidget::sizeHint() const
-{
-		QSize size = QWidget::sizeHint();
-		size.setHeight(200);
-		return size;
-}
-
 void CommandLineWidget::terminalExited()
 {
 	m_terminal = 0;

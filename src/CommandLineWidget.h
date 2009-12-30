@@ -38,8 +38,6 @@ class CommandLineWidget : public QWidget
 		CommandLineWidget(QWidget *parent = 0);
 		~CommandLineWidget();
 
-		virtual QSize sizeHint() const;
-
 	public slots:
 		void setRepository(const Git::Repo *repo);
 		void terminalExited();
