@@ -5,11 +5,13 @@ set(cocoon_SRCS
 	main.cpp
 	CommandLineWidget.cpp
 	GitHistoryModel.cpp
+	HistoryWidget.cpp
 	MainWindow.cpp
 	OpenRepositoryDialog.cpp
 )
 
 kde4_add_ui_files(cocoon_SRCS
+	HistoryWidget.ui
 	MainWindow.ui
 	OpenRepositoryDialog.ui)
 
