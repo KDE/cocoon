@@ -1,5 +1,6 @@
 
 set(git_SRCS
+	Commit.cpp
 	dvcsjob.cpp
 	gitrunner.cpp
 	Repo.cpp
