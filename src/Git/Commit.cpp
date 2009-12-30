@@ -20,6 +20,8 @@
 
 #include "Repo.h"
 
+#include <KDebug>
+
 #include <QStringList>
 
 using namespace Git;
@@ -59,21 +61,36 @@ CommitList Commit::fromRawRevList(const Repo *repo, QStringList &lines)
 	while(!lines.isEmpty()) {
 		Commit *newCommit = new Commit(repo);
 
-		newCommit->m_id = lines.takeFirst().mid(strlen("commit "), -1);
-		lines.removeFirst(); // tree
-		lines.removeFirst(); // parent
-		lines.removeFirst(); // author
-		lines.removeFirst(); // committer
+		newCommit->m_id   = lines.takeFirst().mid(strlen("commit "), -1);
+		newCommit->m_tree = lines.takeFirst().mid(strlen("tree "), -1);
+		while (lines.first().startsWith("parent ")) {
+			newCommit->m_parents << lines.takeFirst().mid(strlen("parent "), -1);
+		}
+		QRegExp actorRegExp("^(.*) (\\d+) ([+-]\\d+)$");
+
+		QString authorString = lines.takeFirst().mid(strlen("author "), -1);
+		actorRegExp.indexIn(authorString);
+		newCommit->m_author = actorRegExp.cap(1);
+		newCommit->m_authoredAt.setTime_t(actorRegExp.cap(2).toInt()); // UTC time
+		/** @todo add zone offset */
+
+		QString committerString = lines.takeFirst().mid(strlen("committer "), -1);
+		actorRegExp.indexIn(committerString);
+		newCommit->m_committer = actorRegExp.cap(1);
+		newCommit->m_committedAt.setTime_t(actorRegExp.cap(2).toInt()); // UTC time
+		/** @todo add zone offset */
+
 		lines.removeFirst();
-		while(!lines.isEmpty() && lines.first().startsWith("    ")) {
-			if(newCommit->m_message.isNull()) {
+		while (!lines.isEmpty() && lines.first().startsWith("    ")) {
+			if (newCommit->m_message.isNull()) {
 				newCommit->m_message = lines.takeFirst().mid(4, -1);
 			} else {
 				newCommit->m_message += "\n" + lines.takeFirst().mid(4, -1);
 			}
 		}
+		newCommit->m_summary = newCommit->m_message.split("\n")[0];
 
-		while(!lines.isEmpty() && lines.first().isEmpty())  {
+		while (!lines.isEmpty() && lines.first().isEmpty())  {
 			lines.removeFirst();
 		}
 
