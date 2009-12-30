@@ -46,14 +46,14 @@ int GitHistoryModel::columnCount(const QModelIndex &parent) const
 {
 	Q_UNUSED(parent)
 
-	return 4;
+	return 3;
 }
 
 const QString& GitHistoryModel::columnName(int column) const
 {
 	static QStringList columnNames;
 	if (columnNames.isEmpty()) {
-		columnNames << i18n("Summary") << i18n("Author") << i18n("Date") << i18n("Id");
+		columnNames << i18n("Summary") << i18n("Author") << i18n("Date");
 	}
 
 	return columnNames[column];
@@ -70,16 +70,13 @@ QVariant GitHistoryModel::data(const QModelIndex &index, int role) const
 	QString data;
 	switch (index.column()) {
 	case 0:
-		data = commit->message().split("\n")[0];  // commit->summary();
+		data = commit->summary();
 		break;
 	case 1:
-		data = "author";  // commit->author();
+		data = commit->author();
 		break;
 	case 2:
-		data = "date";  // commit->authoredDate();
-		break;
-	case 3:
-		data = commit->id();
+		data = commit->authoredAt().toString();
 		break;
 	}
 
