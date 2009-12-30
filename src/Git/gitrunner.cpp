@@ -263,6 +263,7 @@ DvcsJob::JobStatus GitRunner::log()
 	DvcsJob *job = new DvcsJob();
 	initJob(*job);
 	*job << "log";
+	*job << "--pretty=raw";
 
 	startJob(*job);
 	return m_jobStatus;
