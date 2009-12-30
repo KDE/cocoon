@@ -32,18 +32,6 @@ Commit::Commit(const Repo *repo)
 {
 }
 
-const QString& Commit::id() const {
-	return m_id;
-}
-
-const QString Commit::shortId() const {
-	return m_id.left(7);
-}
-
-const QString& Commit::message() const {
-	return m_message;
-}
-
 CommitList Commit::fromRawRevList(const Repo *repo, QStringList &lines)
 {
 	CommitList commits;
@@ -73,6 +61,18 @@ CommitList Commit::fromRawRevList(const Repo *repo, QStringList &lines)
 	}
 
 	return commits;
+}
+
+const QString& Commit::id() const {
+	return m_id;
+}
+
+const QString& Commit::message() const {
+	return m_message;
+}
+
+const QString Commit::shortId() const {
+	return m_id.left(7);
 }
 
 #include "Commit.moc"
