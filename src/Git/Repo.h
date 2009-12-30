@@ -21,6 +21,8 @@
 
 #include <QObject>
 
+#include "Commit.h"
+
 
 
 namespace Git {
@@ -43,6 +45,7 @@ class Repo : public QObject
 	public:
 		explicit Repo(const QString &workingDir, QObject *parent = 0);
 
+		CommitList commits() const;
 		const QString& workingDir() const;
 
 	// static

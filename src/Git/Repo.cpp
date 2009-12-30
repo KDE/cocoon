@@ -34,6 +34,19 @@ Repo::Repo(const QString &workingDir, QObject *parent)
 {
 }
 
+QList<Commit*> Repo::commits() const
+{
+	GitRunner runner;
+	runner.setDirectory(workingDir());
+
+	QStringList lines;
+	if (runner.log() == DvcsJob::JobSucceeded) {
+		lines = runner.getResult().split("\n");
+	}
+
+	return Commit::fromRawRevList(this, lines);
+}
+
 bool Repo::containsRepository(const QString &path)
 {
 	KUrl repoUrl(QDir(path).absolutePath());
