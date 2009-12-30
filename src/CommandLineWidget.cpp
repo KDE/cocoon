@@ -38,7 +38,7 @@ CommandLineWidget::CommandLineWidget(QWidget *parent)
 {
 	m_layout = new QVBoxLayout(this);
 	m_layout->setMargin(0);
-	showTerminal();
+	createTerminal();
 }
 
 CommandLineWidget::~CommandLineWidget()
@@ -78,24 +78,15 @@ void CommandLineWidget::showEvent(QShowEvent* event)
 			return;
 		}
 
-		showTerminal();
+		updateTerminal();
 
 		QWidget::showEvent(event);
-}
-
-void CommandLineWidget::showTerminal()
-{
-		if (m_terminal) {
-			updateTerminal();
-		} else {
-			createTerminal();
-		}
 }
 
 void CommandLineWidget::terminalExited()
 {
 	m_terminal = 0;
-	showTerminal();
+	createTerminal();
 }
 
 void CommandLineWidget::updateTerminal()
