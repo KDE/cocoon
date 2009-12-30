@@ -19,15 +19,17 @@
 #ifndef COMMANDLINEWIDGET_H
 #define COMMANDLINEWIDGET_H
 
-#include <KUrl>
-
 #include <QWidget>
+
+namespace Git {
+	class Repo;
+}
+
+class TerminalInterfaceV2;
 
 class QVBoxLayout;
 
-class KJob;
 
-class TerminalInterfaceV2;
 
 class CommandLineWidget : public QWidget
 {
@@ -36,28 +38,23 @@ class CommandLineWidget : public QWidget
 		CommandLineWidget(QWidget *parent = 0);
 		~CommandLineWidget();
 
-		const KUrl& url() const;
 		virtual QSize sizeHint() const;
 
 	public slots:
-		virtual void setUrl(const KUrl& url);
+		void setRepository(const Git::Repo *repo);
 		void terminalExited();
 
 	protected:
 		/** @see QWidget::showEvent() */
 		virtual void showEvent(QShowEvent* event);
 
-//	private slots:
-//		void slotMostLocalUrlResult(KJob* job);
-
 	private:
 		void cdDirectory(const QString& path);
-		void cdUrl(const KUrl& url);
 		void showTerminal();
 
 	private:
 		QVBoxLayout* m_layout;
-		KUrl m_url;
+		const Git::Repo *m_repo;
 		TerminalInterfaceV2* m_terminal;
 		QWidget* m_terminalWidget;
 };

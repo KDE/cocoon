@@ -17,6 +17,7 @@
 */
 
 #include "CommandLineWidget.h"
+#include "Git/Repo.h"
 
 #include <klibloader.h>
 #include <kde_terminal_interface_v2.h>
@@ -32,7 +33,6 @@
 CommandLineWidget::CommandLineWidget(QWidget *parent)
 	: QWidget(parent)
 	, m_layout(0)
-	, m_url(KUrl())
 	, m_terminal(0)
 	, m_terminalWidget(0)
 {
@@ -45,20 +45,16 @@ CommandLineWidget::~CommandLineWidget()
 {
 }
 
-void CommandLineWidget::setUrl(const KUrl& url)
+void CommandLineWidget::setRepository(const Git::Repo *repo)
 {
-	if (!url.isValid() || (url == m_url)) {
-		return;
-	}
-
-	m_url = url;
-
 	const bool sendInput = (m_terminal != 0)
 		&& (m_terminal->foregroundProcessId() == -1)
 		&& isVisible();
 
+	m_repo = repo;
+
 	if (sendInput) {
-		cdUrl(url);
+		cdDirectory(m_repo->workingDir());
 	}
 }
 
@@ -85,11 +81,9 @@ void CommandLineWidget::showTerminal()
 				m_layout->addWidget(m_terminalWidget);
 				m_terminal = qobject_cast<TerminalInterfaceV2 *>(part);
 			}
-		}
-
-		if (m_terminal != 0) {
-			m_terminal->showShellInDir(m_url.toLocalFile());
-			cdUrl(m_url);
+		} else {
+			m_terminal->showShellInDir(m_repo->workingDir());
+			//cdUrl(m_repo->workingDir());
 			//m_terminal->sendInput("clear\n");
 			m_terminalWidget->setFocus();
 		}
@@ -106,13 +100,6 @@ void CommandLineWidget::terminalExited()
 {
 	m_terminal = 0;
 	showTerminal();
-}
-
-void CommandLineWidget::cdUrl(const KUrl& url)
-{
-		if (url.isLocalFile()) {
-			cdDirectory(url.toLocalFile());
-		}
 }
 
 void CommandLineWidget::cdDirectory(const QString& dir)
