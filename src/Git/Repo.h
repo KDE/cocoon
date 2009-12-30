@@ -43,7 +43,7 @@ class Repo : public QObject
 	public:
 		explicit Repo(const QString &workingDir, QObject *parent = 0);
 
-		const QString& workingDir();
+		const QString& workingDir() const;
 
 	// static
 		static bool containsRepository(const QString &path);

@@ -56,7 +56,7 @@ void Repo::init(const QString &newRepoPath)
 	}
 }
 
-const QString& Repo::workingDir()
+const QString& Repo::workingDir() const
 {
 	return m_workingDir;
 }
