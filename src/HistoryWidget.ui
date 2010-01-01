@@ -53,7 +53,7 @@
        <bool>false</bool>
       </property>
      </widget>
-     <widget class="QWidget" name="commitWidget" native="true"/>
+     <widget class="CommitInfoWidget" name="commitWidget" native="true"/>
     </widget>
    </item>
   </layout>
@@ -63,6 +63,12 @@
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>CommitInfoWidget</class>
+   <extends>QWidget</extends>
+   <header>CommitInfoWidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

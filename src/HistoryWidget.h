@@ -31,11 +31,14 @@ namespace Ui {
 
 class GitHistoryModel;
 
+class QModelIndex;
+
 
 
 class HistoryWidget : public QWidget
 {
 	Q_OBJECT
+
 	public:
 		HistoryWidget(QWidget *parent = 0);
 		~HistoryWidget();
@@ -45,6 +48,9 @@ class HistoryWidget : public QWidget
 
 	private:
 		void loadModels();
+
+	private slots:
+		void on_historyView_clicked(const QModelIndex &index);
 
 	private:
 		GitHistoryModel *m_historyModel;

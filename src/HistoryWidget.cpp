@@ -42,6 +42,11 @@ void HistoryWidget::loadModels()
 	ui->historyView->setModel(m_historyModel);
 }
 
+void HistoryWidget::on_historyView_clicked(const QModelIndex &index)
+{
+	ui->commitWidget->setCommit(m_historyModel->mapToCommit(index));
+}
+
 void HistoryWidget::setRepository(const Git::Repo *repo)
 {
 	m_repo = repo;
