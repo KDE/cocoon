@@ -4,6 +4,7 @@ add_subdirectory( Git )
 set(cocoon_SRCS
 	main.cpp
 	CommandLineWidget.cpp
+	CommitInfoWidget.cpp
 	GitHistoryModel.cpp
 	HistoryWidget.cpp
 	MainWindow.cpp
@@ -11,6 +12,7 @@ set(cocoon_SRCS
 )
 
 kde4_add_ui_files(cocoon_SRCS
+	CommitInfoWidget.ui
 	HistoryWidget.ui
 	MainWindow.ui
 	OpenRepositoryDialog.ui)
