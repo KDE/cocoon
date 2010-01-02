@@ -31,6 +31,7 @@ namespace Ui {
 
 class MainWindow : public KMainWindow {
 	Q_OBJECT
+
 	public:
 		MainWindow(QWidget *parent = 0);
 		~MainWindow();

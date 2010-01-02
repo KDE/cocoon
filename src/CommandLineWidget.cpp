@@ -55,7 +55,6 @@ void CommandLineWidget::createTerminal()
 		m_layout->addWidget(m_terminalWidget);
 		m_terminal = qobject_cast<TerminalInterfaceV2 *>(part);
 	}
-
 }
 
 void CommandLineWidget::setRepository(const Git::Repo *repo)
