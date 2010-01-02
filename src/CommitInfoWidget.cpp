@@ -37,10 +37,10 @@ CommitInfoWidget::~CommitInfoWidget()
 
 void CommitInfoWidget::clear()
 {
-	ui->shaLabel->clear();
+	ui->idLabel->clear();
 	ui->authorLabel->clear();
 	ui->messageLabel->clear();
-	//ui->diffWidget->setDiff(0);
+	ui->diffView->clear();
 }
 
 void CommitInfoWidget::updateView()
@@ -50,16 +50,10 @@ void CommitInfoWidget::updateView()
 		return;
 	}
 
-	ui->shaLabel->setText(m_commit->id());
+	ui->idLabel->setText(m_commit->id());
 	ui->authorLabel->setText(i18n("%1 %2", m_commit->author(), m_commit->authoredAt().toString()));
 	ui->messageLabel->setText(m_commit->message());
-/*
-			@ui.diffWidget.diff = unless commit.diffs.empty?
-															commit.diffs.map(&:diff).join("\n")
-														else
-															''
-														end
-*/
+	ui->diffView->setText(m_commit->diff());
 }
 
 void CommitInfoWidget::setCommit(const Git::Commit *commit)
