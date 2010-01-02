@@ -19,6 +19,8 @@
 #include "HistoryWidget.h"
 #include "ui_HistoryWidget.h"
 
+#include "Git/Repo.h"
+#include "GitBranchesModel.h"
 #include "GitHistoryModel.h"
 
 
@@ -37,9 +39,22 @@ HistoryWidget::~HistoryWidget()
 
 void HistoryWidget::loadModels()
 {
+	m_branchesModel = new GitBranchesModel(*m_repo, this);
 	m_historyModel = new GitHistoryModel(*m_repo, this);
 
+	ui->branchComboBox->setModel(m_branchesModel);
 	ui->historyView->setModel(m_historyModel);
+
+	QModelIndex currentHistoryIndex = m_historyModel->index(0, 0);
+	ui->historyView->setCurrentIndex(currentHistoryIndex);
+	on_historyView_clicked(currentHistoryIndex);
+
+	showCurrentBranch();
+}
+
+void HistoryWidget::on_branchComboBox_currentIndexChanged(const QString &branchName)
+{
+	m_historyModel->setBranch(branchName);
 }
 
 void HistoryWidget::on_historyView_clicked(const QModelIndex &index)
@@ -51,6 +66,12 @@ void HistoryWidget::setRepository(const Git::Repo *repo)
 {
 	m_repo = repo;
 	loadModels();
+}
+
+void HistoryWidget::showCurrentBranch()
+{
+	int currentBranchIndex = ui->branchComboBox->findText(m_repo->head());
+	ui->branchComboBox->setCurrentIndex(currentBranchIndex);
 }
 
 #include "HistoryWidget.moc"

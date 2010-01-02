@@ -29,6 +29,7 @@ namespace Ui {
 	class HistoryWidget;
 }
 
+class GitBranchesModel;
 class GitHistoryModel;
 
 class QModelIndex;
@@ -48,11 +49,14 @@ class HistoryWidget : public QWidget
 
 	private:
 		void loadModels();
+		void showCurrentBranch();
 
 	private slots:
+		void on_branchComboBox_currentIndexChanged(const QString&);
 		void on_historyView_clicked(const QModelIndex &index);
 
 	private:
+		GitBranchesModel *m_branchesModel;
 		GitHistoryModel *m_historyModel;
 		const Git::Repo *m_repo;
 		Ui::HistoryWidget *ui;
