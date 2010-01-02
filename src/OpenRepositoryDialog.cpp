@@ -126,6 +126,13 @@ void OpenRepositoryDialog::on_addButton_clicked()
 
 void OpenRepositoryDialog::on_cloneButton_clicked()
 {
+/*
+				clone_dialog = Kitten::Ui::CloneRepositoryDialog.new(self)
+				clone_dialog.exec
+				if clone_dialog.result == Qt::Dialog::Accepted
+					add_repository(clone_dialog.repository_path)
+				end
+*/
 }
 
 void OpenRepositoryDialog::on_newButton_clicked()
