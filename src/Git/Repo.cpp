@@ -69,7 +69,7 @@ void Repo::init(const QString &newRepoPath)
 	}
 }
 
-QString Repo::currentBranch() const
+QString Repo::head() const
 {
 	GitRunner runner;
 	runner.setDirectory(workingDir());
