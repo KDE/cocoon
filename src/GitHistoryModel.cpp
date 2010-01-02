@@ -28,7 +28,7 @@
 
 GitHistoryModel::GitHistoryModel(const Git::Repo &repo, QObject *parent)
 	: QAbstractTableModel(parent)
-	, m_branch(repo.currentBranch())
+	, m_branch(repo.head())
 	, m_commits(Git::CommitList())
 	, m_repo(repo)
 {
@@ -44,7 +44,7 @@ GitHistoryModel::GitHistoryModel(const Git::Repo &repo, QObject *parent)
 
 int GitHistoryModel::columnCount(const QModelIndex &parent) const
 {
-	Q_UNUSED(parent)
+	Q_UNUSED(parent);
 
 	return 3;
 }
@@ -139,7 +139,7 @@ void GitHistoryModel::reset()
 
 int GitHistoryModel::rowCount(const QModelIndex &parent) const
 {
-	Q_UNUSED(parent)
+	Q_UNUSED(parent);
 
 	return m_commits.size();
 }
