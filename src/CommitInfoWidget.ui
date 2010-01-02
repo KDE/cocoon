@@ -79,24 +79,15 @@
     </widget>
    </item>
    <item row="3" column="1">
-    <widget class="KTextBrowser" name="diffView">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="font">
-      <font>
-       <family>Droid Sans Mono</family>
-      </font>
-     </property>
-    </widget>
+    <widget class="DiffWidget" name="diffView"/>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KTextBrowser</class>
+   <class>DiffWidget</class>
    <extends>QTextBrowser</extends>
-   <header>ktextbrowser.h</header>
+   <header>DiffWidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

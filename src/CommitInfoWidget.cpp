@@ -53,7 +53,7 @@ void CommitInfoWidget::updateView()
 	ui->idLabel->setText(m_commit->id());
 	ui->authorLabel->setText(i18n("%1 %2", m_commit->author(), m_commit->authoredAt().toString()));
 	ui->messageLabel->setText(m_commit->message());
-	ui->diffView->setText(m_commit->diff());
+	ui->diffView->setDiff(m_commit->diff());
 }
 
 void CommitInfoWidget::setCommit(const Git::Commit *commit)
