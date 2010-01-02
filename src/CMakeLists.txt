@@ -5,6 +5,7 @@ set(cocoon_SRCS
 	main.cpp
 	CommandLineWidget.cpp
 	CommitInfoWidget.cpp
+	CompareWidget.cpp
 	DiffWidget.cpp
 	GitBranchesModel.cpp
 	GitHistoryModel.cpp
@@ -15,6 +16,7 @@ set(cocoon_SRCS
 
 kde4_add_ui_files(cocoon_SRCS
 	CommitInfoWidget.ui
+	CompareWidget.ui
 	HistoryWidget.ui
 	MainWindow.ui
 	OpenRepositoryDialog.ui)
