@@ -118,7 +118,7 @@ QVariant GitHistoryModel::headerData(int section, Qt::Orientation orientation, i
 
 void GitHistoryModel::loadCommits()
 {
-	m_commits = m_repo.commits();
+	m_commits = m_repo.commits(m_branch);
 	/** @todo change to m_repo.commits(m_branch, Git::NoLimit); */
 }
 
