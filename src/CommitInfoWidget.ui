@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>CommitInfoWidget</class>
- <widget class="QWidget" name="commitInfoWidget">
+ <widget class="QWidget" name="CommitInfoWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
