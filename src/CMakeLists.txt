@@ -5,6 +5,7 @@ set(cocoon_SRCS
 	main.cpp
 	CommandLineWidget.cpp
 	CommitInfoWidget.cpp
+	DiffWidget.cpp
 	GitHistoryModel.cpp
 	HistoryWidget.cpp
 	MainWindow.cpp
