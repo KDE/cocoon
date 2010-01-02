@@ -55,7 +55,7 @@
          <number>0</number>
         </property>
         <item row="0" column="0">
-         <widget class="QWidget" name="compareWidget" native="true"/>
+         <widget class="CompareWidget" name="compareWidget" native="true"/>
         </item>
        </layout>
       </widget>
@@ -115,6 +115,12 @@
    <class>HistoryWidget</class>
    <extends>QWidget</extends>
    <header>HistoryWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CompareWidget</class>
+   <extends>QWidget</extends>
+   <header>CompareWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
