@@ -47,6 +47,7 @@ class Repo : public QObject
 
 		CommitList commits() const;
 		QString head() const;
+		QStringList heads() const;
 		const QString& workingDir() const;
 
 	// static

@@ -81,6 +81,22 @@ QString Repo::head() const
 	return QString();
 }
 
+QStringList Repo::heads() const
+{
+	GitRunner runner;
+	runner.setDirectory(workingDir());
+
+	runner.branches();
+
+	QStringList branches = runner.getResult().split("\n");
+	branches.removeLast(); // splitting results in empty last line
+	for(int i=0; i < branches.size(); ++i) {
+		branches[i] = branches[i].mid(2);
+	}
+
+	return branches;
+}
+
 const QString& Repo::workingDir() const
 {
 	return m_workingDir;
