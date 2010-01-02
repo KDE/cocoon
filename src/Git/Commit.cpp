@@ -18,6 +18,8 @@
 
 #include "Commit.h"
 
+#include "gitrunner.h"
+
 #include "Repo.h"
 
 #include <KDebug>
@@ -52,6 +54,14 @@ const QString& Commit::committer() const
 const KDateTime& Commit::committedAt() const
 {
 	return m_committedAt;
+}
+
+const QString Commit::diff() const
+{
+	GitRunner runner;
+	runner.setDirectory(m_repo->workingDir());
+	runner.commitDiff(id());
+	return runner.getResult();
 }
 
 CommitList Commit::fromRawRevList(const Repo *repo, QStringList &lines)

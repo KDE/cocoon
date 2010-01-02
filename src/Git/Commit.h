@@ -48,6 +48,7 @@ class Commit : public QObject
 		const KDateTime&   authoredAt() const;
 		const QString&     committer() const;
 		const KDateTime&   committedAt() const;
+		const QString      diff() const;
 		const QString&     id() const;
 		const QStringList& parents() const;
 		const QString&     message() const;
