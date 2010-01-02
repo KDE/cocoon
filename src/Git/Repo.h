@@ -45,7 +45,7 @@ class Repo : public QObject
 	public:
 		explicit Repo(const QString &workingDir, QObject *parent = 0);
 
-		CommitList commits() const;
+		CommitList commits(const QString &branch = QString()) const;
 		QString head() const;
 		QStringList heads() const;
 		const QString& workingDir() const;

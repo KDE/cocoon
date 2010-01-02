@@ -204,12 +204,15 @@ DvcsJob::JobStatus GitRunner::commit(const QString &message)
 	return m_jobStatus;
 }
 
-DvcsJob::JobStatus GitRunner::commits()
+DvcsJob::JobStatus GitRunner::commits(const QString &branch)
 {
 	DvcsJob *job = new DvcsJob();
 	initJob(*job);
 	*job << "log";
 	*job << "--pretty=raw";
+	if (!branch.isNull()) {
+		*job << branch;
+	}
 
 	startJob(*job);
 	return m_jobStatus;

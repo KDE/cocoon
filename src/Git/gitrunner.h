@@ -167,10 +167,12 @@ public:
 		DvcsJob::JobStatus commit(const QString &message);
 
 		/**
-		 * Logs all git-related event, such as commits, merges and so on.
+		 * Lists all commits on the given branch in chronological order.
+		 * It will list all commits if branch isNull().
+		 * @param branch The branch to get the log of.
 		 * @return The status of the performed operation.
 		 */
-		DvcsJob::JobStatus commits();
+		DvcsJob::JobStatus commits(const QString &branch = QString());
 
 		/**
 		 * Get the diff for the given commit and it's parent.

@@ -34,13 +34,13 @@ Repo::Repo(const QString &workingDir, QObject *parent)
 {
 }
 
-QList<Commit*> Repo::commits() const
+QList<Commit*> Repo::commits(const QString &branch) const
 {
 	GitRunner runner;
 	runner.setDirectory(workingDir());
 
 	QStringList lines;
-	if (runner.commits() == DvcsJob::JobSucceeded) {
+	if (runner.commits(branch) == DvcsJob::JobSucceeded) {
 		lines = runner.getResult().split("\n");
 	}
 
