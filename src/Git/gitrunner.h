@@ -201,6 +201,14 @@ public:
 		DvcsJob::JobStatus deleteCommit(const QString &sha1hash);
 
 		/**
+		 * Get the diff between the given commits.
+		 * @param sha1hash The sha1 hash string representing the first commit.
+		 * @param sha2hash The sha1 hash string representing the first commit.
+		 * @return The status of the performed operation.
+		 */
+		DvcsJob::JobStatus diffCommits(const QString &sha1hash, const QString &sha2hash);
+
+		/**
 		 * Init a new git repository tree in the given directory.
 		 * @param directory The directory we want being revision-controlled.
 		 * @return The status of the performed operation.

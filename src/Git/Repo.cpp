@@ -57,6 +57,16 @@ bool Repo::containsRepository(const QString &path)
 	return runner.isValidDirectory();
 }
 
+QString Repo::diff(const Commit &a, const Commit &b) const
+{
+	GitRunner runner;
+	runner.setDirectory(workingDir());
+
+	runner.diffCommits(a.id(), b.id());
+
+	return runner.getResult();
+}
+
 void Repo::init(const QString &newRepoPath)
 {
 	KUrl newRepoUrl(QDir(newRepoPath).absolutePath());

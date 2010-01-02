@@ -265,6 +265,19 @@ DvcsJob::JobStatus GitRunner::deleteCommit(const QString &sha1hash)
 	return m_jobStatus;
 }
 
+DvcsJob::JobStatus GitRunner::diffCommits(const QString &sha1hash, const QString &sha2hash)
+{
+	DvcsJob *job = new DvcsJob();
+	initJob(*job);
+	*job << "diff";
+	*job << sha1hash;
+	*job << sha2hash;
+	*job << "--";
+
+	startJob(*job);
+	return m_jobStatus;
+}
+
 DvcsJob::JobStatus GitRunner::remove(const KUrl::List &files)
 {
 	if (files.empty()) {
