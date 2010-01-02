@@ -167,6 +167,12 @@ public:
 		DvcsJob::JobStatus commit(const QString &message);
 
 		/**
+		 * Logs all git-related event, such as commits, merges and so on.
+		 * @return The status of the performed operation.
+		 */
+		DvcsJob::JobStatus commits();
+
+		/**
 		 * Get the diff for the given commit and it's parent.
 		 * @param sha1hash The sha1 hash string representing the commit we want the diff for.
 		 * @return The status of the performed operation.
@@ -191,12 +197,6 @@ public:
 		 * @see moveToCommit()
 		 */
 		DvcsJob::JobStatus deleteCommit(const QString &sha1hash);
-
-		/**
-		 * Logs all git-related event, such as commits, merges and so on.
-		 * @return The status of the performed operation.
-		 */
-		DvcsJob::JobStatus log();
 
 		/**
 		 * Init a new git repository tree in the given directory.

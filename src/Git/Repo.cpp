@@ -40,7 +40,7 @@ QList<Commit*> Repo::commits() const
 	runner.setDirectory(workingDir());
 
 	QStringList lines;
-	if (runner.log() == DvcsJob::JobSucceeded) {
+	if (runner.commits() == DvcsJob::JobSucceeded) {
 		lines = runner.getResult().split("\n");
 	}
 

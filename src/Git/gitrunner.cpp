@@ -186,7 +186,6 @@ DvcsJob::JobStatus GitRunner::status()
 	return m_jobStatus;
 }
 
-
 DvcsJob::JobStatus GitRunner::commit(const QString &message)
 {
 	// NOTE: git doesn't allow empty commit !
@@ -200,6 +199,17 @@ DvcsJob::JobStatus GitRunner::commit(const QString &message)
 	*job << "-m";
 	//Note: the message is quoted somewhere else
 	*job << message;
+
+	startJob(*job);
+	return m_jobStatus;
+}
+
+DvcsJob::JobStatus GitRunner::commits()
+{
+	DvcsJob *job = new DvcsJob();
+	initJob(*job);
+	*job << "log";
+	*job << "--pretty=raw";
 
 	startJob(*job);
 	return m_jobStatus;
@@ -265,18 +275,6 @@ DvcsJob::JobStatus GitRunner::remove(const KUrl::List &files)
 	while (!stringFiles.isEmpty()) {
 		*job <<  m_lastRepoRoot->pathOrUrl() + '/' + stringFiles.takeAt(0);
 	}
-
-	startJob(*job);
-	return m_jobStatus;
-}
-
-
-DvcsJob::JobStatus GitRunner::log()
-{
-	DvcsJob *job = new DvcsJob();
-	initJob(*job);
-	*job << "log";
-	*job << "--pretty=raw";
 
 	startJob(*job);
 	return m_jobStatus;
