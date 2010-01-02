@@ -205,6 +205,19 @@ DvcsJob::JobStatus GitRunner::commit(const QString &message)
 	return m_jobStatus;
 }
 
+DvcsJob::JobStatus GitRunner::commitDiff(const QString &sha1hash)
+{
+	DvcsJob *job = new DvcsJob();
+	initJob(*job);
+	*job << "diff";
+	*job << "--full-index";
+	*job << sha1hash + "^";
+	*job << sha1hash;
+
+	startJob(*job);
+	return m_jobStatus;
+}
+
 DvcsJob::JobStatus GitRunner::moveToCommit(const QString &sha1hash, const QString &newBranch)
 {
 	DvcsJob *job = new DvcsJob();

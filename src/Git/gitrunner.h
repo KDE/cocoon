@@ -167,6 +167,13 @@ public:
 		DvcsJob::JobStatus commit(const QString &message);
 
 		/**
+		 * Get the diff for the given commit and it's parent.
+		 * @param sha1hash The sha1 hash string representing the commit we want the diff for.
+		 * @return The status of the performed operation.
+		 */
+		DvcsJob::JobStatus commitDiff(const QString &sha1hash);
+
+		/**
 		 * Move HEAD from the current stage, to the commit pointed by its sha1hash, and then
 		 * create a new branch so new changes won't affect the original branch history.
 		 * @param sha1hash The sha1 hash string representing the commit we want to point to.
