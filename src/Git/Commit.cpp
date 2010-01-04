@@ -114,7 +114,7 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 	}
 }
 
-CommitList Commit::fromRawLog(const Repo *repo, QString &rawLog)
+CommitList Commit::fromRawLog(const Repo *repo, const QString &rawLog)
 {
 	CommitList commits;
 

@@ -57,7 +57,14 @@ class Commit : public QObject
 		const QString&     tree() const;
 
 	// static
-		static CommitList fromRawLog(const Repo *repo, QString &rawLog);
+		/**
+		 * Creates a list of commits for the given repo from the the given raw log.
+		 *
+		 * @param repo The repository of the commits.
+		 * @param rawLog The raw log as result of a `git log --pretty=raw` call.
+		 * @return The list of commits extracted from the log.
+		 */
+		static CommitList fromRawLog(const Repo *repo, const QString &rawLog);
 
 	private:
 		/**
