@@ -167,6 +167,11 @@ const QString& Commit::id() const
 	return m_id;
 }
 
+bool Commit::isMerge() const
+{
+	return m_parents.size() > 1;
+}
+
 const QString& Commit::message() const
 {
 	return m_message;

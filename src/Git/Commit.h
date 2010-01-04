@@ -50,6 +50,13 @@ class Commit : public QObject
 		const KDateTime&   committedAt() const;
 		const QString      diff() const;
 		const QString&     id() const;
+
+		/**
+		 * Is this a merge commit? It is if it has multiple parents.
+		 *
+		 * @return true if so, false otherwise.
+		 */
+		bool               isMerge() const;
 		const QStringList& parents() const;
 		const QString&     message() const;
 		const QString      shortId() const;
