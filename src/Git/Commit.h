@@ -42,7 +42,7 @@ class Commit : public QObject
 
 	public:
 		Commit(const Repo *repo);
-		Commit(const QString& treeish);
+		Commit(const QString& id, const Repo *repo);
 
 		const QString&     author() const;
 		const KDateTime&   authoredAt() const;
@@ -58,6 +58,15 @@ class Commit : public QObject
 
 	// static
 		static CommitList fromRawLog(const Repo *repo, QString &rawLog);
+
+	private:
+		/**
+		 * Populates the given commit with the data extracted from the raw data.
+		 *
+		 * @param commit The commit to be populated.
+		 * @param raw The raw commit data.
+		 */
+		static void fillFromString(Commit *commit, const QString &raw);
 
 	private:
 		QString     m_author;

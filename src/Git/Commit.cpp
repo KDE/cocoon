@@ -36,6 +36,18 @@ Commit::Commit(const Repo *repo)
 {
 }
 
+Commit::Commit(const QString &id, const Repo *repo)
+	: QObject((QObject*)repo)
+	, m_repo(repo)
+{
+	GitRunner runner;
+	runner.setDirectory(m_repo->workingDir());
+
+	runner.log(QStringList() << "--pretty=raw" << "-1", id);
+
+	fillFromString(this, runner.getResult());
+}
+
 const QString& Commit::author() const
 {
 	return m_author;
@@ -62,6 +74,44 @@ const QString Commit::diff() const
 	runner.setDirectory(m_repo->workingDir());
 	runner.commitDiff(id());
 	return runner.getResult();
+}
+
+void Commit::fillFromString(Commit *commit, const QString &raw)
+{
+	QStringList lines = raw.split("\n");
+
+	commit->m_id   = lines.takeFirst().mid(strlen("commit "), -1);
+	commit->m_tree = lines.takeFirst().mid(strlen("tree "), -1);
+	while (lines.first().startsWith("parent ")) {
+		commit->m_parents << lines.takeFirst().mid(strlen("parent "), -1);
+	}
+	QRegExp actorRegExp("^(.*) (\\d+) ([+-]\\d+)$");
+
+	QString authorString = lines.takeFirst().mid(strlen("author "), -1);
+	actorRegExp.indexIn(authorString);
+	commit->m_author = actorRegExp.cap(1);
+	commit->m_authoredAt.setTime_t(actorRegExp.cap(2).toInt()); // UTC time
+	/** @todo add zone offset */
+
+	QString committerString = lines.takeFirst().mid(strlen("committer "), -1);
+	actorRegExp.indexIn(committerString);
+	commit->m_committer = actorRegExp.cap(1);
+	commit->m_committedAt.setTime_t(actorRegExp.cap(2).toInt()); // UTC time
+	/** @todo add zone offset */
+
+	lines.removeFirst();
+	while (!lines.isEmpty() && lines.first().startsWith("    ")) {
+		if (commit->m_message.isNull()) {
+			commit->m_message = lines.takeFirst().mid(4, -1);
+		} else {
+			commit->m_message += "\n" + lines.takeFirst().mid(4, -1);
+		}
+	}
+	commit->m_summary = commit->m_message.split("\n")[0];
+
+	while (!lines.isEmpty() && lines.first().isEmpty())  {
+		lines.removeFirst();
+	}
 }
 
 CommitList Commit::fromRawLog(const Repo *repo, QString &rawLog)
