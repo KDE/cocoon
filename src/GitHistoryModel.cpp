@@ -20,6 +20,7 @@
 
 #include "Git/Repo.h"
 
+#include <KIcon>
 #include <KLocalizedString>
 
 #include <QStringList>
@@ -83,20 +84,18 @@ QVariant GitHistoryModel::data(const QModelIndex &index, int role) const
 	switch (role) {
 	case Qt::DisplayRole:
 		return QVariant(data);
-//	case Qt::DecorationRole: // Icon
-/*
-					if index.column() == 0
-						if commit.merge?
-							icon = @@merge_icon
-						elsif commit.branched_on?(branch)
-							icon = @@branch_icon
-						else
-							icon = @@commit_icon
-						end
-						Qt::Variant.from_value(icon)
-					else
-						Qt::Variant.new
-*/
+	case Qt::DecorationRole: // Icon
+		if (index.column() == 0) { // in first column
+			if (commit->isMerge()) {
+				return QVariant(KIcon("git-merge"));
+			} else if(commit->hasBranchedOn(QStringList() << m_branch)) {
+				return QVariant(KIcon("git-branch"));
+			} else {
+				return QVariant(KIcon("git-commit"));
+			}
+		} else {
+			return QVariant();
+		}
 	default:
 		return QVariant();
 	}
