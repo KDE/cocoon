@@ -57,7 +57,7 @@ class Commit : public QObject
 		const QString&     tree() const;
 
 	// static
-		static CommitList fromRawRevList(const Repo *repo, QStringList &lines);
+		static CommitList fromRawLog(const Repo *repo, QString &rawLog);
 
 	private:
 		QString     m_author;

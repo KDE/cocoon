@@ -64,9 +64,11 @@ const QString Commit::diff() const
 	return runner.getResult();
 }
 
-CommitList Commit::fromRawRevList(const Repo *repo, QStringList &lines)
+CommitList Commit::fromRawLog(const Repo *repo, QString &rawLog)
 {
 	CommitList commits;
+
+	QStringList lines = rawLog.split("\n");
 
 	while(!lines.isEmpty()) {
 		Commit *newCommit = new Commit(repo);

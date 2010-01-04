@@ -39,12 +39,12 @@ QList<Commit*> Repo::commits(const QString &branch) const
 	GitRunner runner;
 	runner.setDirectory(workingDir());
 
-	QStringList lines;
+	QString result;
 	if (runner.commits(branch) == DvcsJob::JobSucceeded) {
-		lines = runner.getResult().split("\n");
+		result = runner.getResult();
 	}
 
-	return Commit::fromRawRevList(this, lines);
+	return Commit::fromRawLog(this, result);
 }
 
 bool Repo::containsRepository(const QString &path)
