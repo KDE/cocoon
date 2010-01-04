@@ -262,6 +262,9 @@ public:
 		 */
 		DvcsJob::JobStatus currentBranch();
 
+		DvcsJob::JobStatus log(const QStringList &options = QStringList(), const QString &sinceId = QString(), const QString &untilId = QString(), const QStringList &paths = QStringList());
+		DvcsJob::JobStatus revList(const QStringList &options = QStringList(), const QStringList &commits = QStringList(), const QStringList &paths = QStringList());
+
 		/**
 		 * Retrieves all the branches available in the current git repo.
 		 * @return The status of the performed operation.

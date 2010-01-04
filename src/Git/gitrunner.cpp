@@ -278,6 +278,51 @@ DvcsJob::JobStatus GitRunner::diffCommits(const QString &sha1hash, const QString
 	return m_jobStatus;
 }
 
+DvcsJob::JobStatus GitRunner::log(const QStringList &options, const QString &sinceId, const QString &untilId, const QStringList &paths)
+{
+	DvcsJob *job = new DvcsJob();
+	initJob(*job);
+	*job << "log";
+
+	if (!options.isEmpty()) {
+		*job << options;
+	}
+	if (!sinceId.isEmpty()) {
+		*job << sinceId;
+	}
+	if (!untilId.isEmpty()) {
+		*job << untilId;
+	}
+	*job << "--";
+	if (!paths.isEmpty()) {
+		*job << paths;
+	}
+
+	startJob(*job);
+	return m_jobStatus;
+}
+
+DvcsJob::JobStatus GitRunner::revList(const QStringList &options, const QStringList &commits, const QStringList &paths)
+{
+	DvcsJob *job = new DvcsJob();
+	initJob(*job);
+	*job << "rev-list";
+
+	if (!options.isEmpty()) {
+		*job << options;
+	}
+	if (!commits.isEmpty()) {
+		*job << commits;
+	}
+	*job << "--";
+	if (!paths.isEmpty()) {
+		*job << paths;
+	}
+
+	startJob(*job);
+	return m_jobStatus;
+}
+
 DvcsJob::JobStatus GitRunner::remove(const KUrl::List &files)
 {
 	if (files.empty()) {
