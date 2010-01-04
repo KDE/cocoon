@@ -58,6 +58,58 @@ const KDateTime& Commit::authoredAt() const
 	return m_authoredAt;
 }
 
+QStringList Commit::childrenOf(const Commit &commit, const QStringList &refs)
+{
+	GitRunner runner;
+	runner.setDirectory(commit.m_repo->workingDir());
+
+	QStringList opts;
+	opts << "--children";
+
+	QStringList commits;
+	commits << refs;
+	commits << QString("^%1^@").arg(commit.id());
+
+	runner.revList(opts, commits);
+
+	QStringList revList = runner.getResult().split("\n");
+	revList.removeLast();
+	int revIndexForCommit = revList.indexOf(QRegExp(QString("^%1 .*$").arg(commit.id())));
+	if (revIndexForCommit != -1) {
+		const QString &revLineForCommit = revList[revIndexForCommit];
+
+		return revLineForCommit.split(" ").mid(1);
+	} else {
+		return QStringList();
+	}
+}
+
+CommitList Commit::childrenOn(const QStringList &refs) const
+{
+	QStringList actualRefs(refs);
+	if (actualRefs.isEmpty()) {
+		actualRefs << m_repo->head();
+	}
+
+	// used for caching the result
+	static QHash<QString, CommitList> childrenByRefs;
+
+	QString refKey = id() + ": " + actualRefs.join(" ");
+
+	if (!childrenByRefs.contains(refKey)) {
+		QStringList childrenIds = childrenOf(*this, actualRefs);
+
+		CommitList children;
+		foreach (const QString &id, childrenIds) {
+			children << new Commit(id, m_repo);
+		}
+
+		childrenByRefs[refKey] = children;
+	}
+
+	return childrenByRefs[refKey];
+}
+
 const QString& Commit::committer() const
 {
 	return m_committer;
@@ -160,6 +212,11 @@ CommitList Commit::fromRawLog(const Repo *repo, const QString &rawLog)
 	}
 
 	return commits;
+}
+
+bool Commit::hasBranchedOn(const QStringList &refs) const
+{
+	return childrenOn(refs).size() > 1;
 }
 
 const QString& Commit::id() const

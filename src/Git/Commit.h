@@ -49,6 +49,31 @@ class Commit : public QObject
 		const QString&     committer() const;
 		const KDateTime&   committedAt() const;
 		const QString      diff() const;
+
+		/**
+		 * Has this commit been branched off of on the given branches?
+		 *
+		 * It has been if it has multiple children.
+		 *
+		 * @param refs The branches (ids or names) to be checked for children.
+		 *             If empty the current head is assumed.
+		 * @return true if it has multiple children on the given branches, false otherwise.
+		 *
+		 * @see childrenOn()
+		 */
+		bool hasBranchedOn(const QStringList &refs) const;
+
+		/**
+		 * Find the children of this commit on the given branches.
+		 *
+		 * @param refs The branches (ids or names) to be checked for children.
+		 *             If it is empty the current head is assumed.
+		 * @return The list of child commits.
+		 *
+		 * @see
+		 */
+		CommitList childrenOn(const QStringList &refs) const;
+
 		const QString&     id() const;
 
 		/**
@@ -74,6 +99,16 @@ class Commit : public QObject
 		static CommitList fromRawLog(const Repo *repo, const QString &rawLog);
 
 	private:
+	// static
+		/**
+		 * Finds the children of commit starting from the given list of refs.
+		 *
+		 * @param commit The commit to find the children of.
+		 * @param refs Refs (ids or names) to start looking for them.
+		 * @return The list of child commit ids.
+		 */
+		static QStringList childrenOf(const Commit &commit, const QStringList &refs);
+
 		/**
 		 * Populates the given commit with the data extracted from the raw data.
 		 *
