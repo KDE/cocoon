@@ -4,6 +4,7 @@ set(git_SRCS
 	dvcsjob.cpp
 	gitrunner.cpp
 	Repo.cpp
+	Status.cpp
 )
 
 automoc4(CocoonGit git_SRCS)
