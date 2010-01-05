@@ -107,6 +107,11 @@ QStringList Repo::heads() const
 	return branches;
 }
 
+Status* Repo::status() const
+{
+	return new Status(this);
+}
+
 const QString& Repo::workingDir() const
 {
 	return m_workingDir;

@@ -22,6 +22,7 @@
 #include <QObject>
 
 #include "Commit.h"
+#include "Status.h"
 
 
 
@@ -49,6 +50,7 @@ class Repo : public QObject
 		QString diff(const Commit &a, const Commit &b) const;
 		QString head() const;
 		QStringList heads() const;
+		Status* status() const;
 		const QString& workingDir() const;
 
 	// static
