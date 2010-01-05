@@ -173,41 +173,25 @@ CommitList Commit::fromRawLog(const Repo *repo, const QString &rawLog)
 	QStringList lines = rawLog.split("\n");
 
 	while(!lines.isEmpty()) {
-		Commit *newCommit = new Commit(repo);
+		QStringList rawCommitLines;
 
-		newCommit->m_id   = lines.takeFirst().mid(strlen("commit "), -1);
-		newCommit->m_tree = lines.takeFirst().mid(strlen("tree "), -1);
+		rawCommitLines << lines.takeFirst(); // commit
+		rawCommitLines << lines.takeFirst(); // tree
 		while (lines.first().startsWith("parent ")) {
-			newCommit->m_parents << lines.takeFirst().mid(strlen("parent "), -1);
+			rawCommitLines << lines.takeFirst(); // parent
 		}
-		QRegExp actorRegExp("^(.*) (\\d+) ([+-]\\d+)$");
-
-		QString authorString = lines.takeFirst().mid(strlen("author "), -1);
-		actorRegExp.indexIn(authorString);
-		newCommit->m_author = actorRegExp.cap(1);
-		newCommit->m_authoredAt.setTime_t(actorRegExp.cap(2).toInt()); // UTC time
-		/** @todo add zone offset */
-
-		QString committerString = lines.takeFirst().mid(strlen("committer "), -1);
-		actorRegExp.indexIn(committerString);
-		newCommit->m_committer = actorRegExp.cap(1);
-		newCommit->m_committedAt.setTime_t(actorRegExp.cap(2).toInt()); // UTC time
-		/** @todo add zone offset */
-
-		lines.removeFirst();
+		rawCommitLines << lines.takeFirst(); // author
+		rawCommitLines << lines.takeFirst(); // committer
+		rawCommitLines << lines.takeFirst(); // empty line
 		while (!lines.isEmpty() && lines.first().startsWith("    ")) {
-			if (newCommit->m_message.isNull()) {
-				newCommit->m_message = lines.takeFirst().mid(4, -1);
-			} else {
-				newCommit->m_message += "\n" + lines.takeFirst().mid(4, -1);
-			}
+			rawCommitLines << lines.takeFirst(); // line of the commit massege
 		}
-		newCommit->m_summary = newCommit->m_message.split("\n")[0];
-
-		while (!lines.isEmpty() && lines.first().isEmpty())  {
-			lines.removeFirst();
+		while (!lines.isEmpty() && lines.first().isEmpty()) {
+			rawCommitLines << lines.takeFirst(); // empty lines
 		}
 
+		Commit *newCommit = new Commit(repo);
+		fillFromString(newCommit, rawCommitLines.join("\n"));
 		commits << newCommit;
 	}
 
