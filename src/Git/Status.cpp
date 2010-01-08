@@ -27,3 +27,5 @@ Status::Status(const Repo *repo)
 	, m_repo(repo)
 {
 }
+
+#include "Status.moc"
