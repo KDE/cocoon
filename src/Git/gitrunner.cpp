@@ -299,6 +299,28 @@ DvcsJob::JobStatus GitRunner::diffFiles(const QStringList &options, const QStrin
 	return m_jobStatus;
 }
 
+DvcsJob::JobStatus GitRunner::diffIndex(const QString &treeish, const QStringList &options, const QStringList &commits, const QStringList &paths)
+{
+	DvcsJob *job = new DvcsJob();
+	initJob(*job);
+	*job << "diff-index";
+
+	if (!options.isEmpty()) {
+		*job << options;
+	}
+	if (!commits.isEmpty()) {
+		*job << commits;
+	}
+	*job << treeish;
+	*job << "--";
+	if (!paths.isEmpty()) {
+		*job << paths;
+	}
+
+	startJob(*job);
+	return m_jobStatus;
+}
+
 DvcsJob::JobStatus GitRunner::log(const QStringList &options, const QString &sinceId, const QString &untilId, const QStringList &paths)
 {
 	DvcsJob *job = new DvcsJob();
