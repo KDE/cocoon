@@ -28,4 +28,36 @@ Status::Status(const Repo *repo)
 {
 }
 
+
+
+StatusFile::StatusFile(Status *parent)
+	: QObject(parent)
+{
+}
+
+bool StatusFile::isAdded() const
+{
+	return m_status == "A";
+}
+
+bool StatusFile::isDeleted() const
+{
+	return m_status == "D";
+}
+
+bool StatusFile::isModified() const
+{
+	return m_status == "M";
+}
+
+bool StatusFile::isStaged() const
+{
+	return m_staged;
+}
+
+const QString& StatusFile::path() const
+{
+	return m_path;
+}
+
 #include "Status.moc"

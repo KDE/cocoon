@@ -26,6 +26,38 @@
 namespace Git {
 
 class Repo;
+class Status;
+
+
+
+class StatusFile : public QObject
+{
+	Q_OBJECT
+
+	friend class Status;
+
+	public:
+		StatusFile(Status *parent);
+
+		bool changesStaged() const;
+		bool changesUnstaged() const;
+		bool isAdded() const;
+		bool isDeleted() const;
+		bool isModified() const;
+		bool isStaged() const;
+		bool isUntracked() const;
+		bool hasChanged() const;
+		const QString& path() const;
+
+	private:
+		QString m_idIndex;
+		QString m_idRepo;
+		QString m_modeIndex;
+		QString m_modeRepo;
+		QString m_path;
+		bool m_staged;
+		QString m_status;
+};
 
 
 
