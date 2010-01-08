@@ -21,8 +21,9 @@ kde4_add_ui_files(cocoon_SRCS
 	CompareWidget.ui
 	HistoryWidget.ui
 	MainWindow.ui
+	OpenRepositoryDialog.ui
 	StageWidget.ui
-	OpenRepositoryDialog.ui)
+)
 
 kde4_add_kcfg_files(cocoon_SRCS settings.kcfgc)
 
