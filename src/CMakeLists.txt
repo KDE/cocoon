@@ -13,6 +13,7 @@ set(cocoon_SRCS
 	HistoryWidget.cpp
 	MainWindow.cpp
 	OpenRepositoryDialog.cpp
+	StageWidget.cpp
 )
 
 kde4_add_ui_files(cocoon_SRCS
@@ -20,6 +21,7 @@ kde4_add_ui_files(cocoon_SRCS
 	CompareWidget.ui
 	HistoryWidget.ui
 	MainWindow.ui
+	StageWidget.ui
 	OpenRepositoryDialog.ui)
 
 kde4_add_kcfg_files(cocoon_SRCS settings.kcfgc)
