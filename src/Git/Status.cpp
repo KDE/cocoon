@@ -229,7 +229,7 @@ QList<StatusFile*> Status::stagedFiles() const
 	QList<StatusFile*> files;
 
 	foreach(StatusFile *file, m_files) {
-		if (file->isStaged()) {
+		if (file->changesStaged()) {
 			files << file;
 		}
 	}
