@@ -20,6 +20,7 @@
 #include "ui_StageWidget.h"
 
 #include "GitStagedFilesModel.h"
+#include "GitUnstagedFilesModel.h"
 
 
 
@@ -38,7 +39,10 @@ StageWidget::~StageWidget()
 void StageWidget::loadModels()
 {
 	m_stagedFilesModel = new GitStagedFilesModel(*m_repo, this);
+	m_unstagedFilesModel = new GitUnstagedFilesModel(*m_repo, this);
+
 	ui->stagedChangesView->setModel(m_stagedFilesModel);
+	ui->unstagedChangesView->setModel(m_unstagedFilesModel);
 }
 
 void StageWidget::setRepository(const Git::Repo *repo)

@@ -30,6 +30,7 @@ namespace Ui {
 }
 
 class GitStagedFilesModel;
+class GitUnstagedFilesModel;
 
 
 
@@ -50,6 +51,7 @@ class StageWidget : public QWidget
 	private:
 		const Git::Repo *m_repo;
 		GitStagedFilesModel *m_stagedFilesModel;
+		GitUnstagedFilesModel *m_unstagedFilesModel;
 		Ui::StageWidget *ui;
 };
 
