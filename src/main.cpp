@@ -1,4 +1,3 @@
-#include "cocoon.h"
 
 #include "MainWindow.h"
 #include "OpenRepositoryDialog.h"
