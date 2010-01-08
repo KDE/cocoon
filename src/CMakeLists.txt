@@ -10,6 +10,7 @@ set(cocoon_SRCS
 	GitBranchesModel.cpp
 	GitHistoryModel.cpp
 	GitStagedFilesModel.cpp
+	GitUnstagedFilesModel.cpp
 	HistoryWidget.cpp
 	MainWindow.cpp
 	OpenRepositoryDialog.cpp
