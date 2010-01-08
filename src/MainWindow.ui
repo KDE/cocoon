@@ -18,7 +18,7 @@
     <item row="1" column="0">
      <widget class="KTabWidget" name="viewModeTabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="stageTab">
        <attribute name="title">
@@ -29,7 +29,7 @@
          <number>0</number>
         </property>
         <item row="0" column="0">
-         <widget class="QWidget" name="stageWidget" native="true"/>
+         <widget class="StageWidget" name="stageWidget" native="true"/>
         </item>
        </layout>
       </widget>
@@ -121,6 +121,12 @@
    <class>CompareWidget</class>
    <extends>QWidget</extends>
    <header>CompareWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>StageWidget</class>
+   <extends>QWidget</extends>
+   <header>StageWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
