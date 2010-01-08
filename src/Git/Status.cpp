@@ -242,11 +242,34 @@ QString Status::unescapeFileName(const QString &escapedName) const
 	return escapedName;
 }
 
+QList<StatusFile*> Status::unstagedFiles() const
+{
+	QList<StatusFile*> files;
+
+	foreach(StatusFile *file, m_files) {
+		if (!file->changesUnstaged()) {
+			files << file;
+		}
+	}
+
+	return files;
+}
+
 
 
 StatusFile::StatusFile(Status *parent)
 	: QObject(parent)
 {
+}
+
+bool StatusFile::changesStaged() const
+{
+	return hasChanged() && isStaged();
+}
+
+bool StatusFile::changesUnstaged() const
+{
+	return hasChanged() && !isStaged();
 }
 
 bool StatusFile::isAdded() const
@@ -267,6 +290,11 @@ bool StatusFile::isModified() const
 bool StatusFile::isStaged() const
 {
 	return m_staged;
+}
+
+bool StatusFile::hasChanged() const
+{
+	return m_status.isEmpty();
 }
 
 const QString& StatusFile::path() const

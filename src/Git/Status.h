@@ -72,6 +72,7 @@ class Status : public QObject
 		explicit Status(const Repo *repo);
 
 		QList<StatusFile*> stagedFiles() const;
+		QList<StatusFile*> unstagedFiles() const;
 
 	private:
 		void constuctStatus();
