@@ -263,6 +263,7 @@ public:
 		DvcsJob::JobStatus currentBranch();
 
 		DvcsJob::JobStatus log(const QStringList &options = QStringList(), const QString &sinceId = QString(), const QString &untilId = QString(), const QStringList &paths = QStringList());
+		DvcsJob::JobStatus lsFiles(const QStringList &options = QStringList(), const QStringList &files = QStringList());
 		DvcsJob::JobStatus revList(const QStringList &options = QStringList(), const QStringList &commits = QStringList(), const QStringList &paths = QStringList());
 
 		/**

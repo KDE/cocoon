@@ -302,6 +302,24 @@ DvcsJob::JobStatus GitRunner::log(const QStringList &options, const QString &sin
 	return m_jobStatus;
 }
 
+DvcsJob::JobStatus GitRunner::lsFiles(const QStringList &options, const QStringList &files)
+{
+	DvcsJob *job = new DvcsJob();
+	initJob(*job);
+	*job << "ls-files";
+
+	if (!options.isEmpty()) {
+		*job << options;
+	}
+	*job << "--";
+	if (!files.isEmpty()) {
+		*job << files;
+	}
+
+	startJob(*job);
+	return m_jobStatus;
+}
+
 DvcsJob::JobStatus GitRunner::revList(const QStringList &options, const QStringList &commits, const QStringList &paths)
 {
 	DvcsJob *job = new DvcsJob();
