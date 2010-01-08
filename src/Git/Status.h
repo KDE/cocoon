@@ -21,6 +21,9 @@
 
 #include <QObject>
 
+#include <QHash>
+#include <QList>
+
 
 
 namespace Git {
@@ -68,8 +71,22 @@ class Status : public QObject
 	public:
 		explicit Status(const Repo *repo);
 
+		QList<StatusFile*> stagedFiles() const;
+
 	private:
+		void constuctStatus();
+		void addFile(const QString &file, QHash<QString, QString> data);
+		/** Compares the index and the working directory */
+		QHash<QString, QHash<QString, QString> > diffFiles() const;
+		/** Compares the index and the repository */
+		QHash<QString, QHash<QString, QString> > diffIndex(const QString &treeish) const;
+		QHash<QString, QHash<QString, QString> > lsFiles() const;
+		QString unescapeFileName(const QString &escapedName) const;
+
+	private:
+		QList<StatusFile*> m_files;
 		const Repo *m_repo;
+		QHash<QString, StatusFile*> m_status;
 };
 
 }
