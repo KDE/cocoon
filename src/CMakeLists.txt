@@ -9,6 +9,7 @@ set(cocoon_SRCS
 	DiffWidget.cpp
 	GitBranchesModel.cpp
 	GitHistoryModel.cpp
+	GitStagedFilesModel.cpp
 	HistoryWidget.cpp
 	MainWindow.cpp
 	OpenRepositoryDialog.cpp
