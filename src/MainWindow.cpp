@@ -24,15 +24,22 @@
 
 
 MainWindow::MainWindow(QWidget *parent)
-	: KMainWindow(parent)
+	: KXmlGuiWindow(parent)
 	, ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
 
-	connect(this, SIGNAL(repositoryChanged(const Git::Repo*)), ui->stageWidget, SLOT(setRepository(const Git::Repo*)));
-	connect(this, SIGNAL(repositoryChanged(const Git::Repo*)), ui->historyWidget, SLOT(setRepository(const Git::Repo*)));
-	connect(this, SIGNAL(repositoryChanged(const Git::Repo*)), ui->compareWidget, SLOT(setRepository(const Git::Repo*)));
 	connect(this, SIGNAL(repositoryChanged(const Git::Repo*)), ui->commandLineWidget, SLOT(setRepository(const Git::Repo*)));
+	connect(this, SIGNAL(repositoryChanged(const Git::Repo*)), ui->compareWidget, SLOT(setRepository(const Git::Repo*)));
+	connect(this, SIGNAL(repositoryChanged(const Git::Repo*)), ui->historyWidget, SLOT(setRepository(const Git::Repo*)));
+	connect(this, SIGNAL(repositoryChanged(const Git::Repo*)), ui->stageWidget, SLOT(setRepository(const Git::Repo*)));
+
+	// a call to KXmlGuiWindow::setupGUI() populates the GUI
+	// with actions, using KXMLGUI.
+	// It also applies the saved mainwindow settings, if any, and ask the
+	// mainwindow to automatically save settings if changed: window size,
+	// toolbar position, icon size, etc.
+	setupGUI();
 }
 
 MainWindow::~MainWindow()

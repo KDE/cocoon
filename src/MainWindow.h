@@ -19,7 +19,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <KMainWindow>
+#include <KXmlGuiWindow>
 
 namespace Git {
 	class Repo;
@@ -29,7 +29,7 @@ namespace Ui {
 	class MainWindow;
 }
 
-class MainWindow : public KMainWindow
+class MainWindow : public KXmlGuiWindow
 {
 	Q_OBJECT
 
