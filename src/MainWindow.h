@@ -45,6 +45,8 @@ class MainWindow : public KXmlGuiWindow
 	protected:
 		void changeEvent(QEvent *e);
 
+	protected slots:
+		void open();
 	private:
 		void setupActions();
 

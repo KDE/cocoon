@@ -20,6 +20,8 @@
 #include "ui_MainWindow.h"
 
 #include "Git/Repo.h"
+#include "OpenRepositoryDialog.h"
+
 #include <KAction>
 #include <KActionCollection>
 #include <KApplication>
@@ -62,6 +64,16 @@ void MainWindow::changeEvent(QEvent *e)
 		break;
 	default:
 		break;
+	}
+}
+
+void MainWindow::open()
+{
+	OpenRepositoryDialog openRepoDialog(this);
+	openRepoDialog.exec();
+	if (openRepoDialog.result() == QDialog::Accepted) {
+		QString path = openRepoDialog.selectedRepositoryPath();
+		setRepository(path);
 	}
 }
 
