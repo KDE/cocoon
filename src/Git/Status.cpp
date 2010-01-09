@@ -45,14 +45,14 @@ void Status::constuctStatus()
 	}
 
 	// find untracked files
-//	foreach(const String &file, untrackedFiles()) {
-//		QHash<QString, QString> data;
-//		data["path"] = file;
-//		data["staged"] = "false";
-//		data["status"] = "U";
-//
-//		addFile(file, data);
-//	}
+	foreach(const QString &file, untrackedFiles()) {
+		QHash<QString, QString> data;
+		data["path"] = file;
+		data["staged"] = "false";
+		data["status"] = "U";
+
+		addFile(file, data);
+	}
 
 	// find modified in tree
 	filesData = diffFiles();
@@ -293,6 +293,33 @@ QList<StatusFile*> Status::unstagedFiles() const
 	}
 
 	return files;
+}
+
+QStringList Status::untrackedFiles() const
+{
+	GitRunner runner;
+	runner.setDirectory(m_repo->workingDir());
+
+	runner.lsFiles(QStringList() << "--others");
+
+	QStringList otherFiles = runner.getResult().split("\n");
+	otherFiles.removeLast(); // remove empty line at the end
+
+	// unescape file names
+	for (int i=0; i < otherFiles.size(); ++i) {
+		otherFiles[i] = unescapeFileName(otherFiles[i]);
+	}
+
+	// remove ignored files from the list
+	foreach (const QString &iFile, ignoredFiles()) {
+		foreach (const QString &oFile, otherFiles) {
+			if (oFile == iFile || oFile.startsWith(iFile)) {
+				otherFiles.removeOne(oFile);
+			}
+		}
+	}
+
+	return otherFiles;
 }
 
 

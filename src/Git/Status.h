@@ -84,6 +84,7 @@ class Status : public QObject
 		QStringList ignoredFiles() const;
 		QHash<QString, QHash<QString, QString> > lsFiles() const;
 		QString unescapeFileName(const QString &escapedName) const;
+		QStringList untrackedFiles() const;
 
 	private:
 		QList<StatusFile*> m_files;
