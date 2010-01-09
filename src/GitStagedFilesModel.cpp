@@ -106,6 +106,17 @@ void GitStagedFilesModel::loadFiles()
 	m_files = m_repo.status()->stagedFiles();
 }
 
+QModelIndex GitStagedFilesModel::mapToIndex(const Git::StatusFile &file) const
+{
+	for (int i=0; i < m_files.size(); ++i) {
+		if (m_files[i]->path() == file.path()) {
+			return index(i, 0);
+		}
+	}
+
+	return QModelIndex();
+}
+
 const Git::StatusFile* GitStagedFilesModel::mapToStatusFile(const QModelIndex &index) const
 {
 	if (!index.isValid()) {

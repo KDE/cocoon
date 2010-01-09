@@ -40,6 +40,7 @@ class GitUnstagedFilesModel : public QAbstractTableModel
 		const QString& columnName(int column) const;
 		QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 		QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+		QModelIndex mapToIndex(const Git::StatusFile &file) const;
 		const Git::StatusFile* mapToStatusFile(const QModelIndex &index) const;
 		int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
