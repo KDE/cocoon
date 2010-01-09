@@ -81,6 +81,7 @@ class Status : public QObject
 		QHash<QString, QHash<QString, QString> > diffFiles() const;
 		/** Compares the index and the repository */
 		QHash<QString, QHash<QString, QString> > diffIndex(const QString &treeish) const;
+		QStringList ignoredFiles() const;
 		QHash<QString, QHash<QString, QString> > lsFiles() const;
 		QString unescapeFileName(const QString &escapedName) const;
 

@@ -192,6 +192,46 @@ QHash<QString, QHash<QString, QString> > Status::diffIndex(const QString &treeis
 	return result;
 }
 
+QStringList Status::ignoredFiles() const
+{
+	QStringList ignoredFiles;
+
+	GitRunner runner;
+	runner.setDirectory(m_repo->workingDir());
+
+	// list ignored files
+	runner.lsFiles(QStringList() << "--others" << "--ignored" << "--exclude-standard");
+	ignoredFiles = runner.getResult().split("\n");
+	ignoredFiles.removeLast(); // remove empty line at the end
+	for(int i=0; i < ignoredFiles.size(); ++i) { // unescape file names
+		ignoredFiles[i] = unescapeFileName(ignoredFiles[i]);
+	}
+
+	// list ignored directories (may also include files)
+	runner.lsFiles(QStringList() << "--others" << "--ignored" << "--exclude-standard" << "--directory");
+	QStringList ignoredDirs = runner.getResult().split("\n");
+	ignoredDirs.removeLast(); // remove empty line at the end
+	for(int i=0; i < ignoredDirs.size(); ++i) { // unescape file names
+		ignoredDirs[i] = unescapeFileName(ignoredDirs[i]);
+		if (!QFileInfo(m_repo->workingDir(), ignoredDirs[i]).isDir()) { // only leave dirs
+			ignoredDirs.removeAt(i);
+			--i;
+		}
+	}
+
+//	// add all files in ignoredDirs
+//	foreach (const QString &dir, ignoredDirs) {
+//		foreach (const QString &file, glob(dir)) {
+//			if (!ignoredFiles.contains(file)) {
+//				ignoredFiles << file;
+//			}
+//		}
+//	}
+	ignoredFiles << ignoredDirs;
+
+	return ignoredFiles;
+}
+
 QHash<QString, QHash<QString, QString> > Status::lsFiles() const
 {
 	QHash<QString, QHash<QString, QString> > result;
