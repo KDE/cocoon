@@ -45,6 +45,14 @@ void StageWidget::loadModels()
 	ui->unstagedChangesView->setModel(m_unstagedFilesModel);
 }
 
+void StageWidget::reload()
+{
+	m_stagedFilesModel->reset();
+	m_unstagedFilesModel->reset();
+//	ui->commitWidget->clear();
+//	ui->fileStatusWidget->clear();
+}
+
 void StageWidget::setRepository(const Git::Repo *repo)
 {
 	m_repo = repo;

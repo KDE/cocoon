@@ -43,6 +43,7 @@ class StageWidget : public QWidget
 		~StageWidget();
 
 	public slots:
+		void reload();
 		void setRepository(const Git::Repo *repo);
 
 	private:
