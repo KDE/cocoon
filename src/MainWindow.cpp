@@ -77,6 +77,13 @@ void MainWindow::open()
 	}
 }
 
+void MainWindow::reload()
+{
+//	ui->historyWidget->reload();
+	ui->stageWidget->reload();
+//	ui->compareWidget->reload();
+}
+
 void MainWindow::setRepository(const QString &repoPath)
 {
 	m_repo = new Git::Repo(repoPath, this);

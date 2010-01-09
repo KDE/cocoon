@@ -47,6 +47,8 @@ class MainWindow : public KXmlGuiWindow
 
 	protected slots:
 		void open();
+		void reload();
+
 	private:
 		void setupActions();
 
