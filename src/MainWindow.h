@@ -46,6 +46,9 @@ class MainWindow : public KXmlGuiWindow
 		void changeEvent(QEvent *e);
 
 	private:
+		void setupActions();
+
+	private:
 		Git::Repo *m_repo;
 		Ui::MainWindow *ui;
 };

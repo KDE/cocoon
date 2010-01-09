@@ -20,6 +20,10 @@
 #include "ui_MainWindow.h"
 
 #include "Git/Repo.h"
+#include <KAction>
+#include <KActionCollection>
+#include <KApplication>
+#include <KStandardAction>
 
 
 
@@ -28,6 +32,8 @@ MainWindow::MainWindow(QWidget *parent)
 	, ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
+
+	setupActions();
 
 	connect(this, SIGNAL(repositoryChanged(const Git::Repo*)), ui->commandLineWidget, SLOT(setRepository(const Git::Repo*)));
 	connect(this, SIGNAL(repositoryChanged(const Git::Repo*)), ui->compareWidget, SLOT(setRepository(const Git::Repo*)));
@@ -63,6 +69,51 @@ void MainWindow::setRepository(const QString &repoPath)
 {
 	m_repo = new Git::Repo(repoPath, this);
 	emit repositoryChanged(m_repo);
+}
+
+void MainWindow::setupActions()
+{
+	KStandardAction::quit(KApplication::instance(), SLOT(quit()), actionCollection());
+/*
+			# commit
+				commit_action = KDE::Action.new(self) do |a|
+					a.text = i18n("Commit")
+					a.icon = KDE::Icon.new('git-commit')
+					# TODO: make setting shortcuts work
+					#a.shortcut = Qt::CTRL + Qt::Key_Return
+				end
+				actionCollection.add_action('commit', commit_action)
+				connect(commit_action, SIGNAL('triggered(bool)'), @ui.stageWidget, SLOT('commit()'))
+
+				stage_file_action = KDE::Action.new(self) do |a|
+					a.text = i18n("Stage File to Commit")
+					a.icon = KDE::Icon.new('list-add')
+					# TODO: make setting shortcuts work
+					#a.shortcut = Qt::CTRL + Qt::Key_S
+				end
+				actionCollection.add_action('file_stage', stage_file_action)
+				connect(stage_file_action, SIGNAL('triggered(bool)'), @ui.stageWidget, SLOT('stageFile()'))
+
+				unstage_file_action = KDE::Action.new(self) do |a|
+					a.text = i18n("Unstage File from Commit")
+					a.icon = KDE::Icon.new('list-remove')
+					# TODO: make setting shortcuts work
+					#a.shortcut = Qt::CTRL + Qt::Key_U
+				end
+				actionCollection.add_action('file_unstage', unstage_file_action)
+				connect(unstage_file_action, SIGNAL('triggered(bool)'), @ui.stageWidget, SLOT('unstageFile()'))
+*/
+
+// repository
+	KAction *openRepoAction = actionCollection()->addAction("repository_open", this, SLOT(open()));
+	openRepoAction->setText(i18n("Open repository"));
+	openRepoAction->setIcon(KIcon("folder-open"));
+	openRepoAction->setShortcut(Qt::CTRL + Qt::Key_O);
+
+	KAction *reloadRepoAction = actionCollection()->addAction("repository_reload", this, SLOT(reload()));
+	reloadRepoAction->setText(i18n("Reload repository"));
+	reloadRepoAction->setIcon(KIcon("view-refresh"));
+	reloadRepoAction->setShortcut(Qt::Key_F5);
 }
 
 #include "MainWindow.moc"
