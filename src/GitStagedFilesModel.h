@@ -43,7 +43,7 @@ class GitStagedFilesModel : public QAbstractTableModel
 		const Git::StatusFile* mapToStatusFile(const QModelIndex &index) const;
 		int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
-	protected slots:
+	public slots:
 		void reset();
 
 	private:
