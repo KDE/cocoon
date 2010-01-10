@@ -50,12 +50,16 @@ class Repo : public QObject
 		QString diff(const Commit &a, const Commit &b) const;
 		QString head() const;
 		QStringList heads() const;
+		void stageFiles(const QStringList &paths);
 		Status* status() const;
 		const QString& workingDir() const;
 
 	// static
 		static bool containsRepository(const QString &path);
 		static void init(const QString &newRepoPath);
+
+	signals:
+		void indexChanged();
 
 	private:
 		QString m_workingDir;

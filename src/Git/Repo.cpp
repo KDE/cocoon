@@ -107,6 +107,16 @@ QStringList Repo::heads() const
 	return branches;
 }
 
+void Repo::stageFiles(const QStringList &paths)
+{
+	GitRunner runner;
+	runner.setDirectory(workingDir());
+
+	runner.add(paths, QStringList());
+
+	emit indexChanged();
+}
+
 Status* Repo::status() const
 {
 	return new Status(this);
