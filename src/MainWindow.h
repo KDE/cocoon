@@ -40,7 +40,7 @@ class MainWindow : public KXmlGuiWindow
 		void setRepository(const QString &repoPath);
 
 	signals:
-		void repositoryChanged(const Git::Repo*);
+		void repositoryChanged(Git::Repo*);
 
 	protected:
 		void changeEvent(QEvent *e);

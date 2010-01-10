@@ -45,7 +45,7 @@ class HistoryWidget : public QWidget
 		~HistoryWidget();
 
 	public slots:
-		void setRepository(const Git::Repo *repo);
+		void setRepository(Git::Repo *repo);
 
 	private:
 		void loadModels();

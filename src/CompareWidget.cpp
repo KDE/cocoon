@@ -84,7 +84,7 @@ void CompareWidget::on_historyBView_clicked(const QModelIndex &index)
 	updateComparison();
 }
 
-void CompareWidget::setRepository(const Git::Repo *repo)
+void CompareWidget::setRepository(Git::Repo *repo)
 {
 	m_repo = repo;
 	loadModels();

@@ -57,7 +57,7 @@ void CommandLineWidget::createTerminal()
 	}
 }
 
-void CommandLineWidget::setRepository(const Git::Repo *repo)
+void CommandLineWidget::setRepository(Git::Repo *repo)
 {
 	const bool sendInput = (m_terminal != 0)
 		&& (m_terminal->foregroundProcessId() == -1)

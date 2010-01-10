@@ -45,7 +45,7 @@ class CompareWidget : public QWidget
 		~CompareWidget();
 
 	public slots:
-		void setRepository(const Git::Repo *repo);
+		void setRepository(Git::Repo *repo);
 
 	private:
 		void loadModels();

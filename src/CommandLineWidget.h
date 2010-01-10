@@ -39,7 +39,7 @@ class CommandLineWidget : public QWidget
 		~CommandLineWidget();
 
 	public slots:
-		void setRepository(const Git::Repo *repo);
+		void setRepository(Git::Repo *repo);
 		void terminalExited();
 
 	protected:

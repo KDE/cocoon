@@ -37,10 +37,10 @@ MainWindow::MainWindow(QWidget *parent)
 
 	setupActions();
 
-	connect(this, SIGNAL(repositoryChanged(const Git::Repo*)), ui->commandLineWidget, SLOT(setRepository(const Git::Repo*)));
-	connect(this, SIGNAL(repositoryChanged(const Git::Repo*)), ui->compareWidget, SLOT(setRepository(const Git::Repo*)));
-	connect(this, SIGNAL(repositoryChanged(const Git::Repo*)), ui->historyWidget, SLOT(setRepository(const Git::Repo*)));
-	connect(this, SIGNAL(repositoryChanged(const Git::Repo*)), ui->stageWidget, SLOT(setRepository(const Git::Repo*)));
+	connect(this, SIGNAL(repositoryChanged(Git::Repo*)), ui->commandLineWidget, SLOT(setRepository(Git::Repo*)));
+	connect(this, SIGNAL(repositoryChanged(Git::Repo*)), ui->compareWidget, SLOT(setRepository(Git::Repo*)));
+	connect(this, SIGNAL(repositoryChanged(Git::Repo*)), ui->historyWidget, SLOT(setRepository(Git::Repo*)));
+	connect(this, SIGNAL(repositoryChanged(Git::Repo*)), ui->stageWidget, SLOT(setRepository(Git::Repo*)));
 
 	// a call to KXmlGuiWindow::setupGUI() populates the GUI
 	// with actions, using KXMLGUI.
