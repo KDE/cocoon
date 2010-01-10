@@ -34,7 +34,7 @@ class GitUnstagedFilesModel : public QAbstractTableModel
 	Q_OBJECT
 
 	public:
-		explicit GitUnstagedFilesModel(const Git::Repo &repo, QObject *parent = 0);
+		explicit GitUnstagedFilesModel(Git::Repo *repo, QObject *parent = 0);
 
 		int columnCount(const QModelIndex &parent = QModelIndex()) const;
 		const QString& columnName(int column) const;
@@ -52,7 +52,7 @@ class GitUnstagedFilesModel : public QAbstractTableModel
 
 	private:
 		QList<Git::StatusFile*> m_files;
-		const Git::Repo &m_repo;
+		Git::Repo *m_repo;
 };
 
 #endif // GITUNSTAGEDFILESMODEL_H

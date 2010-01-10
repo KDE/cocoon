@@ -26,10 +26,12 @@
 
 
 
-GitStagedFilesModel::GitStagedFilesModel(const Git::Repo &repo, QObject *parent)
+GitStagedFilesModel::GitStagedFilesModel(Git::Repo *repo, QObject *parent)
 	: QAbstractTableModel(parent)
 	, m_repo(repo)
 {
+	connect(m_repo, SIGNAL(indexChanged()), this, SLOT(reset()));
+
 	loadFiles();
 }
 
@@ -103,7 +105,7 @@ QVariant GitStagedFilesModel::headerData(int section, Qt::Orientation orientatio
 
 void GitStagedFilesModel::loadFiles()
 {
-	m_files = m_repo.status()->stagedFiles();
+	m_files = m_repo->status()->stagedFiles();
 }
 
 QModelIndex GitStagedFilesModel::mapToIndex(const Git::StatusFile &file) const

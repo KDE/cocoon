@@ -26,10 +26,12 @@
 
 
 
-GitUnstagedFilesModel::GitUnstagedFilesModel(const Git::Repo &repo, QObject *parent)
+GitUnstagedFilesModel::GitUnstagedFilesModel(Git::Repo *repo, QObject *parent)
 	: QAbstractTableModel(parent)
 	, m_repo(repo)
 {
+	connect(m_repo, SIGNAL(indexChanged()), this, SLOT(reset()));
+
 	loadFiles();
 }
 
@@ -103,7 +105,7 @@ QVariant GitUnstagedFilesModel::headerData(int section, Qt::Orientation orientat
 
 void GitUnstagedFilesModel::loadFiles()
 {
-	m_files = m_repo.status()->unstagedFiles();
+	m_files = m_repo->status()->unstagedFiles();
 }
 
 QModelIndex GitUnstagedFilesModel::mapToIndex(const Git::StatusFile &file) const
