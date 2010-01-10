@@ -32,6 +32,8 @@ namespace Ui {
 class GitStagedFilesModel;
 class GitUnstagedFilesModel;
 
+class QModelIndex;
+
 
 
 class StageWidget : public QWidget
@@ -44,13 +46,19 @@ class StageWidget : public QWidget
 
 	public slots:
 		void reload();
-		void setRepository(const Git::Repo *repo);
+		void setRepository(Git::Repo *repo);
 
 	private:
 		void loadModels();
+		void stageFile();
+		void unstageFile();
+
+	private slots:
+		void on_stagedChangesView_doubleClicked(const QModelIndex &index);
+		void on_unstagedChangesView_doubleClicked(const QModelIndex &index);
 
 	private:
-		const Git::Repo *m_repo;
+		Git::Repo *m_repo;
 		GitStagedFilesModel *m_stagedFilesModel;
 		GitUnstagedFilesModel *m_unstagedFilesModel;
 		Ui::StageWidget *ui;
