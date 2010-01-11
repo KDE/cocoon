@@ -25,4 +25,5 @@ ENDMACRO(UNIT_TESTS)
 
 unit_tests(
 	NewFileStatus
+	NewlyAddedFileStatus
 )
