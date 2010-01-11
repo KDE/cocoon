@@ -332,6 +332,27 @@ bool StatusFile::changesUnstaged() const
 	return hasChanged() && !isStaged();
 }
 
+const QString StatusFile::diff() const
+{
+	QString diff;
+
+	if (!isUntracked()) {
+		GitRunner runner;
+		runner.setDirectory(m_repo->workingDir());
+
+		QStringList opts;
+		if (changesStaged()) {
+			opts << "--cached";
+		}
+
+		runner.diff(QStringList(), opts, QStringList() << path());
+
+		diff = runner.getResult();
+	}
+
+	return diff;
+}
+
 bool StatusFile::hasChanged() const
 {
 	return m_status.isEmpty();

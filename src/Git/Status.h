@@ -44,6 +44,7 @@ class StatusFile : public QObject
 
 		bool changesStaged() const;
 		bool changesUnstaged() const;
+		const QString diff() const;
 		bool isAdded() const;
 		bool isDeleted() const;
 		bool isModified() const;
