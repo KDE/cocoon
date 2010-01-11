@@ -48,6 +48,9 @@ void StageWidget::loadModels()
 
 	ui->stagedChangesView->setModel(m_stagedFilesModel);
 	ui->unstagedChangesView->setModel(m_unstagedFilesModel);
+
+	ui->fileStatusWidget->setRepository(m_repo);
+//	ui->commitWidget->setRepository(m_repo);
 }
 
 void StageWidget::on_stagedChangesView_doubleClicked(const QModelIndex &index)
@@ -69,7 +72,7 @@ void StageWidget::reload()
 	m_stagedFilesModel->reset();
 	m_unstagedFilesModel->reset();
 //	ui->commitWidget->clear();
-//	ui->fileStatusWidget->clear();
+	ui->fileStatusWidget->clear();
 }
 
 void StageWidget::setRepository(Git::Repo *repo)
@@ -92,7 +95,7 @@ void StageWidget::stageFile()
 
 		// update file status view
 		const Git::StatusFile *newStatusFile = m_stagedFilesModel->mapToStatusFile(newIndex);
-//		ui->fileStatusWidget->setFile(newStatusFile);
+		ui->fileStatusWidget->setFile(*newStatusFile);
 	}
 }
 
