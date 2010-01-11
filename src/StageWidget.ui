@@ -98,13 +98,21 @@
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <widget class="QWidget" name="fileStatusWidget" native="true"/>
+      <widget class="FileStatusWidget" name="fileStatusWidget" native="true"/>
       <widget class="QWidget" name="commitWidget" native="true"/>
      </widget>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>FileStatusWidget</class>
+   <extends>QWidget</extends>
+   <header>FileStatusWidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
