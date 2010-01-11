@@ -7,6 +7,7 @@ set(cocoon_SRCS
 	CommitInfoWidget.cpp
 	CompareWidget.cpp
 	DiffWidget.cpp
+	FileStatusWidget.cpp
 	GitBranchesModel.cpp
 	GitHistoryModel.cpp
 	GitStagedFilesModel.cpp
@@ -20,6 +21,7 @@ set(cocoon_SRCS
 kde4_add_ui_files(cocoon_SRCS
 	CommitInfoWidget.ui
 	CompareWidget.ui
+	FileStatusWidget.ui
 	HistoryWidget.ui
 	MainWindow.ui
 	OpenRepositoryDialog.ui
