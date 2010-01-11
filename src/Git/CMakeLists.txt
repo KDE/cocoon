@@ -1,4 +1,6 @@
 
+add_subdirectory( tests )
+
 set(git_SRCS
 	Commit.cpp
 	dvcsjob.cpp
