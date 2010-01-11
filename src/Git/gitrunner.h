@@ -263,6 +263,7 @@ public:
 		DvcsJob::JobStatus currentBranch();
 
 		DvcsJob::JobStatus add(const QStringList &paths, const QStringList &options = QStringList());
+		DvcsJob::JobStatus diff(const QStringList &commits, const QStringList &options = QStringList(), const QStringList &paths = QStringList());
 		DvcsJob::JobStatus diffFiles(const QStringList &options = QStringList(), const QStringList &commits = QStringList(), const QStringList &paths = QStringList());
 		DvcsJob::JobStatus diffIndex(const QString &treeish, const QStringList &options = QStringList(), const QStringList &commits = QStringList(), const QStringList &paths = QStringList());
 		DvcsJob::JobStatus log(const QStringList &options = QStringList(), const QString &sinceId = QString(), const QString &untilId = QString(), const QStringList &paths = QStringList());

@@ -296,6 +296,27 @@ DvcsJob::JobStatus GitRunner::add(const QStringList &paths, const QStringList &o
 	return m_jobStatus;
 }
 
+DvcsJob::JobStatus GitRunner::diff(const QStringList &commits, const QStringList &options, const QStringList &paths)
+{
+	DvcsJob *job = new DvcsJob();
+	initJob(*job);
+	*job << "diff";
+
+	if (!options.isEmpty()) {
+		*job << options;
+	}
+	if (!commits.isEmpty()) {
+		*job << commits;
+	}
+	*job << "--";
+	if (!paths.isEmpty()) {
+		*job << paths;
+	}
+
+	startJob(*job);
+	return m_jobStatus;
+}
+
 DvcsJob::JobStatus GitRunner::diffFiles(const QStringList &options, const QStringList &commits, const QStringList &paths)
 {
 	DvcsJob *job = new DvcsJob();
