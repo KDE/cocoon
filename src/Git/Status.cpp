@@ -75,7 +75,7 @@ void Status::constuctStatus()
 			filesData[file]["staged"] = "true";
 		}
 
-		if (!(m_status.contains(file) && m_status[file].last()->m_status == "D")) {
+		if (!(m_status.contains(file) && m_status[file].last()->status() == "D")) {
 			addFile(file, filesData[file]);
 		}
 	}
