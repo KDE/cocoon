@@ -9,7 +9,9 @@ set(git_SRCS
 
 automoc4(CocoonGit git_SRCS)
 add_library(CocoonGit
-	STATIC ${git_SRCS})
+	STATIC ${git_SRCS}
+)
 
 target_link_libraries(CocoonGit
-	${QT_LIBRARIES})
+	${QT_LIBRARIES}
+)
