@@ -390,7 +390,7 @@ const QString StatusFile::diff() const
 
 bool StatusFile::hasChanged() const
 {
-	return m_status.isEmpty();
+	return !m_status.isEmpty();
 }
 
 bool StatusFile::isAdded() const
