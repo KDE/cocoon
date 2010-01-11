@@ -54,14 +54,14 @@ void StageWidget::on_stagedChangesView_doubleClicked(const QModelIndex &index)
 {
 	Q_UNUSED(index);
 
-	stageFile();
+	unstageFile();
 }
 
 void StageWidget::on_unstagedChangesView_doubleClicked(const QModelIndex &index)
 {
 	Q_UNUSED(index);
 
-	unstageFile();
+	stageFile();
 }
 
 void StageWidget::reload()
