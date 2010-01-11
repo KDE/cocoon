@@ -53,6 +53,7 @@ class StatusFile : public QObject
 		bool isUntracked() const;
 		bool hasChanged() const;
 		const QString& path() const;
+		const QString& status() const;
 
 	private:
 		QString m_idIndex;
@@ -74,6 +75,8 @@ class Status : public QObject
 	public:
 		explicit Status(const Repo *repo);
 
+		QList<StatusFile*> files() const;
+		QList<StatusFile*> forFile(const QString &file) const;
 		QList<StatusFile*> stagedFiles() const;
 		QList<StatusFile*> unstagedFiles() const;
 

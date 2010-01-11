@@ -184,6 +184,16 @@ QHash<QString, QHash<QString, QString> > Status::diffIndex(const QString &treeis
 	return result;
 }
 
+QList<StatusFile*> Status::files() const
+{
+	return m_files;
+}
+
+QList<StatusFile*> Status::forFile(const QString &file) const
+{
+	return m_status[file];
+}
+
 QStringList Status::ignoredFiles() const
 {
 	QStringList ignoredFiles;
@@ -418,6 +428,11 @@ bool StatusFile::isUntracked() const
 const QString& StatusFile::path() const
 {
 	return m_path;
+}
+
+const QString& StatusFile::status() const
+{
+	return m_status;
 }
 
 #include "Status.moc"
