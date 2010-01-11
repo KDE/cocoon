@@ -78,6 +78,8 @@ void NewFileStatusTest::initTestCase()
 
 	QProcess::execute("mkdir", QStringList() << workingDir);
 
+	qDebug() << workingDir;
+
 	QProcess::execute("git", gitBasicOpts() << "init");
 	QProcess::execute("git", gitBasicOpts() << "commit" << "--allow-empty" << "-m" << "Empty inital commit.");
 
@@ -125,6 +127,9 @@ void NewFileStatusTest::testNewTestFileIsUntracked()
 void NewFileStatusTest::testNewFileIsUnstaged()
 {
 	Git::StatusFile *file = status->forFile("untracked.txt")[0];
+
+	QVERIFY(file->hasChanged());
+	QVERIFY(!file->isStaged());
 
 	QVERIFY(!file->changesStaged());
 	QVERIFY(file->changesUnstaged());
