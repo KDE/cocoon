@@ -332,6 +332,11 @@ bool StatusFile::changesUnstaged() const
 	return hasChanged() && !isStaged();
 }
 
+bool StatusFile::hasChanged() const
+{
+	return m_status.isEmpty();
+}
+
 bool StatusFile::isAdded() const
 {
 	return m_status == "A";
@@ -352,9 +357,9 @@ bool StatusFile::isStaged() const
 	return m_staged;
 }
 
-bool StatusFile::hasChanged() const
+bool StatusFile::isUntracked() const
 {
-	return m_status.isEmpty();
+	return m_status == "U";
 }
 
 const QString& StatusFile::path() const
