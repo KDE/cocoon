@@ -325,11 +325,7 @@ StatusFile::StatusFile(const Repo *repo)
 const QByteArray StatusFile::blob(QString type) const
 {
 	if (type.isEmpty()) {
-		if (changesUnstaged()) {
-			type = "file";
-		} else {
-			type = "index";
-		}
+		type = changesUnstaged() ? "file" : "index";
 	}
 
 	GitRunner runner;
@@ -366,6 +362,7 @@ bool StatusFile::changesUnstaged() const
 {
 	return hasChanged() && !isStaged();
 }
+
 
 const QString StatusFile::diff() const
 {
