@@ -40,7 +40,7 @@ class StatusFile : public QObject
 	friend class Status;
 
 	public:
-		StatusFile(Status *parent);
+		StatusFile(const Repo *parent);
 
 		bool changesStaged() const;
 		bool changesUnstaged() const;
@@ -58,6 +58,7 @@ class StatusFile : public QObject
 		QString m_modeIndex;
 		QString m_modeRepo;
 		QString m_path;
+		const Repo *m_repo;
 		bool m_staged;
 		QString m_status;
 };
@@ -89,7 +90,7 @@ class Status : public QObject
 	private:
 		QList<StatusFile*> m_files;
 		const Repo *m_repo;
-		QHash<QString, StatusFile*> m_status;
+		QHash<QString, QList<StatusFile*> > m_status;
 };
 
 }

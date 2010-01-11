@@ -56,73 +56,65 @@ void Status::constuctStatus()
 
 	// find modified in tree
 	filesData = diffFiles();
-	for(int i=0; i < filesData.size(); ++i) {
-		QString key = filesData.keys()[i];
-
+	foreach (const QString &file, filesData.keys()) {
 		// if a file shows up here it has not yet been staged
 		// @info staged deleted files don't show up in diff-files
-		filesData[key]["staged"] = "false";
+		filesData[file]["staged"] = "false";
 
-		addFile(key, filesData[key]);
+		addFile(file, filesData[file]);
 	}
 
 	// find added but not committed - new files
 	filesData = diffIndex("HEAD");
-	for(int i=0; i < filesData.size(); ++i) {
-		QString file = filesData.keys()[i];
-
+	foreach (const QString &file, filesData.keys()) {
 		// the file has been staged
 		// if the file has a index id or is marked as deleted
 		// @info staged deleted files have no index id
 		if (!QRegExp("^[0]*$").exactMatch(filesData[file]["idIndex"]) || filesData[file]["status"] == "D"
-			|| m_status[file]->m_idRepo != filesData[file]["idRepo"]) {
+			|| m_status[file].last()->m_idRepo != filesData[file]["idRepo"]) {
 			filesData[file]["staged"] = "true";
 		}
 
-		if (!(m_status.contains(file) && m_status[file]->m_status == "D")) {
+		if (!(m_status.contains(file) && m_status[file].last()->m_status == "D")) {
 			addFile(file, filesData[file]);
 		}
 	}
-/*
-				@status.each do |file, data_array|
-					if data_array.size > 1
-						@status[file] = data_array.map{ |data| StatusFile.new(@base, data) }
-					else
-						@status[file] = StatusFile.new(@base, data_array.first)
-					end
-				end
-				@files = @status.values.flatten
-*/
-	m_files = m_status.values();
+
+	foreach (const QList<StatusFile*> list, m_status.values()) {
+		m_files << list;
+	}
 }
 
 void Status::addFile(const QString &file, QHash<QString, QString> data)
 {
-/*
-				if @status[file]
-					last_data = @status[file].last
-					if !last_data[:status] || data[:staged].nil?
-						@status[file][-1] =  data.merge!(last_data)
-					else
-						@status[file] << data
-					end
-				else
-					@status[file] = [data]
-				end
-*/
-	if (!m_status.contains(file)) {
-		m_status[file] = new StatusFile(this);
+	if (m_status.contains(file) && m_status[file].size() > 0) {
+		StatusFile *lastFile = m_status[file].last();
+		if (lastFile->m_status.isEmpty() || data["staged"].isEmpty()) {
+			if (!lastFile->m_idIndex.isEmpty())   { data["idIndex"]   = lastFile->m_idIndex; }
+			if (!lastFile->m_idRepo.isEmpty())    { data["idRepo"]    = lastFile->m_idRepo; }
+			if (!lastFile->m_modeIndex.isEmpty()) { data["modeIndex"] = lastFile->m_modeIndex; }
+			if (!lastFile->m_modeRepo.isEmpty())  { data["modeRepo"]  = lastFile->m_modeRepo; }
+			if (!lastFile->m_path.isEmpty())      { data["path"]      = lastFile->m_path; }
+			if ( lastFile->m_staged)              { data["staged"]    = "true"; }
+			else                                  { data["staged"]    = "false"; }
+			if (!lastFile->m_status.isEmpty())    { data["status"]    = lastFile->m_status; }
+
+			m_status[file][m_status[file].size()-1] = new StatusFile(m_repo);
+		} else {
+			m_status[file] << new StatusFile(m_repo);
+		}
+	} else {
+		m_status[file] << new StatusFile(m_repo);
 	}
 
-	StatusFile *statusFile = m_status[file];
-
-	statusFile->m_idIndex = data["idIndex"];
-	statusFile->m_idRepo = data["idRepo"];
+	StatusFile *statusFile = m_status[file].last();
+	statusFile->m_idIndex   = data["idIndex"];
+	statusFile->m_idRepo    = data["idRepo"];
 	statusFile->m_modeIndex = data["modeIndex"];
-	statusFile->m_modeRepo = data["modeRepo"];
-	statusFile->m_path = data["path"];
-	statusFile->m_staged = data["staged"] == "true";
-	statusFile->m_status = data["status"];
+	statusFile->m_modeRepo  = data["modeRepo"];
+	statusFile->m_path      = data["path"];
+	statusFile->m_staged    = data["staged"] == "true";
+	statusFile->m_status    = data["status"];
 }
 
 QHash<QString, QHash<QString, QString> > Status::diffFiles() const
@@ -324,8 +316,9 @@ QStringList Status::untrackedFiles() const
 
 
 
-StatusFile::StatusFile(Status *parent)
-	: QObject(parent)
+StatusFile::StatusFile(const Repo *repo)
+	: QObject((QObject*)repo)
+	, m_repo(repo)
 {
 }
 
