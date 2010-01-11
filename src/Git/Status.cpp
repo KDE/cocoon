@@ -322,6 +322,41 @@ StatusFile::StatusFile(const Repo *repo)
 {
 }
 
+const QByteArray StatusFile::blob(QString type) const
+{
+	if (type.isEmpty()) {
+		if (changesUnstaged()) {
+			type = "file";
+		} else {
+			type = "index";
+		}
+	}
+
+	GitRunner runner;
+	runner.setDirectory(m_repo->workingDir());
+
+	QByteArray blobData;
+
+	if (type == "file") {
+		QFile file(QDir(m_repo->workingDir()).filePath(path()));
+		file.open(QFile::ReadOnly);
+		blobData = file.readAll();
+		file.close();
+	} else if (type == "index") {
+		if (!m_idIndex.isEmpty()) {
+			runner.catFile(m_idIndex, QStringList() << "-p");
+			blobData = runner.getResult().toUtf8();
+		}
+	} else if (type == "repo") {
+		if (!m_idRepo.isEmpty()) {
+			runner.catFile(m_idRepo, QStringList() << "-p");
+			blobData = runner.getResult().toUtf8();
+		}
+	}
+
+	return blobData;
+}
+
 bool StatusFile::changesStaged() const
 {
 	return hasChanged() && isStaged();

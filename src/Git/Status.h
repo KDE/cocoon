@@ -42,6 +42,7 @@ class StatusFile : public QObject
 	public:
 		StatusFile(const Repo *parent);
 
+		const QByteArray blob(QString type = QString()) const;
 		bool changesStaged() const;
 		bool changesUnstaged() const;
 		const QString diff() const;
