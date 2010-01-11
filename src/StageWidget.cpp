@@ -98,22 +98,20 @@ void StageWidget::stageFile()
 
 void StageWidget::unstageFile()
 {
-/*
-				indexes = @ui.stagedChangesView.selected_indexes
-				unless indexes.empty?
-					index = indexes.first
-					status_file = @staged_files_model.map_to_status_file(index)
-					repository.unstage_files(status_file.path)
+	QModelIndexList indexes = ui->stagedChangesView->selectionModel()->selectedIndexes();
+	if (!indexes.isEmpty()) {
+		QModelIndex index = indexes.first();
+		const Git::StatusFile *statusFile = m_stagedFilesModel->mapToStatusFile(index);
+//		m_repo->unstageFiles(QStringList() << statusFile->path());
 
-					# set selection on unstaged file
-					new_index = @unstaged_files_model.map_to_index(status_file)
-					@ui.unstagedChangesView.current_index = new_index
+		// set selection on unstaged file
+		QModelIndex newIndex = m_unstagedFilesModel->mapToIndex(*statusFile);
+		ui->unstagedChangesView->setCurrentIndex(newIndex);
 
-					# update file status view
-					new_status_file = @unstaged_files_model.map_to_status_file(new_index)
-					@ui.fileStatusWidget.file_status = new_status_file
-				end
-*/
+		// update file status view
+		const Git::StatusFile *newStatusFile = m_unstagedFilesModel->mapToStatusFile(newIndex);
+		ui->fileStatusWidget->setFile(*newStatusFile);
+	}
 }
 
 #include "StageWidget.moc"
