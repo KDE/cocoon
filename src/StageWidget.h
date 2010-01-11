@@ -54,7 +54,9 @@ class StageWidget : public QWidget
 		void unstageFile();
 
 	private slots:
+		void on_stagedChangesView_clicked(const QModelIndex &index);
 		void on_stagedChangesView_doubleClicked(const QModelIndex &index);
+		void on_unstagedChangesView_clicked(const QModelIndex &index);
 		void on_unstagedChangesView_doubleClicked(const QModelIndex &index);
 
 	private:

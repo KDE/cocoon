@@ -19,6 +19,8 @@
 #include "StageWidget.h"
 #include "ui_StageWidget.h"
 
+#include "FileStatusWidget.h"
+
 #include "Git/Repo.h"
 #include "Git/Status.h"
 
@@ -53,11 +55,25 @@ void StageWidget::loadModels()
 //	ui->commitWidget->setRepository(m_repo);
 }
 
+void StageWidget::on_stagedChangesView_clicked(const QModelIndex &index)
+{
+	ui->unstagedChangesView->clearSelection();
+	const Git::StatusFile *file = m_stagedFilesModel->mapToStatusFile(index);
+	ui->fileStatusWidget->setFile(*file);
+}
+
 void StageWidget::on_stagedChangesView_doubleClicked(const QModelIndex &index)
 {
 	Q_UNUSED(index);
 
 	unstageFile();
+}
+
+void StageWidget::on_unstagedChangesView_clicked(const QModelIndex &index)
+{
+	ui->stagedChangesView->clearSelection();
+	const Git::StatusFile *file = m_unstagedFilesModel->mapToStatusFile(index);
+	ui->fileStatusWidget->setFile(*file);
 }
 
 void StageWidget::on_unstagedChangesView_doubleClicked(const QModelIndex &index)
