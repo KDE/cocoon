@@ -42,7 +42,7 @@ class NewlyAddedFileStatusTest : public QObject
 		void cleanup();
 
 		void testNewlyAddedFileHasStatus();
-		void testNewlyAddedTestFileIsAdded();
+		void testNewlyAddedFileIsAdded();
 		void testNewlyAddedFileIsStaged();
 		void testNewlyAddedFileDefaultBlobIsIndexBlob();
 		void testNewlyAddedFileFileBlobIsCorrect();
@@ -116,7 +116,7 @@ void NewlyAddedFileStatusTest::testNewlyAddedFileHasStatus()
 	QVERIFY(!status->forFile("newly_added.txt").isEmpty());
 }
 
-void NewlyAddedFileStatusTest::testNewlyAddedTestFileIsAdded()
+void NewlyAddedFileStatusTest::testNewlyAddedFileIsAdded()
 {
 	QList<Git::StatusFile*> fileStatus = status->forFile("newly_added.txt");
 	QVERIFY(fileStatus.size() == 1);
