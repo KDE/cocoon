@@ -48,7 +48,7 @@ class ModifiedFileStatusTest : public QObject
 		void testModifiedFileFileBlobIsCorrect();
 		void testModifiedFileIndexBlobIsCorrect();
 		void testModifiedFileRepoBlobIsEmpty();
-		void testModifiedFileUncachedDiffIsCorrect();
+		void testModifiedFileDiffIsCorrect();
 
 	private:
 		Git::Repo *repo;
@@ -170,7 +170,7 @@ void ModifiedFileStatusTest::testModifiedFileRepoBlobIsEmpty()
 	QVERIFY(file->blob("repo") == "foo\nbar");
 }
 
-void ModifiedFileStatusTest::testModifiedFileUncachedDiffIsCorrect()
+void ModifiedFileStatusTest::testModifiedFileDiffIsCorrect()
 {
 	Git::StatusFile *file = status->forFile("modified.txt")[0];
 
