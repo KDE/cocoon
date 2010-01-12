@@ -70,7 +70,7 @@ void Status::constuctStatus()
 		// the file has been staged
 		// if the file has a index id or is marked as deleted
 		// @info staged deleted files have no index id
-		if (!QRegExp("^[0]*$").exactMatch(filesData[file]["idIndex"]) || filesData[file]["status"] == "D"
+		if ((!filesData[file]["idIndex"].isEmpty() || filesData[file]["status"] == "D")
 			|| m_status[file].last()->m_idRepo != filesData[file]["idRepo"]) {
 			filesData[file]["staged"] = "true";
 		}
@@ -140,8 +140,8 @@ QHash<QString, QHash<QString, QString> > Status::diffFiles() const
 
 		result[file];
 		result[file]["path"] = file;
-		result[file]["idIndex"] = idIndex;
-		result[file]["idRepo"] = idRepo;
+		result[file]["idIndex"] = QRegExp("^[0]*$").exactMatch(idIndex) ? QString() : idIndex;
+		result[file]["idRepo"] = QRegExp("^[0]*$").exactMatch(idRepo) ? QString() : idRepo;
 		result[file]["modeIndex"] = modeIndex;
 		result[file]["modeRepo"] = modeRepo;
 		result[file]["status"] = status;
@@ -174,8 +174,8 @@ QHash<QString, QHash<QString, QString> > Status::diffIndex(const QString &treeis
 
 		result[file];
 		result[file]["path"] = file;
-		result[file]["idIndex"] = idIndex;
-		result[file]["idRepo"] = idRepo;
+		result[file]["idIndex"] = QRegExp("^[0]*$").exactMatch(idIndex) ? QString() : idIndex;
+		result[file]["idRepo"] = QRegExp("^[0]*$").exactMatch(idRepo) ? QString() : idRepo;
 		result[file]["modeIndex"] = modeIndex;
 		result[file]["modeRepo"] = modeRepo;
 		result[file]["status"] = status;
@@ -259,7 +259,7 @@ QHash<QString, QHash<QString, QString> > Status::lsFiles() const
 		result[file];
 		result[file]["path"] = file;
 		result[file]["modeIndex"] = modeIndex;
-		result[file]["idIndex"] = idIndex;
+		result[file]["idIndex"] = QRegExp("^[0]*$").exactMatch(idIndex) ? QString() : idIndex;
 		result[file]["stage"] = stage;
 	}
 
