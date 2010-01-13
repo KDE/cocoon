@@ -400,6 +400,16 @@ bool StatusFile::hasChanged() const
 	return !m_status.isEmpty();
 }
 
+const QString& StatusFile::idIndex() const
+{
+	return m_idIndex;
+}
+
+const QString& StatusFile::idRepo() const
+{
+	return m_idRepo;
+}
+
 bool StatusFile::isAdded() const
 {
 	return m_status == "A";
@@ -423,6 +433,16 @@ bool StatusFile::isStaged() const
 bool StatusFile::isUntracked() const
 {
 	return m_status == "U";
+}
+
+const QString& StatusFile::modeIndex() const
+{
+	return m_modeIndex;
+}
+
+const QString& StatusFile::modeRepo() const
+{
+	return m_modeRepo;
 }
 
 const QString& StatusFile::path() const

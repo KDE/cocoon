@@ -46,12 +46,16 @@ class StatusFile : public QObject
 		bool changesStaged() const;
 		bool changesUnstaged() const;
 		const QString diff() const;
+		const QString& idIndex() const;
+		const QString& idRepo() const;
 		bool isAdded() const;
 		bool isDeleted() const;
 		bool isModified() const;
 		bool isStaged() const;
 		bool isUntracked() const;
 		bool hasChanged() const;
+		const QString& modeIndex() const;
+		const QString& modeRepo() const;
 		const QString& path() const;
 		const QString& status() const;
 
