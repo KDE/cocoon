@@ -16,30 +16,16 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QObject>
-
-#include "Git/Repo.h"
-#include "Git/Status.h"
-
-#include <QtTest/QtTest>
-#include <qtest_kde.h>
-
-#include <QProcess>
+#include "GitTestBase.h"
 
 
 
-class NewFileStatusTest : public QObject
+class NewFileStatusTest : public GitTestBase
 {
 	Q_OBJECT
 
-	private:
-		QStringList gitBasicOpts();
-
 	private slots:
 		void initTestCase();
-		void cleanupTestCase();
-		void init();
-		void cleanup();
 
 		void testNewFileHasStatus();
 		void testNewTestFileIsUntracked();
@@ -49,31 +35,16 @@ class NewFileStatusTest : public QObject
 		void testNewFileIndexBlobIsEmpty();
 		void testNewFileRepoBlobIsEmpty();
 		void testNewFileHasNoDiff();
-
-	private:
-		Git::Repo *repo;
-		Git::Status *status;
-		QString workingDir;
 };
 
 QTEST_KDEMAIN_CORE(NewFileStatusTest)
 
 
 
-QStringList NewFileStatusTest::gitBasicOpts()
-{
-	QStringList opts;
-
-	opts << QString("--git-dir=%1/.git").arg(workingDir);
-	opts << QString("--work-tree=%1").arg(workingDir);
-
-	return opts;
-}
-
 void NewFileStatusTest::initTestCase()
 {
-	repo = 0;
-	status = 0;
+	GitTestBase::initTestCase();
+
 	workingDir = QDir::temp().filePath("new_file_status_test_repo");
 
 	QProcess::execute("mkdir", QStringList() << workingDir);
@@ -87,23 +58,6 @@ void NewFileStatusTest::initTestCase()
 	file.open(QFile::ReadWrite);
 	file.write("foo\nbar\nbaz\n");
 	file.close();
-}
-
-void NewFileStatusTest::cleanupTestCase()
-{
-	QProcess::execute("rm", QStringList() << "-rf" << workingDir);
-}
-
-void NewFileStatusTest::init()
-{
-	repo = new Git::Repo(workingDir, this);
-	status = repo->status();
-}
-
-void NewFileStatusTest::cleanup()
-{
-	delete status;
-	delete repo;
 }
 
 

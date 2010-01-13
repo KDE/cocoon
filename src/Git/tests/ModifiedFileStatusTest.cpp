@@ -16,30 +16,16 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QObject>
-
-#include "Git/Repo.h"
-#include "Git/Status.h"
-
-#include <QtTest/QtTest>
-#include <qtest_kde.h>
-
-#include <QProcess>
+#include "GitTestBase.h"
 
 
 
-class ModifiedFileStatusTest : public QObject
+class ModifiedFileStatusTest : public GitTestBase
 {
 	Q_OBJECT
 
-	private:
-		QStringList gitBasicOpts();
-
 	private slots:
 		void initTestCase();
-		void cleanupTestCase();
-		void init();
-		void cleanup();
 
 		void testModifiedFileHasStatus();
 		void testModifiedFileIsModified();
@@ -49,31 +35,16 @@ class ModifiedFileStatusTest : public QObject
 		void testModifiedFileIndexBlobIsCorrect();
 		void testModifiedFileRepoBlobIsEmpty();
 		void testModifiedFileDiffIsCorrect();
-
-	private:
-		Git::Repo *repo;
-		Git::Status *status;
-		QString workingDir;
 };
 
 QTEST_KDEMAIN_CORE(ModifiedFileStatusTest)
 
 
 
-QStringList ModifiedFileStatusTest::gitBasicOpts()
-{
-	QStringList opts;
-
-	opts << QString("--git-dir=%1/.git").arg(workingDir);
-	opts << QString("--work-tree=%1").arg(workingDir);
-
-	return opts;
-}
-
 void ModifiedFileStatusTest::initTestCase()
 {
-	repo = 0;
-	status = 0;
+	GitTestBase::initTestCase();
+
 	workingDir = QDir::temp().filePath("modified_file_status_test_repo");
 
 	QProcess::execute("mkdir", QStringList() << workingDir);
@@ -94,23 +65,6 @@ void ModifiedFileStatusTest::initTestCase()
 	file.open(QFile::ReadWrite);
 	file.write("foo\nbar\nbaz\n");
 	file.close();
-}
-
-void ModifiedFileStatusTest::cleanupTestCase()
-{
-	QProcess::execute("rm", QStringList() << "-rf" << workingDir);
-}
-
-void ModifiedFileStatusTest::init()
-{
-	repo = new Git::Repo(workingDir, this);
-	status = repo->status();
-}
-
-void ModifiedFileStatusTest::cleanup()
-{
-	delete status;
-	delete repo;
 }
 
 
