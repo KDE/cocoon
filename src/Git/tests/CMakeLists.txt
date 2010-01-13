@@ -13,7 +13,7 @@ MACRO(UNIT_TESTS)
 		set(_testName ${_className}Test)
 		kde4_add_unit_test(${_testName}
 			TESTNAME cocoon-git-${_testName}
-			NOGUI ${_testName}.cpp
+			NOGUI ${_testName}.cpp GitTestBase.cpp
 		)
 		target_link_libraries(${_testName}
 			CocoonGit
