@@ -27,6 +27,12 @@ class NewlyAddedFileStatusTest : public GitTestBase
 	private slots:
 		void initTestCase();
 
+		void testNewlyAddedFile_lsFiles();
+		void testNewlyAddedFile_diffFiles();
+		void testNewlyAddedFile_diffIndex();
+		void testNewlyAddedFile_diffUntrackedFiles();
+		void testNewlyAddedFile_diffIgnoredFiles();
+
 		void testNewlyAddedFileHasStatus();
 		void testNewlyAddedFileIsAdded();
 		void testNewlyAddedFileIsStaged();
@@ -60,6 +66,51 @@ void NewlyAddedFileStatusTest::initTestCase()
 	file.close();
 
 	QProcess::execute("git", gitBasicOpts() << "add" << "newly_added.txt");
+}
+
+
+
+void NewlyAddedFileStatusTest::testNewlyAddedFile_lsFiles()
+{
+	QVERIFY(status->lsFiles().size() == 1);
+
+	Git::StatusFile *file = status->lsFiles()[0];
+	QVERIFY(file->idIndex() == "86e041dad66a19b9518b83b78865015f62662f75");
+	QVERIFY(file->idRepo().isNull());
+	QVERIFY(!file->isStaged());
+	QVERIFY(file->modeIndex() == "100644");
+	QVERIFY(file->modeRepo().isNull());
+	QVERIFY(file->path() == "newly_added.txt");
+	QVERIFY(file->status().isNull());
+}
+
+void NewlyAddedFileStatusTest::testNewlyAddedFile_diffFiles()
+{
+	QVERIFY(status->diffFiles().isEmpty());
+}
+
+void NewlyAddedFileStatusTest::testNewlyAddedFile_diffIndex()
+{
+	QVERIFY(status->diffIndex("HEAD").size() == 1);
+
+	Git::StatusFile *file = status->diffIndex("HEAD")[0];
+	QVERIFY(file->idIndex() == "86e041dad66a19b9518b83b78865015f62662f75");
+	QVERIFY(file->idRepo().isNull());
+	QVERIFY(file->isStaged());
+	QVERIFY(file->modeIndex() == "100644");
+	QVERIFY(file->modeRepo().isNull());
+	QVERIFY(file->path() == "newly_added.txt");
+	QVERIFY(file->status() == "A");
+}
+
+void NewlyAddedFileStatusTest::testNewlyAddedFile_diffUntrackedFiles()
+{
+	QVERIFY(status->untrackedFiles().isEmpty());
+}
+
+void NewlyAddedFileStatusTest::testNewlyAddedFile_diffIgnoredFiles()
+{
+	QVERIFY(status->ignoredFiles().isEmpty());
 }
 
 

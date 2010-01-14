@@ -27,6 +27,12 @@ class UpdatedFileStatusTest : public GitTestBase
 	private slots:
 		void initTestCase();
 
+		void testUpdatedFile_lsFiles();
+		void testUpdatedFile_diffFiles();
+		void testUpdatedFile_diffIndex();
+		void testUpdatedFile_diffUntrackedFiles();
+		void testUpdatedFile_diffIgnoredFiles();
+
 		void testUpdatedFileHasStatus();
 		void testUpdatedFileIsModified();
 		void testUpdatedFileIsStaged();
@@ -67,6 +73,51 @@ void UpdatedFileStatusTest::initTestCase()
 	file.close();
 
 	QProcess::execute("git", gitBasicOpts() << "add" << "updated.txt");
+}
+
+
+
+void UpdatedFileStatusTest::testUpdatedFile_lsFiles()
+{
+	QVERIFY(status->lsFiles().size() == 1);
+
+	Git::StatusFile *file = status->lsFiles()[0];
+	QVERIFY(file->idIndex() == "86e041dad66a19b9518b83b78865015f62662f75");
+	QVERIFY(file->idRepo().isNull());
+	QVERIFY(!file->isStaged());
+	QVERIFY(file->modeIndex() == "100644");
+	QVERIFY(file->modeRepo().isNull());
+	QVERIFY(file->path() == "updated.txt");
+	QVERIFY(file->status().isNull());
+}
+
+void UpdatedFileStatusTest::testUpdatedFile_diffFiles()
+{
+	QVERIFY(status->diffFiles().isEmpty());
+}
+
+void UpdatedFileStatusTest::testUpdatedFile_diffIndex()
+{
+	QVERIFY(status->diffIndex("HEAD").size() == 1);
+
+	Git::StatusFile *file = status->diffIndex("HEAD")[0];
+	QVERIFY(file->idIndex() == "86e041dad66a19b9518b83b78865015f62662f75");
+	QVERIFY(file->idRepo() == "a907ec3f431eeb6b1c75799a7e4ba73ca6dc627a");
+	QVERIFY(file->isStaged());
+	QVERIFY(file->modeIndex() == "100644");
+	QVERIFY(file->modeRepo() == "100644");
+	QVERIFY(file->path() == "updated.txt");
+	QVERIFY(file->status() == "M");
+}
+
+void UpdatedFileStatusTest::testUpdatedFile_diffUntrackedFiles()
+{
+	QVERIFY(status->untrackedFiles().isEmpty());
+}
+
+void UpdatedFileStatusTest::testUpdatedFile_diffIgnoredFiles()
+{
+	QVERIFY(status->ignoredFiles().isEmpty());
 }
 
 

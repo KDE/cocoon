@@ -27,6 +27,12 @@ class NewFileStatusTest : public GitTestBase
 	private slots:
 		void initTestCase();
 
+		void testNewFile_lsFiles();
+		void testNewFile_diffFiles();
+		void testNewFile_diffIndex();
+		void testNewFile_diffUntrackedFiles();
+		void testNewFile_diffIgnoredFiles();
+
 		void testNewFileHasStatus();
 		void testNewTestFileIsUntracked();
 		void testNewFileIsUnstaged();
@@ -58,6 +64,42 @@ void NewFileStatusTest::initTestCase()
 	file.open(QFile::ReadWrite);
 	file.write("foo\nbar\nbaz\n");
 	file.close();
+}
+
+
+
+void NewFileStatusTest::testNewFile_lsFiles()
+{
+	QVERIFY(status->lsFiles().isEmpty());
+}
+
+void NewFileStatusTest::testNewFile_diffFiles()
+{
+	QVERIFY(status->diffFiles().isEmpty());
+}
+
+void NewFileStatusTest::testNewFile_diffIndex()
+{
+	QVERIFY(status->diffIndex("HEAD").isEmpty());
+}
+
+void NewFileStatusTest::testNewFile_diffUntrackedFiles()
+{
+	QVERIFY(status->untrackedFiles().size() == 1);
+
+	Git::StatusFile *file = status->untrackedFiles()[0];
+	QVERIFY(file->idIndex().isNull());
+	QVERIFY(file->idRepo().isNull());
+	QVERIFY(!file->isStaged());
+	QVERIFY(file->modeIndex().isNull());
+	QVERIFY(file->modeRepo().isNull());
+	QVERIFY(file->path() == "untracked.txt");
+	QVERIFY(file->status() == "U");
+}
+
+void NewFileStatusTest::testNewFile_diffIgnoredFiles()
+{
+	QVERIFY(status->ignoredFiles().isEmpty());
 }
 
 

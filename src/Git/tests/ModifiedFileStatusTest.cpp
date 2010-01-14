@@ -27,6 +27,12 @@ class ModifiedFileStatusTest : public GitTestBase
 	private slots:
 		void initTestCase();
 
+		void testModifiedFile_lsFiles();
+		void testModifiedFile_diffFiles();
+		void testModifiedFile_diffIndex();
+		void testModifiedFile_diffUntrackedFiles();
+		void testModifiedFile_diffIgnoredFiles();
+
 		void testModifiedFileHasStatus();
 		void testModifiedFileIsModified();
 		void testModifiedFileIsUnstaged();
@@ -65,6 +71,60 @@ void ModifiedFileStatusTest::initTestCase()
 	file.open(QFile::ReadWrite);
 	file.write("foo\nbar\nbaz\n");
 	file.close();
+}
+
+
+
+void ModifiedFileStatusTest::testModifiedFile_lsFiles()
+{
+	QVERIFY(status->lsFiles().size() == 1);
+
+	Git::StatusFile *file = status->lsFiles()[0];
+	QVERIFY(file->idIndex() == "a907ec3f431eeb6b1c75799a7e4ba73ca6dc627a");
+	QVERIFY(file->idRepo().isNull());
+	QVERIFY(!file->isStaged());
+	QVERIFY(file->modeIndex() == "100644");
+	QVERIFY(file->modeRepo().isNull());
+	QVERIFY(file->path() == "modified.txt");
+	QVERIFY(file->status().isNull());
+}
+
+void ModifiedFileStatusTest::testModifiedFile_diffFiles()
+{
+	QVERIFY(status->diffFiles().size() == 1);
+
+	Git::StatusFile *file = status->diffFiles()[0];
+	QVERIFY(file->idIndex().isNull());
+	QVERIFY(file->idRepo() == "a907ec3f431eeb6b1c75799a7e4ba73ca6dc627a");
+	QVERIFY(!file->isStaged());
+	QVERIFY(file->modeIndex() == "100644");
+	QVERIFY(file->modeRepo() == "100644");
+	QVERIFY(file->path() == "modified.txt");
+	QVERIFY(file->status() == "M");
+}
+
+void ModifiedFileStatusTest::testModifiedFile_diffIndex()
+{
+	QVERIFY(status->diffIndex("HEAD").size() == 1);
+
+	Git::StatusFile *file = status->diffIndex("HEAD")[0];
+	QVERIFY(file->idIndex().isNull());
+	QVERIFY(file->idRepo() == "a907ec3f431eeb6b1c75799a7e4ba73ca6dc627a");
+	QVERIFY(!file->isStaged());
+	QVERIFY(file->modeIndex() == "100644");
+	QVERIFY(file->modeRepo() == "100644");
+	QVERIFY(file->path() == "modified.txt");
+	QVERIFY(file->status() == "M");
+}
+
+void ModifiedFileStatusTest::testModifiedFile_diffUntrackedFiles()
+{
+	QVERIFY(status->untrackedFiles().isEmpty());
+}
+
+void ModifiedFileStatusTest::testModifiedFile_diffIgnoredFiles()
+{
+	QVERIFY(status->ignoredFiles().isEmpty());
 }
 
 
