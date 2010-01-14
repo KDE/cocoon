@@ -45,6 +45,7 @@ class StageWidget : public QWidget
 		~StageWidget();
 
 	public slots:
+		void commit();
 		void reload();
 		void setRepository(Git::Repo *repo);
 

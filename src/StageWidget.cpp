@@ -44,6 +44,11 @@ StageWidget::~StageWidget()
 	delete ui;
 }
 
+void StageWidget::commit()
+{
+	ui->commitWidget->commit();
+}
+
 void StageWidget::loadModels()
 {
 	m_stagedFilesModel = new GitStagedFilesModel(m_repo, this);
