@@ -27,5 +27,6 @@ unit_tests(
 	NewFileStatus
 	NewlyAddedFileStatus
 	ModifiedFileStatus
+	RemovedFileStatus
 	UpdatedFileStatus
 )
