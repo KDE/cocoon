@@ -54,6 +54,7 @@ class StatusFile : public QObject
 		bool isStaged() const;
 		bool isUntracked() const;
 		bool hasChanged() const;
+		void merge(const StatusFile &file);
 		const QString& modeIndex() const;
 		const QString& modeRepo() const;
 		const QString& path() const;

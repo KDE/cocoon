@@ -436,6 +436,18 @@ bool StatusFile::isUntracked() const
 	return m_status == "U";
 }
 
+void StatusFile::merge(const StatusFile &file)
+{
+	if (!file.m_idIndex.isEmpty())   { m_idIndex   = file.m_idIndex; }
+	if (!file.m_idRepo.isEmpty())    { m_idRepo    = file.m_idRepo; }
+	if (!file.m_modeIndex.isEmpty()) { m_modeIndex = file.m_modeIndex; }
+	if (!file.m_modeRepo.isEmpty())  { m_modeRepo  = file.m_modeRepo; }
+	if (!file.m_path.isEmpty())      { m_path      = file.m_path; }
+	if ( file.m_staged)              { m_staged    = file.m_staged; }
+	else                             { m_staged    = file.m_staged; }
+	if (!file.m_status.isEmpty())    { m_status    = file.m_status; }
+}
+
 const QString& StatusFile::modeIndex() const
 {
 	return m_modeIndex;
