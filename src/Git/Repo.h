@@ -63,6 +63,7 @@ class Repo : public QObject
 
 	signals:
 		void indexChanged();
+		void historyChanged();
 
 	private:
 		QString m_workingDir;
