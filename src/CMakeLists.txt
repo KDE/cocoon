@@ -5,6 +5,7 @@ set(cocoon_SRCS
 	main.cpp
 	CommandLineWidget.cpp
 	CommitInfoWidget.cpp
+	CommitWidget.cpp
 	CompareWidget.cpp
 	DiffWidget.cpp
 	FileStatusWidget.cpp
@@ -20,6 +21,7 @@ set(cocoon_SRCS
 
 kde4_add_ui_files(cocoon_SRCS
 	CommitInfoWidget.ui
+	CommitWidget.ui
 	CompareWidget.ui
 	FileStatusWidget.ui
 	HistoryWidget.ui
