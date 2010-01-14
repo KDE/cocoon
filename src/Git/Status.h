@@ -87,15 +87,15 @@ class Status : public QObject
 
 	private:
 		void constuctStatus();
-		void addFile(const QString &file, QHash<QString, QString> data);
+		void addFile(StatusFile *file);
 		/** Compares the index and the working directory */
-		QHash<QString, QHash<QString, QString> > diffFiles() const;
+		QList<StatusFile*> diffFiles() const;
 		/** Compares the index and the repository */
-		QHash<QString, QHash<QString, QString> > diffIndex(const QString &treeish) const;
-		QStringList ignoredFiles() const;
-		QHash<QString, QHash<QString, QString> > lsFiles() const;
+		QList<StatusFile*> diffIndex(const QString &treeish) const;
+		QList<StatusFile*> ignoredFiles() const;
+		QList<StatusFile*> lsFiles() const;
 		QString unescapeFileName(const QString &escapedName) const;
-		QStringList untrackedFiles() const;
+		QList<StatusFile*> untrackedFiles() const;
 
 	private:
 		QList<StatusFile*> m_files;

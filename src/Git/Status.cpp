@@ -32,51 +32,60 @@ Status::Status(const Repo *repo)
 	constuctStatus();
 }
 
+void Status::addFile(StatusFile *file)
+{
+	QString path = file->path();
+	if (m_status[path].size() > 0) {
+		StatusFile *lastFile = m_status[path].last();
+		if (lastFile->m_status.isEmpty() || !file->isStaged()) {
+			lastFile->merge(*file);
+		} else {
+			m_status[path] << new StatusFile(m_repo);
+		}
+	} else {
+		m_status[path] << new StatusFile(m_repo);
+	}
+
+	StatusFile *statusFile  = m_status[path].last();
+	statusFile->m_idIndex   = file->m_idIndex;
+	statusFile->m_idRepo    = file->m_idRepo;
+	statusFile->m_modeIndex = file->m_modeIndex;
+	statusFile->m_modeRepo  = file->m_modeRepo;
+	statusFile->m_path      = file->m_path;
+	statusFile->m_staged    = file->m_staged;
+	statusFile->m_status    = file->m_status;
+}
+
 void Status::constuctStatus()
 {
-	QHash<QString, QHash<QString, QString> > filesData;
 	m_status.clear();
 
-	filesData = lsFiles();
-	for(int i=0; i < filesData.size(); ++i) {
-		QString key = filesData.keys()[i];
-
-		addFile(key, filesData[key]);
+	foreach (StatusFile *file, lsFiles()) {
+		addFile(file);
 	}
 
 	// find untracked files
-	foreach(const QString &file, untrackedFiles()) {
-		QHash<QString, QString> data;
-		data["path"] = file;
-		data["staged"] = "false";
-		data["status"] = "U";
-
-		addFile(file, data);
+	foreach (StatusFile *file, untrackedFiles()) {
+		addFile(file);
 	}
 
 	// find modified in tree
-	filesData = diffFiles();
-	foreach (const QString &file, filesData.keys()) {
-		// if a file shows up here it has not yet been staged
-		// @info staged deleted files don't show up in diff-files
-		filesData[file]["staged"] = "false";
-
-		addFile(file, filesData[file]);
+	foreach (StatusFile *file, diffFiles()) {
+		addFile(file);
 	}
 
 	// find added but not committed - new files
-	filesData = diffIndex("HEAD");
-	foreach (const QString &file, filesData.keys()) {
+	foreach (StatusFile *file, diffIndex("HEAD")) {
 		// the file has been staged
 		// if the file has a index id or is marked as deleted
 		// @info staged deleted files have no index id
-		if ((!filesData[file]["idIndex"].isEmpty() || filesData[file]["status"] == "D")
-			|| m_status[file].last()->m_idRepo != filesData[file]["idRepo"]) {
-			filesData[file]["staged"] = "true";
+		if ((!file->idIndex().isEmpty() || file->status() == "D")
+			|| m_status[file->path()].last()->idRepo() != file->idRepo()) {
+			file->m_staged = true;
 		}
 
-		if (!(m_status.contains(file) && m_status[file].last()->status() == "D")) {
-			addFile(file, filesData[file]);
+		if (!(m_status.contains(file->path()) && m_status[file->path()].last()->status() == "D")) {
+			addFile(file);
 		}
 	}
 
@@ -85,41 +94,9 @@ void Status::constuctStatus()
 	}
 }
 
-void Status::addFile(const QString &file, QHash<QString, QString> data)
+QList<StatusFile*> Status::diffFiles() const
 {
-	if (m_status.contains(file) && m_status[file].size() > 0) {
-		StatusFile *lastFile = m_status[file].last();
-		if (lastFile->m_status.isEmpty() || data["staged"].isEmpty()) {
-			if (!lastFile->m_idIndex.isEmpty())   { data["idIndex"]   = lastFile->m_idIndex; }
-			if (!lastFile->m_idRepo.isEmpty())    { data["idRepo"]    = lastFile->m_idRepo; }
-			if (!lastFile->m_modeIndex.isEmpty()) { data["modeIndex"] = lastFile->m_modeIndex; }
-			if (!lastFile->m_modeRepo.isEmpty())  { data["modeRepo"]  = lastFile->m_modeRepo; }
-			if (!lastFile->m_path.isEmpty())      { data["path"]      = lastFile->m_path; }
-			if ( lastFile->m_staged)              { data["staged"]    = "true"; }
-			else                                  { data["staged"]    = "false"; }
-			if (!lastFile->m_status.isEmpty())    { data["status"]    = lastFile->m_status; }
-
-			m_status[file][m_status[file].size()-1] = new StatusFile(m_repo);
-		} else {
-			m_status[file] << new StatusFile(m_repo);
-		}
-	} else {
-		m_status[file] << new StatusFile(m_repo);
-	}
-
-	StatusFile *statusFile = m_status[file].last();
-	statusFile->m_idIndex   = data["idIndex"];
-	statusFile->m_idRepo    = data["idRepo"];
-	statusFile->m_modeIndex = data["modeIndex"];
-	statusFile->m_modeRepo  = data["modeRepo"];
-	statusFile->m_path      = data["path"];
-	statusFile->m_staged    = data["staged"] == "true";
-	statusFile->m_status    = data["status"];
-}
-
-QHash<QString, QHash<QString, QString> > Status::diffFiles() const
-{
-	QHash<QString, QHash<QString, QString> > result;
+	QList<StatusFile*> result;
 
 	GitRunner runner;
 	runner.setDirectory(m_repo->workingDir());
@@ -131,28 +108,30 @@ QHash<QString, QHash<QString, QString> > Status::diffFiles() const
 	foreach(const QString &line, lines) {
 		QString info = line.split("\t")[0];
 		QString rawFile = line.split("\t")[1];
-		QString file = unescapeFileName(rawFile);
-		QString modeRepo  = info.split(" ")[0].mid(1);
-		QString modeIndex = info.split(" ")[1];
-		QString   idRepo  = info.split(" ")[2];
-		QString   idIndex = info.split(" ")[3];
-		QString    status = info.split(" ")[4];
+		QString fileSrc = unescapeFileName(rawFile);
+		QString modeSrc = info.split(" ")[0].mid(1);
+		QString modeDst = info.split(" ")[1];
+		QString   idSrc = info.split(" ")[2];
+		QString   idDst = info.split(" ")[3];
+		QString  status = info.split(" ")[4];
 
-		result[file];
-		result[file]["path"] = file;
-		result[file]["idIndex"] = QRegExp("^[0]*$").exactMatch(idIndex) ? QString() : idIndex;
-		result[file]["idRepo"] = QRegExp("^[0]*$").exactMatch(idRepo) ? QString() : idRepo;
-		result[file]["modeIndex"] = modeIndex;
-		result[file]["modeRepo"] = modeRepo;
-		result[file]["status"] = status;
+		StatusFile *fileStatus = new StatusFile(m_repo);
+		fileStatus->m_path = fileSrc;
+		fileStatus->m_idIndex = QRegExp("^[0]*$").exactMatch(idDst) ? QString() : idDst;
+		fileStatus->m_idRepo = QRegExp("^[0]*$").exactMatch(idSrc) ? QString() : idSrc;
+		fileStatus->m_modeIndex = modeDst == "000000" ? QString() : modeDst;
+		fileStatus->m_modeRepo = modeSrc == "000000" ? QString() : modeSrc;
+		fileStatus->m_status = status;
+
+		result << fileStatus;
 	}
 
 	return result;
 }
 
-QHash<QString, QHash<QString, QString> > Status::diffIndex(const QString &treeish) const
+QList<StatusFile*> Status::diffIndex(const QString &treeish) const
 {
-	QHash<QString, QHash<QString, QString> > result;
+	QList<StatusFile*> result;
 
 	GitRunner runner;
 	runner.setDirectory(m_repo->workingDir());
@@ -165,20 +144,26 @@ QHash<QString, QHash<QString, QString> > Status::diffIndex(const QString &treeis
 	foreach(const QString &line, lines) {
 		QString info = line.split("\t")[0];
 		QString rawFile = line.split("\t")[1];
-		QString file = unescapeFileName(rawFile);
-		QString modeRepo  = info.split(" ")[0].mid(1);
-		QString modeIndex = info.split(" ")[1];
-		QString   idRepo  = info.split(" ")[2];
-		QString   idIndex = info.split(" ")[3];
-		QString    status = info.split(" ")[4];
+		QString fileSrc = unescapeFileName(rawFile);
+		QString modeSrc = info.split(" ")[0].mid(1);
+		QString modeDst = info.split(" ")[1];
+		QString   idSrc = info.split(" ")[2];
+		QString   idDst = info.split(" ")[3];
+		QString  status = info.split(" ")[4];
 
-		result[file];
-		result[file]["path"] = file;
-		result[file]["idIndex"] = QRegExp("^[0]*$").exactMatch(idIndex) ? QString() : idIndex;
-		result[file]["idRepo"] = QRegExp("^[0]*$").exactMatch(idRepo) ? QString() : idRepo;
-		result[file]["modeIndex"] = modeIndex;
-		result[file]["modeRepo"] = modeRepo;
-		result[file]["status"] = status;
+		StatusFile *fileStatus = new StatusFile(m_repo);
+		fileStatus->m_path = fileSrc;
+		fileStatus->m_idIndex = QRegExp("^[0]*$").exactMatch(idDst) ? QString() : idDst;
+		fileStatus->m_idRepo = QRegExp("^[0]*$").exactMatch(idSrc) ? QString() : idSrc;
+		fileStatus->m_modeIndex = modeDst == "000000" ? QString() : modeDst;
+		fileStatus->m_modeRepo = modeSrc == "000000" ? QString() : modeSrc;
+		fileStatus->m_status = status;
+
+		if (!fileStatus->m_idIndex.isNull() || fileStatus->m_status == "D") {
+			fileStatus->m_staged = true;
+		}
+
+		result << fileStatus;
 	}
 
 	return result;
@@ -194,30 +179,38 @@ QList<StatusFile*> Status::forFile(const QString &file) const
 	return m_status[file];
 }
 
-QStringList Status::ignoredFiles() const
+QList<StatusFile*> Status::ignoredFiles() const
 {
-	QStringList ignoredFiles;
+	QList<StatusFile*> ignoredFiles;
 
 	GitRunner runner;
 	runner.setDirectory(m_repo->workingDir());
 
 	// list ignored files
+	QStringList otherIgnoredFiles;
 	runner.lsFiles(QStringList() << "--others" << "--ignored" << "--exclude-standard");
-	ignoredFiles = runner.getResult().split("\n");
-	ignoredFiles.removeLast(); // remove empty line at the end
-	for(int i=0; i < ignoredFiles.size(); ++i) { // unescape file names
-		ignoredFiles[i] = unescapeFileName(ignoredFiles[i]);
+	otherIgnoredFiles = runner.getResult().split("\n");
+	otherIgnoredFiles.removeLast(); // remove empty line at the end
+	foreach (const QString &file, otherIgnoredFiles) { // unescape file names
+		StatusFile *statusFile = new StatusFile(m_repo);
+
+		statusFile->m_path = unescapeFileName(file);
+
+		ignoredFiles << statusFile;
 	}
 
 	// list ignored directories (may also include files)
 	runner.lsFiles(QStringList() << "--others" << "--ignored" << "--exclude-standard" << "--directory");
-	QStringList ignoredDirs = runner.getResult().split("\n");
-	ignoredDirs.removeLast(); // remove empty line at the end
-	for(int i=0; i < ignoredDirs.size(); ++i) { // unescape file names
-		ignoredDirs[i] = unescapeFileName(ignoredDirs[i]);
-		if (!QFileInfo(m_repo->workingDir(), ignoredDirs[i]).isDir()) { // only leave dirs
-			ignoredDirs.removeAt(i);
-			--i;
+	QStringList otherIgnoredDirs = runner.getResult().split("\n");
+	otherIgnoredDirs.removeLast(); // remove empty line at the end
+	for(int i=0; i < otherIgnoredDirs.size(); ++i) { // unescape file names
+		otherIgnoredDirs[i] = unescapeFileName(otherIgnoredDirs[i]);
+		if (QFileInfo(m_repo->workingDir(), otherIgnoredDirs[i]).isDir()) { // only leave dirs
+			StatusFile *statusFile = new StatusFile(m_repo);
+
+			statusFile->m_path = otherIgnoredDirs[i];
+
+			ignoredFiles << statusFile;
 		}
 	}
 
@@ -229,14 +222,13 @@ QStringList Status::ignoredFiles() const
 //			}
 //		}
 //	}
-	ignoredFiles << ignoredDirs;
 
 	return ignoredFiles;
 }
 
-QHash<QString, QHash<QString, QString> > Status::lsFiles() const
+QList<StatusFile*> Status::lsFiles() const
 {
-	QHash<QString, QHash<QString, QString> > result;
+	QList<StatusFile*> result;
 
 	GitRunner runner;
 	runner.setDirectory(m_repo->workingDir());
@@ -256,11 +248,13 @@ QHash<QString, QHash<QString, QString> > Status::lsFiles() const
 		QString   idIndex = info.split(" ")[1];
 		QString     stage = info.split(" ")[2];
 
-		result[file];
-		result[file]["path"] = file;
-		result[file]["modeIndex"] = modeIndex;
-		result[file]["idIndex"] = QRegExp("^[0]*$").exactMatch(idIndex) ? QString() : idIndex;
-		result[file]["stage"] = stage;
+		StatusFile *fileStatus = new StatusFile(m_repo);
+		fileStatus->m_path = file;
+		fileStatus->m_idIndex = QRegExp("^[0]*$").exactMatch(idIndex) ? QString() : idIndex;
+		fileStatus->m_modeIndex = modeIndex == "000000" ? QString() : modeIndex;
+//		fileStatus->m_stage = stage;
+
+		result << fileStatus;
 	}
 
 	return result;
@@ -297,31 +291,40 @@ QList<StatusFile*> Status::unstagedFiles() const
 	return files;
 }
 
-QStringList Status::untrackedFiles() const
+QList<StatusFile*> Status::untrackedFiles() const
 {
 	GitRunner runner;
 	runner.setDirectory(m_repo->workingDir());
 
+	// if a file shows up here it has not yet been staged
+	// @info staged deleted files don't show up in diff-files
 	runner.lsFiles(QStringList() << "--others");
 
 	QStringList otherFiles = runner.getResult().split("\n");
 	otherFiles.removeLast(); // remove empty line at the end
 
-	// unescape file names
-	for (int i=0; i < otherFiles.size(); ++i) {
-		otherFiles[i] = unescapeFileName(otherFiles[i]);
+	QList<StatusFile*> untrackedFiles;
+
+	foreach (const QString &file, otherFiles) {
+		StatusFile *statusFile = new StatusFile(m_repo);
+		statusFile->m_path = unescapeFileName(file); // unescape file names
+		statusFile->m_staged = false;
+		statusFile->m_status = "U";
+
+		untrackedFiles << statusFile;
 	}
 
 	// remove ignored files from the list
-	foreach (const QString &iFile, ignoredFiles()) {
-		foreach (const QString &oFile, otherFiles) {
-			if (oFile == iFile || oFile.startsWith(iFile)) {
-				otherFiles.removeOne(oFile);
+	foreach (const StatusFile *iFile, ignoredFiles()) {
+		foreach (StatusFile *uFile, untrackedFiles) {
+			if (uFile->path() == iFile->path() || uFile->path().startsWith(iFile->path())) {
+				untrackedFiles.removeOne(uFile);
+				delete uFile;
 			}
 		}
 	}
 
-	return otherFiles;
+	return untrackedFiles;
 }
 
 
