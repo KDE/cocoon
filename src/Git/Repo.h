@@ -59,6 +59,7 @@ class Repo : public QObject
 		const QString& workingDir() const;
 
 	// static
+		static void clone(const QString &fromRepo, const QString &toDirectory, const QStringList &options = QStringList());
 		static bool containsRepository(const QString &path);
 		static void init(const QString &newRepoPath);
 

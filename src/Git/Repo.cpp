@@ -34,6 +34,16 @@ Repo::Repo(const QString &workingDir, QObject *parent)
 {
 }
 
+
+
+void Repo::clone(const QString &fromRepo, const QString &toDirectory, const QStringList &options)
+{
+	GitRunner runner;
+	runner.setDirectory(toDirectory);
+
+	runner.clone(fromRepo, options, toDirectory);
+}
+
 void Repo::commitIndex(const QString &message, const QStringList &options)
 {
 	GitRunner runner;
