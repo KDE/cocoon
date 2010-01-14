@@ -288,9 +288,7 @@ DvcsJob::JobStatus GitRunner::add(const QStringList &paths, const QStringList &o
 		*job << options;
 	}
 	*job << "--";
-	if (!paths.isEmpty()) {
-		*job << paths;
-	}
+	*job << paths;
 
 	startJob(*job);
 	return m_jobStatus;
@@ -433,6 +431,22 @@ DvcsJob::JobStatus GitRunner::revList(const QStringList &options, const QStringL
 	if (!paths.isEmpty()) {
 		*job << paths;
 	}
+
+	startJob(*job);
+	return m_jobStatus;
+}
+
+DvcsJob::JobStatus GitRunner::rm(const QStringList &paths, const QStringList &options)
+{
+	DvcsJob *job = new DvcsJob();
+	initJob(*job);
+	*job << "rm";
+
+	if (!options.isEmpty()) {
+		*job << options;
+	}
+	*job << "--";
+	*job << paths;
 
 	startJob(*job);
 	return m_jobStatus;
