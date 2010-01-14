@@ -34,6 +34,20 @@ Repo::Repo(const QString &workingDir, QObject *parent)
 {
 }
 
+void Repo::commitIndex(const QString &message, const QStringList &options)
+{
+	GitRunner runner;
+	runner.setDirectory(workingDir());
+
+	QStringList opts = options;
+	opts << "-m" << message;
+
+	runner.commit(opts);
+
+	emit indexChanged();
+	emit historyChanged();
+}
+
 QList<Commit*> Repo::commits(const QString &branch) const
 {
 	GitRunner runner;
