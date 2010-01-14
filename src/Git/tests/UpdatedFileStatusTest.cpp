@@ -103,7 +103,7 @@ void UpdatedFileStatusTest::testUpdatedFile_diffIndex()
 	Git::StatusFile *file = status->diffIndex("HEAD")[0];
 	QVERIFY(file->idIndex() == "86e041dad66a19b9518b83b78865015f62662f75");
 	QVERIFY(file->idRepo() == "a907ec3f431eeb6b1c75799a7e4ba73ca6dc627a");
-	QVERIFY(file->isStaged());
+	QVERIFY(!file->isStaged());
 	QVERIFY(file->modeIndex() == "100644");
 	QVERIFY(file->modeRepo() == "100644");
 	QVERIFY(file->path() == "updated.txt");

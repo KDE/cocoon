@@ -96,7 +96,7 @@ void NewlyAddedFileStatusTest::testNewlyAddedFile_diffIndex()
 	Git::StatusFile *file = status->diffIndex("HEAD")[0];
 	QVERIFY(file->idIndex() == "86e041dad66a19b9518b83b78865015f62662f75");
 	QVERIFY(file->idRepo().isNull());
-	QVERIFY(file->isStaged());
+	QVERIFY(!file->isStaged());
 	QVERIFY(file->modeIndex() == "100644");
 	QVERIFY(file->modeRepo().isNull());
 	QVERIFY(file->path() == "newly_added.txt");

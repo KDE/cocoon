@@ -90,7 +90,7 @@ void RemovedFileStatusTest::testRemovedFile_diffIndex()
 	Git::StatusFile *file = status->diffIndex("HEAD")[0];
 	QVERIFY(file->idIndex().isNull());
 	QVERIFY(file->idRepo() == "86e041dad66a19b9518b83b78865015f62662f75");
-	QVERIFY(file->isStaged());
+	QVERIFY(!file->isStaged());
 	QVERIFY(file->modeIndex().isNull());
 	QVERIFY(file->modeRepo() == "100644");
 	QVERIFY(file->path() == "removed.txt");
