@@ -38,8 +38,8 @@ class ModifiedFileStatusTest : public GitTestBase
 		void testModifiedFileIsUnstaged();
 		void testModifiedFileDefaultBlobIsFileBlob();
 		void testModifiedFileFileBlobIsCorrect();
-		void testModifiedFileIndexBlobIsCorrect();
-		void testModifiedFileRepoBlobIsEmpty();
+		void testModifiedFileIndexBlobIsEmpty();
+		void testModifiedFileRepoBlobIsCorrect();
 		void testModifiedFileDiffIsCorrect();
 };
 
@@ -170,14 +170,14 @@ void ModifiedFileStatusTest::testModifiedFileFileBlobIsCorrect()
 	QVERIFY(file->blob("file") == "foo\nbar\nbaz\n");
 }
 
-void ModifiedFileStatusTest::testModifiedFileIndexBlobIsCorrect()
+void ModifiedFileStatusTest::testModifiedFileIndexBlobIsEmpty()
 {
 	Git::StatusFile *file = status->forFile("modified.txt")[0];
 
-	QVERIFY(file->blob("index") == "foo\nbar");
+	QVERIFY(file->blob("index").isNull());
 }
 
-void ModifiedFileStatusTest::testModifiedFileRepoBlobIsEmpty()
+void ModifiedFileStatusTest::testModifiedFileRepoBlobIsCorrect()
 {
 	Git::StatusFile *file = status->forFile("modified.txt")[0];
 

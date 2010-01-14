@@ -39,7 +39,7 @@ class UpdatedFileStatusTest : public GitTestBase
 		void testUpdatedFileDefaultBlobIsIndexBlob();
 		void testUpdatedFileFileBlobIsCorrect();
 		void testUpdatedFileIndexBlobIsCorrect();
-		void testUpdatedFileRepoBlobIsEmpty();
+		void testUpdatedFileRepoBlobIsCorrect();
 		void testUpdatedFileDiffIsCorrect();
 };
 
@@ -170,7 +170,7 @@ void UpdatedFileStatusTest::testUpdatedFileIndexBlobIsCorrect()
 	QVERIFY(file->blob("index") == "foo\nbar\nbaz\n");
 }
 
-void UpdatedFileStatusTest::testUpdatedFileRepoBlobIsEmpty()
+void UpdatedFileStatusTest::testUpdatedFileRepoBlobIsCorrect()
 {
 	Git::StatusFile *file = status->forFile("updated.txt")[0];
 
