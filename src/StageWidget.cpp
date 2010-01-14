@@ -19,7 +19,7 @@
 #include "StageWidget.h"
 #include "ui_StageWidget.h"
 
-#include "CompareWidget.h"
+#include "CommitWidget.h"
 #include "FileStatusWidget.h"
 
 #include "Git/Repo.h"
@@ -28,6 +28,7 @@
 #include "GitStagedFilesModel.h"
 #include "GitUnstagedFilesModel.h"
 
+#include <QSortFilterProxyModel>
 #include <QModelIndex>
 
 
@@ -37,6 +38,12 @@ StageWidget::StageWidget(QWidget *parent)
 	, ui(new Ui::StageWidget)
 {
 	ui->setupUi(this);
+
+	m_stagedFilesProxyModel = new QSortFilterProxyModel(this);
+	m_unstagedFilesProxyModel = new QSortFilterProxyModel(this);
+
+	ui->stagedChangesView->setModel(m_stagedFilesProxyModel);
+	ui->unstagedChangesView->setModel(m_unstagedFilesProxyModel);
 }
 
 StageWidget::~StageWidget()
@@ -54,8 +61,11 @@ void StageWidget::loadModels()
 	m_stagedFilesModel = new GitStagedFilesModel(m_repo, this);
 	m_unstagedFilesModel = new GitUnstagedFilesModel(m_repo, this);
 
-	ui->stagedChangesView->setModel(m_stagedFilesModel);
-	ui->unstagedChangesView->setModel(m_unstagedFilesModel);
+	m_stagedFilesProxyModel->setSourceModel(m_stagedFilesModel);
+	m_unstagedFilesProxyModel->setSourceModel(m_unstagedFilesModel);
+
+	ui->stagedChangesView->header()->setSortIndicator(0, Qt::AscendingOrder);
+	ui->unstagedChangesView->header()->setSortIndicator(0, Qt::AscendingOrder);
 
 	ui->fileStatusWidget->setRepository(m_repo);
 	ui->commitWidget->setRepository(m_repo);
@@ -64,7 +74,7 @@ void StageWidget::loadModels()
 void StageWidget::on_stagedChangesView_clicked(const QModelIndex &index)
 {
 	ui->unstagedChangesView->clearSelection();
-	const Git::StatusFile *file = m_stagedFilesModel->mapToStatusFile(index);
+	const Git::StatusFile *file = m_stagedFilesModel->mapToStatusFile(m_stagedFilesProxyModel->mapToSource(index));
 	ui->fileStatusWidget->setFile(*file);
 }
 
@@ -78,7 +88,7 @@ void StageWidget::on_stagedChangesView_doubleClicked(const QModelIndex &index)
 void StageWidget::on_unstagedChangesView_clicked(const QModelIndex &index)
 {
 	ui->stagedChangesView->clearSelection();
-	const Git::StatusFile *file = m_unstagedFilesModel->mapToStatusFile(index);
+	const Git::StatusFile *file = m_unstagedFilesModel->mapToStatusFile(m_unstagedFilesProxyModel->mapToSource(index));
 	ui->fileStatusWidget->setFile(*file);
 }
 
@@ -108,15 +118,15 @@ void StageWidget::stageFile()
 	QModelIndexList indexes = ui->unstagedChangesView->selectionModel()->selectedIndexes();
 	if (!indexes.isEmpty()) {
 		QModelIndex index = indexes.first();
-		const Git::StatusFile *statusFile = m_unstagedFilesModel->mapToStatusFile(index);
+		const Git::StatusFile *statusFile = m_unstagedFilesModel->mapToStatusFile(m_unstagedFilesProxyModel->mapToSource(index));
 		m_repo->stageFiles(QStringList() << statusFile->path());
 
 		// set selection on staged file
-		QModelIndex newIndex = m_stagedFilesModel->mapToIndex(*statusFile);
+		QModelIndex newIndex = m_stagedFilesProxyModel->mapFromSource(m_stagedFilesModel->mapToIndex(*statusFile));
 		ui->stagedChangesView->setCurrentIndex(newIndex);
 
 		// update file status view
-		const Git::StatusFile *newStatusFile = m_stagedFilesModel->mapToStatusFile(newIndex);
+		const Git::StatusFile *newStatusFile = m_stagedFilesModel->mapToStatusFile(m_stagedFilesProxyModel->mapToSource(newIndex));
 		ui->fileStatusWidget->setFile(*newStatusFile);
 	}
 }
@@ -126,15 +136,15 @@ void StageWidget::unstageFile()
 	QModelIndexList indexes = ui->stagedChangesView->selectionModel()->selectedIndexes();
 	if (!indexes.isEmpty()) {
 		QModelIndex index = indexes.first();
-		const Git::StatusFile *statusFile = m_stagedFilesModel->mapToStatusFile(index);
+		const Git::StatusFile *statusFile = m_stagedFilesModel->mapToStatusFile(m_stagedFilesProxyModel->mapToSource(index));
 		m_repo->unstageFiles(QStringList() << statusFile->path());
 
 		// set selection on unstaged file
-		QModelIndex newIndex = m_unstagedFilesModel->mapToIndex(*statusFile);
+		QModelIndex newIndex = m_unstagedFilesProxyModel->mapFromSource(m_unstagedFilesModel->mapToIndex(*statusFile));
 		ui->unstagedChangesView->setCurrentIndex(newIndex);
 
 		// update file status view
-		const Git::StatusFile *newStatusFile = m_unstagedFilesModel->mapToStatusFile(newIndex);
+		const Git::StatusFile *newStatusFile = m_unstagedFilesModel->mapToStatusFile(m_unstagedFilesProxyModel->mapToSource(newIndex));
 		ui->fileStatusWidget->setFile(*newStatusFile);
 	}
 }

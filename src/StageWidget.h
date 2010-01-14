@@ -33,6 +33,7 @@ class GitStagedFilesModel;
 class GitUnstagedFilesModel;
 
 class QModelIndex;
+class QSortFilterProxyModel;
 
 
 
@@ -62,8 +63,10 @@ class StageWidget : public QWidget
 
 	private:
 		Git::Repo *m_repo;
-		GitStagedFilesModel *m_stagedFilesModel;
+		GitStagedFilesModel   *m_stagedFilesModel;
+		QSortFilterProxyModel *m_stagedFilesProxyModel;
 		GitUnstagedFilesModel *m_unstagedFilesModel;
+		QSortFilterProxyModel *m_unstagedFilesProxyModel;
 		Ui::StageWidget *ui;
 };
 
