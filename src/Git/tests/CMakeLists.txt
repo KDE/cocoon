@@ -24,6 +24,7 @@ MACRO(UNIT_TESTS)
 ENDMACRO(UNIT_TESTS)
 
 unit_tests(
+	DeletedFileStatus
 	NewFileStatus
 	NewlyAddedFileStatus
 	ModifiedFileStatus
