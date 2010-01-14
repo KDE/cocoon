@@ -242,7 +242,7 @@ QList<StatusFile*> Status::lsFiles() const
 		QString file = unescapeFileName(rawFile);
 		QString modeIndex = info.split(" ")[0];
 		QString   idIndex = info.split(" ")[1];
-		QString     stage = info.split(" ")[2];
+//		QString     stage = info.split(" ")[2];
 
 		StatusFile *fileStatus = new StatusFile(m_repo);
 		fileStatus->m_path = file;
