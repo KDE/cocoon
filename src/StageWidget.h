@@ -48,11 +48,11 @@ class StageWidget : public QWidget
 		void commit();
 		void reload();
 		void setRepository(Git::Repo *repo);
+		void stageFile();
+		void unstageFile();
 
 	private:
 		void loadModels();
-		void stageFile();
-		void unstageFile();
 
 	private slots:
 		void on_stagedChangesView_clicked(const QModelIndex &index);
