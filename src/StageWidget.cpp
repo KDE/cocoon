@@ -121,7 +121,7 @@ void StageWidget::unstageFile()
 	if (!indexes.isEmpty()) {
 		QModelIndex index = indexes.first();
 		const Git::StatusFile *statusFile = m_stagedFilesModel->mapToStatusFile(index);
-//		m_repo->unstageFiles(QStringList() << statusFile->path());
+		m_repo->unstageFiles(QStringList() << statusFile->path());
 
 		// set selection on unstaged file
 		QModelIndex newIndex = m_unstagedFilesModel->mapToIndex(*statusFile);
