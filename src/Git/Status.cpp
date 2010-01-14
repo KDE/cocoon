@@ -354,6 +354,8 @@ const QByteArray StatusFile::blob(QString type) const
 	} else if (type == "index") {
 		if (!m_idIndex.isEmpty()) {
 			id = m_idIndex;
+		} else if (!m_staged) {
+			id = m_idRepo;
 		}
 	} else if (type == "repo") {
 		if (!m_idRepo.isEmpty()) {
