@@ -21,11 +21,12 @@
 
 #include <QWidget>
 
+#include "Git/Status.h"
+
 #include <KMimeType>
 
 namespace Git {
 	class Repo;
-	class StatusFile;
 }
 
 namespace Ui {
@@ -55,6 +56,8 @@ class FileStatusWidget : public QWidget
 		QString fileType();
 		KMimeType::Ptr mimeType();
 		void showFileStatus();
+		QString statusToIconName(Git::FileStatus status);
+		QString statusToString(Git::FileStatus status);
 
 	private:
 		QByteArray m_byteArray;

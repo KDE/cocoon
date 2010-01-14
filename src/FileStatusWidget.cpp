@@ -154,15 +154,46 @@ void FileStatusWidget::showFileStatus()
 		diff = fileData(fileType());
 	}
 
-	QString status;// = m_file.status().toString();
 	ui->stageIconLabel->setPixmap(stageIcon.pixmap(16));
 	ui->stageLabel->setText(stage);
-	ui->statusIconLabel->setPixmap(KIcon(QString("git-file-%1").arg(status)).pixmap(16));
-	ui->statusLabel->setText(status.replace(QRegExp("(.)(.*)"), "\\1\\2")); // $1.upcase $2
+	ui->statusIconLabel->setPixmap(KIcon(statusToIconName(m_file->status())).pixmap(16));
+	ui->statusLabel->setText(statusToString(m_file->status()));
 	ui->mimeTypeIconLabel->setPixmap(KIcon(mimeType()->iconName()).pixmap(32));
 	ui->filePathLabel->setText(m_file->path());
 	ui->fileInfoLabel->setText(fileInfo);
 	ui->diffWidget->setDiff(diff);
+}
+
+QString FileStatusWidget::statusToIconName(Git::FileStatus status)
+{
+	switch (status) {
+	case Git::Added:
+		return "git-file-added";
+	case Git::Deleted:
+		return "git-file-deleted";
+	case Git::Modified:
+		return "git-file-modified";
+	case Git::Untracked:
+		return "git-file-untracked";
+	default:
+		return "git-file-none";
+	}
+}
+
+QString FileStatusWidget::statusToString(Git::FileStatus status)
+{
+	switch (status) {
+	case Git::Added:
+		return i18n("Added");
+	case Git::Deleted:
+		return i18n("Deleted");
+	case Git::Modified:
+		return i18n("Modified");
+	case Git::Untracked:
+		return i18n("Untracked");
+	default:
+		return i18n("None");
+	}
 }
 
 #include "FileStatusWidget.moc"
