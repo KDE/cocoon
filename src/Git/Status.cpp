@@ -159,10 +159,6 @@ QList<StatusFile*> Status::diffIndex(const QString &treeish) const
 		fileStatus->m_modeRepo = modeSrc == "000000" ? QString() : modeSrc;
 		fileStatus->m_status = status;
 
-		if (!fileStatus->m_idIndex.isNull() || fileStatus->m_status == "D") {
-			fileStatus->m_staged = true;
-		}
-
 		result << fileStatus;
 	}
 
