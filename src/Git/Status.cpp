@@ -345,6 +345,7 @@ const QByteArray StatusFile::blob(QString type) const
 	GitRunner runner;
 	runner.setDirectory(m_repo->workingDir());
 
+	QString id;
 	QByteArray blobData;
 
 	if (type == "file") {
@@ -354,14 +355,19 @@ const QByteArray StatusFile::blob(QString type) const
 		file.close();
 	} else if (type == "index") {
 		if (!m_idIndex.isEmpty()) {
-			runner.catFile(m_idIndex, QStringList() << "-p");
-			blobData = runner.getResult().toUtf8();
+			id = m_idIndex;
+		} else if (!m_idRepo.isEmpty()) {
+			id = m_idRepo;
 		}
 	} else if (type == "repo") {
 		if (!m_idRepo.isEmpty()) {
-			runner.catFile(m_idRepo, QStringList() << "-p");
-			blobData = runner.getResult().toUtf8();
+			id = m_idRepo;
 		}
+	}
+
+	if (!id.isNull()) {
+		runner.catFile(id, QStringList() << "-p");
+		blobData = runner.getResult().toUtf8();
 	}
 
 	return blobData;
