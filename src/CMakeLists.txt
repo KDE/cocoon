@@ -3,6 +3,7 @@ add_subdirectory( Git )
 
 set(cocoon_SRCS
 	main.cpp
+	CloneRepositoryDialog.cpp
 	CommandLineWidget.cpp
 	CommitInfoWidget.cpp
 	CommitWidget.cpp
@@ -20,6 +21,7 @@ set(cocoon_SRCS
 )
 
 kde4_add_ui_files(cocoon_SRCS
+	CloneRepositoryDialog.ui
 	CommitInfoWidget.ui
 	CommitWidget.ui
 	CompareWidget.ui
