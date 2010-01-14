@@ -350,14 +350,14 @@ const QByteArray StatusFile::blob(QString type) const
 
 	if (type == "file") {
 		QFile file(QDir(m_repo->workingDir()).filePath(path()));
-		file.open(QFile::ReadOnly);
-		blobData = file.readAll();
-		file.close();
+		if (file.exists()) {
+			file.open(QFile::ReadOnly);
+			blobData = file.readAll();
+			file.close();
+		}
 	} else if (type == "index") {
 		if (!m_idIndex.isEmpty()) {
 			id = m_idIndex;
-		} else if (!m_idRepo.isEmpty()) {
-			id = m_idRepo;
 		}
 	} else if (type == "repo") {
 		if (!m_idRepo.isEmpty()) {
