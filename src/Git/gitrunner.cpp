@@ -309,6 +309,24 @@ DvcsJob::JobStatus GitRunner::catFile(const QString &object, const QStringList &
 	return m_jobStatus;
 }
 
+DvcsJob::JobStatus GitRunner::commit(const QStringList &options, const QStringList &files)
+{
+	DvcsJob *job = new DvcsJob();
+	initJob(*job);
+	*job << "commit";
+
+	if (!options.isEmpty()) {
+		*job << options;
+	}
+	*job << "--";
+	if (!files.isEmpty()) {
+		*job << files;
+	}
+
+	startJob(*job);
+	return m_jobStatus;
+}
+
 DvcsJob::JobStatus GitRunner::diff(const QStringList &commits, const QStringList &options, const QStringList &paths)
 {
 	DvcsJob *job = new DvcsJob();
