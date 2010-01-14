@@ -93,35 +93,22 @@ void MainWindow::setRepository(const QString &repoPath)
 void MainWindow::setupActions()
 {
 	KStandardAction::quit(KApplication::instance(), SLOT(quit()), actionCollection());
-/*
-			# commit
-				commit_action = KDE::Action.new(self) do |a|
-					a.text = i18n("Commit")
-					a.icon = KDE::Icon.new('git-commit')
-					# TODO: make setting shortcuts work
-					#a.shortcut = Qt::CTRL + Qt::Key_Return
-				end
-				actionCollection.add_action('commit', commit_action)
-				connect(commit_action, SIGNAL('triggered(bool)'), @ui.stageWidget, SLOT('commit()'))
 
-				stage_file_action = KDE::Action.new(self) do |a|
-					a.text = i18n("Stage File to Commit")
-					a.icon = KDE::Icon.new('list-add')
-					# TODO: make setting shortcuts work
-					#a.shortcut = Qt::CTRL + Qt::Key_S
-				end
-				actionCollection.add_action('file_stage', stage_file_action)
-				connect(stage_file_action, SIGNAL('triggered(bool)'), @ui.stageWidget, SLOT('stageFile()'))
+// commit
+	KAction *commitAction = actionCollection()->addAction("commit", ui->stageWidget, SLOT(commit()));
+	commitAction->setText(i18n("Commit"));
+	commitAction->setIcon(KIcon("git-commit"));
+	commitAction->setShortcut(Qt::CTRL + Qt::Key_Return);
 
-				unstage_file_action = KDE::Action.new(self) do |a|
-					a.text = i18n("Unstage File from Commit")
-					a.icon = KDE::Icon.new('list-remove')
-					# TODO: make setting shortcuts work
-					#a.shortcut = Qt::CTRL + Qt::Key_U
-				end
-				actionCollection.add_action('file_unstage', unstage_file_action)
-				connect(unstage_file_action, SIGNAL('triggered(bool)'), @ui.stageWidget, SLOT('unstageFile()'))
-*/
+	KAction *stageFileAction = actionCollection()->addAction("file_stage", ui->stageWidget, SLOT(stageFile()));
+	stageFileAction->setText(i18n("Stage File to Commit"));
+	stageFileAction->setIcon(KIcon("list-add"));
+	stageFileAction->setShortcut(Qt::CTRL + Qt::Key_S);
+
+	KAction *unstageFileAction = actionCollection()->addAction("file_unstage", ui->stageWidget, SLOT(unstageFile()));
+	unstageFileAction->setText(i18n("Unstage File from Commit"));
+	unstageFileAction->setIcon(KIcon("list-remove"));
+	unstageFileAction->setShortcut(Qt::CTRL + Qt::Key_U);
 
 // repository
 	KAction *openRepoAction = actionCollection()->addAction("repository_open", this, SLOT(open()));
