@@ -33,13 +33,8 @@ GitHistoryModel::GitHistoryModel(const Git::Repo &repo, QObject *parent)
 	, m_commits(Git::CommitList())
 	, m_repo(repo)
 {
-/*
-				@@branch_icon = Qt::Icon.new(':/icons/16x16/actions/git-branch')
-				@@commit_icon = Qt::Icon.new(':/icons/16x16/actions/git-commit')
-				@@merge_icon = Qt::Icon.new(':/icons/16x16/actions/git-merge')
+	connect(&m_repo, SIGNAL(historyChanged()), this, SLOT(reset()));
 
-				connect(repository.qt, SIGNAL('logChanged()'), self, SLOT('reset()'))
-*/
 	setBranch(m_branch);
 }
 
