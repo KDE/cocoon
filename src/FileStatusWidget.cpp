@@ -129,12 +129,22 @@ void FileStatusWidget::showFileStatus()
 	QString fileInfo;
 	if (!isBinary()) {
 		if (m_file->isUntracked()) {
-			fileInfo = i18n("%1 lines", -1); // "#{file_status.blob.lines.to_a.size} lines"
+			fileInfo = i18n("%1 lines", m_file->blob().split('\n').size());
 		} else {
-			fileInfo = i18n("<html><body><span style=\"color: green;\">+%1</span> <span style=\"color: red;\">-%2</span> lines</body></html>", 0, 0); // file_status.diff.insertions file_status.diff.deletions
+			int insertions = 0;
+			int  deletions = 0;
+			foreach (const QString &line, m_file->diff().split("\n")) {
+				if (line.startsWith("+") && !line.startsWith("+++")) { // the "+++" thing is ok, because we deal with single files
+					++insertions;
+				} else if (line.startsWith("-") && !line.startsWith("---")) { // as above
+					++deletions;
+				}
+			}
+
+			fileInfo = i18n("<html><body><span style=\"color: green;\">+%1</span> <span style=\"color: red;\">-%2</span> lines</body></html>", insertions, deletions);
 		}
 	} else {
-		fileInfo = i18n("%1 Bytes", -1); // byte_array.size
+		fileInfo = i18n("%1 Bytes", byteArray().size());
 	}
 
 	QString diff;
