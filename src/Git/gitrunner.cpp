@@ -436,6 +436,25 @@ DvcsJob::JobStatus GitRunner::revList(const QStringList &options, const QStringL
 	return m_jobStatus;
 }
 
+DvcsJob::JobStatus GitRunner::reset(const QStringList &paths, const QStringList &options, const QString &commit)
+{
+	DvcsJob *job = new DvcsJob();
+	initJob(*job);
+	*job << "reset";
+
+	if (!options.isEmpty()) {
+		*job << options;
+	}
+	if (!commit.isEmpty()) {
+		*job << commit;
+	}
+	*job << "--";
+	*job << paths;
+
+	startJob(*job);
+	return m_jobStatus;
+}
+
 DvcsJob::JobStatus GitRunner::rm(const QStringList &paths, const QStringList &options)
 {
 	DvcsJob *job = new DvcsJob();
