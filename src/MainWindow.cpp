@@ -113,12 +113,12 @@ void MainWindow::setupActions()
 // repository
 	KAction *openRepoAction = actionCollection()->addAction("repository_open", this, SLOT(open()));
 	openRepoAction->setText(i18n("Open repository"));
-	openRepoAction->setIcon(KIcon("folder-open"));
+	openRepoAction->setIcon(KIcon("repository-open"));
 	openRepoAction->setShortcut(Qt::CTRL + Qt::Key_O);
 
 	KAction *reloadRepoAction = actionCollection()->addAction("repository_reload", this, SLOT(reload()));
 	reloadRepoAction->setText(i18n("Reload repository"));
-	reloadRepoAction->setIcon(KIcon("view-refresh"));
+	reloadRepoAction->setIcon(KIcon("repository-reload"));
 	reloadRepoAction->setShortcut(Qt::Key_F5);
 }
 
