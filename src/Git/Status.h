@@ -32,6 +32,16 @@ class Repo;
 class Status;
 
 
+Q_ENUMS(FileStatus);
+enum FileStatus {
+	NoStatus = 0,
+	Untracked,
+	Added,
+	Modified,
+	Deleted
+};
+
+
 
 class StatusFile : public QObject
 {
@@ -58,7 +68,7 @@ class StatusFile : public QObject
 		const QString& modeIndex() const;
 		const QString& modeRepo() const;
 		const QString& path() const;
-		const QString& status() const;
+		FileStatus status() const;
 
 	private:
 		QString m_idIndex;
@@ -68,7 +78,7 @@ class StatusFile : public QObject
 		QString m_path;
 		const Repo *m_repo;
 		bool m_staged;
-		QString m_status;
+		FileStatus m_status;
 };
 
 
@@ -85,7 +95,7 @@ class Status : public QObject
 		QList<StatusFile*> stagedFiles() const;
 		QList<StatusFile*> unstagedFiles() const;
 
-	private:
+//	private:
 		void constuctStatus();
 		void addFile(StatusFile *file);
 		/** Compares the index and the working directory */
@@ -94,6 +104,7 @@ class Status : public QObject
 		QList<StatusFile*> diffIndex(const QString &treeish) const;
 		QList<StatusFile*> ignoredFiles() const;
 		QList<StatusFile*> lsFiles() const;
+		FileStatus statusFromString(const QString &status) const;
 		QString unescapeFileName(const QString &escapedName) const;
 		QList<StatusFile*> untrackedFiles() const;
 

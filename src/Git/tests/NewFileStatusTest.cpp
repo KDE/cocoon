@@ -94,7 +94,7 @@ void NewFileStatusTest::testNewFile_diffUntrackedFiles()
 	QVERIFY(file->modeIndex().isNull());
 	QVERIFY(file->modeRepo().isNull());
 	QVERIFY(file->path() == "untracked.txt");
-	QVERIFY(file->status() == "U");
+	QVERIFY(file->status() == Git::Untracked);
 }
 
 void NewFileStatusTest::testNewFile_diffIgnoredFiles()
@@ -117,7 +117,7 @@ void NewFileStatusTest::testNewTestFileIsUntracked()
 
 	Git::StatusFile *file = fileStatus[0];
 	QVERIFY(file->isUntracked());
-	QVERIFY(file->status() == "U");
+	QVERIFY(file->status() == Git::Untracked);
 }
 
 void NewFileStatusTest::testNewFileIsUnstaged()

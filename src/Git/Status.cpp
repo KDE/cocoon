@@ -37,7 +37,7 @@ void Status::addFile(StatusFile *file)
 	QString path = file->path();
 	if (m_status[path].size() > 0) {
 		StatusFile *lastFile = m_status[path].last();
-		if (lastFile->m_status.isEmpty() || !file->isStaged()) {
+		if (lastFile->m_status == NoStatus || !file->isStaged()) {
 			lastFile->merge(*file);
 		} else {
 			m_status[path] << new StatusFile(m_repo);
@@ -79,12 +79,12 @@ void Status::constuctStatus()
 		// the file has been staged
 		// if the file has a index id or is marked as deleted
 		// @info staged deleted files have no index id
-		if ((!file->idIndex().isEmpty() || file->status() == "D")
+		if ((!file->idIndex().isEmpty() || file->isDeleted())
 			|| m_status[file->path()].last()->idRepo() != file->idRepo()) {
 			file->m_staged = true;
 		}
 
-		if (!(m_status.contains(file->path()) && m_status[file->path()].last()->status() == "D")) {
+		if (!(m_status.contains(file->path()) && m_status[file->path()].last()->isDeleted())) {
 			addFile(file);
 		}
 	}
@@ -121,7 +121,7 @@ QList<StatusFile*> Status::diffFiles() const
 		fileStatus->m_idRepo = QRegExp("^[0]*$").exactMatch(idSrc) ? QString() : idSrc;
 		fileStatus->m_modeIndex = modeDst == "000000" ? QString() : modeDst;
 		fileStatus->m_modeRepo = modeSrc == "000000" ? QString() : modeSrc;
-		fileStatus->m_status = status;
+		fileStatus->m_status = statusFromString(status);
 
 		result << fileStatus;
 	}
@@ -157,7 +157,7 @@ QList<StatusFile*> Status::diffIndex(const QString &treeish) const
 		fileStatus->m_idRepo = QRegExp("^[0]*$").exactMatch(idSrc) ? QString() : idSrc;
 		fileStatus->m_modeIndex = modeDst == "000000" ? QString() : modeDst;
 		fileStatus->m_modeRepo = modeSrc == "000000" ? QString() : modeSrc;
-		fileStatus->m_status = status;
+		fileStatus->m_status = statusFromString(status);
 
 		result << fileStatus;
 	}
@@ -269,6 +269,19 @@ QList<StatusFile*> Status::stagedFiles() const
 	return files;
 }
 
+FileStatus Status::statusFromString(const QString &status) const
+{
+	if (status == "A") {
+		return Added;
+	} else if (status == "D") {
+		return Deleted;
+	} else if (status == "M") {
+		return Modified;
+	}
+
+	return NoStatus;
+}
+
 QString Status::unescapeFileName(const QString &escapedName) const
 {
 	return escapedName;
@@ -305,7 +318,7 @@ QList<StatusFile*> Status::untrackedFiles() const
 		StatusFile *statusFile = new StatusFile(m_repo);
 		statusFile->m_path = unescapeFileName(file); // unescape file names
 		statusFile->m_staged = false;
-		statusFile->m_status = "U";
+		statusFile->m_status = Untracked;
 
 		untrackedFiles << statusFile;
 	}
@@ -329,6 +342,7 @@ StatusFile::StatusFile(const Repo *repo)
 	: QObject((QObject*)repo)
 	, m_repo(repo)
 	, m_staged(false)
+	, m_status(NoStatus)
 {
 }
 
@@ -405,7 +419,7 @@ const QString StatusFile::diff() const
 
 bool StatusFile::hasChanged() const
 {
-	return !m_status.isEmpty();
+	return m_status != NoStatus;
 }
 
 const QString& StatusFile::idIndex() const
@@ -420,17 +434,17 @@ const QString& StatusFile::idRepo() const
 
 bool StatusFile::isAdded() const
 {
-	return m_status == "A";
+	return m_status == Added;
 }
 
 bool StatusFile::isDeleted() const
 {
-	return m_status == "D";
+	return m_status == Deleted;
 }
 
 bool StatusFile::isModified() const
 {
-	return m_status == "M";
+	return m_status == Modified;
 }
 
 bool StatusFile::isStaged() const
@@ -440,7 +454,7 @@ bool StatusFile::isStaged() const
 
 bool StatusFile::isUntracked() const
 {
-	return m_status == "U";
+	return m_status == Untracked;
 }
 
 void StatusFile::merge(const StatusFile &file)
@@ -452,7 +466,7 @@ void StatusFile::merge(const StatusFile &file)
 	if (!file.m_path.isEmpty())      { m_path      = file.m_path; }
 	if ( file.m_staged)              { m_staged    = file.m_staged; }
 	else                             { m_staged    = file.m_staged; }
-	if (!file.m_status.isEmpty())    { m_status    = file.m_status; }
+	if ( file.m_status != NoStatus)      { m_status    = file.m_status; }
 }
 
 const QString& StatusFile::modeIndex() const
@@ -470,7 +484,7 @@ const QString& StatusFile::path() const
 	return m_path;
 }
 
-const QString& StatusFile::status() const
+FileStatus StatusFile::status() const
 {
 	return m_status;
 }

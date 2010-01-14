@@ -81,7 +81,7 @@ void NewlyAddedFileStatusTest::testNewlyAddedFile_lsFiles()
 	QVERIFY(file->modeIndex() == "100644");
 	QVERIFY(file->modeRepo().isNull());
 	QVERIFY(file->path() == "newly_added.txt");
-	QVERIFY(file->status().isNull());
+	QVERIFY(file->status() == Git::NoStatus);
 }
 
 void NewlyAddedFileStatusTest::testNewlyAddedFile_diffFiles()
@@ -100,7 +100,7 @@ void NewlyAddedFileStatusTest::testNewlyAddedFile_diffIndex()
 	QVERIFY(file->modeIndex() == "100644");
 	QVERIFY(file->modeRepo().isNull());
 	QVERIFY(file->path() == "newly_added.txt");
-	QVERIFY(file->status() == "A");
+	QVERIFY(file->status() == Git::Added);
 }
 
 void NewlyAddedFileStatusTest::testNewlyAddedFile_diffUntrackedFiles()
@@ -128,7 +128,7 @@ void NewlyAddedFileStatusTest::testNewlyAddedFileIsAdded()
 
 	Git::StatusFile *file = fileStatus[0];
 	QVERIFY(file->isAdded());
-	QVERIFY(file->status() == "A");
+	QVERIFY(file->status() == Git::Added);
 }
 
 void NewlyAddedFileStatusTest::testNewlyAddedFileIsStaged()
