@@ -329,6 +329,7 @@ QStringList Status::untrackedFiles() const
 StatusFile::StatusFile(const Repo *repo)
 	: QObject((QObject*)repo)
 	, m_repo(repo)
+	, m_staged(false)
 {
 }
 
