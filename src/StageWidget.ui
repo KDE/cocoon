@@ -99,7 +99,7 @@
        <enum>Qt::Vertical</enum>
       </property>
       <widget class="FileStatusWidget" name="fileStatusWidget" native="true"/>
-      <widget class="QWidget" name="commitWidget" native="true"/>
+      <widget class="CommitWidget" name="commitWidget" native="true"/>
      </widget>
     </widget>
    </item>
@@ -110,6 +110,12 @@
    <class>FileStatusWidget</class>
    <extends>QWidget</extends>
    <header>FileStatusWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CommitWidget</class>
+   <extends>QWidget</extends>
+   <header>CommitWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

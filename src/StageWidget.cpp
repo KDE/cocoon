@@ -19,6 +19,7 @@
 #include "StageWidget.h"
 #include "ui_StageWidget.h"
 
+#include "CompareWidget.h"
 #include "FileStatusWidget.h"
 
 #include "Git/Repo.h"
@@ -52,7 +53,7 @@ void StageWidget::loadModels()
 	ui->unstagedChangesView->setModel(m_unstagedFilesModel);
 
 	ui->fileStatusWidget->setRepository(m_repo);
-//	ui->commitWidget->setRepository(m_repo);
+	ui->commitWidget->setRepository(m_repo);
 }
 
 void StageWidget::on_stagedChangesView_clicked(const QModelIndex &index)
@@ -87,7 +88,7 @@ void StageWidget::reload()
 {
 	m_stagedFilesModel->reset();
 	m_unstagedFilesModel->reset();
-//	ui->commitWidget->clear();
+	ui->commitWidget->clear();
 	ui->fileStatusWidget->clear();
 }
 
