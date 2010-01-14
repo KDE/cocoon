@@ -19,6 +19,7 @@
 #include "OpenRepositoryDialog.h"
 #include "ui_OpenRepositoryDialog.h"
 
+#include "CloneRepositoryDialog.h"
 #include "Git/Repo.h"
 
 #include <KMessageBox>
@@ -126,13 +127,11 @@ void OpenRepositoryDialog::on_addButton_clicked()
 
 void OpenRepositoryDialog::on_cloneButton_clicked()
 {
-/*
-				clone_dialog = Kitten::Ui::CloneRepositoryDialog.new(self)
-				clone_dialog.exec
-				if clone_dialog.result == Qt::Dialog::Accepted
-					add_repository(clone_dialog.repository_path)
-				end
-*/
+	CloneRepositoryDialog cloneDialog(this);
+	cloneDialog.exec();
+	if (cloneDialog.result() == QDialog::Accepted) {
+		addRepository(cloneDialog.repositoryPath());
+	}
 }
 
 void OpenRepositoryDialog::on_newButton_clicked()
