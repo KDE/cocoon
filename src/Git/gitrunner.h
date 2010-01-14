@@ -264,6 +264,8 @@ public:
 
 		DvcsJob::JobStatus add(const QStringList &paths, const QStringList &options = QStringList());
 		DvcsJob::JobStatus catFile(const QString &object, const QStringList &options = QStringList());
+		DvcsJob::JobStatus checkout(const QStringList &options = QStringList(), const QString &treeish = QString(), const QStringList &paths = QStringList());
+		DvcsJob::JobStatus clone(const QString &repository, const QStringList &options = QStringList(), const QString &directory = QString());
 		DvcsJob::JobStatus commit(const QStringList &options = QStringList(), const QStringList &files = QStringList());
 		DvcsJob::JobStatus diff(const QStringList &commits, const QStringList &options = QStringList(), const QStringList &paths = QStringList());
 		DvcsJob::JobStatus diffFiles(const QStringList &options = QStringList(), const QStringList &commits = QStringList(), const QStringList &paths = QStringList());

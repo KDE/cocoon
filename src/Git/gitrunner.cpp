@@ -309,6 +309,46 @@ DvcsJob::JobStatus GitRunner::catFile(const QString &object, const QStringList &
 	return m_jobStatus;
 }
 
+DvcsJob::JobStatus GitRunner::clone(const QString &repository, const QStringList &options, const QString &directory)
+{
+	DvcsJob *job = new DvcsJob();
+	initJob(*job);
+	*job << "clone";
+
+	if (!options.isEmpty()) {
+		*job << options;
+	}
+	*job << "--";
+	*job << repository;
+	if (!directory.isEmpty()) {
+		*job << directory;
+	}
+
+	startJob(*job);
+	return m_jobStatus;
+}
+
+DvcsJob::JobStatus GitRunner::checkout(const QStringList &options, const QString &treeish, const QStringList &paths)
+{
+	DvcsJob *job = new DvcsJob();
+	initJob(*job);
+	*job << "checkout";
+
+	if (!options.isEmpty()) {
+		*job << options;
+	}
+	if (!treeish.isEmpty()) {
+		*job << treeish;
+	}
+	*job << "--";
+	if (!paths.isEmpty()) {
+		*job << paths;
+	}
+
+	startJob(*job);
+	return m_jobStatus;
+}
+
 DvcsJob::JobStatus GitRunner::commit(const QStringList &options, const QStringList &files)
 {
 	DvcsJob *job = new DvcsJob();
