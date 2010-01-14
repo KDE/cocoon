@@ -50,8 +50,11 @@ class Repo : public QObject
 		QString diff(const Commit &a, const Commit &b) const;
 		QString head() const;
 		QStringList heads() const;
+		/** Stages files to be included in the next commit. */
 		void stageFiles(const QStringList &paths);
 		Status* status() const;
+		/** Unstages (staged) files to not be included in the next commit. */
+		void unstageFiles(const QStringList &paths);
 		const QString& workingDir() const;
 
 	// static

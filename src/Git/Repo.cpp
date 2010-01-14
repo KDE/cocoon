@@ -122,6 +122,24 @@ Status* Repo::status() const
 	return new Status(this);
 }
 
+void Repo::unstageFiles(const QStringList &paths)
+{
+	GitRunner runner;
+	runner.setDirectory(workingDir());
+
+/*
+			commits = heads.inject(0) { |sum, head| sum + commit_count(head.commit.to_s) }
+*/
+	CommitList cs = commits();
+	if (cs.isEmpty()) {
+		runner.rm(paths, QStringList() << "--cached");
+	} else {
+		runner.reset(paths, QStringList(), "HEAD");
+	}
+
+	emit indexChanged();
+}
+
 const QString& Repo::workingDir() const
 {
 	return m_workingDir;
