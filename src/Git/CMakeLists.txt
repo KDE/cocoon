@@ -2,6 +2,7 @@
 add_subdirectory( tests )
 
 set(cocoon_git_LIB_SRCS
+	CloneRepositoryProcess.cpp
 	Commit.cpp
 	dvcsjob.cpp
 	gitrunner.cpp
