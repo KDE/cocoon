@@ -64,8 +64,8 @@ class Repo : public QObject
 		static void init(const QString &newRepoPath);
 
 	signals:
-		void indexChanged();
 		void historyChanged();
+		void indexChanged();
 
 	private:
 		QString m_workingDir;
