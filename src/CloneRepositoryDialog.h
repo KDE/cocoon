@@ -45,6 +45,7 @@ class CloneRepositoryDialog : public QDialog
 		void on_cloneButton_clicked();
 		void on_localUrlRequester_textChanged(const QString &text);
 		void on_stackedWidget_currentChanged(int index);
+		void slotCloningFinished();
 
 	private:
 		bool m_finished;

@@ -19,6 +19,7 @@
 #include "CloneRepositoryDialog.h"
 #include "ui_CloneRepositoryDialog.h"
 
+#include "Git/CloneRepositoryProcess.h"
 #include "Git/Repo.h"
 
 #include <KApplication>
@@ -58,8 +59,11 @@ void CloneRepositoryDialog::startCloning()
 	QString path = ui->localUrlRequester->url().pathOrUrl(KUrl::RemoveTrailingSlash);
 	QDir().rmdir(path);
 
-	/** @todo display cloning progress */
-	Git::Repo::clone(repoUrl, path);
+	Git::CloneRepositoryProcess *thread = new Git::CloneRepositoryProcess(repoUrl, path, this);
+
+	connect(thread, SIGNAL(cloningFinished()), this, SLOT(slotCloningFinished()));
+
+	thread->start();
 }
 
 void CloneRepositoryDialog::enableClone()
@@ -132,17 +136,15 @@ void CloneRepositoryDialog::on_stackedWidget_currentChanged(int index)
 		enableFinish();
 		break;
 	case 1:
-		// update the view
-		repaint();
-		KApplication::processEvents();
-
 		// do the actual cloning
 		startCloning();
-
-		// show that the cloning has finished
-		m_finished = true;
-		enableFinish();
 	}
+}
+
+void CloneRepositoryDialog::slotCloningFinished()
+{
+	m_finished = true;
+	enableFinish();
 }
 
 QString CloneRepositoryDialog::repositoryPath() const
