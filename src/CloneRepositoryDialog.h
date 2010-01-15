@@ -36,7 +36,7 @@ class CloneRepositoryDialog : public QDialog
 		QString repositoryPath() const;
 
 	private:
-		void clone();
+		void startCloning();
 		void enableClone();
 		void enableFinish();
 

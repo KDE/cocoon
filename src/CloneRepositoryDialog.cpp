@@ -52,7 +52,7 @@ CloneRepositoryDialog::~CloneRepositoryDialog()
 
 
 
-void CloneRepositoryDialog::clone()
+void CloneRepositoryDialog::startCloning()
 {
 	QString repoUrl = ui->cloneUrlRequester->url().url();
 	QString path = ui->localUrlRequester->url().pathOrUrl(KUrl::RemoveTrailingSlash);
@@ -137,7 +137,7 @@ void CloneRepositoryDialog::on_stackedWidget_currentChanged(int index)
 		KApplication::processEvents();
 
 		// do the actual cloning
-		clone();
+		startCloning();
 
 		// show that the cloning has finished
 		m_finished = true;
