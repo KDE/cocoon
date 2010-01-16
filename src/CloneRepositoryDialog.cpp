@@ -39,12 +39,16 @@ CloneRepositoryDialog::CloneRepositoryDialog(QWidget *parent)
 	ui->cloneUrlRequester->setMode(KFile::Directory | KFile::ExistingOnly);
 	ui->localUrlRequester->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
 
-	setWindowIcon(KIcon("repository-clone"));
+	setWindowIcon(KIcon("git-clone"));
 	ui->cancelButton->setIcon(KIcon("dialog-cancel"));
 	ui->cloneButton->setIcon(KIcon("git-clone"));
-	ui->cloningFinishedIconLabel->setPixmap(KIcon("finished").pixmap(32));
-	ui->cloningProgressIconLabel->setPixmap(KIcon("cloning").pixmap(64));
+	ui->cloningFinishedIconLabel->setPixmap(KIcon("task-waiting").pixmap(32));
+	ui->cloningIconLabel->setPixmap(KIcon("git-clone").pixmap(128));
+	ui->compressingObjectsIconLabel->setPixmap(KIcon("task-waiting").pixmap(32));
+	ui->countingObjectsIconLabel->setPixmap(KIcon("task-waiting").pixmap(32));
 	ui->finishedButton->setIcon(KIcon("dialog-ok"));
+	ui->receivingObjectsIconLabel->setPixmap(KIcon("task-waiting").pixmap(32));
+	ui->resolvingDeltasIconLabel->setPixmap(KIcon("task-waiting").pixmap(32));
 
 	enableClone();
 }
@@ -64,6 +68,7 @@ void CloneRepositoryDialog::startCloning()
 
 	Git::CloneRepositoryProcess *thread = new Git::CloneRepositoryProcess(repoUrl, path, this);
 
+	connect(thread, SIGNAL(cloningProgress(QString)), this, SLOT(slotCloningProgress(QString)));
 	connect(thread, SIGNAL(cloningFinished()), this, SLOT(slotCloningFinished()));
 
 	thread->start();
@@ -92,7 +97,7 @@ void CloneRepositoryDialog::enableClone()
 	} else if (!QFile(localUrl.pathOrUrl()).exists()) {
 		errorMessage = i18n("Clone destination does not exist.");
 		enabled = false;
-	} else if (!QDir(localUrl.pathOrUrl()).entryList(QDir::NoDotAndDotDot).isEmpty()) {
+	} else if (!QDir(localUrl.path()).entryList(QDir::NoDotAndDotDot).isEmpty()) {
 		errorMessage = i18n("Clone destination is not empty.");
 		enabled = false;
 	} else {
@@ -106,8 +111,13 @@ void CloneRepositoryDialog::enableClone()
 
 void CloneRepositoryDialog::enableFinish()
 {
-	ui->cloningFinishedIconLabel->setVisible(m_finished);
-	ui->cloningFinishedLabel->setVisible(m_finished);
+	if (m_finished) {
+		ui->cloningFinishedIconLabel->setPixmap(KIcon("task-complete").pixmap(64));
+		ui->compressingObjectsIconLabel->setPixmap(KIcon("task-complete").pixmap(32));
+		ui->countingObjectsIconLabel->setPixmap(KIcon("task-complete").pixmap(32));
+		ui->receivingObjectsIconLabel->setPixmap(KIcon("task-complete").pixmap(32));
+		ui->resolvingDeltasIconLabel->setPixmap(KIcon("task-complete").pixmap(32));
+	}
 	ui->finishedButton->setEnabled(m_finished);
 }
 
@@ -148,6 +158,28 @@ void CloneRepositoryDialog::slotCloningFinished()
 {
 	m_finished = true;
 	enableFinish();
+}
+
+void CloneRepositoryDialog::slotCloningProgress(QString progress)
+{
+	if (progress.startsWith("remote: Counting objects")) {
+		ui->countingObjectsIconLabel->setPixmap(KIcon("task-in-progress").pixmap(32));
+		ui->countingObjectsLabel->setText(progress);
+	} else if (progress.startsWith("remote: Compressing objects")) {
+		ui->countingObjectsIconLabel->setPixmap(KIcon("task-complete").pixmap(32));
+		ui->compressingObjectsIconLabel->setPixmap(KIcon("task-in-progress").pixmap(32));
+		ui->compressingObjectsLabel->setText(progress);
+	} else if (progress.startsWith("remote: Total")) {
+		ui->compressingObjectsIconLabel->setPixmap(KIcon("task-complete").pixmap(32));
+		ui->totalObjectsLabel->setText(progress);
+	} else if (progress.startsWith("Receiving objects")) {
+		ui->receivingObjectsIconLabel->setPixmap(KIcon("task-in-progress").pixmap(32));
+		ui->receivingObjectsLabel->setText(progress);
+	} else if (progress.startsWith("Resolving deltas")) {
+		ui->receivingObjectsIconLabel->setPixmap(KIcon("task-complete").pixmap(32));
+		ui->resolvingDeltasIconLabel->setPixmap(KIcon("task-in-progress").pixmap(32));
+		ui->resolvingDeltasLabel->setText(progress);
+	}
 }
 
 QString CloneRepositoryDialog::repositoryPath() const
