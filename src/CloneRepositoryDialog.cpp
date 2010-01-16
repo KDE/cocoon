@@ -36,6 +36,9 @@ CloneRepositoryDialog::CloneRepositoryDialog(QWidget *parent)
 {
 	ui->setupUi(this);
 
+	ui->cloneUrlRequester->setMode(KFile::Directory | KFile::ExistingOnly);
+	ui->localUrlRequester->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
+
 	setWindowIcon(KIcon("repository-clone"));
 	ui->cancelButton->setIcon(KIcon("dialog-cancel"));
 	ui->cloneButton->setIcon(KIcon("git-clone"));
