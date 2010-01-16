@@ -32,6 +32,7 @@
 CloneRepositoryDialog::CloneRepositoryDialog(QWidget *parent)
 	: QDialog(parent)
 	, m_finished(false)
+	, m_localDirFilters(QDir::AllEntries | QDir::Hidden | QDir::NoDotAndDotDot)
 	, ui(new Ui::CloneRepositoryDialog)
 {
 	ui->setupUi(this);
@@ -64,10 +65,13 @@ void CloneRepositoryDialog::startCloning()
 {
 	QString repoUrl = ui->cloneUrlRequester->url().url();
 	QString path = ui->localUrlRequester->url().pathOrUrl(KUrl::RemoveTrailingSlash);
-	QDir().rmdir(path);
+
+	/** @todo Find a more elegant way to recursively delete a directory */
+	QProcess::execute("rm", QStringList() << "-rf" << path);
 
 	Git::CloneRepositoryProcess *thread = new Git::CloneRepositoryProcess(repoUrl, path, this);
 
+	connect(thread, SIGNAL(cloningProgress(int)), this, SLOT(slotCloningProgress(int)));
 	connect(thread, SIGNAL(cloningProgress(QString)), this, SLOT(slotCloningProgress(QString)));
 	connect(thread, SIGNAL(cloningFinished()), this, SLOT(slotCloningFinished()));
 
@@ -80,7 +84,9 @@ void CloneRepositoryDialog::enableClone()
 	KUrl localUrl = ui->localUrlRequester->url();
 
 	QString errorMessage;
-	bool enabled;
+	bool enabled = true;
+
+	QDir localDir = QDir(localUrl.pathOrUrl());
 
 	if (cloneUrl.isEmpty()) {
 		errorMessage = i18n("No clone source.");
@@ -97,12 +103,11 @@ void CloneRepositoryDialog::enableClone()
 	} else if (!QFile(localUrl.pathOrUrl()).exists()) {
 		errorMessage = i18n("Clone destination does not exist.");
 		enabled = false;
-	} else if (!QDir(localUrl.path()).entryList(QDir::NoDotAndDotDot).isEmpty()) {
-		errorMessage = i18n("Clone destination is not empty.");
-		enabled = false;
-	} else {
-		errorMessage = QString();
-		enabled = true;
+	} else if (!QDir(localUrl.pathOrUrl()).entryList(m_localDirFilters).isEmpty()) {
+		if (!ui->cleanLocalDirCheckBox->isChecked()) {
+			errorMessage = i18n("Clone destination is not empty.");
+			enabled = false;
+		}
 	}
 
 	ui->errorLabel->setText(errorMessage);
@@ -121,6 +126,13 @@ void CloneRepositoryDialog::enableFinish()
 	ui->finishedButton->setEnabled(m_finished);
 }
 
+void CloneRepositoryDialog::on_cleanLocalDirCheckBox_toggled(bool checked)
+{
+	Q_UNUSED(checked);
+
+	enableClone();
+}
+
 void CloneRepositoryDialog::on_cloneButton_clicked()
 {
 	enableFinish();
@@ -137,6 +149,10 @@ void CloneRepositoryDialog::on_cloneUrlRequester_textChanged(const QString &text
 void CloneRepositoryDialog::on_localUrlRequester_textChanged(const QString &text)
 {
 	Q_UNUSED(text);
+
+	KUrl localUrl = ui->localUrlRequester->url();
+
+	ui->cleanLocalDirCheckBox->setEnabled(localUrl.isValid() && !QDir(localUrl.pathOrUrl()).entryList(m_localDirFilters).isEmpty());
 
 	enableClone();
 }
@@ -164,15 +180,13 @@ void CloneRepositoryDialog::slotCloningProgress(QString progress)
 {
 	if (progress.startsWith("remote: Counting objects")) {
 		ui->countingObjectsIconLabel->setPixmap(KIcon("task-in-progress").pixmap(32));
-		ui->countingObjectsLabel->setText(progress);
+		ui->countingObjectsLabel->setText(progress.mid(8)); // get rid of the "remote: " part
 	} else if (progress.startsWith("remote: Compressing objects")) {
 		ui->countingObjectsIconLabel->setPixmap(KIcon("task-complete").pixmap(32));
 		ui->compressingObjectsIconLabel->setPixmap(KIcon("task-in-progress").pixmap(32));
-		ui->compressingObjectsLabel->setText(progress);
-	} else if (progress.startsWith("remote: Total")) {
-		ui->compressingObjectsIconLabel->setPixmap(KIcon("task-complete").pixmap(32));
-		ui->totalObjectsLabel->setText(progress);
+		ui->compressingObjectsLabel->setText(progress.mid(8)); // get rid of the "remote: " part
 	} else if (progress.startsWith("Receiving objects")) {
+		ui->compressingObjectsIconLabel->setPixmap(KIcon("task-complete").pixmap(32));
 		ui->receivingObjectsIconLabel->setPixmap(KIcon("task-in-progress").pixmap(32));
 		ui->receivingObjectsLabel->setText(progress);
 	} else if (progress.startsWith("Resolving deltas")) {

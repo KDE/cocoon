@@ -21,9 +21,13 @@
 
 #include <QDialog>
 
+#include <QDir>
+
 namespace Ui {
 	class CloneRepositoryDialog;
 }
+
+
 
 class CloneRepositoryDialog : public QDialog
 {
@@ -41,6 +45,7 @@ class CloneRepositoryDialog : public QDialog
 		void enableFinish();
 
 	private slots:
+		void on_cleanLocalDirCheckBox_toggled(bool checked);
 		void on_cloneUrlRequester_textChanged(const QString &text);
 		void on_cloneButton_clicked();
 		void on_localUrlRequester_textChanged(const QString &text);
@@ -50,6 +55,7 @@ class CloneRepositoryDialog : public QDialog
 
 	private:
 		bool m_finished;
+		QDir::Filters m_localDirFilters;
 		Ui::CloneRepositoryDialog *ui;
 };
 
