@@ -36,10 +36,11 @@ class CloneRepositoryProcess : public KProcess
 
 	signals:
 		void cloningProgress(int);
+		void cloningProgress(QString);
 		void cloningFinished();
 
 	private slots:
-		void slotReadyReadStandardOutput();
+		void slotReadyReadStandardError();
 
 	private:
 		QString m_fromRepo;

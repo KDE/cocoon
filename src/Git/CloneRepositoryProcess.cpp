@@ -33,22 +33,34 @@ CloneRepositoryProcess::CloneRepositoryProcess(const QString &fromRepo, const QS
 	setWorkingDirectory(m_toDirectory);
 	qDebug() << program();
 	setOutputChannelMode(KProcess::SeparateChannels);
-	setProgram("git", QStringList() << "clone" << m_fromRepo << m_toDirectory);
 	setEnvironment(QProcess::systemEnvironment());
 
-	connect(this, SIGNAL(readyReadStandardOutput()), this, SLOT(slotReadyReadStandardOutput()));
+	// -v needed for progress reports
+	setProgram("git", QStringList() << "clone" << "-v" << m_fromRepo << m_toDirectory);
+
+	// progress is written to stderr
+	connect(this, SIGNAL(readyReadStandardError()), this, SLOT(slotReadyReadStandardError()));
+
 	connect(this, SIGNAL(finished(int)), this, SIGNAL(cloningFinished()));
 }
 
-void CloneRepositoryProcess::slotReadyReadStandardOutput()
+void CloneRepositoryProcess::slotReadyReadStandardError()
 {
-	QString output = readAllStandardOutput();
-	qDebug() << ".";
-	qDebug() << output;
-	QRegExp progressRegExp("(\\d{1,3})%");
-	progressRegExp.exactMatch(output);
+	QString output = readAllStandardError();
+	qDebug() << "StdErr:" << output;
 
-	emit cloningProgress(progressRegExp.cap(0).toInt());
+	QRegExp progressRegExp("(\\d{1,3})%");
+
+	// output could be multiple lines
+	foreach (const QString &line, output.split(QRegExp("\n|\r"))) {
+		if (!line.isEmpty()) {
+			qDebug() << "Progress:" << line;
+			emit cloningProgress(line);
+
+			progressRegExp.indexIn(line);
+			emit cloningProgress(progressRegExp.cap(1).toInt());
+		}
+	}
 }
 
 #include "CloneRepositoryProcess.moc"
