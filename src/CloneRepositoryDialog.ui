@@ -21,7 +21,7 @@
    <property name="margin">
     <number>0</number>
    </property>
-   <item row="0" column="0" colspan="2">
+   <item row="0" column="0">
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
       <number>0</number>
@@ -73,11 +73,7 @@ p, li { white-space: pre-wrap; }
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="0" column="0">
-           <widget class="KUrlRequester" name="localUrlRequester">
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
+           <widget class="KUrlRequester" name="localUrlRequester"/>
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_4">
@@ -151,10 +147,16 @@ Note: This directory must be empty.</string>
      </widget>
      <widget class="QWidget" name="page_2">
       <layout class="QGridLayout" name="gridLayout_5">
-       <item row="0" column="0">
-        <widget class="QLabel" name="cloningProgressIconLabel">
+       <item row="0" column="0" colspan="2">
+        <widget class="QLabel" name="cloningIconLabel">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>1</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="text">
-          <string/>
+          <string>.</string>
          </property>
          <property name="pixmap">
           <pixmap>:/icons/64x64/status/cloning.png</pixmap>
@@ -164,11 +166,11 @@ Note: This directory must be empty.</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1" colspan="2">
+       <item row="0" column="2">
         <widget class="QLabel" name="label_2">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-           <horstretch>0</horstretch>
+           <horstretch>5</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
@@ -182,10 +184,10 @@ Depending on the size of the repository this can take from a few seconds up to s
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="cloningFinishedIconLabel">
+       <item row="2" column="0" colspan="2">
+        <widget class="QLabel" name="countingObjectsIconLabel">
          <property name="text">
-          <string/>
+          <string>.</string>
          </property>
          <property name="pixmap">
           <pixmap>:/icons/32x32/status/finished.png</pixmap>
@@ -195,7 +197,123 @@ Depending on the size of the repository this can take from a few seconds up to s
          </property>
         </widget>
        </item>
-       <item row="1" column="1" colspan="2">
+       <item row="2" column="2">
+        <widget class="QLabel" name="countingObjectsLabel">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Counting objects ...</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="2">
+        <widget class="QLabel" name="compressingObjectsIconLabel">
+         <property name="text">
+          <string>.</string>
+         </property>
+         <property name="pixmap">
+          <pixmap>:/icons/32x32/status/finished.png</pixmap>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="QLabel" name="compressingObjectsLabel">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Compressing objects ...</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="2">
+        <widget class="QLabel" name="receivingObjectsIconLabel">
+         <property name="text">
+          <string>.</string>
+         </property>
+         <property name="pixmap">
+          <pixmap>:/icons/32x32/status/finished.png</pixmap>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2">
+        <widget class="QLabel" name="receivingObjectsLabel">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Receiving objects ...</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0" colspan="2">
+        <widget class="QLabel" name="resolvingDeltasIconLabel">
+         <property name="text">
+          <string>.</string>
+         </property>
+         <property name="pixmap">
+          <pixmap>:/icons/32x32/status/finished.png</pixmap>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="2">
+        <widget class="QLabel" name="resolvingDeltasLabel">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Resolving deltas ...</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0" colspan="2">
+        <widget class="QLabel" name="cloningFinishedIconLabel">
+         <property name="text">
+          <string>.</string>
+         </property>
+         <property name="pixmap">
+          <pixmap>:/icons/32x32/status/finished.png</pixmap>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="2">
         <widget class="QLabel" name="cloningFinishedLabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
@@ -211,7 +329,7 @@ Depending on the size of the repository this can take from a few seconds up to s
          </property>
         </widget>
        </item>
-       <item row="2" column="0" colspan="3">
+       <item row="8" column="0" colspan="3">
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
           <spacer name="horizontalSpacer_2">
@@ -237,6 +355,20 @@ Depending on the size of the repository this can take from a few seconds up to s
           </widget>
          </item>
         </layout>
+       </item>
+       <item row="1" column="0" colspan="3">
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QLabel" name="totalObjectsLabel">
+         <property name="text">
+          <string>Total ...</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
