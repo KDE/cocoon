@@ -49,7 +49,7 @@ const QString& GitHistoryModel::columnName(int column) const
 {
 	static QStringList columnNames;
 	if (columnNames.isEmpty()) {
-		columnNames << i18n("Summary") << i18n("Author") << i18n("Date");
+		columnNames << i18n("Date") << i18n("Author") << i18n("Summary");
 	}
 
 	return columnNames[column];
@@ -66,13 +66,13 @@ QVariant GitHistoryModel::data(const QModelIndex &index, int role) const
 	QString data;
 	switch (index.column()) {
 	case 0:
-		data = commit->summary();
+		data = commit->authoredAt().toString();
 		break;
 	case 1:
 		data = commit->author();
 		break;
 	case 2:
-		data = commit->authoredAt().toString();
+		data = commit->summary();
 		break;
 	}
 
@@ -80,7 +80,7 @@ QVariant GitHistoryModel::data(const QModelIndex &index, int role) const
 	case Qt::DisplayRole:
 		return QVariant(data);
 	case Qt::DecorationRole: // Icon
-		if (index.column() == 0) { // in first column
+		if (index.column() == 2) { // in summary column
 			if (commit->isMerge()) {
 				return QVariant(KIcon("git-merge"));
 			} else if(commit->hasBranchedOn(QStringList() << m_branch)) {
