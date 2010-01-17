@@ -88,6 +88,7 @@ void CloneRepositoryDialog::enableClone()
 
 	QDir localDir = QDir(localUrl.pathOrUrl());
 
+	/** @todo Check for network connection */
 	if (cloneUrl.isEmpty()) {
 		errorMessage = i18n("No clone source.");
 		enabled = false;
