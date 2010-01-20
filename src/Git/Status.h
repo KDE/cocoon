@@ -32,18 +32,6 @@ class Repo;
 class Status;
 
 
-Q_ENUMS(FileStatus);
-enum FileStatus {
-	NoStatus = 0,
-	Staged,
-	Unstaged,
-	Untracked,
-	Added,
-	Modified,
-	Deleted
-};
-
-
 
 class StatusFile : public QObject
 {
@@ -53,6 +41,18 @@ class StatusFile : public QObject
 
 	public:
 		StatusFile(const Repo *parent);
+
+	enum StatusFlag {
+		None      = 0x00,
+		Staged    = 0x01,
+		Unstaged  = 0x02,
+		Untracked = 0x04,
+		Added     = 0x08,
+		Modified  = 0x10,
+		Deleted   = 0x20
+	};
+	Q_DECLARE_FLAGS(Status, StatusFlag);
+
 
 		const QByteArray blob(QString type = QString()) const;
 		bool changesStaged() const;
@@ -70,7 +70,7 @@ class StatusFile : public QObject
 		const QString& modeIndex() const;
 		const QString& modeRepo() const;
 		const QString& path() const;
-		FileStatus status() const;
+		Status status() const;
 
 	private:
 		QString m_idIndex;
@@ -80,8 +80,9 @@ class StatusFile : public QObject
 		QString m_path;
 		const Repo *m_repo;
 		bool m_staged;
-		FileStatus m_status;
+		Status m_status;
 };
+Q_DECLARE_OPERATORS_FOR_FLAGS(StatusFile::Status)
 
 
 
@@ -93,7 +94,7 @@ class Status : public QObject
 		explicit Status(const Repo *repo);
 
 		QList<StatusFile*> files() const;
-		QList<StatusFile*> filesByStatus(FileStatus fileStatus) const;
+		QList<StatusFile*> filesByStatus(StatusFile::Status fileStatus) const;
 		QList<StatusFile*> forFile(const QString &file) const;
 		QList<StatusFile*> stagedFiles() const;
 		QList<StatusFile*> unstagedFiles() const;
@@ -107,7 +108,7 @@ class Status : public QObject
 		QList<StatusFile*> diffIndex(const QString &treeish) const;
 		QList<StatusFile*> ignoredFiles() const;
 		QList<StatusFile*> lsFiles() const;
-		FileStatus statusFromString(const QString &status) const;
+		StatusFile::Status statusFromString(const QString &status) const;
 		QString unescapeFileName(const QString &escapedName) const;
 		QList<StatusFile*> untrackedFiles() const;
 

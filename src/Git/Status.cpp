@@ -37,7 +37,7 @@ void Status::addFile(StatusFile *file)
 	QString path = file->path();
 	if (m_status[path].size() > 0) {
 		StatusFile *lastFile = m_status[path].last();
-		if (lastFile->m_status == NoStatus || !file->isStaged()) {
+		if (lastFile->m_status == None || !file->isStaged()) {
 			lastFile->merge(*file);
 		} else {
 			m_status[path] << new StatusFile(m_repo);
@@ -170,18 +170,18 @@ QList<StatusFile*> Status::files() const
 	return m_files;
 }
 
-QList<StatusFile*> Status::filesByStatus(FileStatus fileStatus) const
+QList<StatusFile*> Status::filesByStatus(StatusFile::Status fileStatus) const
 {
-	if (fileStatus == Staged) {
+	if (fileStatus & StatusFile::Staged) {
 		return stagedFiles();
-	} else if (fileStatus == Unstaged) {
+	} else if (fileStatus & StatusFile::Unstaged) {
 		return unstagedFiles();
 	}
 
 	QList<StatusFile*> result;
 
 	foreach (StatusFile *file, m_files) {
-		if (file->status() == fileStatus) {
+		if (file->status() & fileStatus) {
 			result << file;
 		}
 	}
@@ -288,17 +288,17 @@ QList<StatusFile*> Status::stagedFiles() const
 	return files;
 }
 
-FileStatus Status::statusFromString(const QString &status) const
+StatusFile::Status Status::statusFromString(const QString &status) const
 {
 	if (status == "A") {
-		return Added;
+		return StatusFile::Added;
 	} else if (status == "D") {
-		return Deleted;
+		return StatusFile::Deleted;
 	} else if (status == "M") {
-		return Modified;
+		return StatusFile::Modified;
 	}
 
-	return NoStatus;
+	return StatusFile::None;
 }
 
 QString Status::unescapeFileName(const QString &escapedName) const
@@ -337,7 +337,7 @@ QList<StatusFile*> Status::untrackedFiles() const
 		StatusFile *statusFile = new StatusFile(m_repo);
 		statusFile->m_path = unescapeFileName(file); // unescape file names
 		statusFile->m_staged = false;
-		statusFile->m_status = Untracked;
+		statusFile->m_status = StatusFile::Untracked;
 
 		untrackedFiles << statusFile;
 	}
@@ -361,7 +361,7 @@ StatusFile::StatusFile(const Repo *repo)
 	: QObject((QObject*)repo)
 	, m_repo(repo)
 	, m_staged(false)
-	, m_status(NoStatus)
+	, m_status(None)
 {
 }
 
@@ -438,7 +438,7 @@ const QString StatusFile::diff() const
 
 bool StatusFile::hasChanged() const
 {
-	return m_status != NoStatus;
+	return m_status != None;
 }
 
 const QString& StatusFile::idIndex() const
@@ -485,7 +485,7 @@ void StatusFile::merge(const StatusFile &file)
 	if (!file.m_path.isEmpty())      { m_path      = file.m_path; }
 	if ( file.m_staged)              { m_staged    = file.m_staged; }
 	else                             { m_staged    = file.m_staged; }
-	if ( file.m_status != NoStatus)      { m_status    = file.m_status; }
+	if ( file.m_status != StatusFile::None)      { m_status    = file.m_status; }
 }
 
 const QString& StatusFile::modeIndex() const
@@ -503,7 +503,7 @@ const QString& StatusFile::path() const
 	return m_path;
 }
 
-FileStatus StatusFile::status() const
+StatusFile::Status StatusFile::status() const
 {
 	return m_status;
 }
