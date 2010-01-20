@@ -25,8 +25,7 @@
 #include "Git/Repo.h"
 #include "Git/Status.h"
 
-#include "GitStagedFilesModel.h"
-#include "GitUnstagedFilesModel.h"
+#include "GitFileStatusModel.h"
 
 #include <QSortFilterProxyModel>
 #include <QModelIndex>
@@ -58,8 +57,8 @@ void StageWidget::commit()
 
 void StageWidget::loadModels()
 {
-	m_stagedFilesModel = new GitStagedFilesModel(m_repo, this);
-	m_unstagedFilesModel = new GitUnstagedFilesModel(m_repo, this);
+	m_stagedFilesModel = new GitFileStatusModel(Git::Staged, m_repo, this);
+	m_unstagedFilesModel = new GitFileStatusModel(Git::Unstaged, m_repo, this);
 
 	m_stagedFilesProxyModel->setSourceModel(m_stagedFilesModel);
 	m_unstagedFilesProxyModel->setSourceModel(m_unstagedFilesModel);

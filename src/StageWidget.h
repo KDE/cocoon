@@ -29,8 +29,7 @@ namespace Ui {
 	class StageWidget;
 }
 
-class GitStagedFilesModel;
-class GitUnstagedFilesModel;
+class GitFileStatusModel;
 
 class QModelIndex;
 class QSortFilterProxyModel;
@@ -63,9 +62,9 @@ class StageWidget : public QWidget
 
 	private:
 		Git::Repo *m_repo;
-		GitStagedFilesModel   *m_stagedFilesModel;
+		GitFileStatusModel    *m_stagedFilesModel;
 		QSortFilterProxyModel *m_stagedFilesProxyModel;
-		GitUnstagedFilesModel *m_unstagedFilesModel;
+		GitFileStatusModel    *m_unstagedFilesModel;
 		QSortFilterProxyModel *m_unstagedFilesProxyModel;
 		Ui::StageWidget *ui;
 };
