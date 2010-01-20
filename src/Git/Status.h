@@ -35,6 +35,8 @@ class Status;
 Q_ENUMS(FileStatus);
 enum FileStatus {
 	NoStatus = 0,
+	Staged,
+	Unstaged,
 	Untracked,
 	Added,
 	Modified,
@@ -91,6 +93,7 @@ class Status : public QObject
 		explicit Status(const Repo *repo);
 
 		QList<StatusFile*> files() const;
+		QList<StatusFile*> filesByStatus(FileStatus fileStatus) const;
 		QList<StatusFile*> forFile(const QString &file) const;
 		QList<StatusFile*> stagedFiles() const;
 		QList<StatusFile*> unstagedFiles() const;

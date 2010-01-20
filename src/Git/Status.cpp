@@ -170,6 +170,25 @@ QList<StatusFile*> Status::files() const
 	return m_files;
 }
 
+QList<StatusFile*> Status::filesByStatus(FileStatus fileStatus) const
+{
+	if (fileStatus == Staged) {
+		return stagedFiles();
+	} else if (fileStatus == Unstaged) {
+		return unstagedFiles();
+	}
+
+	QList<StatusFile*> result;
+
+	foreach (StatusFile *file, m_files) {
+		if (file->status() == fileStatus) {
+			result << file;
+		}
+	}
+
+	return result;
+}
+
 QList<StatusFile*> Status::forFile(const QString &file) const
 {
 	return m_status[file];
