@@ -30,6 +30,7 @@ using namespace Git;
 
 Repo::Repo(const QString &workingDir, QObject *parent)
 	: QObject(parent)
+	, m_status(0)
 	, m_workingDir(workingDir)
 {
 }
@@ -131,6 +132,20 @@ QStringList Repo::heads() const
 	return branches;
 }
 
+void Repo::on_indexChanged()
+{
+	reloadStatus();
+}
+
+void Repo::reloadStatus()
+{
+	/** @todo make Status smarter to detect only changed files */
+	if (m_status) {
+		delete m_status;
+		m_status = 0;
+	}
+}
+
 void Repo::stageFiles(const QStringList &paths)
 {
 	GitRunner runner;
@@ -141,9 +156,13 @@ void Repo::stageFiles(const QStringList &paths)
 	emit indexChanged();
 }
 
-Status* Repo::status() const
+Status* Repo::status()
 {
-	return new Status(this);
+	if (!m_status) {
+		m_status = new Status(this);
+	}
+
+	return m_status;
 }
 
 void Repo::unstageFiles(const QStringList &paths)

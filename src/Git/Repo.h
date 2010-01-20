@@ -68,6 +68,13 @@ class Repo : public QObject
 		void indexChanged();
 
 	private:
+		void reloadStatus();
+
+	private slots:
+		void on_indexChanged();
+
+	private:
+		Status *m_status;
 		QString m_workingDir;
 };
 
