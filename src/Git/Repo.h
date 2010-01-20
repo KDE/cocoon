@@ -47,13 +47,13 @@ class Repo : public QObject
 		explicit Repo(const QString &workingDir, QObject *parent = 0);
 
 		void commitIndex(const QString &message, const QStringList &options = QStringList());
-		CommitList commits(const QString &branch = QString()) const;
+		CommitList commits(const QString &branch = QString());
 		QString diff(const Commit &a, const Commit &b) const;
 		QString head() const;
 		QStringList heads() const;
 		/** Stages files to be included in the next commit. */
 		void stageFiles(const QStringList &paths);
-		Status* status() const;
+		Status* status();
 		/** Unstages (staged) files to not be included in the next commit. */
 		void unstageFiles(const QStringList &paths);
 		const QString& workingDir() const;
@@ -68,12 +68,15 @@ class Repo : public QObject
 		void indexChanged();
 
 	private:
+		void reloadCommits();
 		void reloadStatus();
 
 	private slots:
+		void on_historyChanged();
 		void on_indexChanged();
 
 	private:
+		QHash<QString, CommitList> m_commits;
 		Status *m_status;
 		QString m_workingDir;
 };

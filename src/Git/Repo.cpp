@@ -59,17 +59,21 @@ void Repo::commitIndex(const QString &message, const QStringList &options)
 	emit historyChanged();
 }
 
-QList<Commit*> Repo::commits(const QString &branch) const
+CommitList Repo::commits(const QString &branch)
 {
-	GitRunner runner;
-	runner.setDirectory(workingDir());
+	if (!m_commits.contains(branch)) {
+		GitRunner runner;
+		runner.setDirectory(workingDir());
 
-	QString result;
-	if (runner.commits(branch) == DvcsJob::JobSucceeded) {
-		result = runner.getResult();
+		QString result;
+		if (runner.commits(branch) == DvcsJob::JobSucceeded) {
+			result = runner.getResult();
+		}
+
+		m_commits[branch] = Commit::fromRawLog(this, result);
 	}
 
-	return Commit::fromRawLog(this, result);
+	return m_commits[branch];
 }
 
 bool Repo::containsRepository(const QString &path)
@@ -132,9 +136,19 @@ QStringList Repo::heads() const
 	return branches;
 }
 
+void Repo::on_historyChanged()
+{
+	reloadCommits();
+}
+
 void Repo::on_indexChanged()
 {
 	reloadStatus();
+}
+
+void Repo::reloadCommits()
+{
+	m_commits.clear();
 }
 
 void Repo::reloadStatus()
