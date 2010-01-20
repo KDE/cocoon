@@ -57,8 +57,8 @@ void StageWidget::commit()
 
 void StageWidget::loadModels()
 {
-	m_stagedFilesModel = new GitFileStatusModel(Git::Staged, m_repo, this);
-	m_unstagedFilesModel = new GitFileStatusModel(Git::Unstaged, m_repo, this);
+	m_stagedFilesModel = new GitFileStatusModel(Git::StatusFile::Staged, m_repo, this);
+	m_unstagedFilesModel = new GitFileStatusModel(Git::StatusFile::Unstaged, m_repo, this);
 
 	m_stagedFilesProxyModel->setSourceModel(m_stagedFilesModel);
 	m_unstagedFilesProxyModel->setSourceModel(m_unstagedFilesModel);

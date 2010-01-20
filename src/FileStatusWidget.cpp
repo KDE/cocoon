@@ -164,32 +164,32 @@ void FileStatusWidget::showFileStatus()
 	ui->diffWidget->setDiff(diff);
 }
 
-QString FileStatusWidget::statusToIconName(Git::FileStatus status)
+QString FileStatusWidget::statusToIconName(Git::StatusFile::Status status)
 {
 	switch (status) {
-	case Git::Added:
+	case Git::StatusFile::Added:
 		return "git-file-added";
-	case Git::Deleted:
+	case Git::StatusFile::Deleted:
 		return "git-file-deleted";
-	case Git::Modified:
+	case Git::StatusFile::Modified:
 		return "git-file-modified";
-	case Git::Untracked:
+	case Git::StatusFile::Untracked:
 		return "git-file-untracked";
 	default:
 		return "git-file-none";
 	}
 }
 
-QString FileStatusWidget::statusToString(Git::FileStatus status)
+QString FileStatusWidget::statusToString(Git::StatusFile::Status status)
 {
 	switch (status) {
-	case Git::Added:
+	case Git::StatusFile::Added:
 		return i18n("Added");
-	case Git::Deleted:
+	case Git::StatusFile::Deleted:
 		return i18n("Deleted");
-	case Git::Modified:
+	case Git::StatusFile::Modified:
 		return i18n("Modified");
-	case Git::Untracked:
+	case Git::StatusFile::Untracked:
 		return i18n("Untracked");
 	default:
 		return i18n("None");

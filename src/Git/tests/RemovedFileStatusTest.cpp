@@ -94,7 +94,7 @@ void RemovedFileStatusTest::testRemovedFile_diffIndex()
 	QVERIFY(file->modeIndex().isNull());
 	QVERIFY(file->modeRepo() == "100644");
 	QVERIFY(file->path() == "removed.txt");
-	QVERIFY(file->status() == Git::Deleted);
+	QVERIFY(file->status() == Git::StatusFile::Deleted);
 }
 
 void RemovedFileStatusTest::testRemovedFile_diffUntrackedFiles()
@@ -122,7 +122,7 @@ void RemovedFileStatusTest::testRemovedFileIsDeleted()
 
 	Git::StatusFile *file = fileStatus[0];
 	QVERIFY(file->isDeleted());
-	QVERIFY(file->status() == Git::Deleted);
+	QVERIFY(file->status() == Git::StatusFile::Deleted);
 }
 
 void RemovedFileStatusTest::testRemovedFileIsStaged()

@@ -84,7 +84,7 @@ void ModifiedAddedFileStatusTest::testRemodifiedFile_lsFiles()
 	QVERIFY(file->modeIndex() == "100644");
 	QVERIFY(file->modeRepo().isNull());
 	QVERIFY(file->path() == "modified_added.txt");
-	QVERIFY(file->status() == Git::NoStatus);
+	QVERIFY(file->status() == Git::StatusFile::None);
 }
 
 void ModifiedAddedFileStatusTest::testRemodifiedFile_diffFiles()
@@ -98,7 +98,7 @@ void ModifiedAddedFileStatusTest::testRemodifiedFile_diffFiles()
 	QVERIFY(file->modeIndex() == "100644");
 	QVERIFY(file->modeRepo() == "100644");
 	QVERIFY(file->path() == "modified_added.txt");
-	QVERIFY(file->status() == Git::Modified);
+	QVERIFY(file->status() == Git::StatusFile::Modified);
 }
 
 void ModifiedAddedFileStatusTest::testRemodifiedFile_diffIndex()
@@ -112,7 +112,7 @@ void ModifiedAddedFileStatusTest::testRemodifiedFile_diffIndex()
 	QVERIFY(file->modeIndex() == "100644");
 	QVERIFY(file->modeRepo().isNull());
 	QVERIFY(file->path() == "modified_added.txt");
-	QVERIFY(file->status() == Git::Added);
+	QVERIFY(file->status() == Git::StatusFile::Added);
 }
 
 void ModifiedAddedFileStatusTest::testRemodifiedFile_diffUntrackedFiles()
@@ -142,11 +142,11 @@ void ModifiedAddedFileStatusTest::testRemodifiedFileIsModified()
 
 	file = fileStatus[0];
 	QVERIFY(file->isModified());
-	QVERIFY(file->status() == Git::Modified);
+	QVERIFY(file->status() == Git::StatusFile::Modified);
 
 	file = fileStatus[1];
 	QVERIFY(file->isAdded());
-	QVERIFY(file->status() == Git::Added);
+	QVERIFY(file->status() == Git::StatusFile::Added);
 }
 
 void ModifiedAddedFileStatusTest::testRemodifiedFileIsStagedAndUnstaged()

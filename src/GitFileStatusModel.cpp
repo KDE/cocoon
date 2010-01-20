@@ -26,7 +26,7 @@
 
 
 
-GitFileStatusModel::GitFileStatusModel(Git::FileStatus fileStatus, Git::Repo *repo, QObject *parent)
+GitFileStatusModel::GitFileStatusModel(Git::StatusFile::Status fileStatus, Git::Repo *repo, QObject *parent)
 	: QAbstractTableModel(parent)
 	, m_fileStatus(fileStatus)
 	, m_repo(repo)
@@ -90,7 +90,7 @@ QVariant GitFileStatusModel::data(const QModelIndex &index, int role) const
 	}
 }
 
-Git::FileStatus GitFileStatusModel::fileStatus() const
+Git::StatusFile::Status GitFileStatusModel::fileStatus() const
 {
 	return m_fileStatus;
 }

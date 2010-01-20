@@ -30,12 +30,12 @@ class GitFileStatusModel : public QAbstractTableModel
 	Q_OBJECT
 
 	public:
-		explicit GitFileStatusModel(Git::FileStatus fileStatus, Git::Repo *repo, QObject *parent = 0);
+		explicit GitFileStatusModel(Git::StatusFile::Status fileStatus, Git::Repo *repo, QObject *parent = 0);
 
 		int columnCount(const QModelIndex &parent = QModelIndex()) const;
 		const QString& columnName(int column) const;
 		QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-		Git::FileStatus fileStatus() const;
+		Git::StatusFile::Status fileStatus() const;
 		QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 		QModelIndex mapToIndex(const Git::StatusFile &file) const;
 		const Git::StatusFile* mapToStatusFile(const QModelIndex &index) const;
@@ -49,7 +49,7 @@ class GitFileStatusModel : public QAbstractTableModel
 
 	private:
 		QList<Git::StatusFile*> m_files;
-		Git::FileStatus m_fileStatus;
+		Git::StatusFile::Status m_fileStatus;
 		Git::Repo *m_repo;
 };
 

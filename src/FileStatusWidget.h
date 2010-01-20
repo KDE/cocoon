@@ -56,8 +56,8 @@ class FileStatusWidget : public QWidget
 		QString fileType();
 		KMimeType::Ptr mimeType();
 		void showFileStatus();
-		QString statusToIconName(Git::FileStatus status);
-		QString statusToString(Git::FileStatus status);
+		QString statusToIconName(Git::StatusFile::Status status);
+		QString statusToString(Git::StatusFile::Status status);
 
 	private:
 		QByteArray m_byteArray;
