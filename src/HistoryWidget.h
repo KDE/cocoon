@@ -58,7 +58,7 @@ class HistoryWidget : public QWidget
 	private:
 		GitBranchesModel *m_branchesModel;
 		GitHistoryModel *m_historyModel;
-		const Git::Repo *m_repo;
+		Git::Repo *m_repo;
 		Ui::HistoryWidget *ui;
 };
 

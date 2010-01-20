@@ -27,7 +27,7 @@
 
 
 
-GitHistoryModel::GitHistoryModel(const Git::Repo &repo, QObject *parent)
+GitHistoryModel::GitHistoryModel(Git::Repo &repo, QObject *parent)
 	: QAbstractTableModel(parent)
 	, m_branch(repo.head())
 	, m_commits(Git::CommitList())

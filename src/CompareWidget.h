@@ -64,7 +64,7 @@ class CompareWidget : public QWidget
 		GitHistoryModel *m_historyBModel;
 		const Git::Commit *m_commitA;
 		const Git::Commit *m_commitB;
-		const Git::Repo *m_repo;
+		Git::Repo *m_repo;
 		Ui::CompareWidget *ui;
 };
 

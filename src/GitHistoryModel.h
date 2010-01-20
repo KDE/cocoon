@@ -34,7 +34,7 @@ class GitHistoryModel : public QAbstractTableModel
 	Q_OBJECT
 
 	public:
-		explicit GitHistoryModel(const Git::Repo &repo, QObject *parent = 0);
+		explicit GitHistoryModel(Git::Repo &repo, QObject *parent = 0);
 
 		const QString& branch();
 		int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -56,7 +56,7 @@ class GitHistoryModel : public QAbstractTableModel
 	private:
 		QString m_branch;
 		Git::CommitList m_commits;
-		const Git::Repo &m_repo;
+		Git::Repo &m_repo;
 };
 
 #endif // GITHISTORYMODEL_H
