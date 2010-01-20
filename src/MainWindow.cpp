@@ -79,6 +79,8 @@ void MainWindow::open()
 
 void MainWindow::reload()
 {
+	m_repo->reset();
+
 //	ui->historyWidget->reload();
 	ui->stageWidget->reload();
 //	ui->compareWidget->reload();
