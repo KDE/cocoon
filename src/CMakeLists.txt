@@ -11,6 +11,7 @@ set(cocoon_SRCS
 	DiffWidget.cpp
 	FileStatusWidget.cpp
 	GitBranchesModel.cpp
+	GitFileStatusModel.cpp
 	GitHistoryModel.cpp
 	GitStagedFilesModel.cpp
 	GitUnstagedFilesModel.cpp
