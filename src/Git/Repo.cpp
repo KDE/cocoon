@@ -138,20 +138,20 @@ QStringList Repo::heads() const
 
 void Repo::on_historyChanged()
 {
-	reloadCommits();
+	resetCommits();
 }
 
 void Repo::on_indexChanged()
 {
-	reloadStatus();
+	resetStatus();
 }
 
-void Repo::reloadCommits()
+void Repo::resetCommits()
 {
 	m_commits.clear();
 }
 
-void Repo::reloadStatus()
+void Repo::resetStatus()
 {
 	/** @todo make Status smarter to detect only changed files */
 	if (m_status) {

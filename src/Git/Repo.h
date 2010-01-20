@@ -63,13 +63,13 @@ class Repo : public QObject
 		static bool containsRepository(const QString &path);
 		static void init(const QString &newRepoPath);
 
+	public slots:
+		void resetCommits();
+		void resetStatus();
+
 	signals:
 		void historyChanged();
 		void indexChanged();
-
-	private:
-		void reloadCommits();
-		void reloadStatus();
 
 	private slots:
 		void on_historyChanged();
