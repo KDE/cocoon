@@ -55,6 +55,9 @@ void Repo::commitIndex(const QString &message, const QStringList &options)
 
 	runner.commit(opts);
 
+	resetCommits();
+	resetStatus();
+
 	emit indexChanged();
 	emit historyChanged();
 }
@@ -136,19 +139,19 @@ QStringList Repo::heads() const
 	return branches;
 }
 
-void Repo::on_historyChanged()
+void Repo::reset()
 {
 	resetCommits();
-}
-
-void Repo::on_indexChanged()
-{
 	resetStatus();
 }
 
 void Repo::resetCommits()
 {
-	m_commits.clear();
+	if (m_commits.size() > 0) {
+		m_commits.clear();
+
+		emit indexChanged();
+	}
 }
 
 void Repo::resetStatus()
@@ -157,6 +160,8 @@ void Repo::resetStatus()
 	if (m_status) {
 		delete m_status;
 		m_status = 0;
+
+		emit indexChanged();
 	}
 }
 
@@ -167,6 +172,7 @@ void Repo::stageFiles(const QStringList &paths)
 
 	runner.add(paths, QStringList());
 
+	resetStatus();
 	emit indexChanged();
 }
 
@@ -194,6 +200,7 @@ void Repo::unstageFiles(const QStringList &paths)
 		runner.reset(paths, QStringList(), "HEAD");
 	}
 
+	resetStatus();
 	emit indexChanged();
 }
 

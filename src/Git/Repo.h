@@ -64,16 +64,13 @@ class Repo : public QObject
 		static void init(const QString &newRepoPath);
 
 	public slots:
+		void reset();
 		void resetCommits();
 		void resetStatus();
 
 	signals:
 		void historyChanged();
 		void indexChanged();
-
-	private slots:
-		void on_historyChanged();
-		void on_indexChanged();
 
 	private:
 		QHash<QString, CommitList> m_commits;
