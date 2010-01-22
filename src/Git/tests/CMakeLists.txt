@@ -10,7 +10,7 @@ include_directories(
 
 MACRO(UNIT_TESTS)
 	FOREACH(_className ${ARGN})
-		set(_testName ${_className}Test)
+		set(_testName ${_className})
 		kde4_add_unit_test(${_testName}
 			TESTNAME cocoon-git-${_testName}
 			NOGUI ${_testName}.cpp GitTestBase.cpp
@@ -25,15 +25,15 @@ ENDMACRO(UNIT_TESTS)
 
 unit_tests(
 # Commit tests
-	CommitMergeDetection
+	CommitMergeDetectionTest
 
 # Status tests
-	DeletedFileStatus
-	NewFileStatus
-	NewlyAddedFileStatus
-	ModifiedAddedFileStatus
-	ModifiedFileStatus
-	RemodifiedFileStatus
-	RemovedFileStatus
-	UpdatedFileStatus
+	DeletedFileStatusTest
+	NewFileStatusTest
+	NewlyAddedFileStatusTest
+	ModifiedAddedFileStatusTest
+	ModifiedFileStatusTest
+	RemodifiedFileStatusTest
+	RemovedFileStatusTest
+	UpdatedFileStatusTest
 )
