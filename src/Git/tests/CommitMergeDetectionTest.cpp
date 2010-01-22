@@ -27,84 +27,62 @@ class CommitMergeDetectionTest : public GitTestBase
 	Q_OBJECT
 
 	private slots:
-		void initTestCase();
+		void init();
 		void cleanup();
 
-		void testMergeDetectionOnUnbranched();
-		void testMergeDetectionOnSideBanch();
-		void testMergeDetectionOnMergedBanch();
+		void testMergeDetectionWithNoParents();
+		void testMergeDetectionWithOneParent();
+		void testMergeDetectionWithMoreParents();
 
 	private:
-		Git::CommitList commits;
+		Git::Commit *commit;
 };
 
 QTEST_KDEMAIN_CORE(CommitMergeDetectionTest)
 
 
 
-void CommitMergeDetectionTest::initTestCase()
+void CommitMergeDetectionTest::init()
 {
-	GitTestBase::initTestCase();
-
-	QProcess::execute("git", gitBasicOpts() << "commit" << "--allow-empty" << "-m" << "Empty inital commit.");
-
-	QProcess::execute("git", gitBasicOpts() << "checkout" << "-b" << "unbranched");
-	writeToFile("file_on_master.txt", "foo");
-	QProcess::execute("git", gitBasicOpts() << "add" << ".");
-	QProcess::execute("git", gitBasicOpts() << "commit" << "-m" << "First commit on unbranched.");
-
-	QProcess::execute("git", gitBasicOpts() << "checkout" << "-b" << "branch");
-	writeToFile("file_on_branch.txt", "foo\nbar");
-	QProcess::execute("git", gitBasicOpts() << "add" << ".");
-	QProcess::execute("git", gitBasicOpts() << "commit" << "-m" << "Commit on branch.");
-
-	QProcess::execute("git", gitBasicOpts() << "checkout" << "unbranched");
-	writeToFile("file_on_master.txt", "foo\nbar\nbaz");
-	QProcess::execute("git", gitBasicOpts() << "add" << ".");
-	QProcess::execute("git", gitBasicOpts() << "commit" << "-m" << "Second commit on unbranched.");
-
-	QProcess::execute("git", gitBasicOpts() << "checkout" << "-b" << "merged");
-	QProcess::execute("git", gitBasicOpts() << "merge" << "branch");
+	commit = new Git::Commit(repo);
 }
 
 void CommitMergeDetectionTest::cleanup()
 {
-	commits.clear();
+	delete commit;
 }
 
 
 
-void CommitMergeDetectionTest::testMergeDetectionOnUnbranched()
+void CommitMergeDetectionTest::testMergeDetectionWithNoParents()
 {
-	commits = repo->commits("unbranched");
-	QVERIFY(commits.size() == 3);
+	QVERIFY(commit->m_parents.size() == 0);
 
-	QVERIFY(!commits[0]->isMerge());
-	QVERIFY(!commits[1]->isMerge());
-	QVERIFY(!commits[2]->isMerge());
+	QVERIFY(!commit->isMerge());
 }
 
-void CommitMergeDetectionTest::testMergeDetectionOnSideBanch()
+void CommitMergeDetectionTest::testMergeDetectionWithOneParent()
 {
-	commits = repo->commits("branch");
-	QVERIFY(commits.size() == 3);
+	commit->m_parents << "1234567";
+	QVERIFY(commit->m_parents.size() == 1);
 
-	QVERIFY(!commits[0]->isMerge());
-	QVERIFY(!commits[1]->isMerge());
-	QVERIFY(!commits[2]->isMerge());
+	QVERIFY(!commit->isMerge());
 }
 
-void CommitMergeDetectionTest::testMergeDetectionOnMergedBanch()
+void CommitMergeDetectionTest::testMergeDetectionWithMoreParents()
 {
-	commits = repo->commits("merged");
-	QVERIFY(commits.size() == 5);
+	commit->m_parents << "1234567";
+	commit->m_parents << "2345678";
+	QVERIFY(commit->m_parents.size() == 2);
+	QVERIFY(commit->isMerge());
 
-	QVERIFY(commits[0]->isMerge());
+	commit->m_parents << "3456789";
+	QVERIFY(commit->m_parents.size() == 3);
+	QVERIFY(commit->isMerge());
 
-	QVERIFY(!commits[1]->isMerge());
-	QVERIFY(!commits[2]->isMerge());
-	QVERIFY(!commits[3]->isMerge());
-	QVERIFY(!commits[4]->isMerge());
+	commit->m_parents << "4567890";
+	QVERIFY(commit->m_parents.size() == 4);
+	QVERIFY(commit->isMerge());
 }
 
 #include "CommitMergeDetectionTest.moc"
