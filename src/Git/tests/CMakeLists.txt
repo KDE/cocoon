@@ -24,6 +24,10 @@ MACRO(UNIT_TESTS)
 ENDMACRO(UNIT_TESTS)
 
 unit_tests(
+# Commit tests
+	CommitMergeDetection
+
+# Status tests
 	DeletedFileStatus
 	NewFileStatus
 	NewlyAddedFileStatus
