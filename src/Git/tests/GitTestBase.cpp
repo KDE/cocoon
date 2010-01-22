@@ -55,7 +55,8 @@ void GitTestBase::initTestCase()
 	repo = 0;
 	status = 0;
 
-	workingDir = QDir::temp().filePath("git_test_%1_%2").arg(QDateTime::currentDateTime().toTime_t()).arg(random());
+	srand(time(0));
+	workingDir = QDir::temp().filePath("git_test_%1_%2").arg(QDateTime::currentDateTime().toTime_t()).arg(rand());
 	qDebug() << "Test directory: " << workingDir;
 
 	QProcess::execute("mkdir", QStringList() << workingDir);
