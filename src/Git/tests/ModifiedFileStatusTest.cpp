@@ -51,26 +51,14 @@ void ModifiedFileStatusTest::initTestCase()
 {
 	GitTestBase::initTestCase();
 
-	workingDir = QDir::temp().filePath("modified_file_status_test_repo");
-
-	QProcess::execute("mkdir", QStringList() << workingDir);
-
-	qDebug() << workingDir;
-
-	QProcess::execute("git", gitBasicOpts() << "init");
 	QProcess::execute("git", gitBasicOpts() << "commit" << "--allow-empty" << "-m" << "Empty inital commit.");
 
-	QFile file(QDir(workingDir).filePath("modified.txt"));
-	file.open(QFile::ReadWrite);
-	file.write("foo\nbar");
-	file.close();
+	writeToFile("modified.txt", "foo\nbar");
 
 	QProcess::execute("git", gitBasicOpts() << "add" << "modified.txt");
 	QProcess::execute("git", gitBasicOpts() << "commit" << "-m" << "Committed file to be modified.");
 
-	file.open(QFile::ReadWrite);
-	file.write("foo\nbar\nbaz\n");
-	file.close();
+	writeToFile("modified.txt", "foo\nbar\nbaz\n");
 }
 
 
