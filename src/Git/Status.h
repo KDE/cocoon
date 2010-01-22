@@ -26,6 +26,15 @@
 
 
 
+class DeletedFileStatusTest;
+class NewFileStatusTest;
+class NewlyAddedFileStatusTest;
+class ModifiedAddedFileStatusTest;
+class ModifiedFileStatusTest;
+class RemodifiedFileStatusTest;
+class RemovedFileStatusTest;
+class UpdatedFileStatusTest;
+
 namespace Git {
 
 class Repo;
@@ -99,7 +108,7 @@ class Status : public QObject
 		QList<StatusFile*> stagedFiles() const;
 		QList<StatusFile*> unstagedFiles() const;
 
-//	private:
+	private:
 		void constuctStatus();
 		void addFile(StatusFile *file);
 		/** Compares the index and the working directory */
@@ -116,6 +125,15 @@ class Status : public QObject
 		QList<StatusFile*> m_files;
 		const Repo *m_repo;
 		QHash<QString, QList<StatusFile*> > m_status;
+
+		friend class ::DeletedFileStatusTest;
+		friend class ::NewFileStatusTest;
+		friend class ::NewlyAddedFileStatusTest;
+		friend class ::ModifiedAddedFileStatusTest;
+		friend class ::ModifiedFileStatusTest;
+		friend class ::RemodifiedFileStatusTest;
+		friend class ::RemovedFileStatusTest;
+		friend class ::UpdatedFileStatusTest;
 };
 
 }

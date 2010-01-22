@@ -27,6 +27,8 @@
 
 
 
+class CommitMergeDetectionTest;
+
 namespace Git {
 
 class Commit;
@@ -128,6 +130,8 @@ class Commit : public QObject
 		const Repo *m_repo;
 		QString     m_summary;
 		QString     m_tree;
+
+		friend class ::CommitMergeDetectionTest;
 };
 
 }
