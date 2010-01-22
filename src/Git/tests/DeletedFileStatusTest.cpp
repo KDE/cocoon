@@ -51,24 +51,14 @@ void DeletedFileStatusTest::initTestCase()
 {
 	GitTestBase::initTestCase();
 
-	workingDir = QDir::temp().filePath("deleted_file_status_test_repo");
-
-	QProcess::execute("mkdir", QStringList() << workingDir);
-
-	qDebug() << workingDir;
-
-	QProcess::execute("git", gitBasicOpts() << "init");
 	QProcess::execute("git", gitBasicOpts() << "commit" << "--allow-empty" << "-m" << "Empty inital commit.");
 
-	QFile file(QDir(workingDir).filePath("deleted.txt"));
-	file.open(QFile::ReadWrite);
-	file.write("foo\nbar\nbaz\n");
-	file.close();
+	writeToFile("deleted.txt", "foo\nbar\nbaz\n");
 
 	QProcess::execute("git", gitBasicOpts() << "add" << "deleted.txt");
 	QProcess::execute("git", gitBasicOpts() << "commit" << "-m" << "Added file to be deleted.");
 
-	QDir().remove(file.fileName());
+	deleteFile("deleted.txt");
 }
 
 
