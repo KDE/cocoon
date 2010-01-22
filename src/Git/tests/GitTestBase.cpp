@@ -20,6 +20,11 @@
 
 
 
+void GitTestBase::deleteFile(const QString &file)
+{
+	QDir().remove(pathTo(file));
+}
+
 QStringList GitTestBase::gitBasicOpts()
 {
 	QStringList opts;
@@ -30,10 +35,31 @@ QStringList GitTestBase::gitBasicOpts()
 	return opts;
 }
 
+QString GitTestBase::pathTo(const QString &file)
+{
+	return QDir(workingDir).filePath(file);
+}
+
+void GitTestBase::writeToFile(const QString &filePath, const QByteArray &content)
+{
+	QFile file(pathTo(filePath));
+	file.open(QFile::ReadWrite);
+	file.write(content);
+	file.close();
+}
+
+
+
 void GitTestBase::initTestCase()
 {
 	repo = 0;
 	status = 0;
+
+	workingDir = QDir::temp().filePath("git_test_%1_%2").arg(QDateTime::currentDateTime().toTime_t()).arg(random());
+	qDebug() << "Test directory: " << workingDir;
+
+	QProcess::execute("mkdir", QStringList() << workingDir);
+	QProcess::execute("git", gitBasicOpts() << "init");
 }
 
 void GitTestBase::cleanupTestCase()

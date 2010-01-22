@@ -36,7 +36,10 @@ class GitTestBase : public QObject
 	Q_OBJECT
 
 	protected:
+		void deleteFile(const QString &file);
 		QStringList gitBasicOpts();
+		QString pathTo(const QString &file);
+		void writeToFile(const QString &filePath, const QByteArray &content);
 
 	protected slots:
 		void initTestCase();
