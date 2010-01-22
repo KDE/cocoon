@@ -51,19 +51,9 @@ void NewFileStatusTest::initTestCase()
 {
 	GitTestBase::initTestCase();
 
-	workingDir = QDir::temp().filePath("new_file_status_test_repo");
-
-	QProcess::execute("mkdir", QStringList() << workingDir);
-
-	qDebug() << workingDir;
-
-	QProcess::execute("git", gitBasicOpts() << "init");
 	QProcess::execute("git", gitBasicOpts() << "commit" << "--allow-empty" << "-m" << "Empty inital commit.");
 
-	QFile file(QDir(workingDir).filePath("untracked.txt"));
-	file.open(QFile::ReadWrite);
-	file.write("foo\nbar\nbaz\n");
-	file.close();
+	writeToFile("untracked.txt", "foo\nbar\nbaz\n");
 }
 
 
