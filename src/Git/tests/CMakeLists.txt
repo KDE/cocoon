@@ -24,6 +24,9 @@ MACRO(UNIT_TESTS)
 ENDMACRO(UNIT_TESTS)
 
 unit_tests(
+# Repo
+	RepoCommitsCachingTest
+
 # Commit tests
 	CommitMergeDetectionTest
 

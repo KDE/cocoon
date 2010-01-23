@@ -26,6 +26,8 @@
 
 
 
+class RepoCommitsCachingTest;
+
 namespace Git {
 
 
@@ -76,6 +78,8 @@ class Repo : public QObject
 		QHash<QString, CommitList> m_commits;
 		Status *m_status;
 		QString m_workingDir;
+
+		friend class ::RepoCommitsCachingTest;
 };
 
 }
