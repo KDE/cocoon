@@ -26,6 +26,16 @@ class DeletedFileStatusTest : public GitTestBase
 
 	private slots:
 		void initTestCase();
+		void init() {
+			GitTestBase::init();
+			status = repo->status();
+		}
+
+		void cleanup() {
+			repo->resetStatus();
+			status = 0;
+			GitTestBase::cleanup();
+		}
 
 		void testDeletedFile_lsFiles();
 		void testDeletedFile_diffFiles();
@@ -41,6 +51,9 @@ class DeletedFileStatusTest : public GitTestBase
 		void testDeletedFileIndexBlobIsCorrect();
 		void testDeletedFileRepoBlobIsCorrect();
 		void testDeletedFileDiffIsCorrect();
+
+	private:
+		Git::Status *status;
 };
 
 QTEST_KDEMAIN_CORE(DeletedFileStatusTest)
@@ -50,6 +63,7 @@ QTEST_KDEMAIN_CORE(DeletedFileStatusTest)
 void DeletedFileStatusTest::initTestCase()
 {
 	GitTestBase::initTestCase();
+	status = 0;
 
 	QProcess::execute("git", gitBasicOpts() << "commit" << "--allow-empty" << "-m" << "Empty inital commit.");
 

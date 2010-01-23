@@ -53,7 +53,6 @@ void GitTestBase::writeToFile(const QString &filePath, const QByteArray &content
 void GitTestBase::initTestCase()
 {
 	repo = 0;
-	status = 0;
 
 	srand(time(0));
 	workingDir = QDir::temp().filePath("git_test_%1_%2").arg(QDateTime::currentDateTime().toTime_t()).arg(rand());
@@ -71,12 +70,11 @@ void GitTestBase::cleanupTestCase()
 void GitTestBase::init()
 {
 	repo = new Git::Repo(workingDir, this);
-	status = repo->status();
 }
 
 void GitTestBase::cleanup()
 {
-	delete status;
+	repo->reset();
 	delete repo;
 }
 

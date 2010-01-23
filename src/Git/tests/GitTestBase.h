@@ -49,7 +49,6 @@ class GitTestBase : public QObject
 
 	protected:
 		Git::Repo *repo;
-		Git::Status *status;
 		QString workingDir;
 };
 

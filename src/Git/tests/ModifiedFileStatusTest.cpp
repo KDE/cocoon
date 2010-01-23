@@ -26,6 +26,16 @@ class ModifiedFileStatusTest : public GitTestBase
 
 	private slots:
 		void initTestCase();
+		void init() {
+			GitTestBase::init();
+			status = repo->status();
+		}
+
+		void cleanup() {
+			repo->resetStatus();
+			status = 0;
+			GitTestBase::cleanup();
+		}
 
 		void testModifiedFile_lsFiles();
 		void testModifiedFile_diffFiles();
@@ -41,6 +51,9 @@ class ModifiedFileStatusTest : public GitTestBase
 		void testModifiedFileIndexBlobIsCorrect();
 		void testModifiedFileRepoBlobIsCorrect();
 		void testModifiedFileDiffIsCorrect();
+
+	private:
+		Git::Status *status;
 };
 
 QTEST_KDEMAIN_CORE(ModifiedFileStatusTest)
@@ -50,6 +63,7 @@ QTEST_KDEMAIN_CORE(ModifiedFileStatusTest)
 void ModifiedFileStatusTest::initTestCase()
 {
 	GitTestBase::initTestCase();
+	status = 0;
 
 	QProcess::execute("git", gitBasicOpts() << "commit" << "--allow-empty" << "-m" << "Empty inital commit.");
 
