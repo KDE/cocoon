@@ -18,8 +18,6 @@
 
 #include "GitTestBase.h"
 
-#include "Git/Commit.h"
-
 
 
 class CommitMergeDetectionTest : public GitTestBase
@@ -44,19 +42,23 @@ QTEST_KDEMAIN_CORE(CommitMergeDetectionTest)
 
 void CommitMergeDetectionTest::init()
 {
+	GitTestBase::init();
+
 	commit = new Git::Commit(repo);
 }
 
 void CommitMergeDetectionTest::cleanup()
 {
 	delete commit;
+
+	GitTestBase::cleanup();
 }
 
 
 
 void CommitMergeDetectionTest::testMergeDetectionWithNoParents()
 {
-	QVERIFY(commit->m_parents.size() == 0);
+	QVERIFY(commit->m_parents.isEmpty());
 
 	QVERIFY(!commit->isMerge());
 }
