@@ -40,4 +40,7 @@ unit_tests(
 	RemodifiedFileStatusTest
 	RemovedFileStatusTest
 	UpdatedFileStatusTest
+
+# Storage
+	LooseStorageTest
 )
