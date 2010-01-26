@@ -6,6 +6,7 @@ set(cocoon_git_LIB_SRCS
 	Commit.cpp
 	dvcsjob.cpp
 	gitrunner.cpp
+	LooseStorage.cpp
 	Repo.cpp
 	Status.cpp
 )
