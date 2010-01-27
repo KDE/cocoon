@@ -63,7 +63,7 @@ class LooseStorageTest : public GitTestBase
 			qDebug() << id;
 			QByteArray data = storage->dataFor(id);
 
-			QVERIFY(data.startsWith("commit "));
+			QVERIFY(data.startsWith("commit 212"));
 		}
 };
 
