@@ -41,8 +41,8 @@ LooseStorage::LooseStorage(Repo *repo)
 
 const QString LooseStorage::extractHeaderForm(const QByteArray &rawData)
 {
-	QString possibleHeader = rawData.left(rawData.indexOf('\0')+1);
-	if (possibleHeader.contains(QRegExp("^(blob|commit|tree|tag) \\d+$"))) {
+	QString possibleHeader = rawData.left(rawData.indexOf('\0'));
+	if (isValidHeader(possibleHeader)) {
 		return possibleHeader;
 	}
 
