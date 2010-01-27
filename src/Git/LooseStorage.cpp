@@ -112,7 +112,9 @@ const QByteArray LooseStorage::rawDataFor(const QString &id)
 		}
 	}
 
-	kDebug() << "Uncompressed raw object data:" << rawData;
+	/** @todo fix raw data size */
+
+	kDebug() << "Uncompressed raw object data(" << rawData.size() << "):" << rawData;
 
 	delete filter;
 
