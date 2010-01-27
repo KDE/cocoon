@@ -23,6 +23,8 @@
 
 #include <QDir>
 
+class LooseStorageTest;
+
 namespace Git {
 
 class Repo;
@@ -42,6 +44,8 @@ class LooseStorage : public QObject
 	private:
 		QDir m_objectsDir;
 		Repo *m_repo;
+
+	friend class ::LooseStorageTest;
 };
 
 }
