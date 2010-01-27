@@ -35,11 +35,19 @@ LooseStorage::LooseStorage(Repo *repo)
 {
 	m_objectsDir = QDir(m_repo->workingDir());
 	m_objectsDir.cd(".git/objects");
-
-	kDebug() << "Objects dir:" << m_objectsDir;
 }
 
 
+
+const QString LooseStorage::extractHeaderForm(const QByteArray &rawData)
+{
+	QString possibleHeader = rawData.left(rawData.indexOf('\0')+1);
+	if (possibleHeader.contains(QRegExp("^(blob|commit|tree|tag) \\d+$"))) {
+		return possibleHeader;
+	}
+
+	return QString();
+}
 
 const QByteArray LooseStorage::rawDataFor(const QString &id)
 {

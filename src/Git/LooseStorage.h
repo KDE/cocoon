@@ -41,6 +41,9 @@ class LooseStorage : public QObject
 		const QByteArray rawDataFor(const QString &id);
 		const QString sourceFor(const QString &id);
 
+	protected:
+		const QString extractHeaderForm(const QByteArray &rawData);
+
 	private:
 		QDir m_objectsDir;
 		Repo *m_repo;
