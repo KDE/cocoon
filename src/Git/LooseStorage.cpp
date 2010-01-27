@@ -30,10 +30,9 @@ using namespace Git;
 
 
 LooseStorage::LooseStorage(Repo *repo)
-	: QObject(repo)
-	, m_repo(repo)
+	: ObjectStorage(repo)
 {
-	m_objectsDir = QDir(m_repo->workingDir());
+	m_objectsDir = QDir(repo->workingDir());
 	m_objectsDir.cd(".git/objects");
 }
 
@@ -143,14 +142,15 @@ const QByteArray LooseStorage::rawDataFor(const QString &id)
 	return rawData;
 }
 
+RawObject* LooseStorage::rawObjectFor(const QString &id)
+{
+	return 0;
+}
+
 const QString LooseStorage::sourceFor(const QString &id)
 {
 	Q_ASSERT(id.size() == 40);
-	const QString objectPath = m_objectsDir.filePath("%1/%2").arg(id.left(2)).arg(id.mid(2));
-
-	qDebug() << "Object" << id << "in" << objectPath;
-
-	return objectPath;
+	return m_objectsDir.filePath("%1/%2").arg(id.left(2)).arg(id.mid(2));
 }
 
 

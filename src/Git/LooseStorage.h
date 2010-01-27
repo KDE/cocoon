@@ -19,7 +19,7 @@
 #ifndef LOOSESTORAGE_H
 #define LOOSESTORAGE_H
 
-#include <QObject>
+#include "ObjectStorage.h"
 
 #include <QDir>
 
@@ -31,7 +31,7 @@ class Repo;
 
 
 
-class LooseStorage : public QObject
+class LooseStorage : public ObjectStorage
 {
 	Q_OBJECT
 
@@ -39,17 +39,17 @@ class LooseStorage : public QObject
 		explicit LooseStorage(Repo *repo);
 
 		const QByteArray rawDataFor(const QString &id);
-		const QString sourceFor(const QString &id);
+		RawObject* rawObjectFor(const QString &id);
 
 	protected:
 		const QString extractHeaderForm(const QByteArray &rawData);
 		int extractObjectSizeFrom(const QByteArray &rawData);
 		const QString extractObjectTypeFrom(const QByteArray &rawData);
 		bool isValidHeader(const QString &possibleHeader);
+		const QString sourceFor(const QString &id);
 
 	private:
 		QDir m_objectsDir;
-		Repo *m_repo;
 
 	friend class ::LooseStorageTest;
 };
