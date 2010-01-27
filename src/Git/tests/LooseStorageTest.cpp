@@ -91,6 +91,28 @@ class LooseStorageTest : public GitTestBase
 
 			QCOMPARE(storage->extractHeaderForm(data), extractedHeader);
 		}
+
+		void shouldExtractObjectTypeCorrectly_data() {
+			QTest::addColumn<QByteArray>("data");
+			QTest::addColumn<QString>("objectType");
+
+			QTest::newRow("no data")                   << QByteArray()                           << QString();
+			QTest::newRow("only header")               << QByteArray("blob 0\0", 7)              << "blob";
+			QTest::newRow("standard commit header")    << QByteArray("commit 123\0tree ", 16)    << "commit";
+			QTest::newRow("standard tag header")       << QByteArray("tag 123\0foo", 11)         << "tag";
+			QTest::newRow("standard tree header")      << QByteArray("tree 123\0foo", 12)        << "tree";
+			QTest::newRow("with two null bytes")       << QByteArray("blob 123\0foo\0bar", 16)   << "blob";
+			QTest::newRow("bogus data")                << QByteArray("foo\nbar\nbaz", 11)        << QString();
+			QTest::newRow("bogus header")              << QByteArray("foo\nbar\0baz", 11)        << QString();
+			QTest::newRow("bogus type with size")      << QByteArray("foo 123\0baz", 11)         << QString();
+		}
+
+		void shouldExtractObjectTypeCorrectly() {
+			QFETCH(QByteArray, data);
+			QFETCH(QString, objectType);
+
+			QCOMPARE(storage->extractObjectTypeFrom(data), objectType);
+		}
 };
 
 QTEST_KDEMAIN_CORE(LooseStorageTest);

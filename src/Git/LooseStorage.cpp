@@ -49,6 +49,12 @@ const QString LooseStorage::extractHeaderForm(const QByteArray &rawData)
 	return QString();
 }
 
+const QString LooseStorage::extractObjectTypeFrom(const QByteArray &rawData)
+{
+	QString header = extractHeaderForm(rawData);
+	return header.left(header.indexOf(' '));
+}
+
 const QByteArray LooseStorage::rawDataFor(const QString &id)
 {
 	QFile objectFile(sourceFor(id));
