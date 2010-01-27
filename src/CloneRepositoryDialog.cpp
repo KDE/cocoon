@@ -23,6 +23,7 @@
 #include "Git/Repo.h"
 
 #include <KApplication>
+#include <KIO/DeleteJob>
 #include <KMessageBox>
 
 #include <QFileDialog>
@@ -66,8 +67,8 @@ void CloneRepositoryDialog::startCloning()
 	QString repoUrl = ui->cloneUrlRequester->url().url();
 	QString path = ui->localUrlRequester->url().pathOrUrl(KUrl::RemoveTrailingSlash);
 
-	/** @todo Find a more elegant way to recursively delete a directory */
-	QProcess::execute("rm", QStringList() << "-rf" << path);
+	KIO::DeleteJob *deleteJob = KIO::del(path);
+	deleteJob->exec(); /** @todo error handling */
 
 	Git::CloneRepositoryProcess *thread = new Git::CloneRepositoryProcess(repoUrl, path, this);
 
