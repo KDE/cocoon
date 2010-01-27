@@ -22,6 +22,7 @@
 #include "ObjectStorage.h"
 
 #include <QDir>
+#include <QHash>
 
 class LooseStorageTest;
 
@@ -46,6 +47,8 @@ class LooseStorage : public ObjectStorage
 
 	private:
 		QDir m_objectsDir;
+		QHash<QString, QByteArray> m_rawData;
+		QHash<QString, RawObject*> m_rawObjects;
 
 	friend class ::LooseStorageTest;
 };

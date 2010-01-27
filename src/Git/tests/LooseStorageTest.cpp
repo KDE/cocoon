@@ -71,6 +71,22 @@ class LooseStorageTest : public GitTestBase
 			QCOMPARE(QString::fromLatin1(data.data(), 11), QString::fromLatin1("commit 212\0", 11));
 			QCOMPARE(data.size(), QString("commit 212").length() + 1 + 212);
 		}
+
+		void shouldCacheRawDataBetweenQueries() {
+			QString id = repo->commits()[0]->id();
+			const char* pData1 = storage->rawDataFor(id).data();
+			const char* pData2 = storage->rawDataFor(id).data();
+
+			QVERIFY(pData1 == pData2);
+		}
+
+		void shouldCacheRawObjectsBetweenQueries() {
+			QString id = repo->commits()[0]->id();
+			Git::RawObject* pObject1 = storage->rawObjectFor(id);
+			Git::RawObject* pObject2 = storage->rawObjectFor(id);
+
+			QVERIFY(pObject1 == pObject2);
+		}
 };
 
 QTEST_KDEMAIN_CORE(LooseStorageTest);

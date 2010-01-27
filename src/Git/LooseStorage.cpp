@@ -18,6 +18,7 @@
 
 #include "LooseStorage.h"
 
+#include "RawObject.h"
 #include "Repo.h"
 
 #include <KFilterBase>
@@ -40,80 +41,87 @@ LooseStorage::LooseStorage(Repo *repo)
 
 const QByteArray LooseStorage::rawDataFor(const QString &id)
 {
-	QFile objectFile(sourceFor(id));
+	if (!m_rawData.contains(id)) {
+		QFile objectFile(sourceFor(id));
+		Q_ASSERT(objectFile.exists());
 
-	Q_ASSERT(objectFile.exists());
+		QByteArray rawData;
 
-	QByteArray rawData;
+		// get gzip filter for inflation and set it to work on the object's file
+		KFilterBase *filter = KFilterBase::findFilterByMimeType("application/x-gzip");
+		Q_ASSERT(filter);
+		filter->setDevice(&objectFile, false);
 
-	// get gzip filter for inflation and set it to work on the object's file
-	KFilterBase *filter = KFilterBase::findFilterByMimeType("application/x-gzip");
-	Q_ASSERT(filter);
-	filter->setDevice(&objectFile, false);
+		// open the object's file an init the fitler
+		bool ok = objectFile.open(QIODevice::ReadOnly);
+		Q_ASSERT(ok);
+		filter->init(QIODevice::ReadOnly);
 
-	// open the object's file an init the fitler
-	bool ok = objectFile.open(QIODevice::ReadOnly);
-	Q_ASSERT(ok);
-	filter->init(QIODevice::ReadOnly);
+		// prepare for unpacking
+		KFilterBase::Result result = KFilterBase::Ok;
+		QByteArray inBuffer; // buffers reading the object's file
+		QByteArray outBuffer; // buffers the uncompressed result
+	#define bufferSize  8*1024
 
-	// prepare for unpacking
-	KFilterBase::Result result = KFilterBase::Ok;
-	QByteArray inBuffer; // buffers reading the object's file
-	QByteArray outBuffer; // buffers the uncompressed result
-#define bufferSize  8*1024
+		// reserve memory
+		inBuffer.resize(bufferSize);
+		outBuffer.resize(bufferSize);
 
-	// reserve memory
-	inBuffer.resize(bufferSize);
-	outBuffer.resize(bufferSize);
+		while (result != KFilterBase::End || result != KFilterBase::Error) {
+			// tell the filter about the out buffer
+			filter->setOutBuffer(outBuffer.data(), outBuffer.size());
 
-	while (result != KFilterBase::End || result != KFilterBase::Error) {
-		// tell the filter about the out buffer
-		filter->setOutBuffer(outBuffer.data(), outBuffer.size());
+			if (filter->inBufferEmpty()) {
+				// Request data from compressed file
+				int readFromFile = filter->device()->read(inBuffer.data(), inBuffer.size());
+				kDebug() << "Read" << readFromFile << "bytes from compressed file";
 
-		if (filter->inBufferEmpty()) {
-			// Request data from compressed file
-			int readFromFile = filter->device()->read(inBuffer.data(), inBuffer.size());
-			kDebug() << "Read" << readFromFile << "bytes from compressed file";
+				if (readFromFile) {
+					// tell the filter about the new data
+					filter->setInBuffer(inBuffer.data(), readFromFile);
+				} else {
+					kDebug() << "Not enough data available in object file for now";
+					break;
+				}
+			}
 
-			if (readFromFile) {
-				// tell the filter about the new data
-				filter->setInBuffer(inBuffer.data(), readFromFile);
-			} else {
-				kDebug() << "Not enough data available in object file for now";
-				break;
+			// no need for reading header
+
+			// do the deed
+			result = filter->uncompress();
+
+			if (result == KFilterBase::Error) {
+				kWarning() << "Error when uncompressing object" << id;
+				break; // Error
+			}
+
+			int uncompressedBytes = outBuffer.size() - filter->outBufferAvailable();
+			kDebug() << "Uncompressed" << uncompressedBytes << "bytes";
+
+			// append the uncompressed data to the objects data
+			rawData.append(outBuffer.data(), uncompressedBytes);
+
+			if (result == KFilterBase::End) {
+				kDebug() << "Finished unpacking";
+				break; // Finished.
 			}
 		}
 
-		// no need for reading header
+		delete filter;
 
-		// do the deed
-		result = filter->uncompress();
-
-		if (result == KFilterBase::Error) {
-			kWarning() << "Error when uncompressing object" << id;
-			break; // Error
-		}
-
-		int uncompressedBytes = outBuffer.size() - filter->outBufferAvailable();
-		kDebug() << "Uncompressed" << uncompressedBytes << "bytes";
-
-		// append the uncompressed data to the objects data
-		rawData.append(outBuffer.data(), uncompressedBytes);
-
-		if (result == KFilterBase::End) {
-			kDebug() << "Finished unpacking";
-			break; // Finished.
-		}
+		m_rawData[id] = rawData;
 	}
 
-	delete filter;
-
-	return rawData;
+	return m_rawData[id];
 }
 
 RawObject* LooseStorage::rawObjectFor(const QString &id)
 {
-	return 0;
+	if (!m_rawObjects.contains(id)) {
+		m_rawObjects[id] = new RawObject(id, this);
+	}
+
+	return m_rawObjects[id];
 }
 
 const QString LooseStorage::sourceFor(const QString &id)
