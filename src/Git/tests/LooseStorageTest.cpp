@@ -59,10 +59,9 @@ class LooseStorageTest : public GitTestBase
 		}
 
 		void testSourceIsCorrect() {
-			QString id = repo->commits()[0]->id();
-			QString sourcePath = storage->sourceFor(id);
+			QString sourcePath = storage->sourceFor("1234567890123456789012345678901234567890");
 
-			QCOMPARE(sourcePath, QString("%1/.git/objects/%2/%3").arg(repo->workingDir()).arg(id.left(2)).arg(id.mid(2)));
+			QCOMPARE(sourcePath, QString("%1/.git/objects/12/34567890123456789012345678901234567890").arg(repo->workingDir()));
 		}
 
 		void testInflationIsWorking() {
