@@ -64,6 +64,7 @@ class LooseStorageTest : public GitTestBase
 			QByteArray data = storage->rawDataFor(id);
 
 			QVERIFY(data.startsWith("commit 212"));
+			QVERIFY(data.size() == QString("commit 212").length() + 1 + 212);
 		}
 };
 
