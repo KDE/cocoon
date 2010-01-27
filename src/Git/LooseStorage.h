@@ -45,6 +45,7 @@ class LooseStorage : public QObject
 		const QString extractHeaderForm(const QByteArray &rawData);
 		int extractObjectSizeFrom(const QByteArray &rawData);
 		const QString extractObjectTypeFrom(const QByteArray &rawData);
+		bool hasValidHeader(const QByteArray &rawData);
 
 	private:
 		QDir m_objectsDir;

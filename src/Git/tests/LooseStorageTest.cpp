@@ -73,6 +73,28 @@ class LooseStorageTest : public GitTestBase
 			QCOMPARE(data.size(), QString("commit 212").length() + 1 + 212);
 		}
 
+		void shouldDetermineHeaderValiditiy_data() {
+			QTest::addColumn<QByteArray>("data");
+			QTest::addColumn<bool>("headerValid");
+
+			QTest::newRow("no data")                   << QByteArray()                           << false;
+			QTest::newRow("only header")               << QByteArray("blob 0\0", 7)              << true;
+			QTest::newRow("standard commit header")    << QByteArray("commit 123\0tree ", 16)    << true;
+			QTest::newRow("standard tag header")       << QByteArray("tag 123\0foo", 11)         << true;
+			QTest::newRow("standard tree header")      << QByteArray("tree 123\0foo", 12)        << true;
+			QTest::newRow("with two null bytes")       << QByteArray("blob 123\0foo\0bar", 16)   << true;
+			QTest::newRow("bogus data")                << QByteArray("foo\nbar\nbaz", 11)        << false;
+			QTest::newRow("bogus header")              << QByteArray("foo\nbar\0baz", 11)        << false;
+			QTest::newRow("bogus type with size")      << QByteArray("foo 123\0baz", 11)         << false;
+		}
+
+		void shouldDetermineHeaderValiditiy() {
+			QFETCH(QByteArray, data);
+			QFETCH(bool, headerValid);
+
+			QCOMPARE(storage->hasValidHeader(data), headerValid);
+		}
+
 		void shouldExtractHeaderCorrectly_data() {
 			QTest::addColumn<QByteArray>("data");
 			QTest::addColumn<QString>("extractedHeader");
