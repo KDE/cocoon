@@ -65,9 +65,8 @@ const QString LooseStorage::extractObjectTypeFrom(const QByteArray &rawData)
 	return header.left(header.indexOf(' '));
 }
 
-bool LooseStorage::hasValidHeader(const QByteArray &rawData)
+bool LooseStorage::isValidHeader(const QString &possibleHeader)
 {
-	QString possibleHeader = rawData.left(rawData.indexOf('\0'));
 	return possibleHeader.contains(QRegExp("^(blob|commit|tag|tree) \\d+$"));
 }
 
