@@ -71,96 +71,10 @@ class LooseStorageTest : public GitTestBase
 			QCOMPARE(QString::fromLatin1(data.data(), 11), QString::fromLatin1("commit 212\0", 11));
 			QCOMPARE(data.size(), QString("commit 212").length() + 1 + 212);
 		}
-
-		void shouldDetermineHeaderValiditiy_data() {
-			QTest::addColumn<QString>("possibleHeader");
-			QTest::addColumn<bool>("headerValid");
-
-			QTest::newRow("no data")                   << QString()     << false;
-			QTest::newRow("only header")               << "blob 0"      << true;
-			QTest::newRow("standard commit header")    << "commit 123"  << true;
-			QTest::newRow("standard tag header")       << "tag 123"     << true;
-			QTest::newRow("standard tree header")      << "tree 123"    << true;
-			QTest::newRow("with two null bytes")       << "blob 123"    << true;
-			QTest::newRow("bogus data")                << QString()     << false;
-			QTest::newRow("bogus header")              << QString()     << false;
-			QTest::newRow("bogus type with size")      << QString()     << false;
-		}
-
-		void shouldDetermineHeaderValiditiy() {
-			QFETCH(QString, possibleHeader);
-			QFETCH(bool, headerValid);
-
-			QCOMPARE(storage->isValidHeader(possibleHeader), headerValid);
-		}
-
-		void shouldExtractHeaderCorrectly_data() {
-			QTest::addColumn<QByteArray>("data");
-			QTest::addColumn<QString>("extractedHeader");
-
-			QTest::newRow("no data")                   << QByteArray()                           << QString();
-			QTest::newRow("only header")               << QByteArray("blob 0\0", 7)              << "blob 0";
-			QTest::newRow("standard commit header")    << QByteArray("commit 123\0tree ", 16)    << "commit 123";
-			QTest::newRow("standard tag header")       << QByteArray("tag 123\0foo", 11)         << "tag 123";
-			QTest::newRow("standard tree header")      << QByteArray("tree 123\0foo", 12)        << "tree 123";
-			QTest::newRow("with two null bytes")       << QByteArray("blob 123\0foo\0bar", 16)   << "blob 123";
-			QTest::newRow("bogus data")                << QByteArray("foo\nbar\nbaz", 11)        << QString();
-			QTest::newRow("bogus header")              << QByteArray("foo\nbar\0baz", 11)        << QString();
-			QTest::newRow("bogus type with size")      << QByteArray("foo 123\0baz", 11)         << QString();
-		}
-
-		void shouldExtractHeaderCorrectly() {
-			QFETCH(QByteArray, data);
-			QFETCH(QString, extractedHeader);
-
-			QCOMPARE(storage->extractHeaderForm(data), extractedHeader);
-		}
-
-		void shouldExtractObjectTypeCorrectly_data() {
-			QTest::addColumn<QByteArray>("data");
-			QTest::addColumn<QString>("objectType");
-
-			QTest::newRow("no data")                   << QByteArray()                           << QString();
-			QTest::newRow("only header")               << QByteArray("blob 0\0", 7)              << "blob";
-			QTest::newRow("standard commit header")    << QByteArray("commit 123\0tree ", 16)    << "commit";
-			QTest::newRow("standard tag header")       << QByteArray("tag 123\0foo", 11)         << "tag";
-			QTest::newRow("standard tree header")      << QByteArray("tree 123\0foo", 12)        << "tree";
-			QTest::newRow("with two null bytes")       << QByteArray("blob 123\0foo\0bar", 16)   << "blob";
-			QTest::newRow("bogus data")                << QByteArray("foo\nbar\nbaz", 11)        << QString();
-			QTest::newRow("bogus header")              << QByteArray("foo\nbar\0baz", 11)        << QString();
-			QTest::newRow("bogus type with size")      << QByteArray("foo 123\0baz", 11)         << QString();
-		}
-
-		void shouldExtractObjectTypeCorrectly() {
-			QFETCH(QByteArray, data);
-			QFETCH(QString, objectType);
-
-			QCOMPARE(storage->extractObjectTypeFrom(data), objectType);
-		}
-
-		void shouldExtractObjectSizeCorrectly_data() {
-			QTest::addColumn<QByteArray>("data");
-			QTest::addColumn<int>("size");
-
-			QTest::newRow("no data")                   << QByteArray()                           << -1;
-			QTest::newRow("only header")               << QByteArray("blob 0\0", 7)              << 0;
-			QTest::newRow("standard commit header")    << QByteArray("commit 123\0tree ", 16)    << 123;
-			QTest::newRow("standard tag header")       << QByteArray("tag 123\0foo", 11)         << 123;
-			QTest::newRow("standard tree header")      << QByteArray("tree 123\0foo", 12)        << 123;
-			QTest::newRow("with two null bytes")       << QByteArray("blob 123\0foo\0bar", 16)   << 123;
-			QTest::newRow("bogus data")                << QByteArray("foo\nbar\nbaz", 11)        << -1;
-			QTest::newRow("bogus header")              << QByteArray("foo\nbar\0baz", 11)        << -1;
-			QTest::newRow("bogus type with size")      << QByteArray("foo 123\0baz", 11)         << -1;
-		}
-
-		void shouldExtractObjectSizeCorrectly() {
-			QFETCH(QByteArray, data);
-			QFETCH(int, size);
-
-			QCOMPARE(storage->extractObjectSizeFrom(data), size);
-		}
 };
 
 QTEST_KDEMAIN_CORE(LooseStorageTest);
+
+
 
 #include "LooseStorageTest.moc"

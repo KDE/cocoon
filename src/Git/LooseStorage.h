@@ -41,11 +41,7 @@ class LooseStorage : public ObjectStorage
 		const QByteArray rawDataFor(const QString &id);
 		RawObject* rawObjectFor(const QString &id);
 
-	protected:
-		const QString extractHeaderForm(const QByteArray &rawData);
-		int extractObjectSizeFrom(const QByteArray &rawData);
-		const QString extractObjectTypeFrom(const QByteArray &rawData);
-		bool isValidHeader(const QString &possibleHeader);
+	private:
 		const QString sourceFor(const QString &id);
 
 	private:

@@ -38,37 +38,6 @@ LooseStorage::LooseStorage(Repo *repo)
 
 
 
-const QString LooseStorage::extractHeaderForm(const QByteArray &rawData)
-{
-	QString possibleHeader = rawData.left(rawData.indexOf('\0'));
-	if (isValidHeader(possibleHeader)) {
-		return possibleHeader;
-	}
-
-	return QString();
-}
-
-int LooseStorage::extractObjectSizeFrom(const QByteArray &rawData)
-{
-	QString header = extractHeaderForm(rawData);
-	if (!header.isNull()) {
-		return header.mid(header.indexOf(' ')).toInt();
-	}
-
-	return -1;
-}
-
-const QString LooseStorage::extractObjectTypeFrom(const QByteArray &rawData)
-{
-	QString header = extractHeaderForm(rawData);
-	return header.left(header.indexOf(' '));
-}
-
-bool LooseStorage::isValidHeader(const QString &possibleHeader)
-{
-	return possibleHeader.contains(QRegExp("^(blob|commit|tag|tree) \\d+$"));
-}
-
 const QByteArray LooseStorage::rawDataFor(const QString &id)
 {
 	QFile objectFile(sourceFor(id));
