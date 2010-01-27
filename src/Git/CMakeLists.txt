@@ -1,11 +1,16 @@
 
+include_directories (
+	${CMAKE_CURRENT_SOURCE_DIR}/3rdparty
+)
+
+add_subdirectory( 3rdparty )
 add_subdirectory( tests )
 
 set(cocoon_git_LIB_SRCS
+	3rdparty/dvcsjob.cpp
+	3rdparty/gitrunner.cpp
 	CloneRepositoryProcess.cpp
 	Commit.cpp
-	dvcsjob.cpp
-	gitrunner.cpp
 	Repo.cpp
 	Status.cpp
 )
