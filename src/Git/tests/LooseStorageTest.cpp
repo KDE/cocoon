@@ -50,6 +50,14 @@ class LooseStorageTest : public GitTestBase
 			GitTestBase::cleanup();
 		}
 
+		void shouldHaveObjectsDir() {
+			QVERIFY(!storage->m_objectsDir.path().isEmpty());
+		}
+
+		void shouldHaveCorrectObjectsDir() {
+			QCOMPARE(storage->m_objectsDir.path(), QString("%1/.git/objects").arg(repo->workingDir()));
+		}
+
 		void testSourceIsCorrect() {
 			QString id = repo->commits()[0]->id();
 			QString sourcePath = storage->sourceFor(id);
