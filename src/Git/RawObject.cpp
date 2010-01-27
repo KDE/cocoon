@@ -78,6 +78,26 @@ const QString& RawObject::id() const
 	return m_id;
 }
 
+bool RawObject::isBlob() const
+{
+	return type() == "blob";
+}
+
+bool RawObject::isCommit() const
+{
+	return type() == "commit";
+}
+
+bool RawObject::isTag() const
+{
+	return type() == "tag";
+}
+
+bool RawObject::isTree() const
+{
+	return type() == "tree";
+}
+
 bool RawObject::isValidHeader(const QString &possibleHeader) const
 {
 	return possibleHeader.contains(QRegExp("^(blob|commit|tag|tree) \\d+$"));
@@ -93,6 +113,11 @@ void RawObject::populateWith(const QByteArray &rawData)
 	m_data = rawData.mid(header.size()+1);
 	m_size = extractObjectSizeFrom(header);
 	m_type = extractObjectTypeFrom(header);
+}
+
+const QString& RawObject::type() const
+{
+	return m_type;
 }
 
 

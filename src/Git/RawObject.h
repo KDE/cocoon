@@ -44,8 +44,10 @@ class RawObject : public QObject
 		const QString&     id() const;
 		const QString&     type() const;
 
-//		bool hasValidHeader() const;
-//		bool isValid() const;
+		bool isBlob() const;
+		bool isCommit() const;
+		bool isTag() const;
+		bool isTree() const;
 
 	protected:
 		virtual void populateWith(const QByteArray &rawData);
