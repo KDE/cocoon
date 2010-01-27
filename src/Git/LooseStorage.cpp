@@ -72,7 +72,6 @@ const QByteArray LooseStorage::rawDataFor(const QString &id)
 	QByteArray inBuffer; // buffers reading the object's file
 	QByteArray outBuffer; // buffers the uncompressed result
 #define bufferSize  8*1024
-/** @todo handle cases where data does not fit in buffer completely */
 
 	// reserve memory
 	inBuffer.resize(bufferSize);
@@ -106,21 +105,20 @@ const QByteArray LooseStorage::rawDataFor(const QString &id)
 			break; // Error
 		}
 
-		kDebug() << "Uncompressed" << filter->outBufferAvailable() << "bytes";
+		int uncompressedBytes = outBuffer.size() - filter->outBufferAvailable();
+		kDebug() << "Uncompressed" << uncompressedBytes << "bytes";
 
 		outBuffer.data()[filter->outBufferAvailable()] = '\0';
 		kDebug() << "Uncompressed data:" << outBuffer;
 
 		// append the uncompressed data to the objects data
-		rawData.append(outBuffer.data(), filter->outBufferAvailable());
+		rawData.append(outBuffer.data(), uncompressedBytes);
 
 		if (result == KFilterBase::End) {
 			kDebug() << "Finished unpacking";
 			break; // Finished.
 		}
 	}
-
-	/** @todo fix raw data size */
 
 	kDebug() << "Uncompressed raw object data(" << rawData.size() << "):" << rawData;
 
