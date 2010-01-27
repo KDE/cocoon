@@ -36,7 +36,7 @@ class LooseStorage : public QObject
 	public:
 		explicit LooseStorage(Repo *repo);
 
-		const QByteArray dataFor(const QString &id);
+		const QByteArray rawDataFor(const QString &id);
 		const QString sourceFor(const QString &id);
 
 	private:

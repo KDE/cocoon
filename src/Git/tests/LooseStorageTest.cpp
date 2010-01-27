@@ -61,7 +61,7 @@ class LooseStorageTest : public GitTestBase
 		void testInflationIsWorking() {
 			QString id = repo->commits()[0]->id();
 			qDebug() << id;
-			QByteArray data = storage->dataFor(id);
+			QByteArray data = storage->rawDataFor(id);
 
 			QVERIFY(data.startsWith("commit 212"));
 		}

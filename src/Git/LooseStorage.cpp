@@ -41,7 +41,7 @@ LooseStorage::LooseStorage(Repo *repo)
 
 
 
-const QByteArray LooseStorage::dataFor(const QString &id)
+const QByteArray LooseStorage::rawDataFor(const QString &id)
 {
 	QFile objectFile(sourceFor(id));
 
