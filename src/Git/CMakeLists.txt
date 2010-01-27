@@ -12,6 +12,7 @@ set(cocoon_git_LIB_SRCS
 	CloneRepositoryProcess.cpp
 	Commit.cpp
 	LooseStorage.cpp
+	ObjectStorage.cpp
 	Repo.cpp
 	Status.cpp
 )
