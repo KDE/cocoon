@@ -84,7 +84,7 @@ const QByteArray LooseStorage::rawDataFor(const QString &id)
 		if (filter->inBufferEmpty()) {
 			// Request data from compressed file
 			int readFromFile = filter->device()->read(inBuffer.data(), inBuffer.size());
-			kDebug() << "got" << readFromFile << "bytes from compressed file";
+			kDebug() << "Read" << readFromFile << "bytes from compressed file";
 
 			if (readFromFile) {
 				// tell the filter about the new data
@@ -108,9 +108,6 @@ const QByteArray LooseStorage::rawDataFor(const QString &id)
 		int uncompressedBytes = outBuffer.size() - filter->outBufferAvailable();
 		kDebug() << "Uncompressed" << uncompressedBytes << "bytes";
 
-		outBuffer.data()[filter->outBufferAvailable()] = '\0';
-		kDebug() << "Uncompressed data:" << outBuffer;
-
 		// append the uncompressed data to the objects data
 		rawData.append(outBuffer.data(), uncompressedBytes);
 
@@ -119,8 +116,6 @@ const QByteArray LooseStorage::rawDataFor(const QString &id)
 			break; // Finished.
 		}
 	}
-
-	kDebug() << "Uncompressed raw object data(" << rawData.size() << "):" << rawData;
 
 	delete filter;
 
