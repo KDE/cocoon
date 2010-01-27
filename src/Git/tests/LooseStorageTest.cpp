@@ -52,19 +52,17 @@ class LooseStorageTest : public GitTestBase
 
 		void testSourceIsCorrect() {
 			QString id = repo->commits()[0]->id();
-			qDebug() << id;
 			QString sourcePath = storage->sourceFor(id);
 
-			QVERIFY(sourcePath == QString("%1/.git/objects/%2/%3").arg(repo->workingDir()).arg(id.left(2)).arg(id.mid(2)));
+			QCOMPARE(sourcePath, QString("%1/.git/objects/%2/%3").arg(repo->workingDir()).arg(id.left(2)).arg(id.mid(2)));
 		}
 
 		void testInflationIsWorking() {
 			QString id = repo->commits()[0]->id();
-			qDebug() << id;
 			QByteArray data = storage->rawDataFor(id);
 
-			QVERIFY(data.startsWith("commit 212"));
-			QVERIFY(data.size() == QString("commit 212").length() + 1 + 212);
+			QCOMPARE(QString::fromLatin1(data.data(), 11), QString::fromLatin1("commit 212\0", 11));
+			QCOMPARE(data.size(), QString("commit 212").length() + 1 + 212);
 		}
 };
 
