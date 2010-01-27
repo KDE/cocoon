@@ -113,6 +113,28 @@ class LooseStorageTest : public GitTestBase
 
 			QCOMPARE(storage->extractObjectTypeFrom(data), objectType);
 		}
+
+		void shouldExtractObjectSizeCorrectly_data() {
+			QTest::addColumn<QByteArray>("data");
+			QTest::addColumn<int>("size");
+
+			QTest::newRow("no data")                   << QByteArray()                           << -1;
+			QTest::newRow("only header")               << QByteArray("blob 0\0", 7)              << 0;
+			QTest::newRow("standard commit header")    << QByteArray("commit 123\0tree ", 16)    << 123;
+			QTest::newRow("standard tag header")       << QByteArray("tag 123\0foo", 11)         << 123;
+			QTest::newRow("standard tree header")      << QByteArray("tree 123\0foo", 12)        << 123;
+			QTest::newRow("with two null bytes")       << QByteArray("blob 123\0foo\0bar", 16)   << 123;
+			QTest::newRow("bogus data")                << QByteArray("foo\nbar\nbaz", 11)        << -1;
+			QTest::newRow("bogus header")              << QByteArray("foo\nbar\0baz", 11)        << -1;
+			QTest::newRow("bogus type with size")      << QByteArray("foo 123\0baz", 11)         << -1;
+		}
+
+		void shouldExtractObjectSizeCorrectly() {
+			QFETCH(QByteArray, data);
+			QFETCH(int, size);
+
+			QCOMPARE(storage->extractObjectSizeFrom(data), size);
+		}
 };
 
 QTEST_KDEMAIN_CORE(LooseStorageTest);

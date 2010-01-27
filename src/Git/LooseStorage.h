@@ -43,6 +43,7 @@ class LooseStorage : public QObject
 
 	protected:
 		const QString extractHeaderForm(const QByteArray &rawData);
+		int extractObjectSizeFrom(const QByteArray &rawData);
 		const QString extractObjectTypeFrom(const QByteArray &rawData);
 
 	private:
