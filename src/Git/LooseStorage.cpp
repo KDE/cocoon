@@ -20,10 +20,10 @@
 
 #include "Repo.h"
 
-#include <KFilterDev>
+#include <KFilterBase>
 #include <KMimeType>
 
-#include <QDebug>
+#include <KDebug>
 
 using namespace Git;
 
@@ -36,7 +36,7 @@ LooseStorage::LooseStorage(Repo *repo)
 	m_objectsDir = QDir(m_repo->workingDir());
 	m_objectsDir.cd(".git/objects");
 
-	qDebug() << "Objects dir:" << m_objectsDir;
+	kDebug() << "Objects dir:" << m_objectsDir;
 }
 
 
@@ -48,24 +48,73 @@ const QByteArray LooseStorage::dataFor(const QString &id)
 	Q_ASSERT(objectFile.exists());
 
 	QByteArray rawData;
-/*
-	objectFile.open(QFile::ReadOnly);
-	rawData = objectFile.readAll();
-	objectFile.close();
-*/
 
-	KMimeType::Ptr mimeType = KMimeType::findByFileContent(objectFile.fileName());
-	qDebug() << "Object mimetype is" << mimeType->name();
+	// get gzip filter for inflation and set it to work on the object's file
+	KFilterBase *filter = KFilterBase::findFilterByMimeType("application/x-gzip");
+	Q_ASSERT(filter);
+	filter->setDevice(&objectFile, false);
 
-	QIODevice *filterDev = (KFilterDev *)KFilterDev::device(&objectFile, "application/x-gzip", false);
-	Q_ASSERT(filterDev);
-
-	static_cast<KFilterDev *>(filterDev)->setSkipHeaders();
-	bool ok = filterDev->open(QIODevice::ReadOnly);
+	// open the object's file an init the fitler
+	bool ok = objectFile.open(QIODevice::ReadOnly);
 	Q_ASSERT(ok);
-	rawData = filterDev->readAll();
+	filter->init(QIODevice::ReadOnly);
 
-	delete filterDev;
+	// prepare for unpacking
+	KFilterBase::Result result = KFilterBase::Ok;
+	QByteArray inBuffer; // buffers reading the object's file
+	QByteArray outBuffer; // buffers the uncompressed result
+#define bufferSize  8*1024
+/** @todo handle cases where data does not fit in buffer completely */
+
+	// reserve memory
+	inBuffer.resize(bufferSize);
+	outBuffer.resize(bufferSize);
+
+	while (result != KFilterBase::End || result != KFilterBase::Error) {
+		// tell the filter about the out buffer
+		filter->setOutBuffer(outBuffer.data(), outBuffer.size());
+
+		if (filter->inBufferEmpty()) {
+			// Request data from compressed file
+			int readFromFile = filter->device()->read(inBuffer.data(), inBuffer.size());
+			kDebug() << "got" << readFromFile << "bytes from compressed file";
+
+			if (readFromFile) {
+				// tell the filter about the new data
+				filter->setInBuffer(inBuffer.data(), readFromFile);
+			} else {
+				kDebug() << "Not enough data available in object file for now";
+				break;
+			}
+		}
+
+		// no need for reading header
+
+		// do the deed
+		result = filter->uncompress();
+
+		if (result == KFilterBase::Error) {
+			kWarning() << "Error when uncompressing object" << id;
+			break; // Error
+		}
+
+		kDebug() << "Uncompressed" << filter->outBufferAvailable() << "bytes";
+
+		outBuffer.data()[filter->outBufferAvailable()] = '\0';
+		kDebug() << "Uncompressed data:" << outBuffer;
+
+		// append the uncompressed data to the objects data
+		rawData.append(outBuffer.data(), filter->outBufferAvailable());
+
+		if (result == KFilterBase::End) {
+			kDebug() << "Finished unpacking";
+			break; // Finished.
+		}
+	}
+
+	kDebug() << "Uncompressed raw object data:" << rawData;
+
+	delete filter;
 
 	return rawData;
 }
