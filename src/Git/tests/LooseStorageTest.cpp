@@ -72,6 +72,25 @@ class LooseStorageTest : public GitTestBase
 			QCOMPARE(QString::fromLatin1(data.data(), 11), QString::fromLatin1("commit 212\0", 11));
 			QCOMPARE(data.size(), QString("commit 212").length() + 1 + 212);
 		}
+
+		void shouldExtractHeaderCorrectly_data() {
+			QTest::addColumn<QByteArray>("data");
+			QTest::addColumn<QString>("extractedHeader");
+
+			QTest::newRow("no data")                   << QByteArray()                           << QString();
+			QTest::newRow("only header")               << QByteArray("blob 0\0", 7)              << "blob 0";
+			QTest::newRow("standard header")           << QByteArray("commit 123\0tree ", 15)    << "commit 123";
+			QTest::newRow("with two null bytes")       << QByteArray("commit 123\0foo\0bar", 17) << "commit 123";
+			QTest::newRow("bogus data")                << QByteArray("foo\nbar\nbaz", 11)        << QString();
+			QTest::newRow("bogus data with null byte") << QByteArray("foo\nbar\0baz", 11)        << QString();
+		}
+
+		void shouldExtractHeaderCorrectly() {
+			QFETCH(QByteArray, data);
+			QFETCH(QString, extractedHeader);
+
+			QCOMPARE(storage->extractHeaderForm(data), extractedHeader);
+		}
 };
 
 QTEST_KDEMAIN_CORE(LooseStorageTest);
