@@ -13,6 +13,7 @@ set(cocoon_git_LIB_SRCS
 	Commit.cpp
 	LooseStorage.cpp
 	ObjectStorage.cpp
+	RawObject.cpp
 	Repo.cpp
 	Status.cpp
 )

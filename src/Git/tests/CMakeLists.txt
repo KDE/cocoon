@@ -41,6 +41,7 @@ unit_tests(
 	RemovedFileStatusTest
 	UpdatedFileStatusTest
 
-# Storage
+# Storage and Objects
 	LooseStorageTest
+	RawObjectTest
 )
