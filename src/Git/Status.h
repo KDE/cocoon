@@ -32,7 +32,7 @@ class StatusModifiedFileTest;
 class StatusNewFileTest;
 class StatusNewlyAddedFileTest;
 class StatusRemodifiedFileTest;
-class RemovedFileStatusTest;
+class StatusRemovedFileTest;
 class UpdatedFileStatusTest;
 
 namespace Git {
@@ -132,7 +132,7 @@ class Status : public QObject
 		friend class ::StatusNewFileTest;
 		friend class ::StatusNewlyAddedFileTest;
 		friend class ::StatusRemodifiedFileTest;
-		friend class ::RemovedFileStatusTest;
+		friend class ::StatusRemovedFileTest;
 		friend class ::UpdatedFileStatusTest;
 };
 
