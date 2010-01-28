@@ -33,7 +33,7 @@ unit_tests(
 
 # Status tests
 	StatusDeletedFileTest
-	NewFileStatusTest
+	StatusNewFileTest
 	NewlyAddedFileStatusTest
 	ModifiedAddedFileStatusTest
 	ModifiedFileStatusTest
