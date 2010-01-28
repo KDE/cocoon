@@ -32,7 +32,7 @@ RawObject::RawObject(const QString &id, ObjectStorage *storage)
 	, m_size(-1)
 	, m_storage(storage)
 {
-	populateWith(m_storage->rawDataFor(m_id));
+	populateWith(m_storage->rawHeaderFor(m_id));
 }
 
 RawObject::RawObject(const QString &id, const QByteArray &rawData, ObjectStorage *storage)
@@ -45,8 +45,12 @@ RawObject::RawObject(const QString &id, const QByteArray &rawData, ObjectStorage
 
 
 
-const QByteArray& RawObject::data() const
+const QByteArray& RawObject::data()
 {
+	if (m_data.isNull()) {
+		populateWith(m_storage->rawDataFor(m_id));
+	}
+
 	return m_data;
 }
 

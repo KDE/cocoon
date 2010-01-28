@@ -40,7 +40,7 @@ class RawObject : public QObject
 		RawObject(const QString& id, ObjectStorage *storage);
 		RawObject(const QString& id, const QByteArray &rawData, ObjectStorage *storage);
 
-		const QByteArray&  data() const;
+		const QByteArray&  data();
 		const QString&     id() const;
 		const QString&     type() const;
 

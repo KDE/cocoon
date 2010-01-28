@@ -146,10 +146,6 @@ class RawObjectTest : public GitTestBase
 			QCOMPARE(Git::RawObject::isOnlyHeader(rawData), isOnlyHeader);
 		}
 
-		void dataShouldHaveTheSizeWrittenInTheHeader() {
-			QCOMPARE(object->data().size(), object->m_size);
-		}
-
 		void testIsBlob() {
 			object->m_type = "blob";
 
@@ -184,6 +180,20 @@ class RawObjectTest : public GitTestBase
 			QVERIFY(!object->isCommit());
 			QVERIFY(!object->isTag());
 			QVERIFY( object->isTree());
+		}
+
+		void shouldOnlyPopulateHeaderOnCreation() {
+			QVERIFY( object->m_size != -1);
+			QVERIFY(!object->m_type.isNull());
+			QVERIFY( object->m_data.isNull());
+		}
+
+		void shouldPopulateFullyOnDataAccess() {
+			QVERIFY(!object->data().isNull());
+		}
+
+		void dataShouldHaveTheSizeWrittenInTheHeader() {
+			QCOMPARE(object->data().size(), object->m_size);
 		}
 };
 
