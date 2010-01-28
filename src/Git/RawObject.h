@@ -49,14 +49,14 @@ class RawObject : public QObject
 		bool isTag() const;
 		bool isTree() const;
 
+	// static
+		static const QString extractHeaderForm(const QByteArray &rawData);
+		static int extractObjectSizeFrom(const QString &header);
+		static const QString extractObjectTypeFrom(const QString &header);
+		static bool isValidHeader(const QString &possibleHeader);
+
 	protected:
 		virtual void populateWith(const QByteArray &rawData);
-
-	private:
-		const QString extractHeaderForm(const QByteArray &rawData) const;
-		int extractObjectSizeFrom(const QString &header) const;
-		const QString extractObjectTypeFrom(const QString &header) const;
-		bool isValidHeader(const QString &possibleHeader) const;
 
 	private:
 		QByteArray     m_data;
