@@ -32,14 +32,14 @@ unit_tests(
 	CommitMergeDetectionTest
 
 # Status tests
-	DeletedFileStatusTest
-	NewFileStatusTest
-	NewlyAddedFileStatusTest
-	ModifiedAddedFileStatusTest
-	ModifiedFileStatusTest
-	RemodifiedFileStatusTest
-	RemovedFileStatusTest
-	UpdatedFileStatusTest
+	StatusDeletedFileTest
+	StatusModifiedAddedFileTest
+	StatusModifiedFileTest
+	StatusNewFileTest
+	StatusNewlyAddedFileTest
+	StatusRemodifiedFileTest
+	StatusRemovedFileTest
+	StatusUpdatedFileTest
 
 # Storage and Objects
 	LooseStorageTest

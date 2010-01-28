@@ -20,7 +20,7 @@
 
 
 
-class NewFileStatusTest : public GitTestBase
+class StatusNewFileTest : public GitTestBase
 {
 	Q_OBJECT
 
@@ -56,11 +56,11 @@ class NewFileStatusTest : public GitTestBase
 		Git::Status *status;
 };
 
-QTEST_KDEMAIN_CORE(NewFileStatusTest)
+QTEST_KDEMAIN_CORE(StatusNewFileTest)
 
 
 
-void NewFileStatusTest::initTestCase()
+void StatusNewFileTest::initTestCase()
 {
 	GitTestBase::initTestCase();
 	status = 0;
@@ -72,22 +72,22 @@ void NewFileStatusTest::initTestCase()
 
 
 
-void NewFileStatusTest::testNewFile_lsFiles()
+void StatusNewFileTest::testNewFile_lsFiles()
 {
 	QVERIFY(status->lsFiles().isEmpty());
 }
 
-void NewFileStatusTest::testNewFile_diffFiles()
+void StatusNewFileTest::testNewFile_diffFiles()
 {
 	QVERIFY(status->diffFiles().isEmpty());
 }
 
-void NewFileStatusTest::testNewFile_diffIndex()
+void StatusNewFileTest::testNewFile_diffIndex()
 {
 	QVERIFY(status->diffIndex("HEAD").isEmpty());
 }
 
-void NewFileStatusTest::testNewFile_diffUntrackedFiles()
+void StatusNewFileTest::testNewFile_diffUntrackedFiles()
 {
 	QVERIFY(status->untrackedFiles().size() == 1);
 
@@ -101,20 +101,20 @@ void NewFileStatusTest::testNewFile_diffUntrackedFiles()
 	QVERIFY(file->status() == Git::StatusFile::Untracked);
 }
 
-void NewFileStatusTest::testNewFile_diffIgnoredFiles()
+void StatusNewFileTest::testNewFile_diffIgnoredFiles()
 {
 	QVERIFY(status->ignoredFiles().isEmpty());
 }
 
 
 
-void NewFileStatusTest::testNewFileHasStatus()
+void StatusNewFileTest::testNewFileHasStatus()
 {
 	QVERIFY(status->files().size() == 1);
 	QVERIFY(!status->forFile("untracked.txt").isEmpty());
 }
 
-void NewFileStatusTest::testNewTestFileIsUntracked()
+void StatusNewFileTest::testNewTestFileIsUntracked()
 {
 	QList<Git::StatusFile*> fileStatus = status->forFile("untracked.txt");
 	QVERIFY(fileStatus.size() == 1);
@@ -124,7 +124,7 @@ void NewFileStatusTest::testNewTestFileIsUntracked()
 	QVERIFY(file->status() == Git::StatusFile::Untracked);
 }
 
-void NewFileStatusTest::testNewFileIsUnstaged()
+void StatusNewFileTest::testNewFileIsUnstaged()
 {
 	Git::StatusFile *file = status->forFile("untracked.txt")[0];
 
@@ -135,39 +135,39 @@ void NewFileStatusTest::testNewFileIsUnstaged()
 	QVERIFY(file->changesUnstaged());
 }
 
-void NewFileStatusTest::testNewFileDefaultBlobIsFileBlob()
+void StatusNewFileTest::testNewFileDefaultBlobIsFileBlob()
 {
 	Git::StatusFile *file = status->forFile("untracked.txt")[0];
 
 	QVERIFY(file->blob() == file->blob("file"));
 }
 
-void NewFileStatusTest::testNewFileFileBlobIsCorrect()
+void StatusNewFileTest::testNewFileFileBlobIsCorrect()
 {
 	Git::StatusFile *file = status->forFile("untracked.txt")[0];
 
 	QVERIFY(file->blob("file") == "foo\nbar\nbaz\n");
 }
 
-void NewFileStatusTest::testNewFileIndexBlobIsEmpty()
+void StatusNewFileTest::testNewFileIndexBlobIsEmpty()
 {
 	Git::StatusFile *file = status->forFile("untracked.txt")[0];
 
 	QVERIFY(file->blob("index").isNull());
 }
 
-void NewFileStatusTest::testNewFileRepoBlobIsEmpty()
+void StatusNewFileTest::testNewFileRepoBlobIsEmpty()
 {
 	Git::StatusFile *file = status->forFile("untracked.txt")[0];
 
 	QVERIFY(file->blob("repo").isNull());
 }
 
-void NewFileStatusTest::testNewFileHasNoDiff()
+void StatusNewFileTest::testNewFileHasNoDiff()
 {
 	Git::StatusFile *file = status->forFile("untracked.txt")[0];
 
 	QVERIFY(file->diff().isNull());
 }
 
-#include "NewFileStatusTest.moc"
+#include "StatusNewFileTest.moc"

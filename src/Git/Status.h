@@ -26,14 +26,14 @@
 
 
 
-class DeletedFileStatusTest;
-class NewFileStatusTest;
-class NewlyAddedFileStatusTest;
-class ModifiedAddedFileStatusTest;
-class ModifiedFileStatusTest;
-class RemodifiedFileStatusTest;
-class RemovedFileStatusTest;
-class UpdatedFileStatusTest;
+class StatusDeletedFileTest;
+class StatusModifiedAddedFileTest;
+class StatusModifiedFileTest;
+class StatusNewFileTest;
+class StatusNewlyAddedFileTest;
+class StatusRemodifiedFileTest;
+class StatusRemovedFileTest;
+class StatusUpdatedFileTest;
 
 namespace Git {
 
@@ -126,14 +126,14 @@ class Status : public QObject
 		const Repo *m_repo;
 		QHash<QString, QList<StatusFile*> > m_status;
 
-		friend class ::DeletedFileStatusTest;
-		friend class ::NewFileStatusTest;
-		friend class ::NewlyAddedFileStatusTest;
-		friend class ::ModifiedAddedFileStatusTest;
-		friend class ::ModifiedFileStatusTest;
-		friend class ::RemodifiedFileStatusTest;
-		friend class ::RemovedFileStatusTest;
-		friend class ::UpdatedFileStatusTest;
+		friend class ::StatusDeletedFileTest;
+		friend class ::StatusModifiedAddedFileTest;
+		friend class ::StatusModifiedFileTest;
+		friend class ::StatusNewFileTest;
+		friend class ::StatusNewlyAddedFileTest;
+		friend class ::StatusRemodifiedFileTest;
+		friend class ::StatusRemovedFileTest;
+		friend class ::StatusUpdatedFileTest;
 };
 
 }

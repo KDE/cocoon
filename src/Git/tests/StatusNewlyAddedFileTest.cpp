@@ -20,7 +20,7 @@
 
 
 
-class NewlyAddedFileStatusTest : public GitTestBase
+class StatusNewlyAddedFileTest : public GitTestBase
 {
 	Q_OBJECT
 
@@ -56,11 +56,11 @@ class NewlyAddedFileStatusTest : public GitTestBase
 		Git::Status *status;
 };
 
-QTEST_KDEMAIN_CORE(NewlyAddedFileStatusTest)
+QTEST_KDEMAIN_CORE(StatusNewlyAddedFileTest)
 
 
 
-void NewlyAddedFileStatusTest::initTestCase()
+void StatusNewlyAddedFileTest::initTestCase()
 {
 	GitTestBase::initTestCase();
 	status = 0;
@@ -74,7 +74,7 @@ void NewlyAddedFileStatusTest::initTestCase()
 
 
 
-void NewlyAddedFileStatusTest::testNewlyAddedFile_lsFiles()
+void StatusNewlyAddedFileTest::testNewlyAddedFile_lsFiles()
 {
 	QVERIFY(status->lsFiles().size() == 1);
 
@@ -88,12 +88,12 @@ void NewlyAddedFileStatusTest::testNewlyAddedFile_lsFiles()
 	QVERIFY(file->status() == Git::StatusFile::None);
 }
 
-void NewlyAddedFileStatusTest::testNewlyAddedFile_diffFiles()
+void StatusNewlyAddedFileTest::testNewlyAddedFile_diffFiles()
 {
 	QVERIFY(status->diffFiles().isEmpty());
 }
 
-void NewlyAddedFileStatusTest::testNewlyAddedFile_diffIndex()
+void StatusNewlyAddedFileTest::testNewlyAddedFile_diffIndex()
 {
 	QVERIFY(status->diffIndex("HEAD").size() == 1);
 
@@ -107,25 +107,25 @@ void NewlyAddedFileStatusTest::testNewlyAddedFile_diffIndex()
 	QVERIFY(file->status() == Git::StatusFile::Added);
 }
 
-void NewlyAddedFileStatusTest::testNewlyAddedFile_diffUntrackedFiles()
+void StatusNewlyAddedFileTest::testNewlyAddedFile_diffUntrackedFiles()
 {
 	QVERIFY(status->untrackedFiles().isEmpty());
 }
 
-void NewlyAddedFileStatusTest::testNewlyAddedFile_diffIgnoredFiles()
+void StatusNewlyAddedFileTest::testNewlyAddedFile_diffIgnoredFiles()
 {
 	QVERIFY(status->ignoredFiles().isEmpty());
 }
 
 
 
-void NewlyAddedFileStatusTest::testNewlyAddedFileHasStatus()
+void StatusNewlyAddedFileTest::testNewlyAddedFileHasStatus()
 {
 	QVERIFY(status->files().size() == 1);
 	QVERIFY(!status->forFile("newly_added.txt").isEmpty());
 }
 
-void NewlyAddedFileStatusTest::testNewlyAddedFileIsAdded()
+void StatusNewlyAddedFileTest::testNewlyAddedFileIsAdded()
 {
 	QList<Git::StatusFile*> fileStatus = status->forFile("newly_added.txt");
 	QVERIFY(fileStatus.size() == 1);
@@ -135,7 +135,7 @@ void NewlyAddedFileStatusTest::testNewlyAddedFileIsAdded()
 	QVERIFY(file->status() == Git::StatusFile::Added);
 }
 
-void NewlyAddedFileStatusTest::testNewlyAddedFileIsStaged()
+void StatusNewlyAddedFileTest::testNewlyAddedFileIsStaged()
 {
 	Git::StatusFile *file = status->forFile("newly_added.txt")[0];
 
@@ -146,35 +146,35 @@ void NewlyAddedFileStatusTest::testNewlyAddedFileIsStaged()
 	QVERIFY(!file->changesUnstaged());
 }
 
-void NewlyAddedFileStatusTest::testNewlyAddedFileDefaultBlobIsIndexBlob()
+void StatusNewlyAddedFileTest::testNewlyAddedFileDefaultBlobIsIndexBlob()
 {
 	Git::StatusFile *file = status->forFile("newly_added.txt")[0];
 
 	QVERIFY(file->blob() == file->blob("index"));
 }
 
-void NewlyAddedFileStatusTest::testNewlyAddedFileFileBlobIsCorrect()
+void StatusNewlyAddedFileTest::testNewlyAddedFileFileBlobIsCorrect()
 {
 	Git::StatusFile *file = status->forFile("newly_added.txt")[0];
 
 	QVERIFY(file->blob("file") == "foo\nbar\nbaz\n");
 }
 
-void NewlyAddedFileStatusTest::testNewlyAddedFileIndexBlobIsCorrect()
+void StatusNewlyAddedFileTest::testNewlyAddedFileIndexBlobIsCorrect()
 {
 	Git::StatusFile *file = status->forFile("newly_added.txt")[0];
 
 	QVERIFY(file->blob("index") == "foo\nbar\nbaz\n");
 }
 
-void NewlyAddedFileStatusTest::testNewlyAddedFileRepoBlobIsEmpty()
+void StatusNewlyAddedFileTest::testNewlyAddedFileRepoBlobIsEmpty()
 {
 	Git::StatusFile *file = status->forFile("newly_added.txt")[0];
 
 	QVERIFY(file->blob("repo").isNull());
 }
 
-void NewlyAddedFileStatusTest::testNewlyAddedFileDiffIsCorrect()
+void StatusNewlyAddedFileTest::testNewlyAddedFileDiffIsCorrect()
 {
 	Git::StatusFile *file = status->forFile("newly_added.txt")[0];
 
@@ -194,4 +194,4 @@ void NewlyAddedFileStatusTest::testNewlyAddedFileDiffIsCorrect()
 	QVERIFY("--- /dev/null\n+++ b/newly_added.txt\n@@ -0,0 +1,3 @@\n+foo\n+bar\n+baz\n");
 }
 
-#include "NewlyAddedFileStatusTest.moc"
+#include "StatusNewlyAddedFileTest.moc"

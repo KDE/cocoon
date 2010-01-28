@@ -20,7 +20,7 @@
 
 
 
-class DeletedFileStatusTest : public GitTestBase
+class StatusDeletedFileTest : public GitTestBase
 {
 	Q_OBJECT
 
@@ -56,11 +56,11 @@ class DeletedFileStatusTest : public GitTestBase
 		Git::Status *status;
 };
 
-QTEST_KDEMAIN_CORE(DeletedFileStatusTest)
+QTEST_KDEMAIN_CORE(StatusDeletedFileTest)
 
 
 
-void DeletedFileStatusTest::initTestCase()
+void StatusDeletedFileTest::initTestCase()
 {
 	GitTestBase::initTestCase();
 	status = 0;
@@ -77,7 +77,7 @@ void DeletedFileStatusTest::initTestCase()
 
 
 
-void DeletedFileStatusTest::testDeletedFile_lsFiles()
+void StatusDeletedFileTest::testDeletedFile_lsFiles()
 {
 	QVERIFY(status->lsFiles().size() == 1);
 
@@ -91,7 +91,7 @@ void DeletedFileStatusTest::testDeletedFile_lsFiles()
 	QVERIFY(file->status() == Git::StatusFile::None);
 }
 
-void DeletedFileStatusTest::testDeletedFile_diffFiles()
+void StatusDeletedFileTest::testDeletedFile_diffFiles()
 {
 	QVERIFY(status->diffFiles().size() == 1);
 
@@ -105,7 +105,7 @@ void DeletedFileStatusTest::testDeletedFile_diffFiles()
 	QVERIFY(file->status() == Git::StatusFile::Deleted);
 }
 
-void DeletedFileStatusTest::testDeletedFile_diffIndex()
+void StatusDeletedFileTest::testDeletedFile_diffIndex()
 {
 	QVERIFY(status->diffIndex("HEAD").size() == 1);
 
@@ -119,25 +119,25 @@ void DeletedFileStatusTest::testDeletedFile_diffIndex()
 	QVERIFY(file->status() == Git::StatusFile::Deleted);
 }
 
-void DeletedFileStatusTest::testDeletedFile_diffUntrackedFiles()
+void StatusDeletedFileTest::testDeletedFile_diffUntrackedFiles()
 {
 	QVERIFY(status->untrackedFiles().isEmpty());
 }
 
-void DeletedFileStatusTest::testDeletedFile_diffIgnoredFiles()
+void StatusDeletedFileTest::testDeletedFile_diffIgnoredFiles()
 {
 	QVERIFY(status->ignoredFiles().isEmpty());
 }
 
 
 
-void DeletedFileStatusTest::testDeletedFileHasStatus()
+void StatusDeletedFileTest::testDeletedFileHasStatus()
 {
 	QVERIFY(status->files().size() == 1);
 	QVERIFY(!status->forFile("deleted.txt").isEmpty());
 }
 
-void DeletedFileStatusTest::testDeletedFileIsDeleted()
+void StatusDeletedFileTest::testDeletedFileIsDeleted()
 {
 	QList<Git::StatusFile*> fileStatus = status->forFile("deleted.txt");
 	QVERIFY(fileStatus.size() == 1);
@@ -147,7 +147,7 @@ void DeletedFileStatusTest::testDeletedFileIsDeleted()
 	QVERIFY(file->status() == Git::StatusFile::Deleted);
 }
 
-void DeletedFileStatusTest::testDeletedFileIsUnstaged()
+void StatusDeletedFileTest::testDeletedFileIsUnstaged()
 {
 	Git::StatusFile *file = status->forFile("deleted.txt")[0];
 
@@ -158,35 +158,35 @@ void DeletedFileStatusTest::testDeletedFileIsUnstaged()
 	QVERIFY(file->changesUnstaged());
 }
 
-void DeletedFileStatusTest::testDeletedFileDefaultBlobIsFileBlob()
+void StatusDeletedFileTest::testDeletedFileDefaultBlobIsFileBlob()
 {
 	Git::StatusFile *file = status->forFile("deleted.txt")[0];
 
 	QVERIFY(file->blob() == file->blob("file"));
 }
 
-void DeletedFileStatusTest::testDeletedFileFileBlobIsEmpty()
+void StatusDeletedFileTest::testDeletedFileFileBlobIsEmpty()
 {
 	Git::StatusFile *file = status->forFile("deleted.txt")[0];
 
 	QVERIFY(file->blob("file").isNull());
 }
 
-void DeletedFileStatusTest::testDeletedFileIndexBlobIsCorrect()
+void StatusDeletedFileTest::testDeletedFileIndexBlobIsCorrect()
 {
 	Git::StatusFile *file = status->forFile("deleted.txt")[0];
 
 	QVERIFY(file->blob("repo") == "foo\nbar\nbaz\n");
 }
 
-void DeletedFileStatusTest::testDeletedFileRepoBlobIsCorrect()
+void StatusDeletedFileTest::testDeletedFileRepoBlobIsCorrect()
 {
 	Git::StatusFile *file = status->forFile("deleted.txt")[0];
 
 	QVERIFY(file->blob("repo") == "foo\nbar\nbaz\n");
 }
 
-void DeletedFileStatusTest::testDeletedFileDiffIsCorrect()
+void StatusDeletedFileTest::testDeletedFileDiffIsCorrect()
 {
 	Git::StatusFile *file = status->forFile("deleted.txt")[0];
 
@@ -206,4 +206,4 @@ void DeletedFileStatusTest::testDeletedFileDiffIsCorrect()
 	QVERIFY("--- a/deleted.txt\n+++ /dev/null\n@@ -1,3 +0,0 @@\n-foo\n-bar\n-baz\n");
 }
 
-#include "DeletedFileStatusTest.moc"
+#include "StatusDeletedFileTest.moc"

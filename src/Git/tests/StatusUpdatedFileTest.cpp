@@ -20,7 +20,7 @@
 
 
 
-class UpdatedFileStatusTest : public GitTestBase
+class StatusUpdatedFileTest : public GitTestBase
 {
 	Q_OBJECT
 
@@ -56,11 +56,11 @@ class UpdatedFileStatusTest : public GitTestBase
 		Git::Status *status;
 };
 
-QTEST_KDEMAIN_CORE(UpdatedFileStatusTest)
+QTEST_KDEMAIN_CORE(StatusUpdatedFileTest)
 
 
 
-void UpdatedFileStatusTest::initTestCase()
+void StatusUpdatedFileTest::initTestCase()
 {
 	GitTestBase::initTestCase();
 	status = 0;
@@ -79,7 +79,7 @@ void UpdatedFileStatusTest::initTestCase()
 
 
 
-void UpdatedFileStatusTest::testUpdatedFile_lsFiles()
+void StatusUpdatedFileTest::testUpdatedFile_lsFiles()
 {
 	QVERIFY(status->lsFiles().size() == 1);
 
@@ -93,12 +93,12 @@ void UpdatedFileStatusTest::testUpdatedFile_lsFiles()
 	QVERIFY(file->status() == Git::StatusFile::None);
 }
 
-void UpdatedFileStatusTest::testUpdatedFile_diffFiles()
+void StatusUpdatedFileTest::testUpdatedFile_diffFiles()
 {
 	QVERIFY(status->diffFiles().isEmpty());
 }
 
-void UpdatedFileStatusTest::testUpdatedFile_diffIndex()
+void StatusUpdatedFileTest::testUpdatedFile_diffIndex()
 {
 	QVERIFY(status->diffIndex("HEAD").size() == 1);
 
@@ -112,25 +112,25 @@ void UpdatedFileStatusTest::testUpdatedFile_diffIndex()
 	QVERIFY(file->status() == Git::StatusFile::Modified);
 }
 
-void UpdatedFileStatusTest::testUpdatedFile_diffUntrackedFiles()
+void StatusUpdatedFileTest::testUpdatedFile_diffUntrackedFiles()
 {
 	QVERIFY(status->untrackedFiles().isEmpty());
 }
 
-void UpdatedFileStatusTest::testUpdatedFile_diffIgnoredFiles()
+void StatusUpdatedFileTest::testUpdatedFile_diffIgnoredFiles()
 {
 	QVERIFY(status->ignoredFiles().isEmpty());
 }
 
 
 
-void UpdatedFileStatusTest::testUpdatedFileHasStatus()
+void StatusUpdatedFileTest::testUpdatedFileHasStatus()
 {
 	QVERIFY(status->files().size() == 1);
 	QVERIFY(!status->forFile("updated.txt").isEmpty());
 }
 
-void UpdatedFileStatusTest::testUpdatedFileIsModified()
+void StatusUpdatedFileTest::testUpdatedFileIsModified()
 {
 	QList<Git::StatusFile*> fileStatus = status->forFile("updated.txt");
 	QVERIFY(fileStatus.size() == 1);
@@ -140,7 +140,7 @@ void UpdatedFileStatusTest::testUpdatedFileIsModified()
 	QVERIFY(file->status() == Git::StatusFile::Modified);
 }
 
-void UpdatedFileStatusTest::testUpdatedFileIsStaged()
+void StatusUpdatedFileTest::testUpdatedFileIsStaged()
 {
 	Git::StatusFile *file = status->forFile("updated.txt")[0];
 
@@ -151,35 +151,35 @@ void UpdatedFileStatusTest::testUpdatedFileIsStaged()
 	QVERIFY(!file->changesUnstaged());
 }
 
-void UpdatedFileStatusTest::testUpdatedFileDefaultBlobIsIndexBlob()
+void StatusUpdatedFileTest::testUpdatedFileDefaultBlobIsIndexBlob()
 {
 	Git::StatusFile *file = status->forFile("updated.txt")[0];
 
 	QVERIFY(file->blob() == file->blob("index"));
 }
 
-void UpdatedFileStatusTest::testUpdatedFileFileBlobIsCorrect()
+void StatusUpdatedFileTest::testUpdatedFileFileBlobIsCorrect()
 {
 	Git::StatusFile *file = status->forFile("updated.txt")[0];
 
 	QVERIFY(file->blob("file") == "foo\nbar\nbaz\n");
 }
 
-void UpdatedFileStatusTest::testUpdatedFileIndexBlobIsCorrect()
+void StatusUpdatedFileTest::testUpdatedFileIndexBlobIsCorrect()
 {
 	Git::StatusFile *file = status->forFile("updated.txt")[0];
 
 	QVERIFY(file->blob("index") == "foo\nbar\nbaz\n");
 }
 
-void UpdatedFileStatusTest::testUpdatedFileRepoBlobIsCorrect()
+void StatusUpdatedFileTest::testUpdatedFileRepoBlobIsCorrect()
 {
 	Git::StatusFile *file = status->forFile("updated.txt")[0];
 
 	QVERIFY(file->blob("repo") == "foo\nbar");
 }
 
-void UpdatedFileStatusTest::testUpdatedFileDiffIsCorrect()
+void StatusUpdatedFileTest::testUpdatedFileDiffIsCorrect()
 {
 	Git::StatusFile *file = status->forFile("updated.txt")[0];
 
@@ -199,4 +199,4 @@ void UpdatedFileStatusTest::testUpdatedFileDiffIsCorrect()
 	QVERIFY("--- a/updated.txt\n+++ b/updated.txt\n@@ -1,2 +1,3 @@\n foo\n-bar\n\\ No newline at end of file\n+bar\n+baz\n");
 }
 
-#include "UpdatedFileStatusTest.moc"
+#include "StatusUpdatedFileTest.moc"
