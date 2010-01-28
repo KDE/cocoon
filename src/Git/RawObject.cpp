@@ -52,7 +52,16 @@ const QByteArray& RawObject::data() const
 
 const QString RawObject::extractHeaderForm(const QByteArray &rawData)
 {
-	QString possibleHeader = rawData.left(rawData.indexOf('\0'));
+	int nullByteIndex = rawData.indexOf('\0');
+	QString possibleHeader;
+
+	if (nullByteIndex >= 0) {
+		possibleHeader = rawData.left(nullByteIndex);
+	} else {
+		Q_ASSERT(rawData.size() <= 7+9); // should suffice for even absurd headers (at least 9 digits size)
+		possibleHeader = rawData;
+	}
+
 	if (isValidHeader(possibleHeader)) {
 		return possibleHeader;
 	}
