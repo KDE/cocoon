@@ -69,7 +69,7 @@ class RawObjectTest : public GitTestBase
 			QFETCH(QString, possibleHeader);
 			QFETCH(bool, headerValid);
 
-			QCOMPARE(object->isValidHeader(possibleHeader), headerValid);
+			QCOMPARE(Git::RawObject::isValidHeader(possibleHeader), headerValid);
 		}
 
 		void shouldExtractHeaderCorrectly_data() {
@@ -91,7 +91,7 @@ class RawObjectTest : public GitTestBase
 			QFETCH(QByteArray, data);
 			QFETCH(QString, extractedHeader);
 
-			QCOMPARE(object->extractHeaderForm(data), extractedHeader);
+			QCOMPARE(Git::RawObject::extractHeaderForm(data), extractedHeader);
 		}
 
 		void shouldExtractObjectTypeCorrectly_data() {
@@ -109,7 +109,7 @@ class RawObjectTest : public GitTestBase
 			QFETCH(QString, header);
 			QFETCH(QString, objectType);
 
-			QCOMPARE(object->extractObjectTypeFrom(header), objectType);
+			QCOMPARE(Git::RawObject::extractObjectTypeFrom(header), objectType);
 		}
 
 		void shouldExtractObjectSizeCorrectly_data() {
@@ -127,7 +127,7 @@ class RawObjectTest : public GitTestBase
 			QFETCH(QString, header);
 			QFETCH(int, objectSize);
 
-			QCOMPARE(object->extractObjectSizeFrom(header), objectSize);
+			QCOMPARE(Git::RawObject::extractObjectSizeFrom(header), objectSize);
 		}
 
 		void shouldDetermineWhetherGivenDataIsOnlyHeaderOrMore_data() {
