@@ -72,6 +72,13 @@ class LooseStorageTest : public GitTestBase
 			QCOMPARE(rawData.size(), QString("commit 212").length() + 1 + 212);
 		}
 
+		void shouldOnlyExtractHeader() {
+			QString id = repo->commits()[0]->id();
+			QString rawHeader = storage->rawHeaderFor(id);
+
+			QCOMPARE(rawHeader, QString("commit 212"));
+		}
+
 		void shouldCacheRawDataBetweenQueries() {
 			QString id = repo->commits()[0]->id();
 			const char* pData1 = storage->rawDataFor(id).data();
@@ -86,6 +93,27 @@ class LooseStorageTest : public GitTestBase
 			Git::RawObject* pObject2 = storage->rawObjectFor(id);
 
 			QVERIFY(pObject1 == pObject2);
+		}
+
+		void shouldCacheRawHeadersBetweenQueries() {
+			QString id = repo->commits()[0]->id();
+			const char* pData1 = storage->rawHeaderFor(id).data();
+			const char* pData2 = storage->rawHeaderFor(id).data();
+
+			QVERIFY(pData1 == pData2);
+
+			const QByteArray header1 = storage->rawHeaderFor(id);
+			const QByteArray header2 = storage->rawHeaderFor(id);
+
+			QVERIFY(header1.data() == header2.data());
+		}
+
+		void shouldReplaceRawHeadersWithRawData() {
+			QString id = repo->commits()[0]->id();
+			const QByteArray header = storage->rawHeaderFor(id);
+			const QByteArray data = storage->rawDataFor(id);
+
+			QVERIFY(header.data() != data.data());
 		}
 
 		void shouldDetermineWhetherGivenDataIsOnlyHeaderOrMore_data() {
