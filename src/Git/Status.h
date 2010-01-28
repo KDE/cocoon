@@ -30,7 +30,7 @@ class StatusDeletedFileTest;
 class StatusModifiedAddedFileTest;
 class StatusModifiedFileTest;
 class StatusNewFileTest;
-class NewlyAddedFileStatusTest;
+class StatusNewlyAddedFileTest;
 class RemodifiedFileStatusTest;
 class RemovedFileStatusTest;
 class UpdatedFileStatusTest;
@@ -130,7 +130,7 @@ class Status : public QObject
 		friend class ::StatusModifiedAddedFileTest;
 		friend class ::StatusModifiedFileTest;
 		friend class ::StatusNewFileTest;
-		friend class ::NewlyAddedFileStatusTest;
+		friend class ::StatusNewlyAddedFileTest;
 		friend class ::RemodifiedFileStatusTest;
 		friend class ::RemovedFileStatusTest;
 		friend class ::UpdatedFileStatusTest;
