@@ -22,7 +22,7 @@
 
 
 
-class LooseStorageTest : public GitTestBase
+class LooseStorageCachingTest : public GitTestBase
 {
 	Q_OBJECT
 
@@ -52,38 +52,46 @@ class LooseStorageTest : public GitTestBase
 
 
 
-		void shouldHaveObjectsDir() {
-			QVERIFY(!storage->m_objectsDir.path().isEmpty());
-		}
-
-		void shouldHaveCorrectObjectsDir() {
-			QCOMPARE(storage->m_objectsDir.path(), QString("%1/.git/objects").arg(repo->workingDir()));
-		}
-
-		void testSourceIsCorrect() {
-			QString sourcePath = storage->sourceFor("1234567890123456789012345678901234567890");
-
-			QCOMPARE(sourcePath, QString("%1/.git/objects/12/34567890123456789012345678901234567890").arg(repo->workingDir()));
-		}
-
-		void testInflationIsWorking() {
+		void shouldCacheRawDataBetweenQueries() {
 			QString id = repo->commits()[0]->id();
-			QByteArray rawData = storage->rawDataFor(id);
+			const char* pData1 = storage->rawDataFor(id).data();
+			const char* pData2 = storage->rawDataFor(id).data();
 
-			QCOMPARE(QTest::toHexRepresentation(rawData, 16), QTest::toHexRepresentation("commit 212\0tree ", 16));
-			QCOMPARE(rawData.size(), QString("commit 212").length() + 1 + 212);
+			QVERIFY(pData1 == pData2);
 		}
 
-		void shouldOnlyExtractHeader() {
+		void shouldCacheRawObjectsBetweenQueries() {
 			QString id = repo->commits()[0]->id();
-			QString rawHeader = storage->rawHeaderFor(id);
+			Git::RawObject* pObject1 = storage->rawObjectFor(id);
+			Git::RawObject* pObject2 = storage->rawObjectFor(id);
 
-			QCOMPARE(rawHeader, QString("commit 212"));
+			QVERIFY(pObject1 == pObject2);
+		}
+
+		void shouldCacheRawHeadersBetweenQueries() {
+			QString id = repo->commits()[0]->id();
+			const char* pData1 = storage->rawHeaderFor(id).data();
+			const char* pData2 = storage->rawHeaderFor(id).data();
+
+			QVERIFY(pData1 == pData2);
+
+			const QByteArray header1 = storage->rawHeaderFor(id);
+			const QByteArray header2 = storage->rawHeaderFor(id);
+
+			QVERIFY(header1.data() == header2.data());
+		}
+
+		void shouldReplaceRawHeadersWithRawData() {
+			QString id = repo->commits()[0]->id();
+			const QByteArray header = storage->rawHeaderFor(id);
+			const QByteArray data = storage->rawDataFor(id);
+
+			QVERIFY(header.data() != data.data());
 		}
 };
 
-QTEST_KDEMAIN_CORE(LooseStorageTest);
+QTEST_KDEMAIN_CORE(LooseStorageCachingTest);
 
 
 
-#include "LooseStorageTest.moc"
+#include "LooseStorageCachingTest.moc"

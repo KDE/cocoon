@@ -43,6 +43,7 @@ unit_tests(
 
 # Storage and Objects
 	LooseStorageTest
+	LooseStorageCachingTest
 	RawObjectTest
 	RawObjectHeaderExtractionTest
 	RawObjectTypeTest
