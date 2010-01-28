@@ -34,9 +34,9 @@ unit_tests(
 # Status tests
 	StatusDeletedFileTest
 	StatusModifiedAddedFileTest
+	StatusModifiedFileTest
 	StatusNewFileTest
 	NewlyAddedFileStatusTest
-	ModifiedFileStatusTest
 	RemodifiedFileStatusTest
 	RemovedFileStatusTest
 	UpdatedFileStatusTest

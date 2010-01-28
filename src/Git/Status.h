@@ -28,9 +28,9 @@
 
 class StatusDeletedFileTest;
 class StatusModifiedAddedFileTest;
+class StatusModifiedFileTest;
 class StatusNewFileTest;
 class NewlyAddedFileStatusTest;
-class ModifiedFileStatusTest;
 class RemodifiedFileStatusTest;
 class RemovedFileStatusTest;
 class UpdatedFileStatusTest;
@@ -128,9 +128,9 @@ class Status : public QObject
 
 		friend class ::StatusDeletedFileTest;
 		friend class ::StatusModifiedAddedFileTest;
+		friend class ::StatusModifiedFileTest;
 		friend class ::StatusNewFileTest;
 		friend class ::NewlyAddedFileStatusTest;
-		friend class ::ModifiedFileStatusTest;
 		friend class ::RemodifiedFileStatusTest;
 		friend class ::RemovedFileStatusTest;
 		friend class ::UpdatedFileStatusTest;
