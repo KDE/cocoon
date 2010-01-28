@@ -27,9 +27,9 @@
 
 
 class StatusDeletedFileTest;
+class StatusModifiedAddedFileTest;
 class StatusNewFileTest;
 class NewlyAddedFileStatusTest;
-class ModifiedAddedFileStatusTest;
 class ModifiedFileStatusTest;
 class RemodifiedFileStatusTest;
 class RemovedFileStatusTest;
@@ -127,9 +127,9 @@ class Status : public QObject
 		QHash<QString, QList<StatusFile*> > m_status;
 
 		friend class ::StatusDeletedFileTest;
+		friend class ::StatusModifiedAddedFileTest;
 		friend class ::StatusNewFileTest;
 		friend class ::NewlyAddedFileStatusTest;
-		friend class ::ModifiedAddedFileStatusTest;
 		friend class ::ModifiedFileStatusTest;
 		friend class ::RemodifiedFileStatusTest;
 		friend class ::RemovedFileStatusTest;
