@@ -41,7 +41,9 @@ LooseStorage::LooseStorage(Repo *repo)
 
 const QByteArray LooseStorage::rawDataFor(const QString &id)
 {
-	if (!m_rawData.contains(id)) {
+	if (!m_rawData.contains(id) || isOnlyHeader(m_rawData[id])) {
+		kDebug() << "Loading data for" << id;
+
 		QFile objectFile(sourceFor(id));
 		Q_ASSERT(objectFile.exists());
 
@@ -61,7 +63,7 @@ const QByteArray LooseStorage::rawDataFor(const QString &id)
 		KFilterBase::Result result = KFilterBase::Ok;
 		QByteArray inBuffer; // buffers reading the object's file
 		QByteArray outBuffer; // buffers the uncompressed result
-	#define bufferSize  8*1024
+		const int bufferSize = 8*1024;
 
 		// reserve memory
 		inBuffer.resize(bufferSize);
