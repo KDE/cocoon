@@ -29,6 +29,7 @@ using namespace Git;
 RawObject::RawObject(const QString &id, ObjectStorage *storage)
 	: QObject((QObject*)storage)
 	, m_id(id)
+	, m_size(-1)
 	, m_storage(storage)
 {
 	populateWith(m_storage->rawDataFor(m_id));
