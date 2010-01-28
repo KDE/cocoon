@@ -53,6 +53,7 @@ class RawObjectTypeTest : public GitTestBase
 		void cleanup() {
 			delete object;
 			delete storage;
+			GitTestBase::cleanup();
 		}
 
 
