@@ -39,5 +39,5 @@ unit_tests(
 	StatusNewlyAddedFileTest
 	StatusRemodifiedFileTest
 	StatusRemovedFileTest
-	UpdatedFileStatusTest
+	StatusUpdatedFileTest
 )
