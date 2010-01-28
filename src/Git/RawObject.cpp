@@ -49,7 +49,7 @@ const QByteArray& RawObject::data() const
 	return m_data;
 }
 
-const QString RawObject::extractHeaderForm(const QByteArray &rawData) const
+const QString RawObject::extractHeaderForm(const QByteArray &rawData)
 {
 	QString possibleHeader = rawData.left(rawData.indexOf('\0'));
 	if (isValidHeader(possibleHeader)) {
@@ -59,7 +59,7 @@ const QString RawObject::extractHeaderForm(const QByteArray &rawData) const
 	return QString();
 }
 
-int RawObject::extractObjectSizeFrom(const QString &header) const
+int RawObject::extractObjectSizeFrom(const QString &header)
 {
 	if (!header.isNull()) {
 		return header.mid(header.indexOf(' ')).toInt();
@@ -68,7 +68,7 @@ int RawObject::extractObjectSizeFrom(const QString &header) const
 	return -1;
 }
 
-const QString RawObject::extractObjectTypeFrom(const QString &header) const
+const QString RawObject::extractObjectTypeFrom(const QString &header)
 {
 	return header.left(header.indexOf(' '));
 }
@@ -98,7 +98,7 @@ bool RawObject::isTree() const
 	return type() == "tree";
 }
 
-bool RawObject::isValidHeader(const QString &possibleHeader) const
+bool RawObject::isValidHeader(const QString &possibleHeader)
 {
 	return possibleHeader.contains(QRegExp("^(blob|commit|tag|tree) \\d+$"));
 }
