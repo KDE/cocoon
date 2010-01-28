@@ -32,7 +32,7 @@ unit_tests(
 	CommitMergeDetectionTest
 
 # Status tests
-	DeletedFileStatusTest
+	StatusDeletedFileTest
 	NewFileStatusTest
 	NewlyAddedFileStatusTest
 	ModifiedAddedFileStatusTest
