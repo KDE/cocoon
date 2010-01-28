@@ -68,7 +68,7 @@ class LooseStorageTest : public GitTestBase
 			QString id = repo->commits()[0]->id();
 			QByteArray rawData = storage->rawDataFor(id);
 
-			QCOMPARE(QString::fromLatin1(rawData.data(), 16), QString::fromLatin1("commit 212\0tree ", 16));
+			QCOMPARE(QTest::toHexRepresentation(rawData, 16), QTest::toHexRepresentation("commit 212\0tree ", 16));
 			QCOMPARE(rawData.size(), QString("commit 212").length() + 1 + 212);
 		}
 
