@@ -50,6 +50,13 @@ class RawObjectTest : public GitTestBase
 			object = new Git::RawObject(id, storage);
 		}
 
+		void cleanup() {
+			delete object;
+			delete storage;
+		}
+
+
+
 		void shouldDetermineHeaderValiditiy_data() {
 			QTest::addColumn<QString>("possibleHeader");
 			QTest::addColumn<bool>("headerValid");
@@ -144,42 +151,6 @@ class RawObjectTest : public GitTestBase
 			QFETCH(bool, isOnlyHeader);
 
 			QCOMPARE(Git::RawObject::isOnlyHeader(rawData), isOnlyHeader);
-		}
-
-		void testIsBlob() {
-			object->m_type = "blob";
-
-			QVERIFY( object->isBlob());
-			QVERIFY(!object->isCommit());
-			QVERIFY(!object->isTag());
-			QVERIFY(!object->isTree());
-		}
-
-		void testIsCommit() {
-			object->m_type = "commit";
-
-			QVERIFY(!object->isBlob());
-			QVERIFY( object->isCommit());
-			QVERIFY(!object->isTag());
-			QVERIFY(!object->isTree());
-		}
-
-		void testIsTag() {
-			object->m_type = "tag";
-
-			QVERIFY(!object->isBlob());
-			QVERIFY(!object->isCommit());
-			QVERIFY( object->isTag());
-			QVERIFY(!object->isTree());
-		}
-
-		void testIsTree() {
-			object->m_type = "tree";
-
-			QVERIFY(!object->isBlob());
-			QVERIFY(!object->isCommit());
-			QVERIFY(!object->isTag());
-			QVERIFY( object->isTree());
 		}
 
 		void shouldOnlyPopulateHeaderOnCreation() {

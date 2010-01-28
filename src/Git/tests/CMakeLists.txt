@@ -44,4 +44,5 @@ unit_tests(
 # Storage and Objects
 	LooseStorageTest
 	RawObjectTest
+	RawObjectTypeTest
 )

@@ -24,6 +24,7 @@
 
 
 class RawObjectTest;
+class RawObjectTypeTest;
 
 namespace Git {
 
@@ -67,6 +68,7 @@ class RawObject : public QObject
 		QString        m_type;
 
 	friend class ::RawObjectTest;
+	friend class ::RawObjectTypeTest;
 };
 
 }
