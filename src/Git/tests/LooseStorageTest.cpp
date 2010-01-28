@@ -66,10 +66,10 @@ class LooseStorageTest : public GitTestBase
 
 		void testInflationIsWorking() {
 			QString id = repo->commits()[0]->id();
-			QByteArray data = storage->rawDataFor(id);
+			QByteArray rawData = storage->rawDataFor(id);
 
-			QCOMPARE(QString::fromLatin1(data.data(), 11), QString::fromLatin1("commit 212\0", 11));
-			QCOMPARE(data.size(), QString("commit 212").length() + 1 + 212);
+			QCOMPARE(QString::fromLatin1(rawData.data(), 16), QString::fromLatin1("commit 212\0tree ", 16));
+			QCOMPARE(rawData.size(), QString("commit 212").length() + 1 + 212);
 		}
 
 		void shouldCacheRawDataBetweenQueries() {
