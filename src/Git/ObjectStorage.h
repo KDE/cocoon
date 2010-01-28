@@ -38,6 +38,9 @@ class ObjectStorage : public QObject
 		virtual const QByteArray rawDataFor(const QString &id) = 0;
 		virtual RawObject* rawObjectFor(const QString &id) = 0;
 
+	protected:
+		bool isOnlyHeader(const QByteArray &rawData);
+
 	private:
 		Repo *m_repo;
 };

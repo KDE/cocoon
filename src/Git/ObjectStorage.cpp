@@ -18,6 +18,7 @@
 
 #include "ObjectStorage.h"
 
+#include "RawObject.h"
 #include "Repo.h"
 
 using namespace Git;
@@ -28,6 +29,13 @@ ObjectStorage::ObjectStorage(Repo *repo)
 	: QObject(repo)
 	, m_repo(repo)
 {
+}
+
+
+
+bool ObjectStorage::isOnlyHeader(const QByteArray &rawData)
+{
+	return !rawData.isEmpty() && (rawData == RawObject::extractHeaderForm(rawData).toLatin1());
 }
 
 
