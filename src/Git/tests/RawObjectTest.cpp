@@ -77,7 +77,7 @@ class RawObjectTest : public GitTestBase
 			QTest::addColumn<QString>("extractedHeader");
 
 			QTest::newRow("no data")                   << QByteArray()                           << QString();
-			QTest::newRow("only header")               << QByteArray("blob 0\0", 7)              << "blob 0";
+			QTest::newRow("only header")               << QByteArray("blob 0", 6)                << "blob 0";
 			QTest::newRow("standard commit header")    << QByteArray("commit 123\0tree ", 16)    << "commit 123";
 			QTest::newRow("standard tag header")       << QByteArray("tag 123\0foo", 11)         << "tag 123";
 			QTest::newRow("standard tree header")      << QByteArray("tree 123\0foo", 12)        << "tree 123";
