@@ -41,7 +41,7 @@ LooseStorage::LooseStorage(Repo *repo)
 
 const QByteArray LooseStorage::rawDataFor(const QString &id)
 {
-	if (!m_rawData.contains(id) || isOnlyHeader(m_rawData[id])) {
+	if (!m_rawData.contains(id) || RawObject::isOnlyHeader(m_rawData[id])) {
 		kDebug() << "Loading data for" << id;
 
 		QFile objectFile(sourceFor(id));
