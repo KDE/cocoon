@@ -115,22 +115,6 @@ class LooseStorageTest : public GitTestBase
 
 			QVERIFY(header.data() != data.data());
 		}
-
-		void shouldDetermineWhetherGivenDataIsOnlyHeaderOrMore_data() {
-			QTest::addColumn<QByteArray>("rawData");
-			QTest::addColumn<bool>("isOnlyHeader");
-
-			QTest::newRow("empty data")       << QByteArray()                        << false;
-			QTest::newRow("only header")      << QByteArray("commit 123")            << true;
-			QTest::newRow("more than header") << QByteArray("commit 123\0tree ", 16) << false;
-		}
-
-		void shouldDetermineWhetherGivenDataIsOnlyHeaderOrMore() {
-			QFETCH(QByteArray, rawData);
-			QFETCH(bool, isOnlyHeader);
-
-			QCOMPARE(storage->isOnlyHeader(rawData), isOnlyHeader);
-		}
 };
 
 QTEST_KDEMAIN_CORE(LooseStorageTest);

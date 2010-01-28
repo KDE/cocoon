@@ -33,11 +33,4 @@ ObjectStorage::ObjectStorage(Repo *repo)
 
 
 
-bool ObjectStorage::isOnlyHeader(const QByteArray &rawData)
-{
-	return !rawData.isEmpty() && (rawData == RawObject::extractHeaderForm(rawData).toLatin1());
-}
-
-
-
 #include "ObjectStorage.moc"

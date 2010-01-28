@@ -130,6 +130,22 @@ class RawObjectTest : public GitTestBase
 			QCOMPARE(object->extractObjectSizeFrom(header), objectSize);
 		}
 
+		void shouldDetermineWhetherGivenDataIsOnlyHeaderOrMore_data() {
+			QTest::addColumn<QByteArray>("rawData");
+			QTest::addColumn<bool>("isOnlyHeader");
+
+			QTest::newRow("empty data")       << QByteArray()                        << false;
+			QTest::newRow("only header")      << QByteArray("commit 123")            << true;
+			QTest::newRow("more than header") << QByteArray("commit 123\0tree ", 16) << false;
+		}
+
+		void shouldDetermineWhetherGivenDataIsOnlyHeaderOrMore() {
+			QFETCH(QByteArray, rawData);
+			QFETCH(bool, isOnlyHeader);
+
+			QCOMPARE(Git::RawObject::isOnlyHeader(rawData), isOnlyHeader);
+		}
+
 		void dataShouldHaveTheSizeWrittenInTheHeader() {
 			QCOMPARE(object->data().size(), object->m_size);
 		}

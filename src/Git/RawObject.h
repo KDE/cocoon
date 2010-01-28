@@ -53,6 +53,7 @@ class RawObject : public QObject
 		static const QString extractHeaderForm(const QByteArray &rawData);
 		static int extractObjectSizeFrom(const QString &header);
 		static const QString extractObjectTypeFrom(const QString &header);
+		static bool isOnlyHeader(const QByteArray &rawData);
 		static bool isValidHeader(const QString &possibleHeader);
 
 	protected:

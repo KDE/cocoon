@@ -98,6 +98,11 @@ bool RawObject::isCommit() const
 	return type() == "commit";
 }
 
+bool RawObject::isOnlyHeader(const QByteArray &rawData)
+{
+	return !rawData.isEmpty() && (rawData == extractHeaderForm(rawData).toLatin1());
+}
+
 bool RawObject::isTag() const
 {
 	return type() == "tag";
