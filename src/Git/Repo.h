@@ -54,6 +54,7 @@ class Repo : public QObject
 		QString diff(const Commit &a, const Commit &b) const;
 		QString head() const;
 		QStringList heads() const;
+		const QString& gitDir() const;
 		/** Stages files to be included in the next commit. */
 		void stageFiles(const QStringList &paths);
 		Status* status();
@@ -77,6 +78,7 @@ class Repo : public QObject
 
 	private:
 		QHash<QString, CommitList> m_commits;
+		QString m_gitDir;
 		Status *m_status;
 		QString m_workingDir;
 

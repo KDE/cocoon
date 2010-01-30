@@ -30,6 +30,7 @@ using namespace Git;
 
 Repo::Repo(const QString &workingDir, QObject *parent)
 	: QObject(parent)
+	, m_gitDir(workingDir + "/.git")
 	, m_status(0)
 	, m_workingDir(workingDir)
 {
@@ -97,6 +98,11 @@ QString Repo::diff(const Commit &a, const Commit &b) const
 	runner.diffCommits(a.id(), b.id());
 
 	return runner.getResult();
+}
+
+const QString& Repo::gitDir() const
+{
+	return m_gitDir;
 }
 
 void Repo::init(const QString &newRepoPath)
