@@ -56,6 +56,19 @@ QList<RawObject*> LooseStorage::allObjects()
 	return objects;
 }
 
+QList<RawObject*> LooseStorage::allObjectsByType(const QString &type)
+{
+	QList<RawObject*> objects = allObjects();
+
+	foreach (RawObject *object, objects) {
+		if (object->type() != type) {
+			objects.removeOne(object);
+		}
+	}
+
+	return objects;
+}
+
 const QByteArray LooseStorage::rawDataFor(const QString &id)
 {
 	if (!m_rawData.contains(id) || RawObject::isOnlyHeader(m_rawData[id])) {
