@@ -39,6 +39,23 @@ LooseStorage::LooseStorage(Repo *repo)
 
 
 
+QList<RawObject*> LooseStorage::allObjects()
+{
+	QList<RawObject*> objects;
+
+	foreach (const QString &dir, m_objectsDir.entryList()) {
+		if (dir.contains(QRegExp("^[0-9a-fA-F]{2}$"))) {
+			foreach (const QString &file, QDir(m_objectsDir.path() + "/" + dir).entryList()) {
+				if (file.contains(QRegExp("^[0-9a-fA-F]{38}$"))) {
+					objects << rawObjectFor(dir + file);
+				}
+			}
+		}
+	}
+
+	return objects;
+}
+
 const QByteArray LooseStorage::rawDataFor(const QString &id)
 {
 	if (!m_rawData.contains(id) || RawObject::isOnlyHeader(m_rawData[id])) {
