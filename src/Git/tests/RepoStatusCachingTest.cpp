@@ -39,11 +39,11 @@ class RepoStatusCachingTest : public GitTestBase
 			QVERIFY(repo->m_commits.isEmpty());
 
 			Git::Status *status1 = repo->status();
-			QVERIFY(status1->files().size() == 1);
+			QCOMPARE(status1->files().size(), 1);
 			QVERIFY(repo->m_status != 0);
 
 			Git::Status *status2 = repo->status();
-			QVERIFY(status2->files().size() == 1);
+			QCOMPARE(status2->files().size(), 1);
 			QVERIFY(repo->m_status != 0);
 
 			QVERIFY(status1 == status2);
