@@ -1,4 +1,4 @@
-project(cocoon)
+project(CocoonGit)
 
 find_package(KDE4 REQUIRED)
 include (KDE4Defaults)
@@ -10,4 +10,3 @@ include_directories(
 
 add_subdirectory( doc )
 add_subdirectory( src )
-add_subdirectory( icons )
