@@ -28,6 +28,7 @@
 
 
 class RepoCommitsCachingTest;
+class RepoHeadsCachingTest;
 class RepoStatusCachingTest;
 
 namespace Git {
@@ -94,6 +95,7 @@ class Repo : public QObject
 		QString m_workingDir;
 
 		friend class ::RepoCommitsCachingTest;
+		friend class ::RepoHeadsCachingTest;
 		friend class ::RepoStatusCachingTest;
 };
 

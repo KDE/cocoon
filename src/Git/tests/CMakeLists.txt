@@ -26,6 +26,7 @@ ENDMACRO(UNIT_TESTS)
 unit_tests(
 # Repo
 	RepoCommitsCachingTest
+	RepoHeadsCachingTest
 	RepoStatusCachingTest
 
 # Ref tests
