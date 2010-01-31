@@ -22,6 +22,7 @@
 #include <QObject>
 
 #include "Commit.h"
+#include "Head.h"
 #include "Status.h"
 
 
@@ -40,6 +41,8 @@ enum RepoOption {
 Q_DECLARE_FLAGS(RepoOptions, RepoOption)
 Q_DECLARE_OPERATORS_FOR_FLAGS(RepoOptions)
 
+class RepoPrivate;
+
 
 
 class Repo : public QObject
@@ -48,12 +51,13 @@ class Repo : public QObject
 
 	public:
 		explicit Repo(const QString &workingDir, QObject *parent = 0);
+		virtual ~Repo();
 
 		void commitIndex(const QString &message, const QStringList &options = QStringList());
 		CommitList commits(const QString &branch = QString());
 		QString diff(const Commit &a, const Commit &b) const;
 		QString head() const;
-		QStringList heads() const;
+		RefList heads() const;
 		const QString& gitDir() const;
 		/** Stages files to be included in the next commit. */
 		void stageFiles(const QStringList &paths);
@@ -70,13 +74,19 @@ class Repo : public QObject
 	public slots:
 		void reset();
 		void resetCommits();
+		void resetHeads();
 		void resetStatus();
 
 	signals:
+//		void currentHeadChanged();
+		void headsChanged();
+//		void headChanged(const QString&);
 		void historyChanged();
 		void indexChanged();
 
 	private:
+		class Private;
+		Private *d;
 		QHash<QString, CommitList> m_commits;
 		QString m_gitDir;
 		Status *m_status;
