@@ -1,7 +1,6 @@
 # Used by kde4_add_unit_test to set the full path to test executables
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR} ${ktutorial_SOURCE_DIR}/src ${KDE4_INCLUDES})
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}
 	${CMAKE_SOURCE_DIR}/src
