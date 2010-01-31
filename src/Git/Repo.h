@@ -41,8 +41,6 @@ enum RepoOption {
 Q_DECLARE_FLAGS(RepoOptions, RepoOption)
 Q_DECLARE_OPERATORS_FOR_FLAGS(RepoOptions)
 
-class RepoPrivate;
-
 
 
 class Repo : public QObject
@@ -85,7 +83,10 @@ class Repo : public QObject
 		void indexChanged();
 
 	private:
-		class Private;
+		class Private {
+		public:
+			RefList heads;
+		};
 		Private *d;
 		QHash<QString, CommitList> m_commits;
 		QString m_gitDir;

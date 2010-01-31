@@ -28,14 +28,6 @@ using namespace Git;
 
 
 
-class Repo::Private
-{
-public:
-	RefList heads;
-};
-
-
-
 Repo::Repo(const QString &workingDir, QObject *parent)
 	: QObject(parent)
 	, d(new Repo::Private)
