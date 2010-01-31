@@ -11,9 +11,11 @@ set(cocoon_git_LIB_SRCS
 	3rdparty/gitrunner.cpp
 	CloneRepositoryProcess.cpp
 	Commit.cpp
+	Head.cpp
 	LooseStorage.cpp
 	ObjectStorage.cpp
 	RawObject.cpp
+	Ref.cpp
 	Repo.cpp
 	Status.cpp
 )

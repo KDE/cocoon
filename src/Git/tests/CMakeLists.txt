@@ -28,6 +28,9 @@ unit_tests(
 	RepoCommitsCachingTest
 	RepoStatusCachingTest
 
+# Ref tests
+	HeadTest
+
 # Commit tests
 	CommitMergeDetectionTest
 
