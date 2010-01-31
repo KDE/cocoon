@@ -33,8 +33,8 @@ using namespace Git;
 LooseStorage::LooseStorage(Repo *repo)
 	: ObjectStorage(repo)
 {
-	m_objectsDir = QDir(repo->workingDir());
-	m_objectsDir.cd(".git/objects");
+	m_objectsDir = QDir(repo->gitDir());
+	m_objectsDir.cd("objects");
 }
 
 
