@@ -4,7 +4,6 @@ include_directories (
 )
 
 add_subdirectory( 3rdparty )
-add_subdirectory( tests )
 
 set(cocoon_git_LIB_SRCS
 	3rdparty/dvcsjob.cpp
