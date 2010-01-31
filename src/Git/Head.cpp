@@ -24,19 +24,19 @@ using namespace Git;
 
 
 
-Head::Head(Repo *repo)
+Head::Head(const Repo &repo)
 	: Ref("heads", repo)
 {
 }
 
-Head::Head(const QString &name, Repo *repo)
+Head::Head(const QString &name, const Repo &repo)
 	: Ref(name, "heads", repo)
 {
 }
 
 
 
-Ref* Head::newInstance(const QString &name, Repo *repo) const
+Ref* Head::newInstance(const QString &name, const Repo &repo) const
 {
 	return new Head(name, repo);
 }

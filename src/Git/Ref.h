@@ -48,10 +48,10 @@ class Ref : public QObject
 		RefList all() const;
 
 	protected:
-		explicit Ref(const QString &prefix, Repo *repo);
-		explicit Ref(const QString &name, const QString &prefix, Repo *repo);
+		explicit Ref(const QString &prefix, const Repo &repo);
+		explicit Ref(const QString &name, const QString &prefix, const Repo &repo);
 
-		virtual Ref* newInstance(const QString &name, Repo *repo) const = 0;
+		virtual Ref* newInstance(const QString &name, const Repo &repo) const = 0;
 		virtual void populate();
 
 	private:
@@ -59,7 +59,7 @@ class Ref : public QObject
 		QString m_commit;
 		QString m_name;
 		QDir m_refsDir;
-		Repo *m_repo;
+		const Repo &m_repo;
 
 	friend class ::HeadTest;
 };

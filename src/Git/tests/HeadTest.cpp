@@ -51,7 +51,7 @@ class HeadTest : public GitTestBase
 
 		void init() {
 			GitTestBase::init();
-			head = new Git::Head(repo);
+			head = new Git::Head(*repo);
 		}
 
 		void cleanup() {
@@ -66,7 +66,7 @@ class HeadTest : public GitTestBase
 		}
 
 		void shouldFindAllHeads() {
-			Git::RefList heads = Git::Head(repo).all();
+			Git::RefList heads = Git::Head(*repo).all();
 			QCOMPARE(heads.size(), 2);
 			QCOMPARE(heads[0]->name(), QString("branch"));
 			QCOMPARE(heads[1]->name(), QString("master"));
@@ -75,7 +75,7 @@ class HeadTest : public GitTestBase
 		void shouldPointToCorrectCommit() {
 			QString id = repo->commits("branch")[0]->id();
 
-			QCOMPARE(Git::Head("branch", repo).commit(), id);
+			QCOMPARE(Git::Head("branch", *repo).commit(), id);
 		}
 
 		void shouldFindCurrentHead() {

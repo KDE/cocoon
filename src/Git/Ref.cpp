@@ -26,22 +26,22 @@ using namespace Git;
 
 
 
-Ref::Ref(const QString &prefix, Repo *repo)
-	: QObject(repo)
+Ref::Ref(const QString &prefix, const Repo &repo)
+	: QObject((QObject*)&repo)
 	, m_repo(repo)
 {
-	m_refsDir = QDir(m_repo->gitDir());
+	m_refsDir = QDir(m_repo.gitDir());
 	m_refsDir.cd("refs");
 	m_refsDir.cd(prefix);
 }
 
-Ref::Ref(const QString &name, const QString &prefix, Repo *repo)
-	: QObject(repo)
+Ref::Ref(const QString &name, const QString &prefix, const Repo &repo)
+	: QObject((QObject*)&repo)
 	, m_commit()
 	, m_name(name)
 	, m_repo(repo)
 {
-	m_refsDir = QDir(m_repo->gitDir());
+	m_refsDir = QDir(m_repo.gitDir());
 	m_refsDir.cd("refs");
 	m_refsDir.cd(prefix);
 

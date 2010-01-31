@@ -36,13 +36,14 @@ class Head : public Ref
 	Q_OBJECT
 
 	public:
-		explicit Head(const QString &name, Repo *repo);
+		explicit Head(const QString &name, const Repo &repo);
 
 	protected:
-		explicit Head(Repo *repo);
+		explicit Head(const Repo &repo);
 
-		virtual Ref* newInstance(const QString &name, Repo *repo) const;
+		virtual Ref* newInstance(const QString &name, const Repo &repo) const;
 
+	friend class Repo;
 	friend class ::HeadTest;
 };
 
