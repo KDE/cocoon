@@ -89,8 +89,17 @@ void MainWindow::reload()
 
 void MainWindow::setRepository(const QString &repoPath)
 {
+	// remember old repo for later deletion
+	Git::Repo *old_repo = m_repo;
+
 	m_repo = new Git::Repo(repoPath, this);
+
 	emit repositoryChanged(m_repo);
+
+	// delete old repo after changes have propagated
+	if (old_repo) {
+		delete old_repo;
+	}
 }
 
 void MainWindow::setupActions()
