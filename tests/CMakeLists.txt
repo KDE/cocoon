@@ -25,7 +25,11 @@ ENDMACRO(UNIT_TESTS)
 unit_tests(
 # Repo
 	RepoCommitsCachingTest
+	RepoHeadsCachingTest
 	RepoStatusCachingTest
+
+# Ref tests
+	HeadTest
 
 # Commit tests
 	CommitMergeDetectionTest
@@ -39,4 +43,12 @@ unit_tests(
 	StatusRemodifiedFileTest
 	StatusRemovedFileTest
 	StatusUpdatedFileTest
+
+# Storage and Objects
+	LooseStorageTest
+	LooseStorageCachingTest
+	LooseStorageListingTest
+	RawObjectTest
+	RawObjectHeaderExtractionTest
+	RawObjectTypeTest
 )

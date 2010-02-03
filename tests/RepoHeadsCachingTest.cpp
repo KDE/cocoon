@@ -20,7 +20,7 @@
 
 
 
-class RepoStatusCachingTest : public GitTestBase
+class RepoHeadsCachingTest : public GitTestBase
 {
 	Q_OBJECT
 
@@ -29,47 +29,45 @@ class RepoStatusCachingTest : public GitTestBase
 			GitTestBase::initTestCase();
 
 			QProcess::execute("git", gitBasicOpts() << "commit" << "--allow-empty" << "-m" << "Empty inital commit.");
-
-			writeToFile("some_file.txt", "foo\nbar\baz");
 		}
 
 
 
-		void testStatusCachingSame() {
-			QVERIFY(repo->m_commits.isEmpty());
+		void shouldCacheHeads() {
+			QVERIFY(repo->d->heads.isEmpty());
 
-			Git::Status *status1 = repo->status();
-			QCOMPARE(status1->files().size(), 1);
-			QVERIFY(repo->m_status != 0);
+			Git::RefList heads1 = repo->heads();
+			QCOMPARE(heads1.size(), 1);
+			QCOMPARE(repo->d->heads.size(), 1);
 
-			Git::Status *status2 = repo->status();
-			QCOMPARE(status2->files().size(), 1);
-			QVERIFY(repo->m_status != 0);
+			Git::RefList heads2 = repo->heads();
+			QCOMPARE(heads2.size(), 1);
+			QCOMPARE(repo->d->heads.size(), 1);
 
-			QVERIFY(status1 == status2);
+			QCOMPARE(heads2, heads1);
 		}
 
-		void testStatusReset() {
-			QVERIFY(repo->m_status == 0);
+		void testHeadsReset() {
+			QVERIFY(repo->d->heads.isEmpty());
 
-			repo->status();
-			QVERIFY(repo->m_status != 0);
+			repo->heads();
+			QVERIFY(!repo->d->heads.isEmpty());
 
-			repo->resetStatus();
-			QVERIFY(repo->m_status == 0);
+			repo->resetHeads();
+			QVERIFY(repo->d->heads.isEmpty());
 		}
 
 		void testReset() {
-			QVERIFY(repo->m_status == 0);
+			QVERIFY(repo->d->heads.isEmpty());
 
-			repo->status();
-			QVERIFY(repo->m_status != 0);
+			repo->heads();
+			QVERIFY(!repo->d->heads.isEmpty());
 
 			repo->reset();
-			QVERIFY(repo->m_status == 0);
+			QVERIFY(repo->d->heads.isEmpty());
 		}
 };
 
-QTEST_KDEMAIN_CORE(RepoStatusCachingTest);
+QTEST_KDEMAIN_CORE(RepoHeadsCachingTest);
 
-#include "RepoStatusCachingTest.moc"
+#include "RepoHeadsCachingTest.moc"

@@ -30,9 +30,16 @@ using namespace Git;
 
 Repo::Repo(const QString &workingDir, QObject *parent)
 	: QObject(parent)
+	, d(new Repo::Private)
+	, m_gitDir(workingDir + "/.git")
 	, m_status(0)
 	, m_workingDir(workingDir)
 {
+}
+
+Repo::~Repo()
+{
+	delete d;
 }
 
 
@@ -99,6 +106,11 @@ QString Repo::diff(const Commit &a, const Commit &b) const
 	return runner.getResult();
 }
 
+const QString& Repo::gitDir() const
+{
+	return m_gitDir;
+}
+
 void Repo::init(const QString &newRepoPath)
 {
 	KUrl newRepoUrl(QDir(newRepoPath).absolutePath());
@@ -123,25 +135,19 @@ QString Repo::head() const
 	return QString();
 }
 
-QStringList Repo::heads() const
+RefList Repo::heads() const
 {
-	GitRunner runner;
-	runner.setDirectory(workingDir());
-
-	runner.branches();
-
-	QStringList branches = runner.getResult().split("\n");
-	branches.removeLast(); // splitting results in empty last line
-	for(int i=0; i < branches.size(); ++i) {
-		branches[i] = branches[i].mid(2);
+	if (d->heads.isEmpty()) {
+		d->heads = Head(*this).all();
 	}
 
-	return branches;
+	return d->heads;
 }
 
 void Repo::reset()
 {
 	resetCommits();
+	resetHeads();
 	resetStatus();
 }
 
@@ -151,6 +157,15 @@ void Repo::resetCommits()
 		m_commits.clear();
 
 		emit indexChanged();
+	}
+}
+
+void Repo::resetHeads()
+{
+	if (!d->heads.isEmpty()) {
+		d->heads.clear();
+
+		emit headsChanged();
 	}
 }
 

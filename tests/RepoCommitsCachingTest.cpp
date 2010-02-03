@@ -42,29 +42,29 @@ class RepoCommitsCachingTest : public GitTestBase
 			QVERIFY(repo->m_commits.isEmpty());
 
 			Git::CommitList commits1 = repo->commits();
-			QVERIFY(commits1.size() == 4);
-			QVERIFY(repo->m_commits.size() == 1);
+			QCOMPARE(commits1.size(), 4);
+			QCOMPARE(repo->m_commits.size(), 1);
 			QVERIFY(repo->m_commits.contains(QString()));
 
 			Git::CommitList commits2 = repo->commits();
-			QVERIFY(commits2.size() == 4);
-			QVERIFY(repo->m_commits.size() == 1);
+			QCOMPARE(commits2.size(), 4);
+			QCOMPARE(repo->m_commits.size(), 1);
 			QVERIFY(repo->m_commits.contains(QString()));
 
-			QVERIFY(commits1 == commits2);
+			QCOMPARE(commits2, commits1);
 		}
 
 		void testCommitsCachingDifferent() {
 			QVERIFY(repo->m_commits.isEmpty());
 
 			Git::CommitList commits1 = repo->commits("master");
-			QVERIFY(commits1.size() == 4);
-			QVERIFY(repo->m_commits.size() == 1);
+			QCOMPARE(commits1.size(), 4);
+			QCOMPARE(repo->m_commits.size(), 1);
 			QVERIFY(repo->m_commits.contains("master"));
 
 			Git::CommitList commits2 = repo->commits("branch");
-			QVERIFY(commits2.size() == 2);
-			QVERIFY(repo->m_commits.size() == 2);
+			QCOMPARE(commits2.size(), 2);
+			QCOMPARE(repo->m_commits.size(), 2);
 			QVERIFY(repo->m_commits.contains("branch"));
 		}
 
@@ -72,7 +72,7 @@ class RepoCommitsCachingTest : public GitTestBase
 			QVERIFY(repo->m_commits.isEmpty());
 
 			repo->commits();
-			QVERIFY(repo->m_commits.size() == 1);
+			QVERIFY(!repo->m_commits.isEmpty());
 
 			repo->resetCommits();
 			QVERIFY(repo->m_commits.isEmpty());
@@ -82,7 +82,7 @@ class RepoCommitsCachingTest : public GitTestBase
 			QVERIFY(repo->m_commits.isEmpty());
 
 			repo->commits();
-			QVERIFY(repo->m_commits.size() == 1);
+			QVERIFY(!repo->m_commits.isEmpty());
 
 			repo->reset();
 			QVERIFY(repo->m_commits.isEmpty());

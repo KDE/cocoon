@@ -10,6 +10,11 @@ set(cocoon_git_LIB_SRCS
 	3rdparty/gitrunner.cpp
 	CloneRepositoryProcess.cpp
 	Commit.cpp
+	Head.cpp
+	LooseStorage.cpp
+	ObjectStorage.cpp
+	RawObject.cpp
+	Ref.cpp
 	Repo.cpp
 	Status.cpp
 )
@@ -33,6 +38,8 @@ install(TARGETS CocoonGit ${INSTALL_TARGETS_DEFAULT_ARGS})
 install( FILES
 	CloneRepositoryProcess.h
 	Commit.h
+	Head.h
+	Ref.h
 	Repo.h
 	Status.h
 	DESTINATION ${INCLUDE_INSTALL_DIR}/Git COMPONENT Devel
