@@ -1,6 +1,4 @@
 
-add_subdirectory( Git )
-
 set(cocoon_SRCS
 	main.cpp
 	CloneRepositoryDialog.cpp
