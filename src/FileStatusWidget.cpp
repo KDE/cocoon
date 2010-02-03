@@ -26,6 +26,7 @@
 
 FileStatusWidget::FileStatusWidget(QWidget *parent)
 		: QWidget(parent)
+		, m_repo(0)
 		, m_byteArray(0)
 		, ui(new Ui::FileStatusWidget)
 {

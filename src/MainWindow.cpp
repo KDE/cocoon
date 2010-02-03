@@ -31,6 +31,7 @@
 
 MainWindow::MainWindow(QWidget *parent)
 	: KXmlGuiWindow(parent)
+	, m_repo(0)
 	, ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);

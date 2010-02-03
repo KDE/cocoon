@@ -25,6 +25,7 @@
 
 CommitInfoWidget::CommitInfoWidget(QWidget *parent)
 	: QWidget(parent)
+	, m_commit(0)
 	, ui(new Ui::CommitInfoWidget)
 {
 	ui->setupUi(this);

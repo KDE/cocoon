@@ -34,6 +34,7 @@
 
 StageWidget::StageWidget(QWidget *parent)
 	: QWidget(parent)
+	, m_repo(0)
 	, ui(new Ui::StageWidget)
 {
 	ui->setupUi(this);
