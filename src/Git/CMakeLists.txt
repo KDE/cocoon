@@ -38,6 +38,8 @@ install(TARGETS CocoonGit ${INSTALL_TARGETS_DEFAULT_ARGS})
 install( FILES
 	CloneRepositoryProcess.h
 	Commit.h
+	Head.h
+	Ref.h
 	Repo.h
 	Status.h
 	DESTINATION ${INCLUDE_INSTALL_DIR}/Git COMPONENT Devel
