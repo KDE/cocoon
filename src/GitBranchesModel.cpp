@@ -57,7 +57,7 @@ QVariant GitBranchesModel::data(const QModelIndex &index, int role) const
 	QString data;
 	switch (index.column()) {
 	case 0:
-		data = m_branches[index.row()];
+		data = m_branches[index.row()]->name();
 		break;
 	}
 
