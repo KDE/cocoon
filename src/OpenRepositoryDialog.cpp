@@ -25,6 +25,8 @@
 #include <KMessageBox>
 
 #include <QFileDialog>
+#include <QListWidgetItem>
+#include <QPainter>
 
 
 
@@ -65,7 +67,25 @@ void OpenRepositoryDialog::addRepository(const QString &repoPath)
 
 	// make sure we only add a repo once
 	if (foundItems.isEmpty()) {
-		QListWidgetItem *item = new QListWidgetItem(KIcon("repository"), repoPath, repoList);
+		QListWidgetItem *item = new QListWidgetItem(repoPath, repoList);
+		if (Git::Repo::containsRepository(repoPath)) {
+			item->setIcon(KIcon("repository"));
+		} else {
+			item->setForeground(QBrush(Qt::red));
+			if (QDir(repoPath).exists()) {
+				item->setIcon(KIcon("folder"));
+				item->setToolTip("This directory does not contain a repository.");
+			} else {
+				QPixmap iconPix = KIcon("folder").pixmap(16);
+				QPainter painter(&iconPix);
+
+				QPixmap emblemPix = KIcon("emblem-important").pixmap(8);
+				painter.drawPixmap(0, iconPix.height() - emblemPix.height(), emblemPix);
+
+				item->setIcon(iconPix);
+				item->setToolTip("This directory does not exist anymore.");
+			}
+		}
 		repoList->addItem(item);
 	}
 
