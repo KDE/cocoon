@@ -181,10 +181,8 @@ void OpenRepositoryDialog::on_removeButton_clicked()
 
 void OpenRepositoryDialog::on_repositoriesListWidget_currentTextChanged(const QString &text)
 {
-	bool enable = !text.isEmpty();
-
-	ui->removeButton->setEnabled(enable);
-	ui->openButton->setEnabled(enable);
+	ui->removeButton->setEnabled(!text.isEmpty());
+	ui->openButton->setEnabled(Git::Repo::containsRepository(text));
 }
 
 void OpenRepositoryDialog::reject()
