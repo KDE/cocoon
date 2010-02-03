@@ -61,8 +61,8 @@ class FileStatusWidget : public QWidget
 
 	private:
 		QByteArray m_byteArray;
-		Git::Repo *m_repo;
 		const Git::StatusFile *m_file;
+		Git::Repo *m_repo;
 		Ui::FileStatusWidget *ui;
 };
 
