@@ -30,3 +30,10 @@ install(TARGETS CocoonGit ${INSTALL_TARGETS_DEFAULT_ARGS})
 ########### install files ###############
 
 # install header files
+install( FILES
+	CloneRepositoryProcess.h
+	Commit.h
+	Repo.h
+	Status.h
+	DESTINATION ${INCLUDE_INSTALL_DIR}/Git COMPONENT Devel
+)
