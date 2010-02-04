@@ -124,7 +124,7 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 	commit->m_id   = lines.takeFirst().mid(strlen("commit "), -1);
 	commit->m_tree = lines.takeFirst().mid(strlen("tree "), -1);
 	while (lines.first().startsWith("parent ")) {
-		commit->m_parents << lines.takeFirst().mid(strlen("parent "), -1);
+		commit->m_parents << commit->storage().repo().commit(lines.takeFirst().mid(strlen("parent "), -1));
 	}
 	QRegExp actorRegExp("^(.*) (\\d+) ([+-]\\d+)$");
 
@@ -185,7 +185,7 @@ const QString& Commit::message() const
 	return m_message;
 }
 
-const QStringList& Commit::parents() const
+const CommitList Commit::parents() const
 {
 	return m_parents;
 }

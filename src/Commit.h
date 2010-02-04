@@ -84,7 +84,7 @@ class Commit : public RawObject
 		 * @return true if so, false otherwise.
 		 */
 		bool               isMerge() const;
-		const QStringList& parents() const;
+		const CommitList   parents() const;
 		const QString&     message() const;
 		const QString      shortId() const;
 		const QString&     summary() const;
@@ -119,7 +119,7 @@ class Commit : public RawObject
 		KDateTime   m_committedAt;
 		QString     m_id;
 		QString     m_message;
-		QStringList m_parents;
+		CommitList  m_parents;
 		QString     m_summary;
 		QString     m_tree;
 
