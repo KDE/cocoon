@@ -67,7 +67,7 @@ const QString& Ref::name() const
 	return m_name;
 }
 
-const QString& Ref::commit() const
+Commit* Ref::commit() const
 {
 	return m_commit;
 }
@@ -79,7 +79,7 @@ void Ref::populate()
 
 	kDebug() << "reading head:" << refFile.fileName();
 
-	m_commit = refFile.readAll().trimmed();
+	m_commit = m_repo.commit(refFile.readAll().trimmed());
 
 	kDebug() << "head content:" << m_commit;
 

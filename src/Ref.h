@@ -30,6 +30,7 @@ class HeadTest;
 
 namespace Git {
 
+class Commit;
 class Ref;
 class Repo;
 
@@ -42,7 +43,7 @@ class Ref : public QObject
 	Q_OBJECT
 
 	public:
-		const QString& commit() const;
+		Commit* commit() const;
 		const QString& name() const;
 
 		RefList all() const;
@@ -55,8 +56,7 @@ class Ref : public QObject
 		virtual void populate();
 
 	private:
-		/** @todo change this to a real commit */
-		QString m_commit;
+		Commit *m_commit;
 		QString m_name;
 		QDir m_refsDir;
 		const Repo &m_repo;
