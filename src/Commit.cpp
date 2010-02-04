@@ -155,34 +155,12 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 	}
 }
 
-CommitList Commit::fromRawLog(const Repo *repo, const QString &rawLog)
+
+CommitList Commit::allReachableFrom(const Ref &ref, const Repo &repo)
 {
 	CommitList commits;
 
-	QStringList lines = rawLog.split("\n");
-
-	while(!lines.isEmpty()) {
-		QStringList rawCommitLines;
-
-		rawCommitLines << lines.takeFirst(); // commit
-		rawCommitLines << lines.takeFirst(); // tree
-		while (lines.first().startsWith("parent ")) {
-			rawCommitLines << lines.takeFirst(); // parent
-		}
-		rawCommitLines << lines.takeFirst(); // author
-		rawCommitLines << lines.takeFirst(); // committer
-		rawCommitLines << lines.takeFirst(); // empty line
-		while (!lines.isEmpty() && lines.first().startsWith("    ")) {
-			rawCommitLines << lines.takeFirst(); // line of the commit massege
-		}
-		while (!lines.isEmpty() && lines.first().isEmpty()) {
-			rawCommitLines << lines.takeFirst(); // empty lines
-		}
-
-		Commit *newCommit = new Commit(repo);
-		fillFromString(newCommit, rawCommitLines.join("\n"));
-		commits << newCommit;
-	}
+	/** @todo generate list of commits for branch */
 
 	return commits;
 }

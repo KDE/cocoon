@@ -32,6 +32,7 @@ class CommitMergeDetectionTest;
 namespace Git {
 
 class Commit;
+class Ref;
 class Repo;
 
 typedef QList<Commit*>  CommitList;
@@ -90,14 +91,7 @@ class Commit : public RawObject
 		const QString&     tree() const;
 
 	// static
-		/**
-		 * Creates a list of commits for the given repo from the the given raw log.
-		 *
-		 * @param repo The repository of the commits.
-		 * @param rawLog The raw log as result of a `git log --pretty=raw` call.
-		 * @return The list of commits extracted from the log.
-		 */
-		static CommitList fromRawLog(const Repo *repo, const QString &rawLog);
+		static CommitList allReachableFrom(const Ref &branch, const Repo &repo);
 
 	private:
 	// static
