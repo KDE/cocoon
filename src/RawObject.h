@@ -59,6 +59,7 @@ class RawObject : public QObject
 
 	protected:
 		virtual void populateWith(const QByteArray &rawData);
+		ObjectStorage& storage() const;
 
 	private:
 		QByteArray     m_data;

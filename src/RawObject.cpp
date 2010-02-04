@@ -134,6 +134,11 @@ void RawObject::populateWith(const QByteArray &rawData)
 	m_type = extractObjectTypeFrom(header);
 }
 
+ObjectStorage& RawObject::storage() const
+{
+	return m_storage;
+}
+
 const QString& RawObject::type() const
 {
 	return m_type;
