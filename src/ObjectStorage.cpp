@@ -33,4 +33,11 @@ ObjectStorage::ObjectStorage(Repo &repo)
 
 
 
+Repo& ObjectStorage::repo() const
+{
+	return m_repo;
+}
+
+
+
 #include "ObjectStorage.moc"
