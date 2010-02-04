@@ -19,7 +19,7 @@
 #ifndef COMMIT_H
 #define COMMIT_H
 
-#include <QObject>
+#include <RawObject.h>
 
 #include <KDateTime>
 
@@ -38,13 +38,12 @@ typedef QList<Commit*>  CommitList;
 
 
 
-class Commit : public QObject
+class Commit : public RawObject
 {
 	Q_OBJECT
 
 	public:
-		Commit(const Repo *repo);
-		Commit(const QString& id, const Repo *repo);
+		Commit(const QString& id, ObjectStorage &storage);
 
 		const QString&     author() const;
 		const KDateTime&   authoredAt() const;
@@ -127,7 +126,6 @@ class Commit : public QObject
 		QString     m_id;
 		QString     m_message;
 		QStringList m_parents;
-		const Repo *m_repo;
 		QString     m_summary;
 		QString     m_tree;
 

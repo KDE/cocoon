@@ -20,6 +20,7 @@
 
 #include "gitrunner.h"
 
+#include "ObjectStorage.h"
 #include "Repo.h"
 
 #include <KDebug>
@@ -30,22 +31,10 @@ using namespace Git;
 
 
 
-Commit::Commit(const Repo *repo)
-	: QObject((QObject*)repo)
-	, m_repo(repo)
+Commit::Commit(const QString& id, ObjectStorage &storage)
+	: RawObject(id, storage)
 {
-}
-
-Commit::Commit(const QString &id, const Repo *repo)
-	: QObject((QObject*)repo)
-	, m_repo(repo)
-{
-	GitRunner runner;
-	runner.setDirectory(m_repo->workingDir());
-
-	runner.log(QStringList() << "--pretty=raw" << "-1", id);
-
-	fillFromString(this, runner.getResult());
+	fillFromString(this, data());
 }
 
 const QString& Commit::author() const
@@ -61,7 +50,7 @@ const KDateTime& Commit::authoredAt() const
 QStringList Commit::childrenOf(const Commit &commit, const QStringList &refs)
 {
 	GitRunner runner;
-	runner.setDirectory(commit.m_repo->workingDir());
+	runner.setDirectory(commit.storage().repo().workingDir());
 
 	QStringList opts;
 	opts << "--children";
@@ -88,7 +77,7 @@ CommitList Commit::childrenOn(const QStringList &refs) const
 {
 	QStringList actualRefs(refs);
 	if (actualRefs.isEmpty()) {
-		actualRefs << m_repo->head();
+		actualRefs << storage().repo().head();
 	}
 
 	// used for caching the result
@@ -101,7 +90,7 @@ CommitList Commit::childrenOn(const QStringList &refs) const
 
 		CommitList children;
 		foreach (const QString &id, childrenIds) {
-			children << new Commit(id, m_repo);
+			children << new Commit(id, storage());
 		}
 
 		childrenByRefs[refKey] = children;
@@ -123,7 +112,7 @@ const KDateTime& Commit::committedAt() const
 const QString Commit::diff() const
 {
 	GitRunner runner;
-	runner.setDirectory(m_repo->workingDir());
+	runner.setDirectory(storage().repo().workingDir());
 	runner.commitDiff(id());
 	return runner.getResult();
 }
