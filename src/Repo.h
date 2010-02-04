@@ -23,6 +23,7 @@
 
 #include "Commit.h"
 #include "Head.h"
+#include "LooseStorage.h"
 #include "Status.h"
 
 
@@ -53,6 +54,7 @@ class Repo : public QObject
 		virtual ~Repo();
 
 		void commitIndex(const QString &message, const QStringList &options = QStringList());
+		Commit* commit(const QString &id) const;
 		CommitList commits(const QString &branch = QString());
 		QString diff(const Commit &a, const Commit &b) const;
 		QString head() const;
@@ -86,7 +88,9 @@ class Repo : public QObject
 	private:
 		class Private {
 		public:
+			Private(Repo &repo) : heads(), looseStorage(repo) {}
 			RefList heads;
+			LooseStorage looseStorage;
 		};
 		Private *d;
 		QHash<QString, CommitList> m_commits;

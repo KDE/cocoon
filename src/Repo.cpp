@@ -30,7 +30,7 @@ using namespace Git;
 
 Repo::Repo(const QString &workingDir, QObject *parent)
 	: QObject(parent)
-	, d(new Repo::Private)
+	, d(new Repo::Private(*this))
 	, m_gitDir(workingDir + "/.git")
 	, m_status(0)
 	, m_workingDir(workingDir)
@@ -67,6 +67,13 @@ void Repo::commitIndex(const QString &message, const QStringList &options)
 
 	emit indexChanged();
 	emit historyChanged();
+}
+
+Commit* Repo::commit(const QString &id) const
+{
+	RawObject *obj = d->looseStorage.rawObjectFor(id);
+
+	return obj->isCommit() ? static_cast<Commit*>(obj) : 0;
 }
 
 CommitList Repo::commits(const QString &branch)
