@@ -38,8 +38,8 @@ class RawObject : public QObject
 	Q_OBJECT
 
 	public:
-		RawObject(const QString& id, ObjectStorage *storage);
-		RawObject(const QString& id, const QByteArray &rawData, ObjectStorage *storage);
+		RawObject(const QString& id, ObjectStorage &storage);
+		RawObject(const QString& id, const QByteArray &rawData, ObjectStorage &storage);
 
 		const QByteArray&  data();
 		const QString&     id() const;
@@ -64,7 +64,7 @@ class RawObject : public QObject
 		QByteArray     m_data;
 		QString        m_id;
 		int            m_size;
-		ObjectStorage *m_storage;
+		ObjectStorage &m_storage;
 		QString        m_type;
 
 	friend class ::RawObjectTest;

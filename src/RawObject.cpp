@@ -26,17 +26,17 @@ using namespace Git;
 
 
 
-RawObject::RawObject(const QString &id, ObjectStorage *storage)
-	: QObject((QObject*)storage)
+RawObject::RawObject(const QString &id, ObjectStorage &storage)
+	: QObject((QObject*)&storage)
 	, m_id(id)
 	, m_size(-1)
 	, m_storage(storage)
 {
-	populateWith(m_storage->rawHeaderFor(m_id));
+	populateWith(m_storage.rawHeaderFor(m_id));
 }
 
-RawObject::RawObject(const QString &id, const QByteArray &rawData, ObjectStorage *storage)
-	: QObject((QObject*)storage)
+RawObject::RawObject(const QString &id, const QByteArray &rawData, ObjectStorage &storage)
+	: QObject((QObject*)&storage)
 	, m_id(id)
 	, m_storage(storage)
 {
@@ -48,7 +48,7 @@ RawObject::RawObject(const QString &id, const QByteArray &rawData, ObjectStorage
 const QByteArray& RawObject::data()
 {
 	if (m_data.isNull()) {
-		populateWith(m_storage->rawDataFor(m_id));
+		populateWith(m_storage.rawDataFor(m_id));
 	}
 
 	return m_data;
