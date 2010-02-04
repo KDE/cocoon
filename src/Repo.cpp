@@ -72,15 +72,7 @@ void Repo::commitIndex(const QString &message, const QStringList &options)
 CommitList Repo::commits(const QString &branch)
 {
 	if (!m_commits.contains(branch)) {
-		GitRunner runner;
-		runner.setDirectory(workingDir());
-
-		QString result;
-		if (runner.commits(branch) == DvcsJob::JobSucceeded) {
-			result = runner.getResult();
-		}
-
-		m_commits[branch] = Commit::fromRawLog(this, result);
+		m_commits[branch] = Commit::allReachableFrom(Head(branch, *this), *this);
 	}
 
 	return m_commits[branch];
