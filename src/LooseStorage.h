@@ -37,7 +37,7 @@ class LooseStorage : public ObjectStorage
 	Q_OBJECT
 
 	public:
-		explicit LooseStorage(Repo *repo);
+		explicit LooseStorage(Repo &repo);
 
 		QList<RawObject*> allObjects();
 		QList<RawObject*> allObjectsByType(const QString &type);

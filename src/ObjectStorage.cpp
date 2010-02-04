@@ -25,8 +25,8 @@ using namespace Git;
 
 
 
-ObjectStorage::ObjectStorage(Repo *repo)
-	: QObject(repo)
+ObjectStorage::ObjectStorage(Repo &repo)
+	: QObject((QObject*)&repo)
 	, m_repo(repo)
 {
 }

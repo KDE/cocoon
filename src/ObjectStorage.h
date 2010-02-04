@@ -33,14 +33,14 @@ class ObjectStorage : public QObject
 	Q_OBJECT
 
 	public:
-		explicit ObjectStorage(Repo *repo);
+		explicit ObjectStorage(Repo &repo);
 
 		virtual const QByteArray rawDataFor(const QString &id) = 0;
 		virtual const QByteArray rawHeaderFor(const QString &id) = 0;
 		virtual RawObject* rawObjectFor(const QString &id) = 0;
 
 	private:
-		Repo *m_repo;
+		Repo &m_repo;
 };
 
 }
