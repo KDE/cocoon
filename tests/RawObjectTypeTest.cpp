@@ -44,10 +44,10 @@ class RawObjectTypeTest : public GitTestBase
 
 		void init() {
 			GitTestBase::init();
-			storage = new Git::LooseStorage(repo);
+			storage = new Git::LooseStorage(*repo);
 
 			QString id = repo->commits()[0]->id();
-			object = new Git::RawObject(id, storage);
+			object = new Git::RawObject(id, *storage);
 		}
 
 		void cleanup() {

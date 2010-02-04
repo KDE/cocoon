@@ -42,7 +42,7 @@ class LooseStorageTest : public GitTestBase
 
 		void init() {
 			GitTestBase::init();
-			storage = new Git::LooseStorage(repo);
+			storage = new Git::LooseStorage(*repo);
 		}
 
 		void cleanup() {

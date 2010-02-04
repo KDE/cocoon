@@ -18,7 +18,7 @@
 
 #include "GitTestBase.h"
 
-#include "Git/Head.h"
+#include "Head.h"
 
 
 
@@ -75,7 +75,7 @@ class HeadTest : public GitTestBase
 		void shouldPointToCorrectCommit() {
 			QString id = repo->commits("branch")[0]->id();
 
-			QCOMPARE(Git::Head("branch", *repo).commit(), id);
+			QCOMPARE(Git::Head("branch", *repo).commit()->id(), id);
 		}
 
 		void shouldFindCurrentHead() {
