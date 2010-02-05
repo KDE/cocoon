@@ -76,8 +76,6 @@ class Commit : public RawObject
 		 */
 		CommitList childrenOn(const QStringList &refs) const;
 
-		const QString&     id() const;
-
 		/**
 		 * Is this a merge commit? It is if it has multiple parents.
 		 *
@@ -86,7 +84,6 @@ class Commit : public RawObject
 		bool               isMerge() const;
 		const CommitList   parents() const;
 		const QString&     message() const;
-		const QString      shortId() const;
 		const QString&     summary() const;
 		const QString&     tree() const;
 
@@ -117,7 +114,6 @@ class Commit : public RawObject
 		KDateTime   m_authoredAt;
 		QString     m_committer;
 		KDateTime   m_committedAt;
-		QString     m_id;
 		QString     m_message;
 		CommitList  m_parents;
 		QString     m_summary;

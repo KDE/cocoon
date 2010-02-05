@@ -180,11 +180,6 @@ bool Commit::hasBranchedOn(const QStringList &refs) const
 	return childrenOn(refs).size() > 1;
 }
 
-const QString& Commit::id() const
-{
-	return m_id;
-}
-
 bool Commit::isMerge() const
 {
 	return m_parents.size() > 1;
@@ -198,11 +193,6 @@ const QString& Commit::message() const
 const CommitList Commit::parents() const
 {
 	return m_parents;
-}
-
-const QString Commit::shortId() const
-{
-	return m_id.left(7);
 }
 
 const QString& Commit::summary() const
