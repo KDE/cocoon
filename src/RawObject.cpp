@@ -18,6 +18,7 @@
 
 #include "RawObject.h"
 
+#include "Commit.h"
 #include "ObjectStorage.h"
 
 #include <QRegExp>
@@ -132,6 +133,15 @@ void RawObject::populateWith(const QByteArray &rawData)
 	m_data = rawData.mid(header.size()+1);
 	m_size = extractObjectSizeFrom(header);
 	m_type = extractObjectTypeFrom(header);
+}
+
+RawObject* RawObject::newInstance(const QString &id, ObjectStorage &storage)
+{
+	if (extractObjectTypeFrom(storage.rawHeaderFor(id)) == "commit") {
+		return new Commit(id, storage);
+	}
+
+	return 0;
 }
 
 ObjectStorage& RawObject::storage() const

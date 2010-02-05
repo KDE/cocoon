@@ -56,6 +56,7 @@ class RawObject : public QObject
 		static const QString extractObjectTypeFrom(const QString &header);
 		static bool isOnlyHeader(const QByteArray &rawData);
 		static bool isValidHeader(const QString &possibleHeader);
+		static RawObject* newInstance(const QString& id, ObjectStorage &storage);
 
 	protected:
 		virtual void populateWith(const QByteArray &rawData);
