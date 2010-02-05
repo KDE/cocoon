@@ -220,7 +220,7 @@ const QByteArray LooseStorage::rawHeaderFor(const QString &id)
 RawObject* LooseStorage::rawObjectFor(const QString &id)
 {
 	if (!m_rawObjects.contains(id)) {
-		m_rawObjects[id] = new RawObject(id, *this);
+		m_rawObjects[id] = RawObject::newInstance(id, *this);
 	}
 
 	return m_rawObjects[id];
