@@ -77,11 +77,12 @@ void Ref::populate()
 	QFile refFile(m_refsDir.filePath(m_name));
 	refFile.open(QFile::ReadOnly);
 
+	QString commitId = refFile.readAll().trimmed();
+
 	kDebug() << "reading head:" << refFile.fileName();
+	kDebug() << "head content:" << commitId;
 
-	m_commit = m_repo.commit(refFile.readAll().trimmed());
-
-	kDebug() << "head content:" << m_commit;
+	m_commit = m_repo.commit(commitId);
 
 	refFile.close();
 }
