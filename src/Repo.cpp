@@ -30,11 +30,12 @@ using namespace Git;
 
 Repo::Repo(const QString &workingDir, QObject *parent)
 	: QObject(parent)
-	, d(new Repo::Private(*this))
+	, d(0)
 	, m_gitDir(workingDir + "/.git")
 	, m_status(0)
 	, m_workingDir(workingDir)
 {
+	d = new Repo::Private(*this);
 }
 
 Repo::~Repo()
