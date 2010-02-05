@@ -58,11 +58,11 @@ QList<RawObject*> LooseStorage::allObjects()
 
 QList<RawObject*> LooseStorage::allObjectsByType(const QString &type)
 {
-	QList<RawObject*> objects = allObjects();
+	QList<RawObject*> objects;
 
-	foreach (RawObject *object, objects) {
-		if (object->type() != type) {
-			objects.removeOne(object);
+	foreach (RawObject *object, allObjects()) {
+		if (object->type() == type) {
+			objects << object;
 		}
 	}
 
