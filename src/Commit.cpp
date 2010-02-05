@@ -77,7 +77,7 @@ CommitList Commit::childrenOn(const QStringList &refs) const
 {
 	QStringList actualRefs(refs);
 	if (actualRefs.isEmpty()) {
-		actualRefs << storage().repo().head();
+		actualRefs << storage().repo().head()->name();
 	}
 
 	// used for caching the result
@@ -121,7 +121,6 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 {
 	QStringList lines = raw.split("\n");
 
-	commit->m_id   = lines.takeFirst().mid(strlen("commit "), -1);
 	commit->m_tree = lines.takeFirst().mid(strlen("tree "), -1);
 	while (lines.first().startsWith("parent ")) {
 		commit->m_parents << commit->storage().repo().commit(lines.takeFirst().mid(strlen("parent "), -1));
