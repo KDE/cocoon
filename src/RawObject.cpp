@@ -141,7 +141,7 @@ RawObject* RawObject::newInstance(const QString &id, ObjectStorage &storage)
 		return new Commit(id, storage);
 	}
 
-	return 0;
+	return new RawObject(id, storage);
 }
 
 ObjectStorage& RawObject::storage() const
