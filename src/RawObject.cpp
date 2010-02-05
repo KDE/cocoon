@@ -39,6 +39,7 @@ RawObject::RawObject(const QString &id, ObjectStorage &storage)
 RawObject::RawObject(const QString &id, const QByteArray &rawData, ObjectStorage &storage)
 	: QObject((QObject*)&storage)
 	, m_id(id)
+	,m_size(-1)
 	, m_storage(storage)
 {
 	populateWith(rawData);
