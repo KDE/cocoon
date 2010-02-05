@@ -158,11 +158,22 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 
 CommitList Commit::allReachableFrom(const Ref &ref, const Repo &repo)
 {
-	CommitList commits;
+	QMap<KDateTime, Commit*> commits;
 
-	/** @todo generate list of commits for branch */
+	CommitList fringe;
+	fringe << ref.commit();
 
-	return commits;
+	while (!fringe.isEmpty()) {
+		Commit *commit = fringe.takeFirst();
+
+		// add parents to fringe
+		fringe << commit->parents();
+
+		// sort in this commit
+		commits.insert(commit->committedAt(), commit);
+	}
+
+	return commits.values();
 }
 
 bool Commit::hasBranchedOn(const QStringList &refs) const
