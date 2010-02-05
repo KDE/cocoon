@@ -57,7 +57,7 @@ class Repo : public QObject
 		Commit* commit(const QString &id) const;
 		CommitList commits(const QString &branch = QString());
 		QString diff(const Commit &a, const Commit &b) const;
-		QString head() const;
+		Ref* head() const;
 		RefList heads() const;
 		const QString& gitDir() const;
 		/** Stages files to be included in the next commit. */
