@@ -80,7 +80,11 @@ Commit* Repo::commit(const QString &id) const
 CommitList Repo::commits(const QString &branch)
 {
 	if (!m_commits.contains(branch)) {
-		m_commits[branch] = Commit::allReachableFrom(Head(branch, *this), *this);
+		if (branch.isEmpty()) {
+			m_commits[branch] = Commit::allReachableFrom(*head(), *this);
+		} else {
+			m_commits[branch] = Commit::allReachableFrom(Head(branch, *this), *this);
+		}
 	}
 
 	return m_commits[branch];
