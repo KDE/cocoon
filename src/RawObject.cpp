@@ -21,6 +21,8 @@
 #include "Commit.h"
 #include "ObjectStorage.h"
 
+#include <KDebug>
+
 #include <QRegExp>
 
 using namespace Git;
@@ -128,6 +130,7 @@ void RawObject::populateWith(const QByteArray &rawData)
 {
 	QString header = extractHeaderForm(rawData);
 	if (!isValidHeader(header)) {
+		kDebug() << "invalid header for object" << id();
 		return;
 	}
 
