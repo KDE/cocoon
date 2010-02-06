@@ -32,6 +32,7 @@ unit_tests(
 	HeadTest
 
 # Commit tests
+	CommitListingTest
 	CommitMergeDetectionTest
 
 # Status tests
