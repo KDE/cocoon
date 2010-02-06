@@ -165,8 +165,6 @@ CommitList Commit::allReachableFrom(const Ref &ref)
 	while (!fringe.isEmpty()) {
 		// find next commit in list
 		Commit *commit = latestIn(fringe);
-		// and remove it from the fringe
-		fringe.removeOne(commit);
 
 		// add parents to fringe
 		foreach (Commit *parent, commit->parents()) {
@@ -175,10 +173,10 @@ CommitList Commit::allReachableFrom(const Ref &ref)
 			}
 		}
 
-		// sort in this commit (it could have been reached from different paths)
-//		if (!commits.contains(commit)) {
-			commits << commit;
-//		}
+		// remove the commit from the fringe
+		fringe.removeOne(commit);
+		// and sort in it in
+		commits << commit;
 	}
 
 	return commits;
