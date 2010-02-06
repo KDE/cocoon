@@ -109,6 +109,8 @@ class Commit : public RawObject
 		 */
 		static void fillFromString(Commit *commit, const QString &raw);
 
+		static Commit* latestIn(const CommitList &commits);
+
 	private:
 		QString     m_author;
 		KDateTime   m_authoredAt;

@@ -157,22 +157,31 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 
 CommitList Commit::allReachableFrom(const Ref &ref)
 {
-	QMap<KDateTime, Commit*> commits;
+	CommitList commits;
 
 	CommitList fringe;
 	fringe << ref.commit();
 
 	while (!fringe.isEmpty()) {
-		Commit *commit = fringe.takeFirst();
+		// find next commit in list
+		Commit *commit = latestIn(fringe);
+		// and remove it from the fringe
+		fringe.removeOne(commit);
 
 		// add parents to fringe
-		fringe << commit->parents();
+		foreach (Commit *parent, commit->parents()) {
+			if (!fringe.contains(parent)) {
+				fringe << commit->parents();
+			}
+		}
 
-		// sort in this commit
-		commits.insert(commit->committedAt(), commit);
+		// sort in this commit (it could have been reached from different paths)
+//		if (!commits.contains(commit)) {
+			commits << commit;
+//		}
 	}
 
-	return commits.values();
+	return commits;
 }
 
 bool Commit::hasBranchedOn(const QStringList &refs) const
@@ -183,6 +192,18 @@ bool Commit::hasBranchedOn(const QStringList &refs) const
 bool Commit::isMerge() const
 {
 	return m_parents.size() > 1;
+}
+
+Commit* Commit::latestIn(const CommitList &commits)
+{
+	Commit *latest = commits.first();
+	foreach (Commit *commit, commits) {
+		if (commit->committedAt() > latest->committedAt()) {
+			latest = commit;
+		}
+	}
+
+	return latest;
 }
 
 const QString& Commit::message() const
