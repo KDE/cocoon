@@ -88,7 +88,7 @@ class Commit : public RawObject
 		const QString&     tree() const;
 
 	// static
-		static CommitList allReachableFrom(const Ref &branch, const Repo &repo);
+		static CommitList allReachableFrom(const Ref &branch);
 
 	private:
 	// static

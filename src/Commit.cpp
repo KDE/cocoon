@@ -155,7 +155,7 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 }
 
 
-CommitList Commit::allReachableFrom(const Ref &ref, const Repo &repo)
+CommitList Commit::allReachableFrom(const Ref &ref)
 {
 	QMap<KDateTime, Commit*> commits;
 
