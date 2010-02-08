@@ -21,8 +21,8 @@
 
 #include <QObject>
 
-#include "Repo.h"
-#include "Status.h"
+#include "Git/Repo.h"
+#include "Git/Status.h"
 
 #include <QtTest/QtTest>
 #include <qtest_kde.h>

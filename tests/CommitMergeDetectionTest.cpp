@@ -18,7 +18,7 @@
 
 #include "GitTestBase.h"
 
-#include "Commit.h"
+#include "Git/Commit.h"
 
 
 

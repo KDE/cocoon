@@ -18,8 +18,8 @@
 
 #include "GitTestBase.h"
 
-#include "LooseStorage.h"
-#include "RawObject.h"
+#include "Git/LooseStorage.h"
+#include "Git/RawObject.h"
 
 
 
