@@ -21,12 +21,9 @@
 
 #include <QObject>
 
-#include "Commit.h"
-#include "Head.h"
-#include "LooseStorage.h"
-#include "Status.h"
+#include "Repo_p.h"
 
-
+#include <QSharedDataPointer>
 
 class RepoCommitsCachingTest;
 class RepoHeadsCachingTest;
@@ -51,6 +48,7 @@ class Repo : public QObject
 
 	public:
 		explicit Repo(const QString &workingDir, QObject *parent = 0);
+		Repo(const Repo &other);
 		virtual ~Repo();
 
 		void commitIndex(const QString &message, const QStringList &options = QStringList());
@@ -58,7 +56,7 @@ class Repo : public QObject
 		CommitList commits(const QString &branch = QString());
 		QString diff(const Commit &a, const Commit &b) const;
 		Ref* head() const;
-		RefList heads() const;
+		RefList heads();
 		const QString& gitDir() const;
 		/** Stages files to be included in the next commit. */
 		void stageFiles(const QStringList &paths);
@@ -86,17 +84,7 @@ class Repo : public QObject
 		void indexChanged();
 
 	private:
-		class Private {
-		public:
-			Private(Repo &repo) : heads(), looseStorage(repo) {}
-			RefList heads;
-			LooseStorage looseStorage;
-		};
-		Private *d;
-		QHash<QString, CommitList> m_commits;
-		QString m_gitDir;
-		Status *m_status;
-		QString m_workingDir;
+		QSharedDataPointer<RepoPrivate> d;
 
 		friend class ::RepoCommitsCachingTest;
 		friend class ::RepoHeadsCachingTest;

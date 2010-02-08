@@ -19,6 +19,10 @@
 #include "Repo.h"
 
 #include "gitrunner.h"
+#include "Commit.h"
+#include "Head.h"
+#include "LooseStorage.h"
+#include "Status.h"
 
 #include <KMessageBox>
 
@@ -30,17 +34,20 @@ using namespace Git;
 
 Repo::Repo(const QString &workingDir, QObject *parent)
 	: QObject(parent)
-	, d(0)
-	, m_gitDir(workingDir + "/.git")
-	, m_status(0)
-	, m_workingDir(workingDir)
 {
-	d = new Repo::Private(*this);
+	d = new RepoPrivate(*this);
+	d->gitDir = workingDir + "/.git";
+	d->workingDir = workingDir;
+}
+
+Repo::Repo(const Repo &other)
+	: QObject(other.parent())
+	, d(other.d)
+{
 }
 
 Repo::~Repo()
 {
-	delete d;
 }
 
 
@@ -72,22 +79,22 @@ void Repo::commitIndex(const QString &message, const QStringList &options)
 
 Commit* Repo::commit(const QString &id) const
 {
-	RawObject *obj = d->looseStorage.rawObjectFor(id);
+	RawObject *obj = ((LooseStorage)d->looseStorage).rawObjectFor(id);
 
 	return obj->isCommit() ? static_cast<Commit*>(obj) : 0;
 }
 
 CommitList Repo::commits(const QString &branch)
 {
-	if (!m_commits.contains(branch)) {
+	if (!d->commits.contains(branch)) {
 		if (branch.isEmpty()) {
-			m_commits[branch] = Commit::allReachableFrom(*head());
+			d->commits[branch] = Commit::allReachableFrom(*head());
 		} else {
-			m_commits[branch] = Commit::allReachableFrom(Head(branch, *this));
+			d->commits[branch] = Commit::allReachableFrom(Head(branch, *this));
 		}
 	}
 
-	return m_commits[branch];
+	return d->commits[branch];
 }
 
 bool Repo::containsRepository(const QString &path)
@@ -112,7 +119,7 @@ QString Repo::diff(const Commit &a, const Commit &b) const
 
 const QString& Repo::gitDir() const
 {
-	return m_gitDir;
+	return d->gitDir;
 }
 
 void Repo::init(const QString &newRepoPath)
@@ -140,7 +147,7 @@ Ref* Repo::head() const
 	return new Head(name, *this);
 }
 
-RefList Repo::heads() const
+RefList Repo::heads()
 {
 	if (d->heads.isEmpty()) {
 		d->heads = Head(*this).all();
@@ -158,8 +165,8 @@ void Repo::reset()
 
 void Repo::resetCommits()
 {
-	if (m_commits.size() > 0) {
-		m_commits.clear();
+	if (d->commits.size() > 0) {
+		d->commits.clear();
 
 		emit indexChanged();
 	}
@@ -177,9 +184,9 @@ void Repo::resetHeads()
 void Repo::resetStatus()
 {
 	/** @todo make Status smarter to detect only changed files */
-	if (m_status) {
-		delete m_status;
-		m_status = 0;
+	if (d->status) {
+		delete d->status;
+		d->status = 0;
 
 		emit indexChanged();
 	}
@@ -198,11 +205,11 @@ void Repo::stageFiles(const QStringList &paths)
 
 Status* Repo::status()
 {
-	if (!m_status) {
-		m_status = new Status(this);
+	if (!d->status) {
+		d->status = new Status(this);
 	}
 
-	return m_status;
+	return d->status;
 }
 
 void Repo::unstageFiles(const QStringList &paths)
@@ -226,7 +233,7 @@ void Repo::unstageFiles(const QStringList &paths)
 
 const QString& Repo::workingDir() const
 {
-	return m_workingDir;
+	return d->workingDir;
 }
 
 #include "Repo.moc"
