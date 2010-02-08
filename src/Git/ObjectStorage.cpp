@@ -36,7 +36,7 @@ ObjectStorage::ObjectStorage(const ObjectStorage &other)
 
 
 
-Repo ObjectStorage::repo() const
+Repo& ObjectStorage::repo() const
 {
 	return d->repo;
 }

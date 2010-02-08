@@ -19,15 +19,20 @@
 #ifndef OBJECTSTORAGE_P_H
 #define OBJECTSTORAGE_P_H
 
-#include "Repo.h"
+#include <QSharedData>
 
 namespace Git {
 
+class Repo;
+
 class ObjectStoragePrivate : public QSharedData {
 	public:
-		ObjectStoragePrivate(const Git::Repo &r) : QSharedData(), repo(r) {};
+		ObjectStoragePrivate(Repo &r)
+			: QSharedData()
+			, repo(r)
+		{}
 
-		Git::Repo repo;
+		Repo &repo;
 };
 
 };

@@ -28,7 +28,6 @@
 namespace Git {
 
 class RawObject;
-class Repo;
 
 
 
@@ -40,7 +39,7 @@ class ObjectStorage : public QObject
 		explicit ObjectStorage(Repo &repo);
 		ObjectStorage(const ObjectStorage &other);
 
-		Repo repo() const;
+		Repo& repo() const;
 
 		virtual const QByteArray rawDataFor(const QString &id) = 0;
 		virtual const QByteArray rawHeaderFor(const QString &id) = 0;
