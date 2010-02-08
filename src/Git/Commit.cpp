@@ -21,6 +21,7 @@
 #include "gitrunner.h"
 
 #include "ObjectStorage.h"
+#include "Ref.h"
 #include "Repo.h"
 
 #include <KDebug>
