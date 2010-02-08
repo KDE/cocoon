@@ -18,7 +18,7 @@
 
 #include "LooseStorage.h"
 
-#include "ObjectStorage_p.h"
+#include "Repo.h"
 
 #include <KDebug>
 #include <KFilterBase>
