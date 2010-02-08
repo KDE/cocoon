@@ -19,7 +19,6 @@
 #include "GitTestBase.h"
 
 #include "Commit.h"
-#include "LooseStorage.h"
 
 
 
@@ -30,16 +29,12 @@ class CommitMergeDetectionTest : public GitTestBase
 	private slots:
 		void init(){
 			GitTestBase::init();
-			QProcess::execute("git", gitBasicOpts() << "commit" << "--allow-empty" << "-m" << "Empty inital commit.");
-			storage = new Git::LooseStorage(*repo);
 
-			QString id = repo->commits()[0]->id();
-			commit = new Git::Commit(id, *storage);
+			commit = new Git::Commit("0123456");
 		}
 
 		void cleanup() {
 			delete commit;
-			delete storage;
 			GitTestBase::cleanup();
 		}
 
@@ -48,7 +43,6 @@ class CommitMergeDetectionTest : public GitTestBase
 		void testMergeDetectionWithMoreParents();
 
 	private:
-		Git::LooseStorage *storage;
 		Git::Commit *commit;
 };
 
@@ -65,25 +59,25 @@ void CommitMergeDetectionTest::testMergeDetectionWithNoParents()
 
 void CommitMergeDetectionTest::testMergeDetectionWithOneParent()
 {
-	commit->m_parents << new Git::Commit("1234567", *storage);
-	QVERIFY(commit->m_parents.size() == 1);
+	commit->m_parents << new Git::Commit("1234567");
+	QCOMPARE(commit->m_parents.size(), 1);
 
 	QVERIFY(!commit->isMerge());
 }
 
 void CommitMergeDetectionTest::testMergeDetectionWithMoreParents()
 {
-	commit->m_parents << new Git::Commit("1234567", *storage);
-	commit->m_parents << new Git::Commit("2345678", *storage);
-	QVERIFY(commit->m_parents.size() == 2);
+	commit->m_parents << new Git::Commit("1234567");
+	commit->m_parents << new Git::Commit("2345678");
+	QCOMPARE(commit->m_parents.size(), 2);
 	QVERIFY(commit->isMerge());
 
-	commit->m_parents << new Git::Commit("3456789", *storage);
-	QVERIFY(commit->m_parents.size() == 3);
+	commit->m_parents << new Git::Commit("3456789");
+	QCOMPARE(commit->m_parents.size(), 3);
 	QVERIFY(commit->isMerge());
 
-	commit->m_parents << new Git::Commit("4567890", *storage);
-	QVERIFY(commit->m_parents.size() == 4);
+	commit->m_parents << new Git::Commit("4567890");
+	QCOMPARE(commit->m_parents.size(), 4);
 	QVERIFY(commit->isMerge());
 }
 
