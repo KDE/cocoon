@@ -16,42 +16,37 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef LOOSESTORAGE_H
-#define LOOSESTORAGE_H
+#ifndef LOOSESTORAGE_P_H
+#define LOOSESTORAGE_P_H
 
-#include "ObjectStorage.h"
+#include "RawObject.h"
 
-#include "LooseStorage_p.h"
-
-class LooseStorageTest;
+#include <QDir>
+#include <QHash>
 
 namespace Git {
 
 
+class LooseStoragePrivate : public QSharedData {
+public:
+	LooseStoragePrivate()
+		: QSharedData()
+		, objectsDir()
+		, rawData()
+		, rawObjects()
+	{}
+	LooseStoragePrivate(const LooseStoragePrivate &other)
+		: QSharedData(other)
+		, objectsDir(other.objectsDir)
+		, rawData(other.rawData)
+		, rawObjects(other.rawObjects)
+	{}
 
-class LooseStorage : public ObjectStorage
-{
-	Q_OBJECT
-
-	public:
-		explicit LooseStorage(Repo &repo);
-		LooseStorage(const LooseStorage &other);
-
-		QList<RawObject*> allObjects();
-		QList<RawObject*> allObjectsByType(const QString &type);
-		const QByteArray rawDataFor(const QString &id);
-		const QByteArray rawHeaderFor(const QString &id);
-		RawObject* rawObjectFor(const QString &id);
-
-	private:
-		const QString sourceFor(const QString &id);
-
-	private:
-		QSharedDataPointer<LooseStoragePrivate> d;
-
-	friend class ::LooseStorageTest;
+	QDir objectsDir;
+	QHash<QString, QByteArray> rawData;
+	QHash<QString, RawObject*> rawObjects;
 };
 
-}
+};
 
-#endif // LOOSESTORAGE_H
+#endif // LOOSESTORAGE_P_H

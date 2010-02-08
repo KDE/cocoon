@@ -16,15 +16,12 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Git/LooseStorage.h"
+#include "LooseStorage.h"
 
-#include "Git/RawObject.h"
-#include "Git/Repo.h"
-
-#include <KFilterBase>
-#include <KMimeType>
+#include "ObjectStorage_p.h"
 
 #include <KDebug>
+#include <KFilterBase>
 
 using namespace Git;
 
@@ -32,9 +29,16 @@ using namespace Git;
 
 LooseStorage::LooseStorage(Repo &repo)
 	: ObjectStorage(repo)
+	, d(new LooseStoragePrivate)
 {
-	m_objectsDir = QDir(repo.gitDir());
-	m_objectsDir.cd("objects");
+	d->objectsDir = QDir(repo.gitDir());
+	d->objectsDir.cd("objects");
+}
+
+LooseStorage::LooseStorage(const LooseStorage &other)
+	: ObjectStorage(other)
+	, d(other.d)
+{
 }
 
 
@@ -43,9 +47,9 @@ QList<RawObject*> LooseStorage::allObjects()
 {
 	QList<RawObject*> objects;
 
-	foreach (const QString &dir, m_objectsDir.entryList()) {
+	foreach (const QString &dir, d->objectsDir.entryList()) {
 		if (dir.contains(QRegExp("^[0-9a-fA-F]{2}$"))) {
-			foreach (const QString &file, QDir(m_objectsDir.path() + "/" + dir).entryList()) {
+			foreach (const QString &file, QDir(d->objectsDir.path() + "/" + dir).entryList()) {
 				if (file.contains(QRegExp("^[0-9a-fA-F]{38}$"))) {
 					kDebug() << "found object:" << dir + file;
 					objects << rawObjectFor(dir + file);
@@ -72,7 +76,7 @@ QList<RawObject*> LooseStorage::allObjectsByType(const QString &type)
 
 const QByteArray LooseStorage::rawDataFor(const QString &id)
 {
-	if (!m_rawData.contains(id) || RawObject::isOnlyHeader(m_rawData[id])) {
+	if (!d->rawData.contains(id) || RawObject::isOnlyHeader(d->rawData[id])) {
 		kDebug() << "Loading data for" << id;
 
 		QFile objectFile(sourceFor(id));
@@ -142,15 +146,15 @@ const QByteArray LooseStorage::rawDataFor(const QString &id)
 
 		delete filter;
 
-		m_rawData[id] = rawData;
+		d->rawData[id] = rawData;
 	}
 
-	return m_rawData[id];
+	return d->rawData[id];
 }
 
 const QByteArray LooseStorage::rawHeaderFor(const QString &id)
 {
-	if (!m_rawData.contains(id)) {
+	if (!d->rawData.contains(id)) {
 		kDebug() << "Loading header for" << id;
 
 		QFile objectFile(sourceFor(id));
@@ -212,26 +216,26 @@ const QByteArray LooseStorage::rawHeaderFor(const QString &id)
 		filter->terminate();
 		delete filter;
 
-		m_rawData[id] = RawObject::extractHeaderForm(rawData).toLatin1();
+		d->rawData[id] = RawObject::extractHeaderForm(rawData).toLatin1();
 	}
 
-	return m_rawData[id];
+	return d->rawData[id];
 }
 
 RawObject* LooseStorage::rawObjectFor(const QString &id)
 {
-	if (!m_rawObjects.contains(id)) {
+	if (!d->rawObjects.contains(id)) {
 		kDebug() << "load object:" << id;
-		m_rawObjects[id] = RawObject::newInstance(id, *this);
+		d->rawObjects[id] = RawObject::newInstance(id, *this);
 	}
 
-	return m_rawObjects[id];
+	return d->rawObjects[id];
 }
 
 const QString LooseStorage::sourceFor(const QString &id)
 {
 	Q_ASSERT(id.size() == 40);
-	return m_objectsDir.filePath("%1/%2").arg(id.left(2)).arg(id.mid(2));
+	return d->objectsDir.filePath("%1/%2").arg(id.left(2)).arg(id.mid(2));
 }
 
 
