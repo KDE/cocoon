@@ -16,31 +16,20 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ObjectStorage.h"
+#ifndef OBJECTSTORAGE_P_H
+#define OBJECTSTORAGE_P_H
 
-using namespace Git;
+#include "Repo.h"
 
+namespace Git {
 
+class ObjectStoragePrivate : public QSharedData {
+	public:
+		ObjectStoragePrivate(const Git::Repo &r) : QSharedData(), repo(r) {};
 
-ObjectStorage::ObjectStorage(Repo &repo)
-	: QObject((QObject*)&repo)
-{
-	d = new ObjectStoragePrivate(repo);
-}
+		Git::Repo repo;
+};
 
-ObjectStorage::ObjectStorage(const ObjectStorage &other)
-	: QObject(other.parent())
-	, d(other.d)
-{
-}
+};
 
-
-
-Repo ObjectStorage::repo() const
-{
-	return d->repo;
-}
-
-
-
-#include "ObjectStorage.moc"
+#endif // OBJECTSTORAGE_P_H

@@ -21,6 +21,10 @@
 
 #include <QObject>
 
+#include "ObjectStorage_p.h"
+
+#include <QSharedDataPointer>
+
 namespace Git {
 
 class RawObject;
@@ -34,15 +38,16 @@ class ObjectStorage : public QObject
 
 	public:
 		explicit ObjectStorage(Repo &repo);
+		ObjectStorage(const ObjectStorage &other);
 
-		Repo& repo() const;
+		Repo repo() const;
 
 		virtual const QByteArray rawDataFor(const QString &id) = 0;
 		virtual const QByteArray rawHeaderFor(const QString &id) = 0;
 		virtual RawObject* rawObjectFor(const QString &id) = 0;
 
 	private:
-		Repo &m_repo;
+		QSharedDataPointer<ObjectStoragePrivate> d;
 };
 
 }
