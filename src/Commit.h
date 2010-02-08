@@ -90,6 +90,9 @@ class Commit : public RawObject
 	// static
 		static CommitList allReachableFrom(const Ref &branch);
 
+	protected:
+		Commit(const QString& id, QObject *parent=0);
+
 	private:
 	// static
 		/**

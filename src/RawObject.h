@@ -59,6 +59,8 @@ class RawObject : public QObject
 		static RawObject* newInstance(const QString& id, ObjectStorage &storage);
 
 	protected:
+		RawObject(const QString &id, QObject *parent=0);
+
 		virtual void populateWith(const QByteArray &rawData);
 		ObjectStorage& storage() const;
 

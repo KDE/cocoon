@@ -29,6 +29,15 @@ using namespace Git;
 
 
 
+RawObject::RawObject(const QString &id, QObject *parent)
+	: QObject(parent)
+	, m_id(id)
+	, m_size(-1)
+	, m_storage(0)
+{
+	kDebug() << "creating object without storage:" << id;
+}
+
 RawObject::RawObject(const QString &id, ObjectStorage &storage)
 	: QObject((QObject*)&storage)
 	, m_id(id)

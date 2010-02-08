@@ -31,6 +31,11 @@ using namespace Git;
 
 
 
+Commit::Commit(const QString &id, QObject *parent)
+	: RawObject(id, parent)
+{
+}
+
 Commit::Commit(const QString& id, ObjectStorage &storage)
 	: RawObject(id, storage)
 {
