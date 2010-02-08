@@ -16,10 +16,10 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "LooseStorage.h"
+#include "Git/LooseStorage.h"
 
-#include "RawObject.h"
-#include "Repo.h"
+#include "Git/RawObject.h"
+#include "Git/Repo.h"
 
 #include <KFilterBase>
 #include <KMimeType>

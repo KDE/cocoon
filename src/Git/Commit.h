@@ -19,7 +19,7 @@
 #ifndef COMMIT_H
 #define COMMIT_H
 
-#include <RawObject.h>
+#include "RawObject.h"
 
 #include <KDateTime>
 
