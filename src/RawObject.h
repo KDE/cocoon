@@ -66,7 +66,7 @@ class RawObject : public QObject
 		QByteArray     m_data;
 		QString        m_id;
 		int            m_size;
-		ObjectStorage &m_storage;
+		ObjectStorage *m_storage;
 		QString        m_type;
 
 	friend class ::RawObjectTest;
