@@ -30,6 +30,7 @@ class CommitMergeDetectionTest : public GitTestBase
 	private slots:
 		void init(){
 			GitTestBase::init();
+			QProcess::execute("git", gitBasicOpts() << "commit" << "--allow-empty" << "-m" << "Empty inital commit.");
 			storage = new Git::LooseStorage(*repo);
 
 			QString id = repo->commits()[0]->id();
