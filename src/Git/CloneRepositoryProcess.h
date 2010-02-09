@@ -27,7 +27,7 @@ namespace Git {
 
 
 
-class CloneRepositoryProcess : public KProcess
+class KDE_EXPORT CloneRepositoryProcess : public KProcess
 {
 	Q_OBJECT
 
