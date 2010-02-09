@@ -19,7 +19,9 @@
 #include "HistoryWidget.h"
 #include "ui_HistoryWidget.h"
 
-#include "Git/Repo.h"
+#include <Git/Ref.h>
+#include <Git/Repo.h>
+
 #include "GitBranchesModel.h"
 #include "GitHistoryModel.h"
 
@@ -71,7 +73,7 @@ void HistoryWidget::setRepository(Git::Repo *repo)
 
 void HistoryWidget::showCurrentBranch()
 {
-	int currentBranchIndex = ui->branchComboBox->findText(m_repo->head());
+	int currentBranchIndex = ui->branchComboBox->findText(m_repo->head()->name());
 	ui->branchComboBox->setCurrentIndex(currentBranchIndex);
 }
 
