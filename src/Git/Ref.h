@@ -52,10 +52,12 @@ class KDE_EXPORT Ref : public QObject
 
 		RefList all() const;
 
+		Ref& operator=(const Ref &other);
+
 	protected:
-		Ref(const Ref &other);
 		explicit Ref(const QString &prefix, Repo &repo);
 		explicit Ref(const QString &name, const QString &prefix, Repo &repo);
+		Ref(const Ref &other);
 
 		virtual Ref* newInstance(const QString &name, Repo &repo) const = 0;
 		virtual void populate();

@@ -77,6 +77,13 @@ Commit* Ref::commit() const
 	return d->commit;
 }
 
+Ref& Ref::operator=(const Ref &other)
+{
+	d = other.d;
+
+	return *this;
+}
+
 void Ref::populate()
 {
 	QFile refFile(d->refsDir.filePath(d->name));
