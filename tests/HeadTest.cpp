@@ -18,6 +18,7 @@
 
 #include "GitTestBase.h"
 
+#include "Git/Commit.h"
 #include "Git/Head.h"
 
 
@@ -62,7 +63,7 @@ class HeadTest : public GitTestBase
 
 
 		void shouldHaveRefsDir() {
-			QCOMPARE(head->m_refsDir.path(), QString("%1/refs/heads").arg(repo->gitDir()));
+			QCOMPARE(head->d->refsDir.path(), QString("%1/refs/heads").arg(repo->gitDir()));
 		}
 
 		void shouldFindAllHeads() {

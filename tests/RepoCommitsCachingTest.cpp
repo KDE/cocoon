@@ -18,6 +18,8 @@
 
 #include "GitTestBase.h"
 
+#include "Git/Repo_p.h"
+
 
 
 class RepoCommitsCachingTest : public GitTestBase
