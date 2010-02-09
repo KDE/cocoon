@@ -18,13 +18,14 @@
 
 #include "GitBranchesModel.h"
 
-#include "Git/Repo.h"
+#include <Git/Ref.h>
+#include <Git/Repo.h>
 
 #include <KLocalizedString>
 
 
 
-GitBranchesModel::GitBranchesModel(const Git::Repo &repo, QObject *parent)
+GitBranchesModel::GitBranchesModel(Git::Repo &repo, QObject *parent)
 	: QAbstractTableModel(parent)
 	, m_repo(repo)
 {

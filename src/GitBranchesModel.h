@@ -35,7 +35,7 @@ class GitBranchesModel : public QAbstractTableModel
 	Q_OBJECT
 
 	public:
-		explicit GitBranchesModel(const Git::Repo &repo, QObject *parent = 0);
+		explicit GitBranchesModel(Git::Repo &repo, QObject *parent = 0);
 
 		int columnCount(const QModelIndex &parent = QModelIndex()) const;
 		const QString& columnName(int column) const;
@@ -51,7 +51,7 @@ class GitBranchesModel : public QAbstractTableModel
 
 	private:
 		QList<Git::Ref*> m_branches;
-		const Git::Repo &m_repo;
+		Git::Repo &m_repo;
 };
 
 #endif // GITBRANCHESMODEL_H
