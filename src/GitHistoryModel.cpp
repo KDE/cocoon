@@ -18,7 +18,8 @@
 
 #include "GitHistoryModel.h"
 
-#include "Git/Repo.h"
+#include <Git/Ref.h>
+#include <Git/Repo.h>
 
 #include <KIcon>
 #include <KLocalizedString>
@@ -29,7 +30,7 @@
 
 GitHistoryModel::GitHistoryModel(Git::Repo &repo, QObject *parent)
 	: QAbstractTableModel(parent)
-	, m_branch(repo.head())
+	, m_branch(repo.head()->name())
 	, m_commits(Git::CommitList())
 	, m_repo(repo)
 {
