@@ -28,12 +28,12 @@ namespace Git {
 
 class RepoPrivate : public QSharedData {
 public:
-	RepoPrivate(Repo &repo)
+	RepoPrivate()
 		: QSharedData()
 		, commits()
 		, gitDir()
 		, heads()
-		, looseStorage(repo)
+		, looseStorage(0)
 		, status(0)
 		, workingDir()
 	{}
@@ -50,7 +50,7 @@ public:
 	QHash<QString, CommitList> commits;
 	QString gitDir;
 	RefList heads;
-	LooseStorage looseStorage;
+	LooseStorage *looseStorage;
 	Status *status;
 	QString workingDir;
 };
