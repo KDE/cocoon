@@ -21,15 +21,23 @@
 
 #include <QObject>
 
-#include "Repo_p.h"
+#include <kdemacros.h>
 
 #include <QSharedDataPointer>
+#include <QStringList>
 
 class RepoCommitsCachingTest;
 class RepoHeadsCachingTest;
 class RepoStatusCachingTest;
 
 namespace Git {
+
+class Commit;
+typedef QList<Commit*>  CommitList;
+class Ref;
+typedef QList<Ref*>  RefList;
+class RepoPrivate;
+class Status;
 
 
 

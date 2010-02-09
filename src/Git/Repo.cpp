@@ -18,6 +18,8 @@
 
 #include "Repo.h"
 
+#include "Repo_p.h"
+
 #include "gitrunner.h"
 #include "Commit.h"
 #include "Head.h"
