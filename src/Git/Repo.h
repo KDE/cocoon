@@ -55,7 +55,7 @@ class KDE_EXPORT Repo : public QObject
 		Commit* commit(const QString &id) const;
 		CommitList commits(const QString &branch = QString());
 		QString diff(const Commit &a, const Commit &b) const;
-		Ref* head() const;
+		Ref* head(const QString &name = QString());
 		RefList heads();
 		const QString& gitDir() const;
 		/** Stages files to be included in the next commit. */
