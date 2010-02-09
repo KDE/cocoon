@@ -45,6 +45,7 @@ install( FILES
 	Head.h
 	RawObject.h
 	Ref.h
+	Ref_p.h
 	Repo.h
 	Status.h
 	DESTINATION ${INCLUDE_INSTALL_DIR}/Git COMPONENT Devel
