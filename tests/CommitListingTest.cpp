@@ -18,8 +18,9 @@
 
 #include "GitTestBase.h"
 
-#include "Git/LooseStorage.h"
 #include "Git/Commit.h"
+#include "Git/Head.h"
+#include "Git/LooseStorage.h"
 
 
 

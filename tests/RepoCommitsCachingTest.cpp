@@ -39,53 +39,53 @@ class RepoCommitsCachingTest : public GitTestBase
 
 
 		void testCommitsCachingSame() {
-			QVERIFY(repo->m_commits.isEmpty());
+			QVERIFY(repo->d->commits.isEmpty());
 
 			Git::CommitList commits1 = repo->commits();
 			QCOMPARE(commits1.size(), 4);
-			QCOMPARE(repo->m_commits.size(), 1);
-			QVERIFY(repo->m_commits.contains(QString()));
+			QCOMPARE(repo->d->commits.size(), 1);
+			QVERIFY(repo->d->commits.contains(QString()));
 
 			Git::CommitList commits2 = repo->commits();
 			QCOMPARE(commits2.size(), 4);
-			QCOMPARE(repo->m_commits.size(), 1);
-			QVERIFY(repo->m_commits.contains(QString()));
+			QCOMPARE(repo->d->commits.size(), 1);
+			QVERIFY(repo->d->commits.contains(QString()));
 
 			QCOMPARE(commits2, commits1);
 		}
 
 		void testCommitsCachingDifferent() {
-			QVERIFY(repo->m_commits.isEmpty());
+			QVERIFY(repo->d->commits.isEmpty());
 
 			Git::CommitList commits1 = repo->commits("master");
 			QCOMPARE(commits1.size(), 4);
-			QCOMPARE(repo->m_commits.size(), 1);
-			QVERIFY(repo->m_commits.contains("master"));
+			QCOMPARE(repo->d->commits.size(), 1);
+			QVERIFY(repo->d->commits.contains("master"));
 
 			Git::CommitList commits2 = repo->commits("branch");
 			QCOMPARE(commits2.size(), 2);
-			QCOMPARE(repo->m_commits.size(), 2);
-			QVERIFY(repo->m_commits.contains("branch"));
+			QCOMPARE(repo->d->commits.size(), 2);
+			QVERIFY(repo->d->commits.contains("branch"));
 		}
 
 		void testCommitsReset() {
-			QVERIFY(repo->m_commits.isEmpty());
+			QVERIFY(repo->d->commits.isEmpty());
 
 			repo->commits();
-			QVERIFY(!repo->m_commits.isEmpty());
+			QVERIFY(!repo->d->commits.isEmpty());
 
 			repo->resetCommits();
-			QVERIFY(repo->m_commits.isEmpty());
+			QVERIFY(repo->d->commits.isEmpty());
 		}
 
 		void testReset() {
-			QVERIFY(repo->m_commits.isEmpty());
+			QVERIFY(repo->d->commits.isEmpty());
 
 			repo->commits();
-			QVERIFY(!repo->m_commits.isEmpty());
+			QVERIFY(!repo->d->commits.isEmpty());
 
 			repo->reset();
-			QVERIFY(repo->m_commits.isEmpty());
+			QVERIFY(repo->d->commits.isEmpty());
 		}
 };
 

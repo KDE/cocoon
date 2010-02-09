@@ -36,37 +36,37 @@ class RepoStatusCachingTest : public GitTestBase
 
 
 		void testStatusCachingSame() {
-			QVERIFY(repo->m_commits.isEmpty());
+			QVERIFY(repo->d->commits.isEmpty());
 
 			Git::Status *status1 = repo->status();
 			QCOMPARE(status1->files().size(), 1);
-			QVERIFY(repo->m_status != 0);
+			QVERIFY(repo->d->status != 0);
 
 			Git::Status *status2 = repo->status();
 			QCOMPARE(status2->files().size(), 1);
-			QVERIFY(repo->m_status != 0);
+			QVERIFY(repo->d->status != 0);
 
 			QVERIFY(status1 == status2);
 		}
 
 		void testStatusReset() {
-			QVERIFY(repo->m_status == 0);
+			QVERIFY(repo->d->status == 0);
 
 			repo->status();
-			QVERIFY(repo->m_status != 0);
+			QVERIFY(repo->d->status != 0);
 
 			repo->resetStatus();
-			QVERIFY(repo->m_status == 0);
+			QVERIFY(repo->d->status == 0);
 		}
 
 		void testReset() {
-			QVERIFY(repo->m_status == 0);
+			QVERIFY(repo->d->status == 0);
 
 			repo->status();
-			QVERIFY(repo->m_status != 0);
+			QVERIFY(repo->d->status != 0);
 
 			repo->reset();
-			QVERIFY(repo->m_status == 0);
+			QVERIFY(repo->d->status == 0);
 		}
 };
 
