@@ -31,7 +31,7 @@ class Repo;
 
 
 
-class Head : public Ref
+class KDE_EXPORT Head : public Ref
 {
 	Q_OBJECT
 

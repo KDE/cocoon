@@ -42,7 +42,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(RepoOptions)
 
 
 
-class Repo : public QObject
+class KDE_EXPORT Repo : public QObject
 {
 	Q_OBJECT
 

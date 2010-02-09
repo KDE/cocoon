@@ -27,6 +27,7 @@
 
 
 
+class CommitListingTest;
 class CommitMergeDetectionTest;
 
 namespace Git {
@@ -39,7 +40,7 @@ typedef QList<Commit*>  CommitList;
 
 
 
-class Commit : public RawObject
+class KDE_EXPORT Commit : public RawObject
 {
 	Q_OBJECT
 
@@ -124,6 +125,7 @@ class Commit : public RawObject
 		QString     m_summary;
 		QString     m_tree;
 
+		friend class ::CommitListingTest;
 		friend class ::CommitMergeDetectionTest;
 };
 

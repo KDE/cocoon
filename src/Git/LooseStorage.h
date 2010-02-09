@@ -29,7 +29,7 @@ namespace Git {
 
 
 
-class LooseStorage : public ObjectStorage
+class KDE_EXPORT LooseStorage : public ObjectStorage
 {
 	Q_OBJECT
 

@@ -21,6 +21,8 @@
 
 #include <QObject>
 
+#include <kdemacros.h>
+
 
 
 class RawObjectTest;
@@ -33,7 +35,7 @@ class Repo;
 
 
 
-class RawObject : public QObject
+class KDE_EXPORT RawObject : public QObject
 {
 	Q_OBJECT
 

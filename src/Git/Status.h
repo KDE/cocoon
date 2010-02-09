@@ -21,6 +21,8 @@
 
 #include <QObject>
 
+#include <kdemacros.h>
+
 #include <QHash>
 #include <QList>
 
@@ -42,7 +44,7 @@ class Status;
 
 
 
-class StatusFile : public QObject
+class KDE_EXPORT StatusFile : public QObject
 {
 	Q_OBJECT
 
@@ -95,7 +97,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(StatusFile::Status)
 
 
 
-class Status : public QObject
+class KDE_EXPORT Status : public QObject
 {
 	Q_OBJECT
 

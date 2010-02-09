@@ -23,7 +23,7 @@ set(cocoon_git_LIB_SRCS
 )
 
 kde4_add_library(CocoonGit
-	STATIC ${cocoon_git_LIB_SRCS}
+	SHARED ${cocoon_git_LIB_SRCS}
 )
 
 target_link_libraries(CocoonGit

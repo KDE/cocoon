@@ -21,6 +21,8 @@
 
 #include <QObject>
 
+#include <kdemacros.h>
+
 #include <QDir>
 #include <QList>
 
@@ -38,7 +40,7 @@ typedef QList<Ref*> RefList;
 
 
 
-class Ref : public QObject
+class KDE_EXPORT Ref : public QObject
 {
 	Q_OBJECT
 

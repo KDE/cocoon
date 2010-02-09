@@ -23,6 +23,8 @@
 
 #include "ObjectStorage_p.h"
 
+#include <kdemacros.h>
+
 #include <QSharedDataPointer>
 
 namespace Git {
@@ -31,7 +33,7 @@ class RawObject;
 
 
 
-class ObjectStorage : public QObject
+class KDE_EXPORT ObjectStorage : public QObject
 {
 	Q_OBJECT
 
