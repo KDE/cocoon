@@ -19,8 +19,8 @@
 #include "CloneRepositoryDialog.h"
 #include "ui_CloneRepositoryDialog.h"
 
-#include "Git/CloneRepositoryProcess.h"
-#include "Git/Repo.h"
+#include <Git/CloneRepositoryProcess.h>
+#include <Git/Repo.h>
 
 #include <KApplication>
 #include <KIO/DeleteJob>
