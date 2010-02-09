@@ -19,7 +19,8 @@
 #include "CommitWidget.h"
 #include "ui_CommitWidget.h"
 
-#include "Git/Repo.h"
+#include <Git/Repo.h>
+#include <Git/Status.h>
 
 #include <KMessageBox>
 
