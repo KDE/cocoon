@@ -16,36 +16,38 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Head.h"
+#ifndef REF_P_H
+#define REF_P_H
 
 #include "Repo.h"
 
-using namespace Git;
+#include <QDir>
 
+namespace Git {
 
+class RefPrivate : public QSharedData {
+public:
+	RefPrivate()
+		: QSharedData()
+		, commit(0)
+		, name()
+		, refsDir()
+		, repo(0)
+	{}
+	RefPrivate(const RefPrivate &other)
+		: QSharedData()
+		, commit(other.commit)
+		, name(other.name)
+		, refsDir(other.refsDir)
+		, repo(other.repo)
+	{}
 
-Head::Head(const Head &other)
-	: Ref(other)
-{
-}
+	Commit *commit;
+	QString name;
+	QDir refsDir;
+	Repo *repo;
+};
 
-Head::Head(Repo &repo)
-	: Ref("heads", repo)
-{
-}
+};
 
-Head::Head(const QString &name, Repo &repo)
-	: Ref(name, "heads", repo)
-{
-}
-
-
-
-Ref* Head::newInstance(const QString &name, Repo &repo) const
-{
-	return new Head(name, repo);
-}
-
-
-
-#include "Head.moc"
+#endif // REF_P_H

@@ -21,10 +21,11 @@
 
 #include <QObject>
 
+#include "Ref_p.h"
+
 #include <kdemacros.h>
 
-#include <QDir>
-#include <QList>
+#include <QSharedDataPointer>
 
 
 
@@ -34,6 +35,7 @@ namespace Git {
 
 class Commit;
 class Ref;
+class RefPrivate;
 class Repo;
 
 typedef QList<Ref*> RefList;
@@ -51,17 +53,15 @@ class KDE_EXPORT Ref : public QObject
 		RefList all() const;
 
 	protected:
-		explicit Ref(const QString &prefix, const Repo &repo);
-		explicit Ref(const QString &name, const QString &prefix, const Repo &repo);
+		Ref(const Ref &other);
+		explicit Ref(const QString &prefix, Repo &repo);
+		explicit Ref(const QString &name, const QString &prefix, Repo &repo);
 
-		virtual Ref* newInstance(const QString &name, const Repo &repo) const = 0;
+		virtual Ref* newInstance(const QString &name, Repo &repo) const = 0;
 		virtual void populate();
 
 	private:
-		Commit *m_commit;
-		QString m_name;
-		QDir m_refsDir;
-		const Repo &m_repo;
+		QSharedDataPointer<RefPrivate> d;
 
 	friend class ::HeadTest;
 };

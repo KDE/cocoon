@@ -18,32 +18,37 @@
 
 #include "Ref.h"
 
-#include "Repo.h"
-
 #include <KDebug>
 
 using namespace Git;
 
 
 
-Ref::Ref(const QString &prefix, const Repo &repo)
-	: QObject((QObject*)&repo)
-	, m_repo(repo)
+Ref::Ref(const Ref &other)
+	: QObject(other.parent())
+	, d(other.d)
 {
-	m_refsDir = QDir(m_repo.gitDir());
-	m_refsDir.cd("refs");
-	m_refsDir.cd(prefix);
 }
 
-Ref::Ref(const QString &name, const QString &prefix, const Repo &repo)
-	: QObject((QObject*)&repo)
-	, m_commit()
-	, m_name(name)
-	, m_repo(repo)
+Ref::Ref(const QString &prefix, Repo &repo)
+	: QObject(&repo)
+	, d(new RefPrivate)
 {
-	m_refsDir = QDir(m_repo.gitDir());
-	m_refsDir.cd("refs");
-	m_refsDir.cd(prefix);
+	d->repo = &repo;
+	d->refsDir = QDir(d->repo->gitDir());
+	d->refsDir.cd("refs");
+	d->refsDir.cd(prefix);
+}
+
+Ref::Ref(const QString &name, const QString &prefix, Repo &repo)
+	: QObject(&repo)
+	, d(new RefPrivate)
+{
+	d->name = name;
+	d->repo = &repo;
+	d->refsDir = QDir(d->repo->gitDir());
+	d->refsDir.cd("refs");
+	d->refsDir.cd(prefix);
 
 	populate();
 }
@@ -54,9 +59,9 @@ RefList Ref::all() const
 {
 	RefList refs;
 
-	foreach (const QString &name, m_refsDir.entryList(QDir::Files)) {
+	foreach (const QString &name, d->refsDir.entryList(QDir::Files)) {
 		kDebug() << "ref found:" << name;
-		refs << newInstance(name, m_repo);
+		refs << newInstance(name, *d->repo);
 	}
 
 	return refs;
@@ -64,17 +69,17 @@ RefList Ref::all() const
 
 const QString& Ref::name() const
 {
-	return m_name;
+	return d->name;
 }
 
 Commit* Ref::commit() const
 {
-	return m_commit;
+	return d->commit;
 }
 
 void Ref::populate()
 {
-	QFile refFile(m_refsDir.filePath(m_name));
+	QFile refFile(d->refsDir.filePath(d->name));
 	refFile.open(QFile::ReadOnly);
 
 	QString commitId = refFile.readAll().trimmed();
@@ -82,7 +87,7 @@ void Ref::populate()
 	kDebug() << "reading head:" << refFile.fileName();
 	kDebug() << "head content:" << commitId;
 
-	m_commit = m_repo.commit(commitId);
+	d->commit = d->repo->commit(commitId);
 
 	refFile.close();
 }
