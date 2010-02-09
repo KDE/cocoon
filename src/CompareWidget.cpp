@@ -19,8 +19,10 @@
 #include "CompareWidget.h"
 #include "ui_CompareWidget.h"
 
-#include "Git/Commit.h"
-#include "Git/Repo.h"
+#include <Git/Commit.h>
+#include <Git/Ref.h>
+#include <Git/Repo.h>
+
 #include "GitBranchesModel.h"
 #include "GitHistoryModel.h"
 
@@ -64,12 +66,12 @@ void CompareWidget::loadModels()
 
 void CompareWidget::on_branchAComboBox_currentIndexChanged(const QString &branchName)
 {
-	m_historyAModel->setBranch(branchName);
+	m_historyAModel->setBranch(m_repo->head(branchName)->name());
 }
 
 void CompareWidget::on_branchBComboBox_currentIndexChanged(const QString &branchName)
 {
-	m_historyBModel->setBranch(branchName);
+	m_historyBModel->setBranch(m_repo->head(branchName)->name());
 }
 
 void CompareWidget::on_historyAView_clicked(const QModelIndex &index)
@@ -92,7 +94,7 @@ void CompareWidget::setRepository(Git::Repo *repo)
 
 void CompareWidget::showCurrentBranch()
 {
-	int currentBranchIndex = ui->branchAComboBox->findText(m_repo->head());
+	int currentBranchIndex = ui->branchAComboBox->findText(m_repo->head()->name());
 	ui->branchAComboBox->setCurrentIndex(currentBranchIndex);
 	ui->branchBComboBox->setCurrentIndex(currentBranchIndex);
 	updateComparison();
@@ -101,10 +103,10 @@ void CompareWidget::showCurrentBranch()
 void CompareWidget::updateComparison()
 {
 	if (!m_commitA) {
-		m_commitA = m_repo->commits(m_repo->head()).first();
+		m_commitA = m_repo->commits(m_repo->head()->name()).first();
 	}
 	if (!m_commitB) {
-		m_commitB = m_repo->commits(m_repo->head()).first();
+		m_commitB = m_repo->commits(m_repo->head()->name()).first();
 	}
 
 	ui->diffWidget->setDiff(m_repo->diff(*m_commitA, *m_commitB));
