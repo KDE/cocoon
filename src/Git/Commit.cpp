@@ -129,7 +129,12 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 
 	commit->m_tree = lines.takeFirst().mid(strlen("tree "), -1);
 	while (lines.first().startsWith("parent ")) {
-		commit->m_parents << commit->storage().repo().commit(lines.takeFirst().mid(strlen("parent "), -1));
+		QString parentId = lines.takeFirst().mid(strlen("parent "), -1);
+		if (commit->storage()) {
+			commit->m_parents << commit->storage()->repo().commit(parentId);
+		} else {
+			commit->m_parents << new Git::Commit(parentId, commit);
+		}
 	}
 	QRegExp actorRegExp("^(.*) (\\d+) ([+-]\\d+)$");
 
