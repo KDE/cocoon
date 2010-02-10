@@ -64,7 +64,7 @@ class KDE_EXPORT RawObject : public QObject
 		RawObject(const QString &id, QObject *parent=0);
 
 		virtual void populateWith(const QByteArray &rawData);
-		ObjectStorage& storage() const;
+		ObjectStorage* storage() const;
 
 	private:
 		QByteArray     m_data;

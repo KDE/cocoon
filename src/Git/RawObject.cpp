@@ -61,6 +61,7 @@ RawObject::RawObject(const QString &id, const QByteArray &rawData, ObjectStorage
 const QByteArray& RawObject::data()
 {
 	if (m_data.isNull()) {
+		Q_ASSERT(m_storage);
 		populateWith(m_storage->rawDataFor(m_id));
 	}
 
@@ -157,9 +158,9 @@ RawObject* RawObject::newInstance(const QString &id, ObjectStorage &storage)
 	return new RawObject(id, storage);
 }
 
-ObjectStorage& RawObject::storage() const
+ObjectStorage* RawObject::storage() const
 {
-	return *m_storage;
+	return m_storage;
 }
 
 const QString& RawObject::type() const
