@@ -127,7 +127,10 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 {
 	QStringList lines = raw.split("\n");
 
-	commit->m_tree = lines.takeFirst().mid(strlen("tree "), -1);
+	if (!lines.isEmpty() && lines.first().startsWith("tree ")) {
+		commit->m_tree = lines.takeFirst().mid(strlen("tree "), -1);
+	}
+
 	while (lines.first().startsWith("parent ")) {
 		QString parentId = lines.takeFirst().mid(strlen("parent "), -1);
 		if (commit->storage()) {
@@ -136,21 +139,33 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 			commit->m_parents << new Git::Commit(parentId, commit);
 		}
 	}
+
 	QRegExp actorRegExp("^(.*) (\\d+) ([+-]\\d+)$");
 
-	QString authorString = lines.takeFirst().mid(strlen("author "), -1);
-	actorRegExp.indexIn(authorString);
-	commit->m_author = actorRegExp.cap(1);
-	commit->m_authoredAt.setTime_t(actorRegExp.cap(2).toInt()); // UTC time
-	/** @todo add zone offset */
+	if (!lines.isEmpty() && lines.first().startsWith("author ")) {
+		QString authorString = lines.takeFirst().mid(strlen("author "), -1);
+		actorRegExp.indexIn(authorString);
+		commit->m_author = actorRegExp.cap(1);
+		if (!actorRegExp.cap(2).isEmpty()) {
+			commit->m_authoredAt.setTime_t(actorRegExp.cap(2).toInt()); // UTC time
+		}
+		/** @todo add zone offset */
+	}
 
-	QString committerString = lines.takeFirst().mid(strlen("committer "), -1);
-	actorRegExp.indexIn(committerString);
-	commit->m_committer = actorRegExp.cap(1);
-	commit->m_committedAt.setTime_t(actorRegExp.cap(2).toInt()); // UTC time
-	/** @todo add zone offset */
+	if (!lines.isEmpty() && lines.first().startsWith("committer ")) {
+		QString committerString = lines.takeFirst().mid(strlen("committer "), -1);
+		actorRegExp.indexIn(committerString);
+		commit->m_committer = actorRegExp.cap(1);
+		if (!actorRegExp.cap(2).isEmpty()) {
+			commit->m_committedAt.setTime_t(actorRegExp.cap(2).toInt()); // UTC time
+		}
+		/** @todo add zone offset */
+	}
 
-	lines.removeFirst();
+	while (!lines.isEmpty() && lines.first().isEmpty()) {
+		lines.removeFirst();
+	}
+
 	while (!lines.isEmpty() && lines.first().startsWith("    ")) {
 		if (commit->m_message.isNull()) {
 			commit->m_message = lines.takeFirst().mid(4, -1);
