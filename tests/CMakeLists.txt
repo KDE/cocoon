@@ -33,6 +33,8 @@ unit_tests(
 # Commit tests
 	CommitListingTest
 	CommitMergeDetectionTest
+	CommitPopulationTest
+	CommitPopulationErrorsTest
 
 # Status tests
 	StatusDeletedFileTest

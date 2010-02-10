@@ -29,6 +29,8 @@
 
 class CommitListingTest;
 class CommitMergeDetectionTest;
+class CommitPopulationTest;
+class CommitPopulationErrorsTest;
 
 namespace Git {
 
@@ -127,6 +129,8 @@ class KDE_EXPORT Commit : public RawObject
 
 		friend class ::CommitListingTest;
 		friend class ::CommitMergeDetectionTest;
+		friend class ::CommitPopulationTest;
+		friend class ::CommitPopulationErrorsTest;
 };
 
 }
