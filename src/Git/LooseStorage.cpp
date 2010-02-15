@@ -234,8 +234,18 @@ RawObject* LooseStorage::rawObjectFor(const QString &id)
 
 const QString LooseStorage::sourceFor(const QString &id)
 {
-	Q_ASSERT(id.size() == 40);
-	return d->objectsDir.filePath("%1/%2").arg(id.left(2)).arg(id.mid(2));
+	Q_ASSERT(id.size() >= 7);
+	QString idDirPath = id.left(2);
+	QString idFilePath = id.mid(2);
+
+	if (id.size() < 40) {
+		QStringList possibleFileIds = QDir(d->objectsDir.filePath(idDirPath)).entryList(QStringList() << QString("%1*").arg(idFilePath));
+		Q_ASSERT(possibleFileIds.size() == 1);
+		idFilePath = possibleFileIds.first();
+	}
+
+	QString sourcePath = d->objectsDir.filePath("%1/%2").arg(idDirPath).arg(idFilePath);
+	return sourcePath;
 }
 
 
