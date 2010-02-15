@@ -58,13 +58,13 @@ class LooseStorageTest : public GitTestBase
 		}
 
 		void shouldHaveCorrectObjectsDir() {
-			QCOMPARE(storage->d->objectsDir.path(), QString("%1/.git/objects").arg(repo->workingDir()));
+			QCOMPARE(storage->d->objectsDir.path(), QString("%1/objects").arg(repo->gitDir()));
 		}
 
 		void testSourceIsCorrect() {
 			QString sourcePath = storage->sourceFor("1234567890123456789012345678901234567890");
 
-			QCOMPARE(sourcePath, QString("%1/.git/objects/12/34567890123456789012345678901234567890").arg(repo->workingDir()));
+			QCOMPARE(sourcePath, QString("%1/objects/12/34567890123456789012345678901234567890").arg(repo->gitDir()));
 		}
 
 		void testInflationIsWorking() {
