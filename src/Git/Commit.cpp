@@ -143,22 +143,48 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 	QRegExp actorRegExp("^(.*) (\\d+) ([+-]\\d+)$");
 
 	if (!lines.isEmpty() && lines.first().startsWith("author ")) {
-		QString authorString = lines.takeFirst().mid(strlen("author "), -1);
-		actorRegExp.indexIn(authorString);
-		commit->m_author = actorRegExp.cap(1);
-		if (!actorRegExp.cap(2).isEmpty()) {
-			commit->m_authoredAt.setTime_t(actorRegExp.cap(2).toInt()); // UTC time
+		QString author;
+		KDateTime authoredAt;
+		QString zoneOffset;
+
+		foreach (const QString part, lines.takeFirst().mid(strlen("author "), -1).split(" ")) {
+			if (part.contains(QRegExp("^[+-]\\d{4}$"))) {
+				zoneOffset = part;
+			} else if (part.contains(QRegExp("^\\d{9,11}$"))) {
+				authoredAt.setTime_t(part.toLong()); // UTC time
+			} else {
+				if (!author.isEmpty()) {
+					author += " ";
+				}
+				author += part;
+			}
 		}
+
+		commit->m_author = author;
+		commit->m_authoredAt = authoredAt;
 		/** @todo add zone offset */
 	}
 
 	if (!lines.isEmpty() && lines.first().startsWith("committer ")) {
-		QString committerString = lines.takeFirst().mid(strlen("committer "), -1);
-		actorRegExp.indexIn(committerString);
-		commit->m_committer = actorRegExp.cap(1);
-		if (!actorRegExp.cap(2).isEmpty()) {
-			commit->m_committedAt.setTime_t(actorRegExp.cap(2).toInt()); // UTC time
+		QString committer;
+		KDateTime committedAt;
+		QString zoneOffset;
+
+		foreach (const QString part, lines.takeFirst().mid(strlen("committer "), -1).split(" ")) {
+			if (part.contains(QRegExp("^[+-]\\d{4}$"))) {
+				zoneOffset = part;
+			} else if (part.contains(QRegExp("^\\d{9,11}$"))) {
+				committedAt.setTime_t(part.toLong()); // UTC time
+			} else {
+				if (!committer.isEmpty()) {
+					committer += " ";
+				}
+				committer += part;
+			}
 		}
+
+		commit->m_committer = committer;
+		commit->m_committedAt = committedAt;
 		/** @todo add zone offset */
 	}
 
