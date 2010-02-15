@@ -61,19 +61,6 @@ QList<RawObject*> LooseStorage::allObjects()
 	return objects;
 }
 
-QList<RawObject*> LooseStorage::allObjectsByType(const QString &type)
-{
-	QList<RawObject*> objects;
-
-	foreach (RawObject *object, allObjects()) {
-		if (object->type() == type) {
-			objects << object;
-		}
-	}
-
-	return objects;
-}
-
 const QByteArray LooseStorage::inflate(QByteArray deflatedData)
 {
 	QByteArray inflatedData;

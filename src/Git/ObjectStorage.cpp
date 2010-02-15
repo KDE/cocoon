@@ -18,6 +18,8 @@
 
 #include "ObjectStorage.h"
 
+#include "RawObject.h"
+
 using namespace Git;
 
 
@@ -39,6 +41,19 @@ ObjectStorage::ObjectStorage(const ObjectStorage &other)
 Repo& ObjectStorage::repo() const
 {
 	return d->repo;
+}
+
+QList<RawObject*> ObjectStorage::allObjectsByType(const QString &type)
+{
+	QList<RawObject*> objects;
+
+	foreach (RawObject *object, allObjects()) {
+		if (object->type() == type) {
+			objects << object;
+		}
+	}
+
+	return objects;
 }
 
 
