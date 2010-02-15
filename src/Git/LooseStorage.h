@@ -43,7 +43,7 @@ class KDE_EXPORT LooseStorage : public ObjectStorage
 		const QByteArray rawHeaderFor(const QString &id);
 		RawObject* rawObjectFor(const QString &id);
 
-	private:
+	protected:
 		const QString sourceFor(const QString &id);
 
 	private:
