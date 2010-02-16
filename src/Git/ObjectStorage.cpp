@@ -20,6 +20,9 @@
 
 #include "RawObject.h"
 
+#include <KDebug>
+#include <KFilterBase>
+
 using namespace Git;
 
 
@@ -37,6 +40,61 @@ ObjectStorage::ObjectStorage(const ObjectStorage &other)
 }
 
 
+
+
+
+const QByteArray ObjectStorage::inflate(QByteArray deflatedData)
+{
+	QByteArray inflatedData;
+
+	// get gzip filter for inflation and set it to work on the object's file
+	KFilterBase *filter = KFilterBase::findFilterByMimeType("application/x-gzip");
+	Q_ASSERT(filter);
+
+	filter->init(QIODevice::ReadOnly);
+
+	// prepare for unpacking
+	KFilterBase::Result result = KFilterBase::Ok;
+	QByteArray outBuffer; // buffers the uncompressed result
+	const int bufferSize = 8*1024;
+
+	// reserve memory
+	outBuffer.resize(bufferSize);
+
+	// tell the filter about the data
+	filter->setInBuffer(deflatedData.data(), deflatedData.size());
+
+	while (result != KFilterBase::End || result != KFilterBase::Error) {
+		// tell the filter about the out buffer
+		filter->setOutBuffer(outBuffer.data(), outBuffer.size());
+
+		// no need for reading header
+
+		// do the deed
+		result = filter->uncompress();
+
+		if (result == KFilterBase::Error) {
+			kWarning() << "Error when uncompressing object";
+			break; // Error
+		}
+
+		int uncompressedBytes = outBuffer.size() - filter->outBufferAvailable();
+		kDebug() << "Uncompressed" << uncompressedBytes << "bytes";
+
+		// append the uncompressed data to the objects data
+		inflatedData.append(outBuffer.data(), uncompressedBytes);
+
+		if (result == KFilterBase::End) {
+			kDebug() << "Finished unpacking";
+			break; // Finished.
+		}
+	}
+
+	filter->terminate();
+	delete filter;
+
+	return inflatedData;
+}
 
 Repo& ObjectStorage::repo() const
 {
