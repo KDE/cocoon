@@ -50,6 +50,7 @@ unit_tests(
 	LooseStorageTest
 	LooseStorageCachingTest
 	LooseStorageListingTest
+	PackedStorageTest
 	RawObjectTest
 	RawObjectHeaderExtractionTest
 	RawObjectInstantiationTest
