@@ -59,17 +59,6 @@ const QStringList LooseStorage::allIds()
 	return ids;
 }
 
-QList<RawObject*> LooseStorage::allObjects()
-{
-	QList<RawObject*> objects;
-
-	foreach (const QString &id, allIds()) {
-		objects << rawObjectFor(id);
-	}
-
-	return objects;
-}
-
 const QByteArray LooseStorage::rawDataFor(const QString &id)
 {
 	if (!d->rawData.contains(id) || RawObject::isOnlyHeader(d->rawData[id])) {

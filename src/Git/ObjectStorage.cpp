@@ -23,6 +23,8 @@
 #include <KDebug>
 #include <KFilterBase>
 
+#include <QStringList>
+
 using namespace Git;
 
 
@@ -99,6 +101,17 @@ const QByteArray ObjectStorage::inflate(QByteArray deflatedData)
 Repo& ObjectStorage::repo() const
 {
 	return d->repo;
+}
+
+QList<RawObject*> ObjectStorage::allObjects()
+{
+	QList<RawObject*> objects;
+
+	foreach (const QString &id, allIds()) {
+		objects << rawObjectFor(id);
+	}
+
+	return objects;
 }
 
 QList<RawObject*> ObjectStorage::allObjectsByType(const QString &type)
