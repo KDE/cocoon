@@ -41,19 +41,30 @@ LooseStorage::LooseStorage(const LooseStorage &other)
 
 
 
-QList<RawObject*> LooseStorage::allObjects()
+const QStringList LooseStorage::allIds()
 {
-	QList<RawObject*> objects;
+	QStringList ids;
 
 	foreach (const QString &dir, d->objectsDir.entryList()) {
 		if (dir.contains(QRegExp("^[0-9a-fA-F]{2}$"))) {
 			foreach (const QString &file, QDir(d->objectsDir.path() + "/" + dir).entryList()) {
 				if (file.contains(QRegExp("^[0-9a-fA-F]{38}$"))) {
 					kDebug() << "found object:" << dir + file;
-					objects << rawObjectFor(dir + file);
+					ids << dir + file;
 				}
 			}
 		}
+	}
+
+	return ids;
+}
+
+QList<RawObject*> LooseStorage::allObjects()
+{
+	QList<RawObject*> objects;
+
+	foreach (const QString &id, allIds()) {
+		objects << rawObjectFor(id);
 	}
 
 	return objects;
