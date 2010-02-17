@@ -20,6 +20,7 @@
 
 #include "Commit.h"
 #include "ObjectStorage.h"
+#include "Repo.h"
 
 #include <KDebug>
 
@@ -32,23 +33,23 @@ using namespace Git;
 RawObject::RawObject(const QString &id, QObject *parent)
 	: QObject(parent)
 	, m_id(id)
-	, m_storage(0)
+	, m_repo(0)
 {
 	kDebug() << "creating object without storage:" << id;
 }
 
-RawObject::RawObject(const QString &id, ObjectStorage &storage)
-	: QObject((QObject*)&storage)
+RawObject::RawObject(const QString &id, Repo &repo)
+	: QObject((QObject*)&repo)
 	, m_id(id)
-	, m_storage(&storage)
+	, m_repo(&repo)
 {
-	populateWith(m_storage->rawHeaderFor(m_id));
+	populateWith(m_repo->storageFor(m_id)->rawHeaderFor(m_id));
 }
 
-RawObject::RawObject(const QString &id, const QByteArray &rawData, ObjectStorage &storage)
-	: QObject((QObject*)&storage)
+RawObject::RawObject(const QString &id, const QByteArray &rawData, Repo &repo)
+	: QObject((QObject*)&repo)
 	, m_id(id)
-	, m_storage(&storage)
+	, m_repo(&repo)
 {
 	populateWith(rawData);
 }
@@ -58,8 +59,8 @@ RawObject::RawObject(const QString &id, const QByteArray &rawData, ObjectStorage
 const QByteArray& RawObject::data()
 {
 	if (m_data.isNull()) {
-		Q_ASSERT(m_storage);
-		populateWith(m_storage->rawDataFor(m_id));
+		Q_ASSERT(m_repo);
+		populateWith(m_repo->storageFor(m_id)->rawDataFor(m_id));
 	}
 
 	return m_data;
@@ -133,6 +134,15 @@ bool RawObject::isValidHeader(const QString &possibleHeader)
 	return possibleHeader.contains(QRegExp("^(blob|commit|tag|tree) \\d+$"));
 }
 
+RawObject* RawObject::newInstance(const QString &id, Repo &repo)
+{
+	if (extractObjectTypeFrom(repo.storageFor(id)->rawHeaderFor(id)) == "commit") {
+		return new Commit(id, repo);
+	}
+
+	return new RawObject(id, repo);
+}
+
 void RawObject::populateWith(const QByteArray &rawData)
 {
 	QString header = extractHeaderForm(rawData);
@@ -145,18 +155,9 @@ void RawObject::populateWith(const QByteArray &rawData)
 	m_type = extractObjectTypeFrom(header);
 }
 
-RawObject* RawObject::newInstance(const QString &id, ObjectStorage &storage)
+Repo& RawObject::repo() const
 {
-	if (extractObjectTypeFrom(storage.rawHeaderFor(id)) == "commit") {
-		return new Commit(id, storage);
-	}
-
-	return new RawObject(id, storage);
-}
-
-ObjectStorage* RawObject::storage() const
-{
-	return m_storage;
+	return *m_repo;
 }
 
 const QString& RawObject::type() const
