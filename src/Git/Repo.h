@@ -34,6 +34,7 @@ namespace Git {
 
 class Commit;
 typedef QList<Commit*>  CommitList;
+class ObjectStorage;
 class Ref;
 typedef QList<Ref*>  RefList;
 class RepoPrivate;
@@ -69,6 +70,7 @@ class KDE_EXPORT Repo : public QObject
 		/** Stages files to be included in the next commit. */
 		void stageFiles(const QStringList &paths);
 		Status* status();
+		ObjectStorage* storageFor(const QString &id);
 		/** Unstages (staged) files to not be included in the next commit. */
 		void unstageFiles(const QStringList &paths);
 		const QString& workingDir() const;

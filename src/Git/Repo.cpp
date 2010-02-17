@@ -217,6 +217,11 @@ Status* Repo::status()
 	return d->status;
 }
 
+ObjectStorage* Repo::storageFor(const QString &id)
+{
+	return d->looseStorage;
+}
+
 void Repo::unstageFiles(const QStringList &paths)
 {
 	GitRunner runner;
