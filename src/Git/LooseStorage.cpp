@@ -70,6 +70,7 @@ const QByteArray LooseStorage::rawDataFor(const QString &id)
 		// open the object's file
 		bool ok = objectFile.open(QIODevice::ReadOnly);
 		Q_ASSERT(ok);
+		Q_UNUSED(ok);
 
 		d->rawData[id] = inflate(objectFile.readAll());
 	}
@@ -88,6 +89,7 @@ const QByteArray LooseStorage::rawHeaderFor(const QString &id)
 		// open the object's file
 		bool ok = objectFile.open(QIODevice::ReadOnly);
 		Q_ASSERT(ok);
+		Q_UNUSED(ok);
 
 		d->rawData[id] = RawObject::extractHeaderForm(inflate(objectFile.read(64))).toLatin1();
 	}
