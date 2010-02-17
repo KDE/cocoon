@@ -99,7 +99,7 @@ RawObject* LooseStorage::rawObjectFor(const QString &id)
 {
 	if (!d->rawObjects.contains(id)) {
 		kDebug() << "load object:" << id;
-		d->rawObjects[id] = RawObject::newInstance(id, *this);
+		d->rawObjects[id] = RawObject::newInstance(id, repo());
 	}
 
 	return d->rawObjects[id];

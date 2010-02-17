@@ -47,7 +47,7 @@ class RawObjectInstantiationTest : public GitTestBase
 			storage = new Git::LooseStorage(*repo);
 
 			QString id = storage->allObjectsByType("commit")[0]->id();
-			object = new Git::RawObject(id, *storage);
+			object = new Git::RawObject(id, *repo);
 		}
 
 		void cleanup() {
@@ -61,7 +61,7 @@ class RawObjectInstantiationTest : public GitTestBase
 		void shouldCreateInstanceOfCommit() {
 			QString id = storage->allObjectsByType("commit")[0]->id();
 
-			Git::RawObject *obj = Git::RawObject::newInstance(id, *storage);
+			Git::RawObject *obj = Git::RawObject::newInstance(id, *repo);
 
 			Q_ASSERT(obj);
 			QCOMPARE(obj->type(), QString("commit"));

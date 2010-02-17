@@ -47,7 +47,7 @@ class KDE_EXPORT Commit : public RawObject
 	Q_OBJECT
 
 	public:
-		Commit(const QString& id, ObjectStorage &storage);
+		Commit(const QString& id, Repo &repo);
 
 		const QString&     author() const;
 		const KDateTime&   authoredAt() const;

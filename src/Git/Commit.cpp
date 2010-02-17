@@ -37,8 +37,8 @@ Commit::Commit(const QString &id, QObject *parent)
 {
 }
 
-Commit::Commit(const QString& id, ObjectStorage &storage)
-	: RawObject(id, storage)
+Commit::Commit(const QString& id, Repo &repo)
+	: RawObject(id, repo)
 {
 	fillFromString(this, data());
 }
@@ -56,7 +56,7 @@ const KDateTime& Commit::authoredAt() const
 QStringList Commit::childrenOf(const Commit &commit, const QStringList &refs)
 {
 	GitRunner runner;
-	runner.setDirectory(commit.storage()->repo().workingDir());
+	runner.setDirectory(commit.repo().workingDir());
 
 	QStringList opts;
 	opts << "--children";
@@ -83,7 +83,7 @@ CommitList Commit::childrenOn(const QStringList &refs) const
 {
 	QStringList actualRefs(refs);
 	if (actualRefs.isEmpty()) {
-		actualRefs << storage()->repo().head()->name();
+		actualRefs << repo().head()->name();
 	}
 
 	// used for caching the result
@@ -96,7 +96,7 @@ CommitList Commit::childrenOn(const QStringList &refs) const
 
 		CommitList children;
 		foreach (const QString &id, childrenIds) {
-			children << new Commit(id, storage());
+			children << new Commit(id, repo());
 		}
 
 		childrenByRefs[refKey] = children;
@@ -118,7 +118,7 @@ const KDateTime& Commit::committedAt() const
 const QString Commit::diff() const
 {
 	GitRunner runner;
-	runner.setDirectory(storage()->repo().workingDir());
+	runner.setDirectory(repo().workingDir());
 	runner.commitDiff(id());
 	return runner.getResult();
 }
@@ -133,11 +133,7 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 
 	while (lines.first().startsWith("parent ")) {
 		QString parentId = lines.takeFirst().mid(strlen("parent "), -1);
-		if (commit->storage()) {
-			commit->m_parents << commit->storage()->repo().commit(parentId);
-		} else {
-			commit->m_parents << new Git::Commit(parentId, commit);
-		}
+		commit->m_parents << commit->repo().commit(parentId);
 	}
 
 	QRegExp actorRegExp("^(.*) (\\d+) ([+-]\\d+)$");

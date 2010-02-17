@@ -48,7 +48,7 @@ class RawObjectTest : public GitTestBase
 			storage = new Git::LooseStorage(*repo);
 
 			QString id = repo->commits()[0]->id();
-			object = new Git::RawObject(id, *storage);
+			object = new Git::RawObject(id, *repo);
 		}
 
 		void cleanup() {
@@ -60,17 +60,12 @@ class RawObjectTest : public GitTestBase
 
 
 		void shouldOnlyPopulateHeaderOnCreation() {
-			QVERIFY( object->m_size != -1);
 			QVERIFY(!object->m_type.isNull());
 			QVERIFY( object->m_data.isNull());
 		}
 
 		void shouldPopulateFullyOnDataAccess() {
 			QVERIFY(!object->data().isNull());
-		}
-
-		void dataShouldHaveTheSizeWrittenInTheHeader() {
-			QCOMPARE(object->data().size(), object->m_size);
 		}
 };
 

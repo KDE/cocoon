@@ -261,7 +261,7 @@ RawObject* PackedStorage::rawObjectFor(const QString &id)
 {
 	if (!d->rawObjects.contains(id)) {
 		kDebug() << "loading object" << id << "from" << d->name;
-		d->rawObjects[id] = RawObject::newInstance(id, *this);
+		d->rawObjects[id] = RawObject::newInstance(id, repo());
 	}
 
 	return d->rawObjects[id];
