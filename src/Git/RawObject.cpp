@@ -32,7 +32,6 @@ using namespace Git;
 RawObject::RawObject(const QString &id, QObject *parent)
 	: QObject(parent)
 	, m_id(id)
-	, m_size(-1)
 	, m_storage(0)
 {
 	kDebug() << "creating object without storage:" << id;
@@ -41,7 +40,6 @@ RawObject::RawObject(const QString &id, QObject *parent)
 RawObject::RawObject(const QString &id, ObjectStorage &storage)
 	: QObject((QObject*)&storage)
 	, m_id(id)
-	, m_size(-1)
 	, m_storage(&storage)
 {
 	populateWith(m_storage->rawHeaderFor(m_id));
@@ -50,7 +48,6 @@ RawObject::RawObject(const QString &id, ObjectStorage &storage)
 RawObject::RawObject(const QString &id, const QByteArray &rawData, ObjectStorage &storage)
 	: QObject((QObject*)&storage)
 	, m_id(id)
-	,m_size(-1)
 	, m_storage(&storage)
 {
 	populateWith(rawData);
@@ -145,7 +142,6 @@ void RawObject::populateWith(const QByteArray &rawData)
 	}
 
 	m_data = rawData.mid(header.size()+1);
-	m_size = extractObjectSizeFrom(header);
 	m_type = extractObjectTypeFrom(header);
 }
 
