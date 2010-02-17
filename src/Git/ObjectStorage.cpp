@@ -45,6 +45,11 @@ ObjectStorage::ObjectStorage(const ObjectStorage &other)
 
 
 
+bool ObjectStorage::contains(const QString &id)
+{
+	return allIds().contains(id);
+}
+
 const QByteArray ObjectStorage::inflate(QByteArray deflatedData)
 {
 	QByteArray inflatedData;
