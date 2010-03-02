@@ -43,6 +43,7 @@ class KDE_EXPORT ObjectStorage : public QObject
 
 		Repo& repo() const;
 
+		const QString actualIdFor(const QString &shortId);
 		virtual const QStringList allIds() = 0;
 		virtual QList<RawObject*> allObjects();
 		virtual QList<RawObject*> allObjectsByType(const QString &type);

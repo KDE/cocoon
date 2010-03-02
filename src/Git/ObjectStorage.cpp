@@ -45,6 +45,21 @@ ObjectStorage::ObjectStorage(const ObjectStorage &other)
 
 
 
+const QString ObjectStorage::actualIdFor(const QString &shortId)
+{
+	if(shortId.size() < 40) {
+		foreach(const QString &idFromList, allIds()) {
+			if (idFromList.startsWith(shortId)) {
+				return idFromList;
+			}
+		}
+	}
+
+	Q_ASSERT(shortId.size() == 40);
+
+	return shortId;
+}
+
 bool ObjectStorage::contains(const QString &id)
 {
 	return allIds().contains(id);
