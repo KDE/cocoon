@@ -35,19 +35,7 @@ class LooseStorageListingTest : public GitTestBase
 
 			storage = 0;
 
-			QProcess::execute("git", gitBasicOpts() << "commit" << "--allow-empty" << "-m" << "Init empty repo.");
-
-			QProcess::execute("git", gitBasicOpts() << "checkout" << "-b" << "branch");
-			writeToFile("branch_file.txt", "foo\n");
-			QProcess::execute("git", gitBasicOpts() << "add" << "branch_file.txt");
-			QProcess::execute("git", gitBasicOpts() << "commit" << "-m" << "Added branch_file.");
-
-			QProcess::execute("git", gitBasicOpts() << "checkout" << "master");
-			writeToFile("master_file.txt", "foo\nbar\baz");
-			QProcess::execute("git", gitBasicOpts() << "add" << "master_file.txt");
-			QProcess::execute("git", gitBasicOpts() << "commit" << "-m" << "Added master_file.");
-
-			QProcess::execute("git", gitBasicOpts() << "merge" << "branch");
+			cloneFrom("LooseStorageListingTestRepo");
 		}
 
 		void init() {
