@@ -30,7 +30,7 @@ class RepoHeadsCachingTest : public GitTestBase
 		void initTestCase() {
 			GitTestBase::initTestCase();
 
-			QProcess::execute("git", gitBasicOpts() << "commit" << "--allow-empty" << "-m" << "Empty inital commit.");
+			cloneFrom("RepoHeadsCachingTestRepo");
 		}
 
 
