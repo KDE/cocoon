@@ -62,7 +62,7 @@ const QString ObjectStorage::actualIdFor(const QString &shortId)
 
 bool ObjectStorage::contains(const QString &id)
 {
-	return allIds().contains(id);
+	return allIds().contains(actualIdFor(id));
 }
 
 const QByteArray ObjectStorage::inflate(QByteArray deflatedData)
