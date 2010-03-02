@@ -65,9 +65,7 @@ void StatusNewFileTest::initTestCase()
 	GitTestBase::initTestCase();
 	status = 0;
 
-	QProcess::execute("git", gitBasicOpts() << "commit" << "--allow-empty" << "-m" << "Empty inital commit.");
-
-	writeToFile("untracked.txt", "foo\nbar\nbaz\n");
+	cloneFrom("StatusNewFileTestRepo");
 }
 
 
