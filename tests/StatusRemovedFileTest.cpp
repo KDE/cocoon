@@ -65,14 +65,7 @@ void StatusRemovedFileTest::initTestCase()
 	GitTestBase::initTestCase();
 	status = 0;
 
-	QProcess::execute("git", gitBasicOpts() << "commit" << "--allow-empty" << "-m" << "Empty inital commit.");
-
-	writeToFile("removed.txt", "foo\nbar\nbaz\n");
-
-	QProcess::execute("git", gitBasicOpts() << "add" << "removed.txt");
-	QProcess::execute("git", gitBasicOpts() << "commit" << "-m" << "Added file to be deleted.");
-
-	QProcess::execute("git", gitBasicOpts() << "rm" << "removed.txt"); // also stages the changes
+	cloneFrom("StatusRemovedFileTestRepo");
 }
 
 
@@ -185,7 +178,7 @@ void StatusRemovedFileTest::testRemovedFileDiffIsCorrect()
 		assert_equal("--- a/removed.txt\n+++ /dev/null\n@@ -1,3 +0,0 @@\n-foo\n-bar\n-baz\n", d.diff)
 */
 	QVERIFY(!diff.isNull());
-	QVERIFY("--- a/removed.txt\n+++ /dev/null\n@@ -1,3 +0,0 @@\n-foo\n-bar\n-baz\n");
+	QVERIFY(diff == "--- a/removed.txt\n+++ /dev/null\n@@ -1,3 +0,0 @@\n-foo\n-bar\n-baz\n");
 }
 
 #include "StatusRemovedFileTest.moc"
