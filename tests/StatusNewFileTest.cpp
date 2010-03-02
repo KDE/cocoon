@@ -87,7 +87,7 @@ void StatusNewFileTest::testNewFile_diffIndex()
 
 void StatusNewFileTest::testNewFile_diffUntrackedFiles()
 {
-	QVERIFY(status->untrackedFiles().size() == 1);
+	QCOMPARE(status->untrackedFiles().size(), 1);
 
 	Git::StatusFile *file = status->untrackedFiles()[0];
 	QVERIFY(file->idIndex().isNull());
@@ -95,8 +95,8 @@ void StatusNewFileTest::testNewFile_diffUntrackedFiles()
 	QVERIFY(!file->isStaged());
 	QVERIFY(file->modeIndex().isNull());
 	QVERIFY(file->modeRepo().isNull());
-	QVERIFY(file->path() == "untracked.txt");
-	QVERIFY(file->status() == Git::StatusFile::Untracked);
+	QCOMPARE(file->path(), QString("untracked.txt"));
+	QCOMPARE(file->status(), Git::StatusFile::Untracked);
 }
 
 void StatusNewFileTest::testNewFile_diffIgnoredFiles()
@@ -108,18 +108,18 @@ void StatusNewFileTest::testNewFile_diffIgnoredFiles()
 
 void StatusNewFileTest::testNewFileHasStatus()
 {
-	QVERIFY(status->files().size() == 1);
+	QCOMPARE(status->files().size(), 1);
 	QVERIFY(!status->forFile("untracked.txt").isEmpty());
 }
 
 void StatusNewFileTest::testNewTestFileIsUntracked()
 {
 	QList<Git::StatusFile*> fileStatus = status->forFile("untracked.txt");
-	QVERIFY(fileStatus.size() == 1);
+	QCOMPARE(fileStatus.size(), 1);
 
 	Git::StatusFile *file = fileStatus[0];
 	QVERIFY(file->isUntracked());
-	QVERIFY(file->status() == Git::StatusFile::Untracked);
+	QCOMPARE(file->status(), Git::StatusFile::Untracked);
 }
 
 void StatusNewFileTest::testNewFileIsUnstaged()
@@ -137,14 +137,14 @@ void StatusNewFileTest::testNewFileDefaultBlobIsFileBlob()
 {
 	Git::StatusFile *file = status->forFile("untracked.txt")[0];
 
-	QVERIFY(file->blob() == file->blob("file"));
+	QCOMPARE(file->blob(), file->blob("file"));
 }
 
 void StatusNewFileTest::testNewFileFileBlobIsCorrect()
 {
 	Git::StatusFile *file = status->forFile("untracked.txt")[0];
 
-	QVERIFY(file->blob("file") == "foo\nbar\nbaz\n");
+	QCOMPARE(file->blob("file"), QByteArray("foo\nbar\nbaz\n", 12));
 }
 
 void StatusNewFileTest::testNewFileIndexBlobIsEmpty()
