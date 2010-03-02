@@ -239,16 +239,18 @@ quint32 PackedStorage::patchDeltaHeaderSize(const QByteArray &delta, quint32 &po
 
 const QByteArray PackedStorage::rawDataFor(const QString &id)
 {
-	if (!d->rawData.contains(id) || RawObject::isOnlyHeader(d->rawData[id])) {
-		kDebug() << "loading data" << id << "from" << d->name;
+	QString actualId = actualIdFor(id);
 
-		int offset = dataOffsetFor(id);
+	if (!d->rawData.contains(actualId) || RawObject::isOnlyHeader(d->rawData[actualId])) {
+		kDebug() << "loading data" << actualId << "from" << d->name;
+
+		int offset = dataOffsetFor(actualId);
 		Q_ASSERT(offset >= 0);
 
-		d->rawData[id] = unpackObjectFrom(offset);
+		d->rawData[actualId] = unpackObjectFrom(offset);
 	}
 
-	return d->rawData[id];
+	return d->rawData[actualId];
 }
 
 const QByteArray PackedStorage::rawHeaderFor(const QString &id)
@@ -259,12 +261,14 @@ const QByteArray PackedStorage::rawHeaderFor(const QString &id)
 
 RawObject* PackedStorage::rawObjectFor(const QString &id)
 {
-	if (!d->rawObjects.contains(id)) {
-		kDebug() << "loading object" << id << "from" << d->name;
-		d->rawObjects[id] = RawObject::newInstance(id, repo());
+	const QString actualId = actualIdFor(id);
+
+	if (!d->rawObjects.contains(actualId)) {
+		kDebug() << "loading object" << actualId << "from" << d->name;
+		d->rawObjects[actualId] = RawObject::newInstance(actualId, repo());
 	}
 
-	return d->rawObjects[id];
+	return d->rawObjects[actualId];
 }
 
 const QByteArray PackedStorage::readIndexFrom(int offset, int length)
