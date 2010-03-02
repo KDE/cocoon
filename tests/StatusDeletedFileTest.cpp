@@ -65,14 +65,7 @@ void StatusDeletedFileTest::initTestCase()
 	GitTestBase::initTestCase();
 	status = 0;
 
-	QProcess::execute("git", gitBasicOpts() << "commit" << "--allow-empty" << "-m" << "Empty inital commit.");
-
-	writeToFile("deleted.txt", "foo\nbar\nbaz\n");
-
-	QProcess::execute("git", gitBasicOpts() << "add" << "deleted.txt");
-	QProcess::execute("git", gitBasicOpts() << "commit" << "-m" << "Added file to be deleted.");
-
-	deleteFile("deleted.txt");
+	cloneFrom("StatusDeletedFileTestRepo");
 }
 
 
@@ -82,13 +75,13 @@ void StatusDeletedFileTest::testDeletedFile_lsFiles()
 	QVERIFY(status->lsFiles().size() == 1);
 
 	Git::StatusFile *file = status->lsFiles()[0];
-	QVERIFY(file->idIndex() == "86e041dad66a19b9518b83b78865015f62662f75");
+	QCOMPARE(file->idIndex(), QString("86e041dad66a19b9518b83b78865015f62662f75"));
 	QVERIFY(file->idRepo().isNull());
 	QVERIFY(!file->isStaged());
-	QVERIFY(file->modeIndex() == "100644");
+	QCOMPARE(file->modeIndex(), QString("100644"));
 	QVERIFY(file->modeRepo().isNull());
-	QVERIFY(file->path() == "deleted.txt");
-	QVERIFY(file->status() == Git::StatusFile::None);
+	QCOMPARE(file->path(), QString("deleted.txt"));
+	QCOMPARE(file->status(), Git::StatusFile::None);
 }
 
 void StatusDeletedFileTest::testDeletedFile_diffFiles()
@@ -97,12 +90,12 @@ void StatusDeletedFileTest::testDeletedFile_diffFiles()
 
 	Git::StatusFile *file = status->diffFiles()[0];
 	QVERIFY(file->idIndex().isNull());
-	QVERIFY(file->idRepo() == "86e041dad66a19b9518b83b78865015f62662f75");
+	QCOMPARE(file->idRepo(), QString("86e041dad66a19b9518b83b78865015f62662f75"));
 	QVERIFY(!file->isStaged());
 	QVERIFY(file->modeIndex().isNull());
-	QVERIFY(file->modeRepo() == "100644");
-	QVERIFY(file->path() == "deleted.txt");
-	QVERIFY(file->status() == Git::StatusFile::Deleted);
+	QCOMPARE(file->modeRepo(), QString("100644"));
+	QCOMPARE(file->path(), QString("deleted.txt"));
+	QCOMPARE(file->status(), Git::StatusFile::Deleted);
 }
 
 void StatusDeletedFileTest::testDeletedFile_diffIndex()
@@ -111,12 +104,12 @@ void StatusDeletedFileTest::testDeletedFile_diffIndex()
 
 	Git::StatusFile *file = status->diffIndex("HEAD")[0];
 	QVERIFY(file->idIndex().isNull());
-	QVERIFY(file->idRepo() == "86e041dad66a19b9518b83b78865015f62662f75");
+	QCOMPARE(file->idRepo(), QString("86e041dad66a19b9518b83b78865015f62662f75"));
 	QVERIFY(!file->isStaged());
 	QVERIFY(file->modeIndex().isNull());
-	QVERIFY(file->modeRepo() == "100644");
-	QVERIFY(file->path() == "deleted.txt");
-	QVERIFY(file->status() == Git::StatusFile::Deleted);
+	QCOMPARE(file->modeRepo(), QString("100644"));
+	QCOMPARE(file->path(), QString("deleted.txt"));
+	QCOMPARE(file->status(), Git::StatusFile::Deleted);
 }
 
 void StatusDeletedFileTest::testDeletedFile_diffUntrackedFiles()
@@ -133,18 +126,18 @@ void StatusDeletedFileTest::testDeletedFile_diffIgnoredFiles()
 
 void StatusDeletedFileTest::testDeletedFileHasStatus()
 {
-	QVERIFY(status->files().size() == 1);
+	QCOMPARE(status->files().size(), 1);
 	QVERIFY(!status->forFile("deleted.txt").isEmpty());
 }
 
 void StatusDeletedFileTest::testDeletedFileIsDeleted()
 {
 	QList<Git::StatusFile*> fileStatus = status->forFile("deleted.txt");
-	QVERIFY(fileStatus.size() == 1);
+	QCOMPARE(fileStatus.size(), 1);
 
 	Git::StatusFile *file = fileStatus[0];
 	QVERIFY(file->isDeleted());
-	QVERIFY(file->status() == Git::StatusFile::Deleted);
+	QCOMPARE(file->status(), Git::StatusFile::Deleted);
 }
 
 void StatusDeletedFileTest::testDeletedFileIsUnstaged()
@@ -162,7 +155,7 @@ void StatusDeletedFileTest::testDeletedFileDefaultBlobIsFileBlob()
 {
 	Git::StatusFile *file = status->forFile("deleted.txt")[0];
 
-	QVERIFY(file->blob() == file->blob("file"));
+	QCOMPARE(file->blob(), file->blob("file"));
 }
 
 void StatusDeletedFileTest::testDeletedFileFileBlobIsEmpty()
@@ -176,14 +169,14 @@ void StatusDeletedFileTest::testDeletedFileIndexBlobIsCorrect()
 {
 	Git::StatusFile *file = status->forFile("deleted.txt")[0];
 
-	QVERIFY(file->blob("repo") == "foo\nbar\nbaz\n");
+	QCOMPARE(file->blob("repo"), QByteArray("foo\nbar\nbaz\n", 12));
 }
 
 void StatusDeletedFileTest::testDeletedFileRepoBlobIsCorrect()
 {
 	Git::StatusFile *file = status->forFile("deleted.txt")[0];
 
-	QVERIFY(file->blob("repo") == "foo\nbar\nbaz\n");
+	QCOMPARE(file->blob("repo"), QByteArray("foo\nbar\nbaz\n", 12));
 }
 
 void StatusDeletedFileTest::testDeletedFileDiffIsCorrect()
@@ -203,7 +196,7 @@ void StatusDeletedFileTest::testDeletedFileDiffIsCorrect()
 		assert_equal("--- a/deleted.txt\n+++ /dev/null\n@@ -1,3 +0,0 @@\n-foo\n-bar\n-baz\n", d.diff)
 */
 	QVERIFY(!diff.isNull());
-	QVERIFY("--- a/deleted.txt\n+++ /dev/null\n@@ -1,3 +0,0 @@\n-foo\n-bar\n-baz\n");
+	QCOMPARE(diff, QString("--- a/deleted.txt\n+++ /dev/null\n@@ -1,3 +0,0 @@\n-foo\n-bar\n-baz\n"));
 }
 
 #include "StatusDeletedFileTest.moc"
