@@ -36,12 +36,7 @@ class CommitListingTest : public GitTestBase
 
 			storage = 0;
 
-			QProcess::execute("git", gitBasicOpts() << "commit" << "--allow-empty" << "-m" << "Empty inital commit.");
-			QProcess::execute("git", gitBasicOpts() << "checkout" << "-b" << "branch");
-			QProcess::execute("git", gitBasicOpts() << "commit" << "--allow-empty" << "-m" << "Empty branch commit.");
-			QProcess::execute("git", gitBasicOpts() << "checkout" << "master");
-			QProcess::execute("git", gitBasicOpts() << "commit" << "--allow-empty" << "-m" << "Empty master commit.");
-			QProcess::execute("git", gitBasicOpts() << "merge" << "branch");
+			cloneFrom("CommitListingTestRepo");
 		}
 
 		void init() {
