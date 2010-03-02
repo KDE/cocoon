@@ -33,6 +33,7 @@ void GitTestBase::cloneFrom(const QString &name)
 	qDebug() << "To test directory " << workingDir;
 
 	QProcess::execute("cp", QStringList() << "-r" << clonedFrom << workingDir);
+	QProcess::execute("mv", QStringList() << QDir(workingDir).filePath("dot_git") << QDir(workingDir).filePath(".git"));
 }
 
 void GitTestBase::deleteFile(const QString &file)
