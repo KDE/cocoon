@@ -30,9 +30,7 @@ class RepoStatusCachingTest : public GitTestBase
 		void initTestCase() {
 			GitTestBase::initTestCase();
 
-			QProcess::execute("git", gitBasicOpts() << "commit" << "--allow-empty" << "-m" << "Empty inital commit.");
-
-			writeToFile("some_file.txt", "foo\nbar\baz");
+			cloneFrom("RepoStatusCachingTestRepo");
 		}
 
 
