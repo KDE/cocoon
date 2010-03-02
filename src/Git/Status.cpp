@@ -433,6 +433,9 @@ const QString StatusFile::diff() const
 		diff = runner.getResult();
 	}
 
+	// for now just remove the header
+	diff = diff.mid(diff.indexOf("---"));
+
 	return diff;
 }
 
