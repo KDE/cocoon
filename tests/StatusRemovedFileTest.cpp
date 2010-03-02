@@ -82,16 +82,16 @@ void StatusRemovedFileTest::testRemovedFile_diffFiles()
 
 void StatusRemovedFileTest::testRemovedFile_diffIndex()
 {
-	QVERIFY(status->diffIndex("HEAD").size() == 1);
+	QCOMPARE(status->diffIndex("HEAD").size(), 1);
 
 	Git::StatusFile *file = status->diffIndex("HEAD")[0];
 	QVERIFY(file->idIndex().isNull());
-	QVERIFY(file->idRepo() == "86e041dad66a19b9518b83b78865015f62662f75");
+	QCOMPARE(file->idRepo(), QString("86e041dad66a19b9518b83b78865015f62662f75"));
 	QVERIFY(!file->isStaged());
 	QVERIFY(file->modeIndex().isNull());
-	QVERIFY(file->modeRepo() == "100644");
-	QVERIFY(file->path() == "removed.txt");
-	QVERIFY(file->status() == Git::StatusFile::Deleted);
+	QCOMPARE(file->modeRepo(), QString("100644"));
+	QCOMPARE(file->path(), QString("removed.txt"));
+	QCOMPARE(file->status(), Git::StatusFile::Deleted);
 }
 
 void StatusRemovedFileTest::testRemovedFile_diffUntrackedFiles()
@@ -108,18 +108,18 @@ void StatusRemovedFileTest::testRemovedFile_diffIgnoredFiles()
 
 void StatusRemovedFileTest::testRemovedFileHasStatus()
 {
-	QVERIFY(status->files().size() == 1);
+	QCOMPARE(status->files().size(), 1);
 	QVERIFY(!status->forFile("removed.txt").isEmpty());
 }
 
 void StatusRemovedFileTest::testRemovedFileIsDeleted()
 {
 	QList<Git::StatusFile*> fileStatus = status->forFile("removed.txt");
-	QVERIFY(fileStatus.size() == 1);
+	QCOMPARE(fileStatus.size(), 1);
 
 	Git::StatusFile *file = fileStatus[0];
 	QVERIFY(file->isDeleted());
-	QVERIFY(file->status() == Git::StatusFile::Deleted);
+	QCOMPARE(file->status(), Git::StatusFile::Deleted);
 }
 
 void StatusRemovedFileTest::testRemovedFileIsStaged()
@@ -137,7 +137,7 @@ void StatusRemovedFileTest::testRemovedFileDefaultBlobIsIndexBlob()
 {
 	Git::StatusFile *file = status->forFile("removed.txt")[0];
 
-	QVERIFY(file->blob() == file->blob("index"));
+	QCOMPARE(file->blob(), file->blob("index"));
 }
 
 void StatusRemovedFileTest::testRemovedFileFileBlobIsEmpty()
@@ -158,7 +158,7 @@ void StatusRemovedFileTest::testRemovedFileRepoBlobIsCorrect()
 {
 	Git::StatusFile *file = status->forFile("removed.txt")[0];
 
-	QVERIFY(file->blob("repo") == "foo\nbar\nbaz\n");
+	QCOMPARE(file->blob("repo"), QByteArray("foo\nbar\nbaz\n", 12));
 }
 
 void StatusRemovedFileTest::testRemovedFileDiffIsCorrect()
@@ -178,7 +178,7 @@ void StatusRemovedFileTest::testRemovedFileDiffIsCorrect()
 		assert_equal("--- a/removed.txt\n+++ /dev/null\n@@ -1,3 +0,0 @@\n-foo\n-bar\n-baz\n", d.diff)
 */
 	QVERIFY(!diff.isNull());
-	QVERIFY(diff == "--- a/removed.txt\n+++ /dev/null\n@@ -1,3 +0,0 @@\n-foo\n-bar\n-baz\n");
+	QCOMPARE(diff, QString("--- a/removed.txt\n+++ /dev/null\n@@ -1,3 +0,0 @@\n-foo\n-bar\n-baz\n"));
 }
 
 #include "StatusRemovedFileTest.moc"
