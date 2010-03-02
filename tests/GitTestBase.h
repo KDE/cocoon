@@ -36,6 +36,7 @@ class GitTestBase : public QObject
 	Q_OBJECT
 
 	protected:
+		void cloneFrom(const QString &name);
 		void deleteFile(const QString &file);
 		QStringList gitBasicOpts();
 		QString pathTo(const QString &file);
@@ -49,6 +50,7 @@ class GitTestBase : public QObject
 
 	protected:
 		Git::Repo *repo;
+		QString clonedFrom;
 		QString workingDir;
 };
 
