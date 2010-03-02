@@ -29,31 +29,17 @@ class RawObjectTypeTest : public GitTestBase
 	Q_OBJECT
 
 	Git::RawObject *object;
-	Git::LooseStorage *storage;
 
 	private slots:
-		void initTestCase() {
-			GitTestBase::initTestCase();
-
-			storage = 0;
-
-			writeToFile("some_file.txt", "foo\nbar\baz");
-
-			QProcess::execute("git", gitBasicOpts() << "add" << "some_file.txt");
-			QProcess::execute("git", gitBasicOpts() << "commit" << "-m" << "Added a file.");
-		}
-
 		void init() {
 			GitTestBase::init();
-			storage = new Git::LooseStorage(*repo);
 
-			QString id = repo->commits()[0]->id();
-			object = new Git::RawObject(id, *repo);
+			object = new Git::RawObject("1234567", 0);
 		}
 
 		void cleanup() {
 			delete object;
-			delete storage;
+
 			GitTestBase::cleanup();
 		}
 
