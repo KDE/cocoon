@@ -64,13 +64,7 @@ void StatusModifiedAddedFileTest::initTestCase()
 	GitTestBase::initTestCase();
 	status = 0;
 
-	QProcess::execute("git", gitBasicOpts() << "commit" << "--allow-empty" << "-m" << "Empty inital commit.");
-
-	writeToFile("modified_added.txt", "foo");
-
-	QProcess::execute("git", gitBasicOpts() << "add" << "modified_added.txt");
-
-	writeToFile("modified_added.txt", "foo\nbar\n");
+	cloneFrom("StatusModifiedAddedFileTestRepo");
 }
 
 
@@ -199,7 +193,7 @@ void StatusModifiedAddedFileTest::testUnstagedRemodifiedFileDiffIsCorrect()
 		assert_equal("--- a/modified_added.txt\n+++ b/modified_added.txt\n@@ -1 +1,2 @@\n-foo\n\\ No newline at end of file\n+foo\n+bar\n", d.diff)
 */
 	QVERIFY(!diff.isNull());
-	QVERIFY("--- a/modified_added.txt\n+++ b/modified_added.txt\n@@ -1 +1,2 @@\n-foo\n\\ No newline at end of file\n+foo\n+bar\n");
+	QVERIFY(diff == "--- a/modified_added.txt\n+++ b/modified_added.txt\n@@ -1 +1,2 @@\n-foo\n\\ No newline at end of file\n+foo\n+bar\n");
 }
 
 void StatusModifiedAddedFileTest::testStagedRemodifiedFileDiffIsCorrect()
@@ -219,7 +213,7 @@ void StatusModifiedAddedFileTest::testStagedRemodifiedFileDiffIsCorrect()
 		assert_equal("--- /dev/null\n+++ b/modified_added.txt\n@@ -0,0 +1 @@\n+foo\n\\ No newline at end of file\n", d.diff)
 */
 	QVERIFY(!diff.isNull());
-	QVERIFY("--- /dev/null\n+++ b/modified_added.txt\n@@ -0,0 +1 @@\n+foo\n\\ No newline at end of file\n");
+	QVERIFY(diff == "--- /dev/null\n+++ b/modified_added.txt\n@@ -0,0 +1 @@\n+foo\n\\ No newline at end of file\n");
 }
 
 #include "StatusModifiedAddedFileTest.moc"
