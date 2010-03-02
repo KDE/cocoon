@@ -35,10 +35,7 @@ class LooseStorageTest : public GitTestBase
 
 			storage = 0;
 
-			writeToFile("some_file.txt", "foo\nbar\baz");
-
-			QProcess::execute("git", gitBasicOpts() << "add" << "some_file.txt");
-			QProcess::execute("git", gitBasicOpts() << "commit" << "-m" << "Added a file.");
+			cloneFrom("LooseStorageTestRepo");
 		}
 
 		void init() {
@@ -62,20 +59,20 @@ class LooseStorageTest : public GitTestBase
 		}
 
 		void testSourceForFullIdIsCorrect() {
-			QString sourcePath = storage->sourceFor("1234567890123456789012345678901234567890");
+			QString sourcePath = storage->sourceFor("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8");
 
-			QCOMPARE(sourcePath, QString("%1/objects/12/34567890123456789012345678901234567890").arg(repo->gitDir()));
+			QCOMPARE(sourcePath, QString("%1/objects/c5/6dada2cf4f67b35ed0019ddd4651a8c8a337e8").arg(repo->gitDir()));
 		}
 
 		void testSourceForShortIdIsCorrect() {
-			QString id = repo->commits()[0]->id();
+			QString id = "c56dada2cf4f67b35ed0019ddd4651a8c8a337e8";
 			QString sourcePath = storage->sourceFor(id.left(7));
 
 			QCOMPARE(sourcePath, QString("%1/objects/%2/%3").arg(repo->gitDir()).arg(id.left(2)).arg(id.mid(2)));
 		}
 
 		void testInflationIsWorking() {
-			QString id = repo->commits()[0]->id();
+			QString id = "c56dada2cf4f67b35ed0019ddd4651a8c8a337e8";
 			QByteArray rawData = storage->rawDataFor(id);
 
 			QCOMPARE(QTest::toHexRepresentation(rawData, 16), QTest::toHexRepresentation("commit 212\0tree ", 16));
