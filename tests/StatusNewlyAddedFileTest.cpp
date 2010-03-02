@@ -79,16 +79,16 @@ void StatusNewlyAddedFileTest::initTestCase()
 
 void StatusNewlyAddedFileTest::testNewlyAddedFile_lsFiles()
 {
-	QVERIFY(status->lsFiles().size() == 1);
+	QCOMPARE(status->lsFiles().size(), 1);
 
 	Git::StatusFile *file = status->lsFiles()[0];
-	QVERIFY(file->idIndex() == "86e041dad66a19b9518b83b78865015f62662f75");
+	QCOMPARE(file->idIndex(), QString("86e041dad66a19b9518b83b78865015f62662f75"));
 	QVERIFY(file->idRepo().isNull());
 	QVERIFY(!file->isStaged());
-	QVERIFY(file->modeIndex() == "100644");
+	QCOMPARE(file->modeIndex(), QString("100644"));
 	QVERIFY(file->modeRepo().isNull());
-	QVERIFY(file->path() == "newly_added.txt");
-	QVERIFY(file->status() == Git::StatusFile::None);
+	QCOMPARE(file->path(), QString("newly_added.txt"));
+	QCOMPARE(file->status(), Git::StatusFile::None);
 }
 
 void StatusNewlyAddedFileTest::testNewlyAddedFile_diffFiles()
@@ -98,16 +98,16 @@ void StatusNewlyAddedFileTest::testNewlyAddedFile_diffFiles()
 
 void StatusNewlyAddedFileTest::testNewlyAddedFile_diffIndex()
 {
-	QVERIFY(status->diffIndex("HEAD").size() == 1);
+	QCOMPARE(status->diffIndex("HEAD").size(), 1);
 
 	Git::StatusFile *file = status->diffIndex("HEAD")[0];
-	QVERIFY(file->idIndex() == "86e041dad66a19b9518b83b78865015f62662f75");
+	QCOMPARE(file->idIndex(), QString("86e041dad66a19b9518b83b78865015f62662f75"));
 	QVERIFY(file->idRepo().isNull());
 	QVERIFY(!file->isStaged());
-	QVERIFY(file->modeIndex() == "100644");
+	QCOMPARE(file->modeIndex(), QString("100644"));
 	QVERIFY(file->modeRepo().isNull());
-	QVERIFY(file->path() == "newly_added.txt");
-	QVERIFY(file->status() == Git::StatusFile::Added);
+	QCOMPARE(file->path(), QString("newly_added.txt"));
+	QCOMPARE(file->status(), Git::StatusFile::Added);
 }
 
 void StatusNewlyAddedFileTest::testNewlyAddedFile_diffUntrackedFiles()
@@ -124,18 +124,18 @@ void StatusNewlyAddedFileTest::testNewlyAddedFile_diffIgnoredFiles()
 
 void StatusNewlyAddedFileTest::testNewlyAddedFileHasStatus()
 {
-	QVERIFY(status->files().size() == 1);
+	QCOMPARE(status->files().size(), 1);
 	QVERIFY(!status->forFile("newly_added.txt").isEmpty());
 }
 
 void StatusNewlyAddedFileTest::testNewlyAddedFileIsAdded()
 {
 	QList<Git::StatusFile*> fileStatus = status->forFile("newly_added.txt");
-	QVERIFY(fileStatus.size() == 1);
+	QCOMPARE(fileStatus.size(), 1);
 
 	Git::StatusFile *file = fileStatus[0];
 	QVERIFY(file->isAdded());
-	QVERIFY(file->status() == Git::StatusFile::Added);
+	QCOMPARE(file->status(), Git::StatusFile::Added);
 }
 
 void StatusNewlyAddedFileTest::testNewlyAddedFileIsStaged()
@@ -153,21 +153,21 @@ void StatusNewlyAddedFileTest::testNewlyAddedFileDefaultBlobIsIndexBlob()
 {
 	Git::StatusFile *file = status->forFile("newly_added.txt")[0];
 
-	QVERIFY(file->blob() == file->blob("index"));
+	QCOMPARE(file->blob(), file->blob("index"));
 }
 
 void StatusNewlyAddedFileTest::testNewlyAddedFileFileBlobIsCorrect()
 {
 	Git::StatusFile *file = status->forFile("newly_added.txt")[0];
 
-	QVERIFY(file->blob("file") == "foo\nbar\nbaz\n");
+	QCOMPARE(file->blob("file"), QByteArray("foo\nbar\nbaz\n", 12));
 }
 
 void StatusNewlyAddedFileTest::testNewlyAddedFileIndexBlobIsCorrect()
 {
 	Git::StatusFile *file = status->forFile("newly_added.txt")[0];
 
-	QVERIFY(file->blob("index") == "foo\nbar\nbaz\n");
+	QCOMPARE(file->blob("index"), QByteArray("foo\nbar\nbaz\n", 12));
 }
 
 void StatusNewlyAddedFileTest::testNewlyAddedFileRepoBlobIsEmpty()
