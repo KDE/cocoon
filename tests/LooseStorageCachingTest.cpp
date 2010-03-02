@@ -35,10 +35,7 @@ class LooseStorageCachingTest : public GitTestBase
 
 			storage = 0;
 
-			writeToFile("some_file.txt", "foo\nbar\baz");
-
-			QProcess::execute("git", gitBasicOpts() << "add" << "some_file.txt");
-			QProcess::execute("git", gitBasicOpts() << "commit" << "-m" << "Added a file.");
+			cloneFrom("LooseStorageCachingTestRepo");
 		}
 
 		void init() {
