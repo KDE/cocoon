@@ -36,17 +36,14 @@ class RawObjectInstantiationTest : public GitTestBase
 
 			storage = 0;
 
-			writeToFile("some_file.txt", "foo\nbar\baz");
-
-			QProcess::execute("git", gitBasicOpts() << "add" << "some_file.txt");
-			QProcess::execute("git", gitBasicOpts() << "commit" << "-m" << "Added a file.");
+			cloneFrom("RawObjectInstantiationTestRepo");
 		}
 
 		void init() {
 			GitTestBase::init();
 			storage = new Git::LooseStorage(*repo);
 
-			QString id = storage->allObjectsByType("commit")[0]->id();
+			QString id = "c56dada2cf4f67b35ed0019ddd4651a8c8a337e8";
 			object = new Git::RawObject(id, *repo);
 		}
 
@@ -59,7 +56,7 @@ class RawObjectInstantiationTest : public GitTestBase
 
 
 		void shouldCreateInstanceOfCommit() {
-			QString id = storage->allObjectsByType("commit")[0]->id();
+			QString id = "c56dada2cf4f67b35ed0019ddd4651a8c8a337e8";
 
 			Git::RawObject *obj = Git::RawObject::newInstance(id, *repo);
 
