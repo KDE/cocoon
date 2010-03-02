@@ -74,13 +74,13 @@ void StatusModifiedAddedFileTest::testRemodifiedFile_lsFiles()
 	QVERIFY(status->lsFiles().size() == 1);
 
 	Git::StatusFile *file = status->lsFiles()[0];
-	QVERIFY(file->idIndex() == "19102815663d23f8b75a47e7a01965dcdc96468c");
+	QCOMPARE(file->idIndex(), QString("19102815663d23f8b75a47e7a01965dcdc96468c"));
 	QVERIFY(file->idRepo().isNull());
 	QVERIFY(!file->isStaged());
-	QVERIFY(file->modeIndex() == "100644");
+	QCOMPARE(file->modeIndex(), QString("100644"));
 	QVERIFY(file->modeRepo().isNull());
-	QVERIFY(file->path() == "modified_added.txt");
-	QVERIFY(file->status() == Git::StatusFile::None);
+	QCOMPARE(file->path(), QString("modified_added.txt"));
+	QCOMPARE(file->status(), Git::StatusFile::None);
 }
 
 void StatusModifiedAddedFileTest::testRemodifiedFile_diffFiles()
@@ -89,12 +89,12 @@ void StatusModifiedAddedFileTest::testRemodifiedFile_diffFiles()
 
 	Git::StatusFile *file = status->diffFiles()[0];
 	QVERIFY(file->idIndex().isNull());
-	QVERIFY(file->idRepo() == "19102815663d23f8b75a47e7a01965dcdc96468c");
+	QCOMPARE(file->idRepo(), QString("19102815663d23f8b75a47e7a01965dcdc96468c"));
 	QVERIFY(!file->isStaged());
-	QVERIFY(file->modeIndex() == "100644");
-	QVERIFY(file->modeRepo() == "100644");
-	QVERIFY(file->path() == "modified_added.txt");
-	QVERIFY(file->status() == Git::StatusFile::Modified);
+	QCOMPARE(file->modeIndex(), QString("100644"));
+	QCOMPARE(file->modeRepo(), QString("100644"));
+	QCOMPARE(file->path(), QString("modified_added.txt"));
+	QCOMPARE(file->status(), Git::StatusFile::Modified);
 }
 
 void StatusModifiedAddedFileTest::testRemodifiedFile_diffIndex()
@@ -105,10 +105,10 @@ void StatusModifiedAddedFileTest::testRemodifiedFile_diffIndex()
 	QVERIFY(file->idIndex().isNull());
 	QVERIFY(file->idRepo().isNull());
 	QVERIFY(!file->isStaged());
-	QVERIFY(file->modeIndex() == "100644");
+	QCOMPARE(file->modeIndex(), QString("100644"));
 	QVERIFY(file->modeRepo().isNull());
-	QVERIFY(file->path() == "modified_added.txt");
-	QVERIFY(file->status() == Git::StatusFile::Added);
+	QCOMPARE(file->path(), QString("modified_added.txt"));
+	QCOMPARE(file->status(), Git::StatusFile::Added);
 }
 
 void StatusModifiedAddedFileTest::testRemodifiedFile_diffUntrackedFiles()
@@ -125,24 +125,24 @@ void StatusModifiedAddedFileTest::testRemodifiedFile_diffIgnoredFiles()
 
 void StatusModifiedAddedFileTest::testRemodifiedFileHasStatus()
 {
-	QVERIFY(status->files().size() == 2);
+	QCOMPARE(status->files().size(), 2);
 	QVERIFY(!status->forFile("modified_added.txt").isEmpty());
 }
 
 void StatusModifiedAddedFileTest::testRemodifiedFileIsModified()
 {
 	QList<Git::StatusFile*> fileStatus = status->forFile("modified_added.txt");
-	QVERIFY(fileStatus.size() == 2);
+	QCOMPARE(fileStatus.size(), 2);
 
 	Git::StatusFile *file = 0;
 
 	file = fileStatus[0];
 	QVERIFY(file->isModified());
-	QVERIFY(file->status() == Git::StatusFile::Modified);
+	QCOMPARE(file->status(), Git::StatusFile::Modified);
 
 	file = fileStatus[1];
 	QVERIFY(file->isAdded());
-	QVERIFY(file->status() == Git::StatusFile::Added);
+	QCOMPARE(file->status(), Git::StatusFile::Added);
 }
 
 void StatusModifiedAddedFileTest::testRemodifiedFileIsStagedAndUnstaged()
@@ -160,18 +160,18 @@ void StatusModifiedAddedFileTest::testUnstagedRemodifiedFileBlobsAreCorrect()
 {
 	Git::StatusFile *file = status->unstagedFiles()[0];
 
-	QVERIFY(file->blob() == file->blob("file"));
-	QVERIFY(file->blob("file") == "foo\nbar\n");
-	QVERIFY(file->blob("index") == "foo");
-	QVERIFY(file->blob("repo") == "foo");
+	QCOMPARE(file->blob(), file->blob("file"));
+	QCOMPARE(file->blob("file"), QByteArray("foo\nbar\n", 8));
+	QCOMPARE(file->blob("index"), QByteArray("foo", 3));
+	QCOMPARE(file->blob("repo"), QByteArray("foo", 3));
 }
 
 void StatusModifiedAddedFileTest::testStagedRemodifiedFileBlobsAreCorrect()
 {
 	Git::StatusFile *file = status->stagedFiles()[0];
 
-	QVERIFY(file->blob() == file->blob("index"));
-	QVERIFY(file->blob("file") == "foo\nbar\n");
+	QCOMPARE(file->blob(), file->blob("index"));
+	QCOMPARE(file->blob("file"), QByteArray("foo\nbar\n", 8));
 	QVERIFY(file->blob("index").isNull());
 	QVERIFY(file->blob("repo").isNull());
 }
@@ -193,7 +193,7 @@ void StatusModifiedAddedFileTest::testUnstagedRemodifiedFileDiffIsCorrect()
 		assert_equal("--- a/modified_added.txt\n+++ b/modified_added.txt\n@@ -1 +1,2 @@\n-foo\n\\ No newline at end of file\n+foo\n+bar\n", d.diff)
 */
 	QVERIFY(!diff.isNull());
-	QVERIFY(diff == "--- a/modified_added.txt\n+++ b/modified_added.txt\n@@ -1 +1,2 @@\n-foo\n\\ No newline at end of file\n+foo\n+bar\n");
+	QCOMPARE(diff, QString("--- a/modified_added.txt\n+++ b/modified_added.txt\n@@ -1 +1,2 @@\n-foo\n\\ No newline at end of file\n+foo\n+bar\n"));
 }
 
 void StatusModifiedAddedFileTest::testStagedRemodifiedFileDiffIsCorrect()
@@ -213,7 +213,7 @@ void StatusModifiedAddedFileTest::testStagedRemodifiedFileDiffIsCorrect()
 		assert_equal("--- /dev/null\n+++ b/modified_added.txt\n@@ -0,0 +1 @@\n+foo\n\\ No newline at end of file\n", d.diff)
 */
 	QVERIFY(!diff.isNull());
-	QVERIFY(diff == "--- /dev/null\n+++ b/modified_added.txt\n@@ -0,0 +1 @@\n+foo\n\\ No newline at end of file\n");
+	QCOMPARE(diff, QString("--- /dev/null\n+++ b/modified_added.txt\n@@ -0,0 +1 @@\n+foo\n\\ No newline at end of file\n"));
 }
 
 #include "StatusModifiedAddedFileTest.moc"
