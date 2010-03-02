@@ -37,17 +37,14 @@ class RawObjectTest : public GitTestBase
 
 			storage = 0;
 
-			writeToFile("some_file.txt", "foo\nbar\baz");
-
-			QProcess::execute("git", gitBasicOpts() << "add" << "some_file.txt");
-			QProcess::execute("git", gitBasicOpts() << "commit" << "-m" << "Added a file.");
+			cloneFrom("RawObjectTestRepo");
 		}
 
 		void init() {
 			GitTestBase::init();
 			storage = new Git::LooseStorage(*repo);
 
-			QString id = repo->commits()[0]->id();
+			QString id = "c56dada2cf4f67b35ed0019ddd4651a8c8a337e8";
 			object = new Git::RawObject(id, *repo);
 		}
 
