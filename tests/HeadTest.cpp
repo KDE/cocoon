@@ -35,19 +35,7 @@ class HeadTest : public GitTestBase
 
 			head = 0;
 
-			QProcess::execute("git", gitBasicOpts() << "commit" << "--allow-empty" << "-m" << "Init empty repo.");
-
-			QProcess::execute("git", gitBasicOpts() << "checkout" << "-b" << "branch");
-			writeToFile("branch_file.txt", "foo\n");
-			QProcess::execute("git", gitBasicOpts() << "add" << "branch_file.txt");
-			QProcess::execute("git", gitBasicOpts() << "commit" << "-m" << "Added branch_file.");
-
-			QProcess::execute("git", gitBasicOpts() << "checkout" << "master");
-			writeToFile("master_file.txt", "foo\nbar\baz");
-			QProcess::execute("git", gitBasicOpts() << "add" << "master_file.txt");
-			QProcess::execute("git", gitBasicOpts() << "commit" << "-m" << "Added master_file.");
-
-			QProcess::execute("git", gitBasicOpts() << "merge" << "branch");
+			cloneFrom("HeadTestRepo");
 		}
 
 		void init() {
@@ -74,7 +62,7 @@ class HeadTest : public GitTestBase
 		}
 
 		void shouldPointToCorrectCommit() {
-			QString id = repo->commits("branch")[0]->id();
+			QString id = "632851d69abeb631f6529b50452611b9915be7fb";
 
 			QCOMPARE(Git::Head("branch", *repo).commit()->id(), id);
 		}
