@@ -64,18 +64,7 @@ void StatusRemodifiedFileTest::initTestCase()
 	GitTestBase::initTestCase();
 	status = 0;
 
-	QProcess::execute("git", gitBasicOpts() << "commit" << "--allow-empty" << "-m" << "Empty inital commit.");
-
-	writeToFile("remodified.txt", "foo");
-
-	QProcess::execute("git", gitBasicOpts() << "add" << "remodified.txt");
-	QProcess::execute("git", gitBasicOpts() << "commit" << "-m" << "Committed file to be modified.");
-
-	writeToFile("remodified.txt", "foo\nbar\n");
-
-	QProcess::execute("git", gitBasicOpts() << "add" << "remodified.txt");
-
-	writeToFile("remodified.txt", "foo\nbar\nbaz\n");
+	cloneFrom("StatusRemodifiedFileTestRepo");
 }
 
 
@@ -204,7 +193,7 @@ void StatusRemodifiedFileTest::testUnstagedRemodifiedFileDiffIsCorrect()
 		assert_equal("--- a/remodified.txt\n+++ b/remodified.txt\n@@ -1,2 +1,3 @@\n foo\n bar\n+baz\n", d.diff)
 */
 	QVERIFY(!diff.isNull());
-	QVERIFY("--- a/remodified.txt\n+++ b/remodified.txt\n@@ -1,2 +1,3 @@\n foo\n bar\n+baz\n");
+	QVERIFY(diff == "--- a/remodified.txt\n+++ b/remodified.txt\n@@ -1,2 +1,3 @@\n foo\n bar\n+baz\n");
 }
 
 void StatusRemodifiedFileTest::testStagedRemodifiedFileDiffIsCorrect()
@@ -224,7 +213,7 @@ void StatusRemodifiedFileTest::testStagedRemodifiedFileDiffIsCorrect()
 		assert_equal("--- a/remodified.txt\n+++ b/remodified.txt\n@@ -1 +1,2 @@\n-foo\n\\ No newline at end of file\n+foo\n+bar\n", d.diff)
 */
 	QVERIFY(!diff.isNull());
-	QVERIFY("--- a/remodified.txt\n+++ b/remodified.txt\n@@ -1 +1,2 @@\n-foo\n\\ No newline at end of file\n+foo\n+bar\n");
+	QVERIFY(diff == "--- a/remodified.txt\n+++ b/remodified.txt\n@@ -1 +1,2 @@\n-foo\n\\ No newline at end of file\n+foo\n+bar\n");
 }
 
 #include "StatusRemodifiedFileTest.moc"
