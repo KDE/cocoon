@@ -65,6 +65,9 @@ void StatusNewlyAddedFileTest::initTestCase()
 	GitTestBase::initTestCase();
 	status = 0;
 
+	QProcess::execute("mkdir", QStringList() << "-p" << workingDir);
+	QProcess::execute("git", gitBasicOpts() << "init");
+
 	QProcess::execute("git", gitBasicOpts() << "commit" << "--allow-empty" << "-m" << "Empty inital commit.");
 
 	writeToFile("newly_added.txt", "foo\nbar\nbaz\n");
@@ -191,7 +194,7 @@ void StatusNewlyAddedFileTest::testNewlyAddedFileDiffIsCorrect()
 		assert_equal("--- /dev/null\n+++ b/newly_added.txt\n@@ -0,0 +1,3 @@\n+foo\n+bar\n+baz\n", d.diff)
 */
 	QVERIFY(!diff.isNull());
-	QVERIFY("--- /dev/null\n+++ b/newly_added.txt\n@@ -0,0 +1,3 @@\n+foo\n+bar\n+baz\n");
+	QVERIFY(diff == "--- /dev/null\n+++ b/newly_added.txt\n@@ -0,0 +1,3 @@\n+foo\n+bar\n+baz\n");
 }
 
 #include "StatusNewlyAddedFileTest.moc"
