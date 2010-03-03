@@ -23,14 +23,10 @@
 void GitTestBase::cloneFrom(const QString &name)
 {
 	QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-	qDebug() << "Environment has COCOON_GIT_TEST_REPOS_PATH = " << env.value("COCOON_GIT_TEST_REPOS_PATH");
+	qDebug() << "Environment has COCOON_GIT_TEST_REPOS_PATH =" << env.value("COCOON_GIT_TEST_REPOS_PATH");
 
 	clonedFrom = QDir(env.value("COCOON_GIT_TEST_REPOS_PATH")).filePath(name);
-	qDebug() << "Cloning test repo from " << clonedFrom;
-
-	srand(time(0));
-	workingDir = QDir::temp().filePath("git_test_%1_%2").arg(QDateTime::currentDateTime().toTime_t()).arg(rand());
-	qDebug() << "To test directory " << workingDir;
+	qDebug() << "Cloning test repo from" << clonedFrom;
 
 	QProcess::execute("cp", QStringList() << "-r" << clonedFrom << workingDir);
 	QProcess::execute("mv", QStringList() << QDir(workingDir).filePath("dot_git") << QDir(workingDir).filePath(".git"));
@@ -69,6 +65,10 @@ void GitTestBase::writeToFile(const QString &filePath, const QByteArray &content
 void GitTestBase::initTestCase()
 {
 	repo = 0;
+
+	srand(time(0));
+	workingDir = QDir::temp().filePath("git_test_%1_%2").arg(QDateTime::currentDateTime().toTime_t()).arg(rand());
+	qDebug() << "Test directory is" << workingDir;
 }
 
 void GitTestBase::cleanupTestCase()
