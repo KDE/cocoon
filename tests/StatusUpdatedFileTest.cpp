@@ -65,6 +65,9 @@ void StatusUpdatedFileTest::initTestCase()
 	GitTestBase::initTestCase();
 	status = 0;
 
+	QProcess::execute("mkdir", QStringList() << "-p" << workingDir);
+	QProcess::execute("git", gitBasicOpts() << "init");
+
 	QProcess::execute("git", gitBasicOpts() << "commit" << "--allow-empty" << "-m" << "Empty inital commit.");
 
 	writeToFile("updated.txt", "foo\nbar");
@@ -196,7 +199,7 @@ void StatusUpdatedFileTest::testUpdatedFileDiffIsCorrect()
 		assert_equal("--- a/updated.txt\n+++ b/updated.txt\n@@ -1,2 +1,3 @@\n foo\n-bar\n\\ No newline at end of file\n+bar\n+baz\n", d.diff)
 */
 	QVERIFY(!diff.isNull());
-	QVERIFY("--- a/updated.txt\n+++ b/updated.txt\n@@ -1,2 +1,3 @@\n foo\n-bar\n\\ No newline at end of file\n+bar\n+baz\n");
+	QVERIFY(diff == "--- a/updated.txt\n+++ b/updated.txt\n@@ -1,2 +1,3 @@\n foo\n-bar\n\\ No newline at end of file\n+bar\n+baz\n");
 }
 
 #include "StatusUpdatedFileTest.moc"
