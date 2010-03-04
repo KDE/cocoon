@@ -194,7 +194,7 @@ void StatusNewlyAddedFileTest::testNewlyAddedFileDiffIsCorrect()
 		assert_equal("--- /dev/null\n+++ b/newly_added.txt\n@@ -0,0 +1,3 @@\n+foo\n+bar\n+baz\n", d.diff)
 */
 	QVERIFY(!diff.isNull());
-	QVERIFY(diff == "--- /dev/null\n+++ b/newly_added.txt\n@@ -0,0 +1,3 @@\n+foo\n+bar\n+baz\n");
+	QCOMPARE(diff, QString("--- /dev/null\n+++ b/newly_added.txt\n@@ -0,0 +1,3 @@\n+foo\n+bar\n+baz\n"));
 }
 
 #include "StatusNewlyAddedFileTest.moc"
