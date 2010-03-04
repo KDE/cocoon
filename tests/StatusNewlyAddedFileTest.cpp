@@ -73,6 +73,8 @@ void StatusNewlyAddedFileTest::initTestCase()
 	writeToFile("newly_added.txt", "foo\nbar\nbaz\n");
 
 	QProcess::execute("git", gitBasicOpts() << "add" << "newly_added.txt");
+
+//	cloneFrom("StatusNewlyAddedFileTestRepo");
 }
 
 

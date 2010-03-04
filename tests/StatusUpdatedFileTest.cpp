@@ -78,6 +78,8 @@ void StatusUpdatedFileTest::initTestCase()
 	writeToFile("updated.txt", "foo\nbar\nbaz\n");
 
 	QProcess::execute("git", gitBasicOpts() << "add" << "updated.txt");
+
+//	cloneFrom("StatusUpdatedFileTestRepo");
 }
 
 
