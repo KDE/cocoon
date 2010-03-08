@@ -42,6 +42,9 @@ class KDE_EXPORT PackedStorage : public ObjectStorage
 		const QByteArray rawHeaderFor(const QString &id);
 		RawObject* rawObjectFor(const QString &id);
 
+	// static
+		static const QStringList allNamesIn(const Repo &repo);
+
 	private:
 		void initIndex();
 		int dataOffsetFor(const QString &id);

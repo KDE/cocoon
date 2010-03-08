@@ -24,6 +24,8 @@
 #include <KDebug>
 #include <KFilterBase>
 
+#include <QDir>
+
 #include <netinet/in.h>
 
 using namespace Git;
@@ -93,6 +95,19 @@ const QStringList PackedStorage::allIds()
 	}
 
 	return ids;
+}
+
+const QStringList PackedStorage::allNamesIn(const Repo &repo)
+{
+	QStringList names;
+
+	QDir packsDir = QDir(repo.gitDir() + "/objects/packs");
+
+	foreach (const QString &indexFile, packsDir.entryList(QStringList() << "*.idx")) {
+		names << indexFile.left(indexFile.length() - 4); // file name lengh - ".idx"
+	}
+
+	return names;
 }
 
 int PackedStorage::dataOffsetFor(const QString &id)
