@@ -222,6 +222,18 @@ ObjectStorage* Repo::storageFor(const QString &id)
 	return d->looseStorage;
 }
 
+const QList<ObjectStorage*> Repo::storages()
+{
+	QList<ObjectStorage*> storages;
+
+	storages << d->looseStorage;
+	foreach(const QString &name, PackedStorage::allNamesIn(*this)) {
+		storages << new PackedStorage(name, *this);
+	}
+
+	return storages;
+}
+
 void Repo::unstageFiles(const QStringList &paths)
 {
 	GitRunner runner;

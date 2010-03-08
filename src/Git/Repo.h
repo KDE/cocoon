@@ -70,6 +70,7 @@ class KDE_EXPORT Repo : public QObject
 		/** Stages files to be included in the next commit. */
 		void stageFiles(const QStringList &paths);
 		Status* status();
+		const QList<ObjectStorage*> storages();
 		ObjectStorage* storageFor(const QString &id);
 		/** Unstages (staged) files to not be included in the next commit. */
 		void unstageFiles(const QStringList &paths);
