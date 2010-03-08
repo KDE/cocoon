@@ -270,7 +270,7 @@ const QByteArray PackedStorage::rawDataFor(const QString &id)
 
 const QByteArray PackedStorage::rawHeaderFor(const QString &id)
 {
-		kDebug() << "loading header" << id << "from" << d->name;
+	kDebug() << "loading header" << id << "from" << d->name;
 	return rawDataFor(id);
 }
 
