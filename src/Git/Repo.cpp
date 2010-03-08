@@ -24,6 +24,7 @@
 #include "Commit.h"
 #include "Head.h"
 #include "LooseStorage.h"
+#include "PackedStorage.h"
 #include "Status.h"
 
 #include <KMessageBox>
@@ -219,7 +220,14 @@ Status* Repo::status()
 
 ObjectStorage* Repo::storageFor(const QString &id)
 {
-	return d->looseStorage;
+	foreach(ObjectStorage *storage, storages()) {
+		if (storage->contains(id)) {
+			return storage;
+		}
+	}
+
+	/** @todo throw exception */
+	return 0;
 }
 
 const QList<ObjectStorage*> Repo::storages()
