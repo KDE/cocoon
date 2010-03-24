@@ -29,20 +29,16 @@ class RawObjectTest : public GitTestBase
 	Q_OBJECT
 
 	Git::RawObject *object;
-	Git::LooseStorage *storage;
 
 	private slots:
 		void initTestCase() {
 			GitTestBase::initTestCase();
-
-			storage = 0;
 
 			cloneFrom("RawObjectTestRepo");
 		}
 
 		void init() {
 			GitTestBase::init();
-			storage = new Git::LooseStorage(*repo);
 
 			QString id = "c56dada2cf4f67b35ed0019ddd4651a8c8a337e8";
 			object = new Git::RawObject(id, *repo);
@@ -50,7 +46,6 @@ class RawObjectTest : public GitTestBase
 
 		void cleanup() {
 			delete object;
-			delete storage;
 			GitTestBase::cleanup();
 		}
 
