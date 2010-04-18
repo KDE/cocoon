@@ -116,7 +116,7 @@ const QStringList PackedStorage::allNamesIn(const Repo &repo)
 {
 	QStringList names;
 
-	QDir packsDir = QDir(repo.gitDir() + "/objects/packs");
+	QDir packsDir = QDir(repo.gitDir() + "/objects/pack");
 
 	foreach (const QString &indexFile, packsDir.entryList(QStringList() << "*.idx")) {
 		names << indexFile.left(indexFile.length() - 4); // file name lengh - ".idx"
