@@ -173,24 +173,13 @@ void PackedStorage::initIndex()
 	Q_ASSERT(ok);
 	Q_UNUSED(ok);
 
-	QByteArray signature = d->indexFile.read(4);
-	quint32 version = ntohl(*(uint32_t*)d->indexFile.read(4).data());
+	initIndexVersion();
 
-	kDebug() << d->name << "index version" << version;
+	initIndexOffsets();
+}
 
-	const QString packIdxSignature = "\377tOc";
-	if (signature == packIdxSignature) {
-		if (version != 2) {
-			kDebug() << d->name << "has unknown pack file version" << version;
-			/** @todo throw exception */
-		}
-		d->indexVersion = 2;
-		d->indexDataOffset = 8;
-	} else {
-		d->indexVersion = 1;
-		d->indexDataOffset = 0;
-	}
-
+void PackedStorage::initIndexOffsets()
+{
 	d->indexDataOffsets << 0;
 	for (int i=0; i < FanOutCount; ++i) {
 		quint32 pos = ntohl(*(uint32_t*)readIndexFrom(i*IdxOffsetSize, IdxOffsetSize).data());
@@ -201,6 +190,37 @@ void PackedStorage::initIndex()
 		d->indexDataOffsets << pos;
 	}
 	d->size = d->indexDataOffsets.last();
+}
+
+void PackedStorage::initIndexVersion()
+{
+	QByteArray signature = d->indexFile.read(4);
+	quint32 version = ntohl(*(uint32_t*)d->indexFile.read(4).data());
+
+	kDebug() << d->name << "index version" << version;
+
+	static const QString packIdxSignature = "\377tOc";
+	if (signature == packIdxSignature) {
+		if (version != 2) {
+			kDebug() << d->name << "has unknown pack file version" << version;
+			/** @todo throw exception */
+		}
+		initIndexVersion_v2();
+	} else {
+		initIndexVersion_v1();
+	}
+}
+
+void PackedStorage::initIndexVersion_v1()
+{
+	d->indexVersion = 1;
+	d->indexDataOffset = 0;
+}
+
+void PackedStorage::initIndexVersion_v2()
+{
+	d->indexVersion = 2;
+	d->indexDataOffset = 8;
 }
 
 void PackedStorage::initPack()
