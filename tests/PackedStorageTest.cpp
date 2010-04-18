@@ -54,6 +54,14 @@ class PackedStorageTest : public GitTestBase
 
 
 
+		void shouldFindCorrectNumberOfPacks() {
+			QCOMPARE(Git::PackedStorage::allNamesIn(*repo).size(), 1);
+		}
+
+		void shouldFindCorrectPacks() {
+			QCOMPARE(Git::PackedStorage::allNamesIn(*repo)[0], packName);
+		}
+
 		void shouldHaveIndexFile() {
 			QVERIFY(!storage->d->indexFile.fileName().isEmpty());
 		}
