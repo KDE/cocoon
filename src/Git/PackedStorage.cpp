@@ -127,38 +127,60 @@ const QStringList PackedStorage::allNamesIn(const Repo &repo)
 
 int PackedStorage::dataOffsetFor(const QString &id)
 {
+	switch(d->indexVersion) {
+	case 2:
+		return dataOffsetFor_v2(id);
+	default:
+		return dataOffsetFor_v1(id);
+	}
+}
+
+int PackedStorage::dataOffsetFor_v1(const QString &id)
+{
 	int slot = (quint8)QByteArray::fromHex(id.toLatin1())[0];
 
 	int first = d->indexDataOffsets[slot];
 	int last = d->indexDataOffsets[slot+1];
 	while (first < last) {
 		int mid = (first + last) / 2;
-		if (d->indexVersion == 2) {
-			QString midId = readIndexFrom(OffsetStart + (mid * SHA1Size), SHA1Size).toHex();
-			int cmp = midId.compare(id);
+		QString midId = readIndexFrom(SHA1Start + mid * EntrySize, SHA1Size).toHex();
+		int cmp = midId.compare(id);
 
-			if (cmp < 0) {
-				first = mid + 1;
-			} else if (cmp > 0) {
-				last = mid;
-			} else {
-				int pos = OffsetStart + (d->size * (SHA1Size + CrcSize)) + (mid * OffsetSize);
-				int offset = ntohl(*(uint32_t*)readIndexFrom(pos, OffsetSize).data());
-				return offset;
-			}
+		if (cmp < 0) {
+			first = mid + 1;
+		} else if (cmp > 0) {
+			last = mid;
 		} else {
-			QString midId = readIndexFrom(SHA1Start + mid * EntrySize, SHA1Size).toHex();
-			int cmp = midId.compare(id);
+			int pos = OffsetStart + mid * EntrySize;
+			int offset = ntohl(*(uint32_t*)readIndexFrom(pos, OffsetSize).data());
+			return offset;
+		}
+	}
 
-			if (cmp < 0) {
-				first = mid + 1;
-			} else if (cmp > 0) {
-				last = mid;
-			} else {
-				int pos = OffsetStart + mid * EntrySize;
-				int offset = ntohl(*(uint32_t*)readIndexFrom(pos, OffsetSize).data());
-				return offset;
-			}
+	kDebug() << d->name << "has no offset for" << id;
+
+	return -1;
+}
+
+int PackedStorage::dataOffsetFor_v2(const QString &id)
+{
+	int slot = (quint8)QByteArray::fromHex(id.toLatin1())[0];
+
+	int first = d->indexDataOffsets[slot];
+	int last = d->indexDataOffsets[slot+1];
+	while (first < last) {
+		int mid = (first + last) / 2;
+		QString midId = readIndexFrom(OffsetStart + (mid * SHA1Size), SHA1Size).toHex();
+		int cmp = midId.compare(id);
+
+		if (cmp < 0) {
+			first = mid + 1;
+		} else if (cmp > 0) {
+			last = mid;
+		} else {
+			int pos = OffsetStart + (d->size * (SHA1Size + CrcSize)) + (mid * OffsetSize);
+			int offset = ntohl(*(uint32_t*)readIndexFrom(pos, OffsetSize).data());
+			return offset;
 		}
 	}
 

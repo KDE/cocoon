@@ -54,6 +54,8 @@ class KDE_EXPORT PackedStorage : public ObjectStorage
 		void initIndexVersion_v1();
 		void initIndexVersion_v2();
 		int dataOffsetFor(const QString &id);
+		int dataOffsetFor_v1(const QString &id);
+		int dataOffsetFor_v2(const QString &id);
 		void initPack();
 		const QByteArray patchDelta(const QByteArray &base, const QByteArray &delta);
 		quint32 patchDeltaHeaderSize(const QByteArray &delta, quint32 &pos);
