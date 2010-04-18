@@ -76,22 +76,37 @@ PackedStorage::PackedStorage(const PackedStorage &other)
 
 const QStringList PackedStorage::allIds()
 {
+	switch(d->indexVersion) {
+	case 2:
+		return allIds_v2();
+	default:
+		return allIds_v1();
+	}
+}
+
+const QStringList PackedStorage::allIds_v1()
+{
 	QStringList ids;
 
-	if (d->indexVersion == 2) {
-		int pos = OffsetStart;
-		for(uint i=0; i < d->size; ++i) {
-			QString id = readIndexFrom(pos, SHA1Size).toHex();
-			pos += SHA1Size;
-			ids << id;
-		}
-	} else {
-		int pos = SHA1Start;
-		for(uint i=0; i < d->size; ++i) {
-			QString id = readIndexFrom(pos, SHA1Size).toHex();
-			pos += EntrySize;
-			ids << id;
-		}
+	int pos = SHA1Start;
+	for(uint i=0; i < d->size; ++i) {
+		QString id = readIndexFrom(pos, SHA1Size).toHex();
+		pos += EntrySize;
+		ids << id;
+	}
+
+	return ids;
+}
+
+const QStringList PackedStorage::allIds_v2()
+{
+	QStringList ids;
+
+	int pos = OffsetStart;
+	for(uint i=0; i < d->size; ++i) {
+		QString id = readIndexFrom(pos, SHA1Size).toHex();
+		pos += SHA1Size;
+		ids << id;
 	}
 
 	return ids;
