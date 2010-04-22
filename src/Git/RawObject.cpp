@@ -137,14 +137,17 @@ bool RawObject::isValidHeader(const QString &possibleHeader)
 
 RawObject* RawObject::newInstance(const QString &id, Repo &repo)
 {
-	QString type = extractObjectTypeFrom(repo.storageFor(id)->rawHeaderFor(id));
+	ObjectStorage *storage = repo.storageFor(id);
+	QString actualId = storage->actualIdFor(id);
+	QString type = extractObjectTypeFrom(storage->rawHeaderFor(actualId));
+
 	if (type == "blob") {
-		return new Blob(id, repo);
+		return new Blob(actualId, repo);
 	} else if (type == "commit") {
-		return new Commit(id, repo);
+		return new Commit(actualId, repo);
 	}
 
-	return new RawObject(id, repo);
+	return new RawObject(actualId, repo);
 }
 
 void RawObject::populateWith(const QByteArray &rawData)
