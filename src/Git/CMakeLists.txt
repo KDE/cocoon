@@ -11,6 +11,7 @@ add_subdirectory( 3rdparty )
 set(cocoon_git_LIB_SRCS
 	3rdparty/dvcsjob.cpp
 	3rdparty/gitrunner.cpp
+	Blob.cpp
 	CloneRepositoryProcess.cpp
 	Commit.cpp
 	Head.cpp
@@ -41,6 +42,7 @@ install(TARGETS CocoonGit ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 # install header files
 install( FILES
+	Blob.h
 	CloneRepositoryProcess.h
 	Commit.h
 	Head.h
