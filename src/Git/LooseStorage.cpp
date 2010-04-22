@@ -49,7 +49,6 @@ const QStringList LooseStorage::allIds()
 		if (dir.contains(QRegExp("^[0-9a-fA-F]{2}$"))) {
 			foreach (const QString &file, QDir(d->objectsDir.path() + "/" + dir).entryList()) {
 				if (file.contains(QRegExp("^[0-9a-fA-F]{38}$"))) {
-					kDebug() << "found object:" << dir + file;
 					ids << dir + file;
 				}
 			}

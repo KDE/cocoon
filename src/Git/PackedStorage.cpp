@@ -206,7 +206,7 @@ void PackedStorage::initIndexOffsets()
 	for (int i=0; i < FanOutCount; ++i) {
 		quint32 pos = ntohl(*(uint32_t*)readIndexFrom(i*IdxOffsetSize, IdxOffsetSize).data());
 		if (pos < d->indexDataOffsets[i]) {
-			kDebug() << d->name << "has discontinuous index" << i;
+			kWarning() << d->name << "has discontinuous index" << i;
 			/** @todo throw exception */
 		}
 		d->indexDataOffsets << pos;
@@ -219,12 +219,12 @@ void PackedStorage::initIndexVersion()
 	QByteArray signature = d->indexFile.read(4);
 	quint32 version = ntohl(*(uint32_t*)d->indexFile.read(4).data());
 
-	kDebug() << d->name << "index version" << version;
+	//kDebug() << d->name << "index version" << version;
 
 	static const QString packIdxSignature = "\377tOc";
 	if (signature == packIdxSignature) {
 		if (version != 2) {
-			kDebug() << d->name << "has unknown pack file version" << version;
+			kError() << d->name << "has unknown pack file version" << version;
 			/** @todo throw exception */
 		}
 		initIndexVersion_v2();
@@ -284,7 +284,7 @@ const QByteArray PackedStorage::patchDelta(const QByteArray &base, const QByteAr
 			patched.append(delta.mid(pos, c));
 			pos += c;
 		} else {
-			kDebug() << d->name << "has invalid delta data";
+			kError() << d->name << "has invalid delta data";
 			/** @todo raise exception */
 		}
 	}
@@ -367,14 +367,14 @@ const QByteArray PackedStorage::unpackCompressed(int offset, int destSize)
 	while (unpackedData.size() < destSize) {
 		QByteArray packedData = d->packFile.read(4096);
 		if (packedData.size() == 0) {
-			kDebug() << "error reading pack data in" << d->name;
+			kError() << "error reading pack data in" << d->name;
 			/** @todo throw exception */
 		}
 		unpackedData.append(inflate(packedData));
 	}
 
 	if (unpackedData.size() > destSize) {
-			kDebug() << "error reading pack data in" << d->name;
+			kError() << "error reading pack data in" << d->name;
 			/** @todo throw exception */
 	}
 
@@ -453,7 +453,7 @@ const QByteArray PackedStorage::unpackObjectFrom(int offset)
 		}
 		break;
 	default:
-		kDebug() << "invalid type" << type << "in" << d->name;
+		kError() << "invalid type" << type << "in" << d->name;
 		/** @todo throw exception */
 	}
 

@@ -35,7 +35,7 @@ RawObject::RawObject(const QString &id, QObject *parent)
 	, m_id(id)
 	, m_repo(0)
 {
-	kDebug() << "creating object without storage:" << id;
+	kWarning() << "creating object without storage:" << id;
 }
 
 RawObject::RawObject(const QString &id, Repo &repo)
@@ -147,7 +147,7 @@ void RawObject::populateWith(const QByteArray &rawData)
 {
 	QString header = extractHeaderForm(rawData);
 	if (!isValidHeader(header)) {
-		kDebug() << "invalid header for object" << id();
+		kError() << "invalid header for object" << id();
 		return;
 	}
 

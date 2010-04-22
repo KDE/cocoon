@@ -101,13 +101,13 @@ const QByteArray ObjectStorage::inflate(QByteArray deflatedData)
 		}
 
 		int uncompressedBytes = outBuffer.size() - filter->outBufferAvailable();
-		kDebug() << "Uncompressed" << uncompressedBytes << "bytes";
+		//kDebug() << "Uncompressed" << uncompressedBytes << "bytes";
 
 		// append the uncompressed data to the objects data
 		inflatedData.append(outBuffer.data(), uncompressedBytes);
 
 		if (result == KFilterBase::End) {
-			kDebug() << "Finished unpacking";
+			//kDebug() << "Finished unpacking";
 			break; // Finished.
 		}
 	}

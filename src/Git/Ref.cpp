@@ -60,7 +60,7 @@ RefList Ref::all() const
 	RefList refs;
 
 	foreach (const QString &name, d->refsDir.entryList(QDir::Files)) {
-		kDebug() << "ref found:" << name;
+		//kDebug() << "ref found:" << name;
 		refs << newInstance(name, *d->repo);
 	}
 
@@ -91,8 +91,8 @@ void Ref::populate()
 
 	QString commitId = refFile.readAll().trimmed();
 
-	kDebug() << "reading head:" << refFile.fileName();
-	kDebug() << "head content:" << commitId;
+	//kDebug() << "reading head:" << refFile.fileName();
+	//kDebug() << "head content:" << commitId;
 
 	d->commit = d->repo->commit(commitId);
 

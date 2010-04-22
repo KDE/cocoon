@@ -140,13 +140,13 @@ Ref* Repo::head(const QString &head)
 
 	if (name.isEmpty()) {
 		QFile head(gitDir() + "/HEAD");
-		kDebug() << "reading HEAD:" << head.fileName();
+		//kDebug() << "reading HEAD:" << head.fileName();
 		head.open(QFile::ReadOnly);
 
 		/** @todo make it recognize any type of ref */
 		name = head.readAll().split('/').last().trimmed();
 
-		kDebug() << "found head named:" << name;
+		//kDebug() << "found head named:" << name;
 		head.close();
 	}
 
