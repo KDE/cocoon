@@ -60,10 +60,12 @@ const QStringList LooseStorage::allIds()
 
 const QByteArray LooseStorage::rawDataFor(const QString &id)
 {
-	if (!d->rawData.contains(id) || RawObject::isOnlyHeader(d->rawData[id])) {
-		kDebug() << "Loading data for" << id;
+	QString actualId = actualIdFor(id);
 
-		QFile objectFile(sourceFor(id));
+	if (!d->rawData.contains(actualId) || RawObject::isOnlyHeader(d->rawData[actualId])) {
+		kDebug() << "Loading data for" << actualId;
+
+		QFile objectFile(sourceFor(actualId));
 		Q_ASSERT(objectFile.exists());
 
 		// open the object's file
@@ -71,18 +73,20 @@ const QByteArray LooseStorage::rawDataFor(const QString &id)
 		Q_ASSERT(ok);
 		Q_UNUSED(ok);
 
-		d->rawData[id] = inflate(objectFile.readAll());
+		d->rawData[actualId] = inflate(objectFile.readAll());
 	}
 
-	return d->rawData[id];
+	return d->rawData[actualId];
 }
 
 const QByteArray LooseStorage::rawHeaderFor(const QString &id)
 {
-	if (!d->rawData.contains(id)) {
-		kDebug() << "Loading header for" << id;
+	QString actualId = actualIdFor(id);
 
-		QFile objectFile(sourceFor(id));
+	if (!d->rawData.contains(actualId)) {
+		kDebug() << "Loading header for" << actualId;
+
+		QFile objectFile(sourceFor(actualId));
 		Q_ASSERT(objectFile.exists());
 
 		// open the object's file
@@ -90,27 +94,31 @@ const QByteArray LooseStorage::rawHeaderFor(const QString &id)
 		Q_ASSERT(ok);
 		Q_UNUSED(ok);
 
-		d->rawData[id] = RawObject::extractHeaderForm(inflate(objectFile.read(64))).toLatin1();
+		d->rawData[actualId] = RawObject::extractHeaderForm(inflate(objectFile.read(64))).toLatin1();
 	}
 
-	return d->rawData[id];
+	return d->rawData[actualId];
 }
 
 RawObject* LooseStorage::rawObjectFor(const QString &id)
 {
-	if (!d->rawObjects.contains(id)) {
-		kDebug() << "load object:" << id;
-		d->rawObjects[id] = RawObject::newInstance(id, repo());
+	QString actualId = actualIdFor(id);
+
+	if (!d->rawObjects.contains(actualId)) {
+		kDebug() << "load object:" << actualId;
+		d->rawObjects[actualId] = RawObject::newInstance(actualId, repo());
 	}
 
-	return d->rawObjects[id];
+	return d->rawObjects[actualId];
 }
 
 const QString LooseStorage::sourceFor(const QString &id)
 {
+	QString actualId = actualIdFor(id);
+
 	Q_ASSERT(id.size() >= 7);
-	QString idDirPath = id.left(2);
-	QString idFilePath = id.mid(2);
+	QString idDirPath = actualId.left(2);
+	QString idFilePath = actualId.mid(2);
 
 	if (id.size() < 40) {
 		QStringList possibleFileIds = QDir(d->objectsDir.filePath(idDirPath)).entryList(QStringList() << QString("%1*").arg(idFilePath));
