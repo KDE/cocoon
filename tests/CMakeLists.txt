@@ -40,7 +40,8 @@ unit_tests(
 	RawObjectInstantiationTest
 	RawObjectTypeTest
 
-# Commit tests
+# Object tests
+	BlobTest
 	CommitListingTest
 	CommitMergeDetectionTest
 	CommitPopulationTest
