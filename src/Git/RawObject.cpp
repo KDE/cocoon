@@ -18,6 +18,7 @@
 
 #include "RawObject.h"
 
+#include "Blob.h"
 #include "Commit.h"
 #include "ObjectStorage.h"
 #include "Repo.h"
@@ -136,7 +137,10 @@ bool RawObject::isValidHeader(const QString &possibleHeader)
 
 RawObject* RawObject::newInstance(const QString &id, Repo &repo)
 {
-	if (extractObjectTypeFrom(repo.storageFor(id)->rawHeaderFor(id)) == "commit") {
+	QString type = extractObjectTypeFrom(repo.storageFor(id)->rawHeaderFor(id));
+	if (type == "blob") {
+		return new Blob(id, repo);
+	} else if (type == "commit") {
 		return new Commit(id, repo);
 	}
 
