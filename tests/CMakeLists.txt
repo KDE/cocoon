@@ -30,6 +30,16 @@ unit_tests(
 # Ref tests
 	HeadTest
 
+# Storage and Objects
+	LooseStorageTest
+	LooseStorageCachingTest
+	LooseStorageListingTest
+	PackedStorageTest
+	RawObjectTest
+	RawObjectHeaderExtractionTest
+	RawObjectInstantiationTest
+	RawObjectTypeTest
+
 # Commit tests
 	CommitListingTest
 	CommitMergeDetectionTest
@@ -45,14 +55,4 @@ unit_tests(
 	StatusRemodifiedFileTest
 	StatusRemovedFileTest
 	StatusUpdatedFileTest
-
-# Storage and Objects
-	LooseStorageTest
-	LooseStorageCachingTest
-	LooseStorageListingTest
-	PackedStorageTest
-	RawObjectTest
-	RawObjectHeaderExtractionTest
-	RawObjectInstantiationTest
-	RawObjectTypeTest
 )
