@@ -19,6 +19,7 @@
 #include "GitTestBase.h"
 
 #include "Git/Commit.h"
+#include "Git/Tree.h"
 
 
 
@@ -32,12 +33,13 @@ class CommitPopulationTest : public GitTestBase
 		void initTestCase() {
 			GitTestBase::initTestCase();
 
-			commit = 0;
+			cloneFrom("CommitPopulationTestRepo");
 		}
 
 		void init() {
 			GitTestBase::init();
-			commit = new Git::Commit("1111111");
+
+			commit = new Git::Commit("b462958a492e9abaaa3bd2725639932b5fd551d9", *repo);
 		}
 
 		void cleanup() {
@@ -49,8 +51,8 @@ class CommitPopulationTest : public GitTestBase
 
 		void shouldPopulateTreeCorrectly() {
 			QStringList rawData;
-			rawData << "tree 2222222";
-			rawData << "parent 3333333";
+			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
+			rawData << "parent abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d";
 			rawData << "author Me 1234567890 +0100";
 			rawData << "committer You 1234567890 +0100";
 			rawData << "";
@@ -58,12 +60,12 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
-			QCOMPARE(commit->tree(), QString("2222222"));
+			QCOMPARE(commit->tree()->id(), QString("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
 		}
 
 		void shouldPopulateNoParentCorrectly() {
 			QStringList rawData;
-			rawData << "tree 2222222";
+			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
 			rawData << "author Me 1234567890 +0100";
 			rawData << "committer You 1234567890 +0100";
 			rawData << "";
@@ -76,8 +78,8 @@ class CommitPopulationTest : public GitTestBase
 
 		void shouldPopulateSingleParentCorrectly() {
 			QStringList rawData;
-			rawData << "tree 2222222";
-			rawData << "parent 3333333";
+			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
+			rawData << "parent abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d";
 			rawData << "author Me 1234567890 +0100";
 			rawData << "committer You 1234567890 +0100";
 			rawData << "";
@@ -86,15 +88,15 @@ class CommitPopulationTest : public GitTestBase
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
 			QCOMPARE(commit->parents().size(), 1);
-			QCOMPARE(commit->parents().first()->id(), QString("3333333"));
+			QCOMPARE(commit->parents().first()->id(), QString("abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d"));
 		}
 
 		void shouldPopulateMultiParentCorrectly() {
 			QStringList rawData;
-			rawData << "tree 2222222";
-			rawData << "parent 3333333";
-			rawData << "parent 4444444";
-			rawData << "parent 5555555";
+			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
+			rawData << "parent abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d";
+			rawData << "parent 6421f09a627d8ea6a85a9155e481cae7ed483b50";
+			rawData << "parent 4262f0d5b0d062a0d655f16c2fc372c92689c853";
 			rawData << "author Me 1234567890 +0100";
 			rawData << "committer You 1234567890 +0100";
 			rawData << "";
@@ -103,15 +105,15 @@ class CommitPopulationTest : public GitTestBase
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
 			QCOMPARE(commit->parents().size(), 3);
-			QCOMPARE(commit->parents()[0]->id(), QString("3333333"));
-			QCOMPARE(commit->parents()[1]->id(), QString("4444444"));
-			QCOMPARE(commit->parents()[2]->id(), QString("5555555"));
+			QCOMPARE(commit->parents()[0]->id(), QString("abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d"));
+			QCOMPARE(commit->parents()[1]->id(), QString("6421f09a627d8ea6a85a9155e481cae7ed483b50"));
+			QCOMPARE(commit->parents()[2]->id(), QString("4262f0d5b0d062a0d655f16c2fc372c92689c853"));
 		}
 
 		void shouldPopulateAuthorCorrectly() {
 			QStringList rawData;
-			rawData << "tree 2222222";
-			rawData << "parent 3333333";
+			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
+			rawData << "parent abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d";
 			rawData << "author Me 1234567890 +0100";
 			rawData << "committer You 1234567890 +0100";
 			rawData << "";
@@ -124,8 +126,8 @@ class CommitPopulationTest : public GitTestBase
 
 		void shouldPopulateAuthorWithEmailCorrectly() {
 			QStringList rawData;
-			rawData << "tree 2222222";
-			rawData << "parent 3333333";
+			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
+			rawData << "parent abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d";
 			rawData << "author Me <me@some.tld> 1234567890 +0100";
 			rawData << "committer You <you@some.tld> 1234567890 +0100";
 			rawData << "";
@@ -136,10 +138,10 @@ class CommitPopulationTest : public GitTestBase
 			QCOMPARE(commit->author(), QString("Me <me@some.tld>"));
 		}
 
-		void shouldPopulateAuthoredAdCorrectly() {
+		void shouldPopulateAuthoredAtCorrectly() {
 			QStringList rawData;
-			rawData << "tree 2222222";
-			rawData << "parent 3333333";
+			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
+			rawData << "parent abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d";
 			rawData << "author Me 1234567890 +0100";
 			rawData << "committer You 1234567890 +0100";
 			rawData << "";
@@ -155,8 +157,8 @@ class CommitPopulationTest : public GitTestBase
 
 		void shouldPopulateCommitterCorrectly() {
 			QStringList rawData;
-			rawData << "tree 2222222";
-			rawData << "parent 3333333";
+			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
+			rawData << "parent abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d";
 			rawData << "author Me 1234567890 +0100";
 			rawData << "committer You 1234567890 +0100";
 			rawData << "";
@@ -169,8 +171,8 @@ class CommitPopulationTest : public GitTestBase
 
 		void shouldPopulateCommitterWithEmailCorrectly() {
 			QStringList rawData;
-			rawData << "tree 2222222";
-			rawData << "parent 3333333";
+			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
+			rawData << "parent abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d";
 			rawData << "author Me <me@some.tld> 1234567890 +0100";
 			rawData << "committer You <you@some.tld> 1234567890 +0100";
 			rawData << "";
@@ -183,8 +185,8 @@ class CommitPopulationTest : public GitTestBase
 
 		void shouldPopulateCommittedAtCorrectly() {
 			QStringList rawData;
-			rawData << "tree 2222222";
-			rawData << "parent 3333333";
+			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
+			rawData << "parent abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d";
 			rawData << "author Me 1234567890 +0100";
 			rawData << "committer You 1234567890 +0100";
 			rawData << "";
@@ -200,8 +202,8 @@ class CommitPopulationTest : public GitTestBase
 
 		void shouldPopulateSingleLineMessageCorrectly() {
 			QStringList rawData;
-			rawData << "tree 2222222";
-			rawData << "parent 3333333";
+			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
+			rawData << "parent abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d";
 			rawData << "author Me 1234567890 +0100";
 			rawData << "committer You 1234567890 +0100";
 			rawData << "";
@@ -214,8 +216,8 @@ class CommitPopulationTest : public GitTestBase
 
 		void shouldPopulateSingleLineMessageSummaryCorrectly() {
 			QStringList rawData;
-			rawData << "tree 2222222";
-			rawData << "parent 3333333";
+			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
+			rawData << "parent abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d";
 			rawData << "author Me 1234567890 +0100";
 			rawData << "committer You 1234567890 +0100";
 			rawData << "";
@@ -228,8 +230,8 @@ class CommitPopulationTest : public GitTestBase
 
 		void shouldPopulateMultiLineMessageCorrectly() {
 			QStringList rawData;
-			rawData << "tree 2222222";
-			rawData << "parent 3333333";
+			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
+			rawData << "parent abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d";
 			rawData << "author Me 1234567890 +0100";
 			rawData << "committer You 1234567890 +0100";
 			rawData << "";
@@ -244,8 +246,8 @@ class CommitPopulationTest : public GitTestBase
 
 		void shouldPopulateMultiLineMessageSummaryCorrectly() {
 			QStringList rawData;
-			rawData << "tree 2222222";
-			rawData << "parent 3333333";
+			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
+			rawData << "parent abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d";
 			rawData << "author Me 1234567890 +0100";
 			rawData << "committer You 1234567890 +0100";
 			rawData << "";
