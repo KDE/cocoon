@@ -37,6 +37,7 @@ namespace Git {
 class Commit;
 class Ref;
 class Repo;
+class Tree;
 
 typedef QList<Commit*>  CommitList;
 
@@ -88,7 +89,7 @@ class KDE_EXPORT Commit : public RawObject
 		const CommitList   parents() const;
 		const QString&     message() const;
 		const QString&     summary() const;
-		const QString&     tree() const;
+		const Tree*        tree() const;
 
 	// static
 		static CommitList allReachableFrom(const Ref &branch);
@@ -125,7 +126,7 @@ class KDE_EXPORT Commit : public RawObject
 		QString     m_message;
 		CommitList  m_parents;
 		QString     m_summary;
-		QString     m_tree;
+		Tree       *m_tree;
 
 		friend class ::CommitListingTest;
 		friend class ::CommitMergeDetectionTest;

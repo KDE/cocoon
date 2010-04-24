@@ -128,7 +128,8 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 	QStringList lines = raw.split("\n");
 
 	if (!lines.isEmpty() && lines.first().startsWith("tree ")) {
-		commit->m_tree = lines.takeFirst().mid(strlen("tree "), -1);
+		QString treeId = lines.takeFirst().mid(strlen("tree "), -1);
+		commit->m_tree = commit->repo().tree(treeId);
 	}
 
 	while (lines.first().startsWith("parent ")) {
@@ -267,7 +268,7 @@ const QString& Commit::summary() const
 	return m_summary;
 }
 
-const QString& Commit::tree() const
+const Tree* Commit::tree() const
 {
 	return m_tree;
 }
