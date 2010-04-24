@@ -22,6 +22,7 @@
 #include "Commit.h"
 #include "ObjectStorage.h"
 #include "Repo.h"
+#include "Tree.h"
 
 #include <KDebug>
 
@@ -145,6 +146,8 @@ RawObject* RawObject::newInstance(const QString &id, Repo &repo)
 		return new Blob(actualId, repo);
 	} else if (type == "commit") {
 		return new Commit(actualId, repo);
+	} else if (type == "tree") {
+		return new Tree(actualId, repo);
 	}
 
 	return new RawObject(actualId, repo);
