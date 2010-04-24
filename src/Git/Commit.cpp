@@ -127,21 +127,25 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 {
 	QStringList lines = raw.split("\n");
 
+	Tree *tree = 0;
 	if (!lines.isEmpty() && lines.first().startsWith("tree ")) {
 		QString treeId = lines.takeFirst().mid(strlen("tree "), -1);
-		commit->m_tree = commit->repo().tree(treeId);
+		tree = commit->repo().tree(treeId);
 	}
+	commit->m_tree = tree;
 
+	CommitList parents;
 	while (lines.first().startsWith("parent ")) {
 		QString parentId = lines.takeFirst().mid(strlen("parent "), -1);
-		commit->m_parents << commit->repo().commit(parentId);
+		parents << commit->repo().commit(parentId);
 	}
+	commit->m_parents = parents;
 
 	QRegExp actorRegExp("^(.*) (\\d+) ([+-]\\d+)$");
 
+	QString author;
+	KDateTime authoredAt;
 	if (!lines.isEmpty() && lines.first().startsWith("author ")) {
-		QString author;
-		KDateTime authoredAt;
 		QString zoneOffset;
 
 		foreach (const QString part, lines.takeFirst().mid(strlen("author "), -1).split(" ")) {
@@ -157,14 +161,14 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 			}
 		}
 
-		commit->m_author = author;
-		commit->m_authoredAt = authoredAt;
 		/** @todo add zone offset */
 	}
+	commit->m_author = author;
+	commit->m_authoredAt = authoredAt;
 
+	QString committer;
+	KDateTime committedAt;
 	if (!lines.isEmpty() && lines.first().startsWith("committer ")) {
-		QString committer;
-		KDateTime committedAt;
 		QString zoneOffset;
 
 		foreach (const QString part, lines.takeFirst().mid(strlen("committer "), -1).split(" ")) {
@@ -180,23 +184,25 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 			}
 		}
 
-		commit->m_committer = committer;
-		commit->m_committedAt = committedAt;
 		/** @todo add zone offset */
 	}
+	commit->m_committer = committer;
+	commit->m_committedAt = committedAt;
 
 	while (!lines.isEmpty() && lines.first().isEmpty()) {
 		lines.removeFirst();
 	}
 
+	QString message;
 	while (!lines.isEmpty() && lines.first().startsWith("    ")) {
-		if (commit->m_message.isNull()) {
-			commit->m_message = lines.takeFirst().mid(4, -1);
+		if (message.isEmpty()) {
+			message = lines.takeFirst().mid(4, -1);
 		} else {
-			commit->m_message += "\n" + lines.takeFirst().mid(4, -1);
+			message += "\n" + lines.takeFirst().mid(4, -1);
 		}
 	}
-	commit->m_summary = commit->m_message.split("\n")[0];
+	commit->m_message = message;
+	commit->m_summary = message.split("\n")[0];
 
 	while (!lines.isEmpty() && lines.first().isEmpty())  {
 		lines.removeFirst();
