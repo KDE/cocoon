@@ -32,13 +32,16 @@ class RepoStatusCachingTest;
 
 namespace Git {
 
+class Blob;
 class Commit;
 typedef QList<Commit*>  CommitList;
 class ObjectStorage;
+class RawObject;
 class Ref;
 typedef QList<Ref*>  RefList;
 class RepoPrivate;
 class Status;
+class Tree;
 
 
 
@@ -60,8 +63,12 @@ class KDE_EXPORT Repo : public QObject
 		Repo(const Repo &other);
 		virtual ~Repo();
 
+		Blob* blob(const QString &id);
+		Commit* commit(const QString &id);
+		RawObject* object(const QString &id);
+		Tree* tree(const QString &id);
+
 		void commitIndex(const QString &message, const QStringList &options = QStringList());
-		Commit* commit(const QString &id) const;
 		CommitList commits(const QString &branch = QString());
 		QString diff(const Commit &a, const Commit &b) const;
 		Ref* head(const QString &name = QString());

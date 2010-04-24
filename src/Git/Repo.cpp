@@ -21,11 +21,13 @@
 #include "Repo_p.h"
 
 #include "gitrunner.h"
+#include "Blob.h"
 #include "Commit.h"
 #include "Head.h"
 #include "LooseStorage.h"
 #include "PackedStorage.h"
 #include "Status.h"
+#include "Tree.h"
 
 #include <KMessageBox>
 
@@ -56,6 +58,13 @@ Repo::~Repo()
 
 
 
+Blob* Repo::blob(const QString &id)
+{
+	RawObject *obj = object(id);
+
+	return obj && obj->isBlob() ? static_cast<Blob*>(obj) : 0;
+}
+
 void Repo::clone(const QString &fromRepo, const QString &toDirectory, const QStringList &options)
 {
 	GitRunner runner;
@@ -81,11 +90,11 @@ void Repo::commitIndex(const QString &message, const QStringList &options)
 	emit historyChanged();
 }
 
-Commit* Repo::commit(const QString &id) const
+Commit* Repo::commit(const QString &id)
 {
-	RawObject *obj = d->looseStorage->rawObjectFor(id);
+	RawObject *obj = object(id);
 
-	return obj->isCommit() ? static_cast<Commit*>(obj) : 0;
+	return obj && obj->isCommit() ? static_cast<Commit*>(obj) : 0;
 }
 
 CommitList Repo::commits(const QString &branch)
@@ -160,6 +169,11 @@ RefList Repo::heads()
 	}
 
 	return d->heads;
+}
+
+RawObject* Repo::object(const QString &id)
+{
+	return storageFor(id) ? storageFor(id)->rawObjectFor(id) : 0;
 }
 
 void Repo::reset()
@@ -240,6 +254,13 @@ const QList<ObjectStorage*> Repo::storages()
 	}
 
 	return storages;
+}
+
+Tree* Repo::tree(const QString &id)
+{
+	RawObject *obj = object(id);
+
+	return obj && obj->isTree() ? static_cast<Tree*>(obj) : 0;
 }
 
 void Repo::unstageFiles(const QStringList &paths)
