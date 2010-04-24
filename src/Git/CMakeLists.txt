@@ -22,6 +22,7 @@ set(cocoon_git_LIB_SRCS
 	Ref.cpp
 	Repo.cpp
 	Status.cpp
+	Tree.cpp
 )
 
 kde4_add_library(CocoonGit
@@ -51,5 +52,6 @@ install( FILES
 	Ref_p.h
 	Repo.h
 	Status.h
+	Tree.h
 	DESTINATION ${INCLUDE_INSTALL_DIR}/Git COMPONENT Devel
 )
