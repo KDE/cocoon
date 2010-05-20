@@ -24,8 +24,6 @@
 #include "Ref.h"
 #include "Repo.h"
 
-#include <KDebug>
-
 #include <QStringList>
 
 using namespace Git;
