@@ -21,11 +21,17 @@
 
 #include "RawObject.h"
 
+#include <QHash>
+#include <QMap>
+
 
 
 class TreeTest;
 
 namespace Git {
+
+class Blob;
+class RawObject;
 
 
 
@@ -36,10 +42,36 @@ class KDE_EXPORT Tree : public RawObject
 	public:
 		Tree(const QString& id, Repo &repo);
 
+		const QList<Blob*> blobs();
+		const QMap<QString, Blob*> blobsByName();
+		const QList<RawObject*> entries();
+		const QMap<QString, RawObject*> entriesByName();
+		const QString nameFor(const RawObject &object) const;
+		const QList<Tree*> trees();
+		const QMap<QString, Tree*> treesByName();
+
 	protected:
 		Tree(const QString& id, QObject *parent=0);
 
-		friend class ::TreeTest;
+	private:
+		// static
+		/**
+		 * Populates the given tree with the data extracted from the raw data.
+		 *
+		 * @param tree The tree to be populated.
+		 * @param raw The raw tree object data.
+		 */
+		static void fillFromString(Tree *tree, const QByteArray &raw);
+
+	private:
+		const QString nameFor(const QString &id) const;
+
+	private:
+		QList<RawObject*>       m_entries;
+		QHash<QString, QString> m_entryModes;
+		QHash<QString, QString> m_entryNames;
+
+	friend class ::TreeTest;
 };
 
 }
