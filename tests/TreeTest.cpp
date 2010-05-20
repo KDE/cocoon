@@ -53,6 +53,39 @@ class TreeTest : public GitTestBase
 			QCOMPARE(tree->entriesByName().count(), 3);
 		}
 
+		void shouldHaveCorrectEntries() {
+			Git::Tree *tree = repo->tree("273b4fb");
+
+			QStringList entryIds;
+			entryIds << "5b51924c72272342a7490dd267ed022e90174480"; // dir0
+			entryIds << "a907ec3f431eeb6b1c75799a7e4ba73ca6dc627a"; // file1
+			entryIds << "eb697c0d58b8e5fce1855b606a665c4a2ad3a1c7"; // file2
+
+			foreach(Git::RawObject *entry, tree->entries()) {
+				QVERIFY(entryIds.contains(entry->id()));
+			}
+		}
+
+		void shouldHaveCorrectEntryNames_data() {
+			QTest::addColumn<QString>("entryName");
+			QTest::addColumn<QString>("entryId");
+
+			QTest::newRow("dir0")  << QString("dir0" ) << QString("5b51924c72272342a7490dd267ed022e90174480");
+			QTest::newRow("file1") << QString("file1") << QString("a907ec3f431eeb6b1c75799a7e4ba73ca6dc627a");
+			QTest::newRow("file2") << QString("file2") << QString("eb697c0d58b8e5fce1855b606a665c4a2ad3a1c7");
+		}
+
+		void shouldHaveCorrectEntryNames() {
+			Git::Tree *tree = repo->tree("273b4fb");
+			QFETCH(QString, entryName);
+			QFETCH(QString, entryId);
+
+			QMap<QString, Git::RawObject*> entries = tree->entriesByName();
+			QCOMPARE(entries[entryName]->id(), entryId);
+
+			QCOMPARE(entries["none_existent"], (Git::RawObject*)0);
+		}
+
 		void shouldHaveCorrectNumberOfTrees() {
 			Git::Tree *tree = repo->tree("273b4fb");
 			QCOMPARE(tree->trees().count(), 1);
@@ -63,6 +96,24 @@ class TreeTest : public GitTestBase
 			Git::Tree *tree = repo->tree("273b4fb");
 			QCOMPARE(tree->blobs().count(), 2);
 			QCOMPARE(tree->blobsByName().count(), 2);
+		}
+
+		void shouldFindCorrectNameForObject_data() {
+			QTest::addColumn<QString>("entryId");
+			QTest::addColumn<QString>("entryName");
+
+			QTest::newRow("none")  << QString("273b4fbfa8910e2806d6999c8433f29c95c1ac86") << QString();
+			QTest::newRow("dir0")  << QString("5b51924c72272342a7490dd267ed022e90174480") << QString("dir0");
+			QTest::newRow("file1") << QString("a907ec3f431eeb6b1c75799a7e4ba73ca6dc627a") << QString("file1");
+			QTest::newRow("file2") << QString("eb697c0d58b8e5fce1855b606a665c4a2ad3a1c7") << QString("file2");
+		}
+
+		void shouldFindCorrectNameForObject() {
+			Git::Tree *tree = repo->tree("273b4fb");
+			QFETCH(QString, entryId);
+			QFETCH(QString, entryName);
+
+			QCOMPARE(tree->nameFor(entryId), entryName);
 		}
 };
 
