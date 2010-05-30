@@ -26,6 +26,10 @@ using namespace Git;
 
 
 
+#define DEFLATED_HEADER_READ_SIZE  128
+
+
+
 LooseStorage::LooseStorage(Repo &repo)
 	: ObjectStorage(repo)
 	, d(new LooseStoragePrivate)
@@ -94,7 +98,7 @@ const QByteArray LooseStorage::rawHeaderFor(const QString &id)
 		Q_ASSERT(ok);
 		Q_UNUSED(ok);
 
-		d->rawData[actualId] = RawObject::extractHeaderForm(inflate(objectFile.read(64))).toLatin1();
+		d->rawData[actualId] = RawObject::extractHeaderForm(inflate(objectFile.read(DEFLATED_HEADER_READ_SIZE))).toLatin1();
 	}
 
 	return d->rawData[actualId];
