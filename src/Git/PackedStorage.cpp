@@ -32,9 +32,6 @@ using namespace Git;
 
 
 
-#define OBJ_OFS_DELTA  6
-#define OBJ_REF_DELTA  7
-
 #define FanOutCount   256
 #define SHA1Size       20
 #define IdxOffsetSize   4
@@ -46,11 +43,15 @@ using namespace Git;
 #define EntrySize    OffsetSize + SHA1Size
 #define EntrySizeV2  SHA1Size + CrcSize + OffsetSize
 
-#define OBJ_NONE    0
-#define OBJ_COMMIT  1
-#define OBJ_TREE    2
-#define OBJ_BLOB    3
-#define OBJ_TAG     4
+typedef enum {
+	OBJ_NONE = 0,
+	OBJ_COMMIT, // = 1
+	OBJ_TREE, // = 2
+	OBJ_BLOB, // = 3
+	OBJ_TAG, // = 4
+	OBJ_OFS_DELTA, // = 6
+	OBJ_REF_DELTA, // = 7
+} PackObjectType;
 
 
 
