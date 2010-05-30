@@ -31,9 +31,9 @@ class PackedStoragePrivate : public QSharedData {
 public:
 	PackedStoragePrivate()
 		: QSharedData()
-		, indexDataOffset(-1)
-		, indexFile()
 		, indexDataOffsets()
+		, indexFile()
+		, indexGlobalDataOffset(-1)
 		, indexVersion(0)
 		, name()
 		, packFile()
@@ -43,9 +43,9 @@ public:
 	{}
 	PackedStoragePrivate(const PackedStoragePrivate &other)
 		: QSharedData(other)
-		, indexDataOffset(other.indexDataOffset)
-		, indexFile(other.indexFile.fileName())
 		, indexDataOffsets(other.indexDataOffsets)
+		, indexFile(other.indexFile.fileName())
+		, indexGlobalDataOffset(other.indexGlobalDataOffset)
 		, indexVersion(other.indexVersion)
 		, name(other.name)
 		, packFile(other.packFile.fileName())
@@ -54,9 +54,9 @@ public:
 		, size(other.size)
 	{}
 
-	int indexDataOffset;
-	QFile indexFile;
 	QList<quint32> indexDataOffsets;
+	QFile indexFile;
+	int indexGlobalDataOffset;
 	quint32 indexVersion;
 	QString name;
 	QFile packFile;

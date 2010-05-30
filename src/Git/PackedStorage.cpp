@@ -236,13 +236,13 @@ void PackedStorage::initIndexVersion()
 void PackedStorage::initIndexVersion_v1()
 {
 	d->indexVersion = 1;
-	d->indexDataOffset = 0;
+	d->indexGlobalDataOffset = 0;
 }
 
 void PackedStorage::initIndexVersion_v2()
 {
 	d->indexVersion = 2;
-	d->indexDataOffset = 8;
+	d->indexGlobalDataOffset = 8;
 }
 
 void PackedStorage::initPack()
@@ -347,7 +347,7 @@ const QByteArray PackedStorage::readIndexFrom(int offset, int length)
 {
 	Q_ASSERT(d->indexFile.isOpen());
 
-	offset += d->indexDataOffset;
+	offset += d->indexGlobalDataOffset;
 
 	d->indexFile.seek(offset);
 	Q_ASSERT(length != 0);
