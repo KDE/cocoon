@@ -350,13 +350,13 @@ const QByteArray PackedStorage::readIndexFrom(int offset, int length)
 
 	offset += d->indexGlobalDataOffset;
 
-	d->indexFile.seek(offset);
 	Q_ASSERT(length != 0);
 
 	if (length < 0) {
 		length = 1;
 	}
 
+	d->indexFile.seek(offset);
 	return d->indexFile.read(length);
 }
 
