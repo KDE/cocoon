@@ -109,6 +109,14 @@ class PackedStorageTest : public GitTestBase
 			QCOMPARE(data.size(), QString("commit 212").length() + 1 + 212);
 		}
 
+		void shouldExtractAnotherObject() {
+			QString id = "86e041dad66a19b9518b83b78865015f62662f75";
+			QByteArray data = storage->rawDataFor(id);
+
+			QCOMPARE(QTest::toHexRepresentation(data, 20), QTest::toHexRepresentation("blob 12\0foo\nbar\nbaz\n", 20));
+			QCOMPARE(data.size(), QString("blob 12").length() + 1 + 12);
+		}
+
 		void shouldFindObjectByFullId() {
 			QCOMPARE(storage->rawObjectFor("b7566b7883e0dd74baba8cb194ed5dacaed5bb62")->id(), QLatin1String("b7566b7883e0dd74baba8cb194ed5dacaed5bb62"));
 		}
