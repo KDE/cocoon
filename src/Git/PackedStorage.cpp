@@ -368,14 +368,14 @@ const QByteArray PackedStorage::unpackCompressed(int offset, int destSize)
 	while (unpackedData.size() < destSize) {
 		QByteArray packedData = d->packFile.read(4096);
 		if (packedData.size() == 0) {
-			kError() << "error reading pack data in" << d->name;
+			kError() << "could not read packed data in" << d->name;
 			/** @todo throw exception */
 		}
 		unpackedData.append(inflate(packedData));
 	}
 
 	if (unpackedData.size() > destSize) {
-			kError() << "error reading pack data in" << d->name;
+			kError() << "unpacked more data than expected in" << d->name;
 			/** @todo throw exception */
 	}
 
