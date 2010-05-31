@@ -36,6 +36,8 @@ public:
 		, indexGlobalDataOffset(-1)
 		, indexVersion(0)
 		, name()
+		, objectSizes()
+		, objectTypes()
 		, packFile()
 		, rawData()
 		, rawObjects()
@@ -48,6 +50,8 @@ public:
 		, indexGlobalDataOffset(other.indexGlobalDataOffset)
 		, indexVersion(other.indexVersion)
 		, name(other.name)
+		, objectSizes(other.objectSizes)
+		, objectTypes(other.objectTypes)
 		, packFile(other.packFile.fileName())
 		, rawData(other.rawData)
 		, rawObjects(other.rawObjects)
@@ -59,6 +63,8 @@ public:
 	int indexGlobalDataOffset;
 	quint32 indexVersion;
 	QString name;
+	QHash<QString, int> objectSizes;
+	QHash<QString, QString> objectTypes;
 	QFile packFile;
 	QHash<QString, QByteArray> rawData;
 	QHash<QString, RawObject*> rawObjects;
