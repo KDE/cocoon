@@ -181,6 +181,7 @@ int PackedStorage::dataOffsetFor_v2(const QString &id)
 		} else {
 			int pos = OffsetStart + (d->size * (SHA1Size + CrcSize)) + (mid * OffsetSize);
 			int offset = ntohl(*(uint32_t*)readIndexFrom(pos, OffsetSize).data());
+			kDebug() << d->name << "found offset" << QString::number(offset, 16) << "for" << id;
 			return offset;
 		}
 	}
@@ -207,8 +208,9 @@ void PackedStorage::initIndexOffsets()
 	for (int i=0; i < FanOutCount; ++i) {
 		quint32 pos = ntohl(*(uint32_t*)readIndexFrom(i*IdxOffsetSize, IdxOffsetSize).data());
 		if (pos < d->indexDataOffsets[i]) {
-			kWarning() << d->name << "has discontinuous index" << i;
+			kError() << d->name << "has discontinuous index" << i;
 			/** @todo throw exception */
+			return;
 		}
 		d->indexDataOffsets << pos;
 	}
@@ -220,7 +222,7 @@ void PackedStorage::initIndexVersion()
 	QByteArray signature = d->indexFile.read(4);
 	quint32 version = ntohl(*(uint32_t*)d->indexFile.read(4).data());
 
-	//kDebug() << d->name << "index version" << version;
+	kDebug() << d->name << "index version" << version;
 
 	static const QString packIdxSignature = "\377tOc";
 	if (signature == packIdxSignature) {
@@ -458,6 +460,7 @@ const QByteArray PackedStorage::unpackObjectFrom(int offset)
 	default:
 		kError() << "invalid type" << type << "in" << d->name;
 		/** @todo throw exception */
+		return QByteArray();
 	}
 
 	return rawData;
