@@ -42,7 +42,7 @@ class PackedStorageTest : public GitTestBase
 		void init() {
 			GitTestBase::init();
 
-			packName = "pack-ffd4ffdf47bddc07d2675702e50ac3b3b6df20bb";
+			packName = "pack-6e6471a59ce1759c3fb91189036c587088492a8d";
 
 			storage = new Git::PackedStorage(packName, *repo);
 		}
@@ -85,13 +85,19 @@ class PackedStorageTest : public GitTestBase
 		}
 
 		void shouldHaveCorrectNumberOfObjectsInPack() {
-			QCOMPARE(storage->allIds().size(), 3);
+			QCOMPARE(storage->allIds().size(), 9);
 		}
 
 		void shouldHaveCorrectObjectsInPack() {
-			Q_ASSERT(storage->allIds()[0] == "5b36b1f1641c26c8bee07c40e2577be81a22c73d"); // tree
-			Q_ASSERT(storage->allIds()[1] == "86e041dad66a19b9518b83b78865015f62662f75"); // blob
-			Q_ASSERT(storage->allIds()[2] == "b7566b7883e0dd74baba8cb194ed5dacaed5bb62"); // commit
+			QCOMPARE(storage->allIds()[0], QLatin1String("4d1a5561d058e0b30e7752d4bebde44b6ac37faa")); // lorem_ipsum.txt in 2st commit
+			QCOMPARE(storage->allIds()[1], QLatin1String("52076e870c962a1aa44a722bdcad8b75c04c9de1")); // tree for 3rd commit
+			QCOMPARE(storage->allIds()[2], QLatin1String("5b36b1f1641c26c8bee07c40e2577be81a22c73d")); // tree for 1st commit
+			QCOMPARE(storage->allIds()[3], QLatin1String("86e041dad66a19b9518b83b78865015f62662f75")); // some_file.txt
+			QCOMPARE(storage->allIds()[4], QLatin1String("978dd50f4a265b83c793158a292ab83db82ded94")); // lorem_ipsum.txt in 3rd commit
+			QCOMPARE(storage->allIds()[5], QLatin1String("a909f28454efc3fedce30447f997a3eeab6e3330")); // 3rd commit
+			QCOMPARE(storage->allIds()[6], QLatin1String("b08e418477a380049d998de4815133ea5fb30b3a")); // 2nd commit
+			QCOMPARE(storage->allIds()[7], QLatin1String("b7566b7883e0dd74baba8cb194ed5dacaed5bb62")); // 1st commit
+			QCOMPARE(storage->allIds()[8], QLatin1String("f760db3a96a9392a765d3c29e305060368afceac")); // tree for 2nd commit
 		}
 
 		void shouldOnlyExtractHeader() {
@@ -110,11 +116,11 @@ class PackedStorageTest : public GitTestBase
 		}
 
 		void shouldExtractAnotherObject() {
-			QString id = "86e041dad66a19b9518b83b78865015f62662f75";
+			QString id = "978dd50f4a265b83c793158a292ab83db82ded94";
 			QByteArray data = storage->rawDataFor(id);
 
-			QCOMPARE(QTest::toHexRepresentation(data, 20), QTest::toHexRepresentation("blob 12\0foo\nbar\nbaz\n", 20));
-			QCOMPARE(data.size(), QString("blob 12").length() + 1 + 12);
+			QCOMPARE(QTest::toHexRepresentation(data, 37), QTest::toHexRepresentation("blob 3107\0Lorem ipsum dolor sit amet,", 37));
+			QCOMPARE(data.size(), QString("blob 3107").length() + 1 + 3107);
 		}
 
 		void shouldFindObjectByFullId() {
