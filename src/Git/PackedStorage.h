@@ -62,7 +62,7 @@ class KDE_EXPORT PackedStorage : public ObjectStorage
 		const QByteArray readIndexFrom(int offset, int length = -1);
 		const QByteArray unpackCompressed(int offset, int destSize);
 		const QByteArray unpackDeltified(const QString &id, int type, int offset, int objOffset, int size);
-		const QByteArray unpackObjectFrom(int offset);
+		const QByteArray unpackObjectFrom(const QString &id, int offset = -1);
 
 	private:
 		QSharedDataPointer<PackedStoragePrivate> d;

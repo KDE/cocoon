@@ -428,8 +428,13 @@ const QByteArray  PackedStorage::unpackDeltified(const QString &id, int type, in
 	return patchDelta(base, delta);
 }
 
-const QByteArray PackedStorage::unpackObjectFrom(int offset)
+const QByteArray PackedStorage::unpackObjectFrom(const QString &id, int offset)
 {
+	if (offset < 0) {
+		offset = dataOffsetFor(id);
+		Q_ASSERT(offset >= 0);
+	}
+
 	int objectOffset = offset;
 	d->packFile.seek(offset);
 
