@@ -275,17 +275,17 @@ const QByteArray PackedStorage::patchDelta(const QByteArray &base, const QByteAr
 	QByteArray patched;
 
 	while (pos < delta.size()) {
-		char c = delta[pos];
+		unsigned char c = delta[pos];
 		pos += 1;
 		if ((c & 0x80) != 0) {
 			pos -= 1;
 			int cpSize = 0;
 			quint32 cpOff = 0;
 
-			if ((c & 0x01) != 0) { cpOff  = delta[pos += 1]; }
-			if ((c & 0x02) != 0) { cpOff |= delta[pos += 1] <<  8; }
-			if ((c & 0x04) != 0) { cpOff |= delta[pos += 1] << 16; }
-			if ((c & 0x08) != 0) { cpOff |= delta[pos += 1] << 24; }
+			if ((c & 0x01) != 0) { cpOff   = delta[pos += 1]; }
+			if ((c & 0x02) != 0) { cpOff  |= delta[pos += 1] <<  8; }
+			if ((c & 0x04) != 0) { cpOff  |= delta[pos += 1] << 16; }
+			if ((c & 0x08) != 0) { cpOff  |= delta[pos += 1] << 24; }
 			if ((c & 0x10) != 0) { cpSize  = delta[pos += 1]; }
 			if ((c & 0x20) != 0) { cpSize |= delta[pos += 1] <<  8; }
 			if ((c & 0x40) != 0) { cpSize |= delta[pos += 1] << 16; }
@@ -293,7 +293,7 @@ const QByteArray PackedStorage::patchDelta(const QByteArray &base, const QByteAr
 			pos += 1;
 			patched += base.mid(cpOff, cpSize);
 		} else if (c != 0) {
-			patched.append(delta.mid(pos, c));
+			patched += delta.mid(pos, c);
 			pos += c;
 		} else {
 			kError() << d->name << "has invalid delta data";
