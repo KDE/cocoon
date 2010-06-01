@@ -400,15 +400,15 @@ const QByteArray PackedStorage::unpackCompressed(int offset, int destSize)
 const QByteArray  PackedStorage::unpackDeltified(int type, int offset, int objOffset, int size)
 {
 	d->packFile.seek(offset);
-	QByteArray id = d->packFile.read(SHA1Size);
+	QByteArray data = d->packFile.read(SHA1Size);
 
 	int baseOffset = -1;
 	if (type == OBJ_OFS_DELTA) {
 		int i = 0;
-		char c = id[0];
+		unsigned char c = data[0];
 		baseOffset = c & 0x7f;
 		while ((c & 0x80) != 0) {
-			c = id[i += 1];
+			c = data[i += 1];
 			baseOffset += 1;
 			baseOffset <<= 7;
 			baseOffset |= c & 0x7f;
@@ -416,7 +416,7 @@ const QByteArray  PackedStorage::unpackDeltified(int type, int offset, int objOf
 		baseOffset = objOffset - baseOffset;
 		offset += i + 1;
 	} else {
-		baseOffset = dataOffsetFor(id);
+		baseOffset = dataOffsetFor(data/*.toHex() ?*/);
 		offset += SHA1Size;
 	}
 
