@@ -328,10 +328,11 @@ const QByteArray PackedStorage::rawDataFor(const QString &id)
 	if (!d->rawData.contains(actualId) || RawObject::isOnlyHeader(d->rawData[actualId])) {
 		kDebug() << "loading data" << actualId << "from" << d->name;
 
-		int offset = dataOffsetFor(actualId);
-		Q_ASSERT(offset >= 0);
+		QByteArray data = unpackObjectFrom(actualId);
+		data.prepend('\0');
+		data.prepend(d->objectTypes[actualId].toLatin1() + " " + QString::number(d->objectSizes[actualId]).toLatin1());
 
-		d->rawData[actualId] = unpackObjectFrom(offset);
+		d->rawData[actualId] = data;
 	}
 
 	return d->rawData[actualId];
@@ -465,17 +466,6 @@ const QByteArray PackedStorage::unpackObjectFrom(const QString &id, int offset)
 		rawData = unpackCompressed(offset, size);
 		d->objectSizes[id] = size;
 		d->objectTypes[id] = ObjectTypeNames[type];
-		rawData.prepend('\0');
-		rawData.prepend(QString::number(rawData.size()-1).toLatin1());
-		if (type == OBJ_BLOB) {
-			rawData.prepend("blob ");
-		} else if (type == OBJ_COMMIT) {
-			rawData.prepend("commit ");
-		} else if (type == OBJ_TAG) {
-			rawData.prepend("tag ");
-		} else if (type == OBJ_TREE) {
-			rawData.prepend("tree ");
-		}
 		break;
 	default:
 		kError() << "invalid type" << type << "in" << d->name;
