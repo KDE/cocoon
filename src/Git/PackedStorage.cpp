@@ -420,6 +420,8 @@ const QByteArray  PackedStorage::unpackDeltified(int type, int offset, int objOf
 		offset += SHA1Size;
 	}
 
+	Q_ASSERT(baseOffset >= 0);
+
 	QByteArray base = unpackObjectFrom(baseOffset);
 	/** @todo get object type */
 	QByteArray delta = unpackCompressed(offset, size);
