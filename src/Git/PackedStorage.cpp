@@ -397,7 +397,7 @@ const QByteArray PackedStorage::unpackCompressed(int offset, int destSize)
 	return unpackedData;
 }
 
-const QByteArray  PackedStorage::unpackDeltified(int type, int offset, int objOffset, int size)
+const QByteArray  PackedStorage::unpackDeltified(const QString &id, int type, int offset, int objOffset, int size)
 {
 	d->packFile.seek(offset);
 	QByteArray data = d->packFile.read(SHA1Size);
@@ -422,7 +422,7 @@ const QByteArray  PackedStorage::unpackDeltified(int type, int offset, int objOf
 
 	Q_ASSERT(baseOffset >= 0);
 
-	QByteArray base = unpackObjectFrom(baseOffset);
+	QByteArray base = unpackObjectFrom(id, baseOffset);
 	/** @todo get object type */
 	QByteArray delta = unpackCompressed(offset, size);
 	return patchDelta(base, delta);
