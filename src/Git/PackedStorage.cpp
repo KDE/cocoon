@@ -278,7 +278,7 @@ const QByteArray PackedStorage::patchDelta(const QByteArray &base, const QByteAr
 		char c = delta[pos];
 		pos += 1;
 		if ((c & 0x80) != 0) {
-			pos += 1;
+			pos -= 1;
 			int cpSize = 0;
 			quint32 cpOff = 0;
 
