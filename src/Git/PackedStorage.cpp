@@ -455,14 +455,16 @@ const QByteArray PackedStorage::unpackObjectFrom(const QString &id, int offset)
 	case OBJ_OFS_DELTA:
 	case OBJ_REF_DELTA:
 		kDebug() << "unpacking delta from" << d->name;
-		rawData = unpackDeltified(type, offset, objectOffset, size);
-		/** @todo prepend header */
+		rawData = unpackDeltified(id, type, offset, objectOffset, size);
+		d->objectSizes[id] = rawData.size();
 		break;
 	case OBJ_BLOB:
 	case OBJ_COMMIT:
 	case OBJ_TAG:
 	case OBJ_TREE:
 		rawData = unpackCompressed(offset, size);
+		d->objectSizes[id] = size;
+		d->objectTypes[id] = ObjectTypeNames[type];
 		rawData.prepend('\0');
 		rawData.prepend(QString::number(rawData.size()-1).toLatin1());
 		if (type == OBJ_BLOB) {
