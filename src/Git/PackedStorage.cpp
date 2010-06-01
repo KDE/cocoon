@@ -392,6 +392,8 @@ const QByteArray PackedStorage::unpackCompressed(int offset, int destSize)
 			return QByteArray();
 	}
 
+	Q_ASSERT(unpackedData.size() == destSize);
+
 	return unpackedData;
 }
 
