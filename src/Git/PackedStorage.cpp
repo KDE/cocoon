@@ -406,7 +406,7 @@ const QByteArray  PackedStorage::unpackDeltified(int type, int offset, int objOf
 	if (type == OBJ_OFS_DELTA) {
 		int i = 0;
 		char c = id[0];
-		int baseOffset = c & 0x7f;
+		baseOffset = c & 0x7f;
 		while ((c & 0x80) != 0) {
 			c = id[i += 1];
 			baseOffset += 1;
