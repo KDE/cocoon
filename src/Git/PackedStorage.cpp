@@ -262,10 +262,15 @@ void PackedStorage::initPack()
 const QByteArray PackedStorage::patchDelta(const QByteArray &base, const QByteArray &delta)
 {
 	quint32 pos = 0;
-	patchDeltaHeaderSize(delta, pos);
+	int srcSize = patchDeltaHeaderSize(delta, pos/* = 0 */);
 	Q_ASSERT(pos != 0);
+	if (srcSize != base.size()) {
+		kError() << "invalid delta data";
+		return QByteArray();
+	}
 
-	patchDeltaHeaderSize(delta, pos);
+	/*int destSize =*/ patchDeltaHeaderSize(delta, pos);
+	Q_ASSERT(pos != 0);
 
 	QByteArray patched;
 
