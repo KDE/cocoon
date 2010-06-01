@@ -43,6 +43,8 @@ using namespace Git;
 #define EntrySize    OffsetSize + SHA1Size
 #define EntrySizeV2  SHA1Size + CrcSize + OffsetSize
 
+
+
 typedef enum {
 	OBJ_NONE = 0,
 	OBJ_COMMIT = 1,
@@ -52,6 +54,8 @@ typedef enum {
 	OBJ_OFS_DELTA = 6,
 	OBJ_REF_DELTA = 7,
 } PackObjectType;
+
+const char* ObjectTypeNames[] = {"", "commit", "tree", "blob", "tag"};
 
 
 
