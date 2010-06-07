@@ -41,7 +41,7 @@ target_link_libraries(cocoon
 	${KDE4_STRIGI_LIBS}
 	${STRIGI_STREAMANALYZER_LIBRARY}
 	${STRIGI_STREAMS_LIBRARY}
-	${GIT_LIBRARY}
+	CocoonGit
 )
 
 install(TARGETS cocoon ${INSTALL_TARGETS_DEFAULT_ARGS})
