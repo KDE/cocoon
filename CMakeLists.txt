@@ -1,4 +1,4 @@
-project(CocoonGit)
+project(Cocoon)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules" ${CMAKE_MODULE_PATH})
 
@@ -11,5 +11,4 @@ include_directories(
 )
 
 add_subdirectory( doc )
-add_subdirectory( src )
-add_subdirectory( tests )
+add_subdirectory( lib )
