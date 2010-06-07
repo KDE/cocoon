@@ -1,0 +1,26 @@
+# - Try to find Coocoon Git
+# Once done this will define
+#
+#  GIT_FOUND - system has Cocoon Git
+#  GIT_INCLUDE_DIR - the Cocoon Git include directory
+#  GIT_LIBRARY
+
+
+FIND_PATH(GIT_INCLUDE_DIR NAMES repo.h PATH_SUFFIXES git Git)
+
+FIND_LIBRARY(GIT_LIBRARY NAMES CocoonGit)
+
+IF (GIT_INCLUDE_DIR AND GIT_LIBRARY)
+  SET(GIT_FOUND TRUE)
+ENDIF (GIT_INCLUDE_DIR AND GIT_LIBRARY)
+
+
+IF (GIT_FOUND)
+  IF (NOT GIT_FIND_QUIETLY)
+    MESSAGE(STATUS "Found Git: ${GIT_LIBRARY}")
+  ENDIF (NOT GIT_FIND_QUIETLY)
+ELSE (GIT_FOUND)
+  IF (GIT_FIND_REQUIRED)
+    MESSAGE(FATAL_ERROR "Could not find Cocoon Git library <http://gitorious.org/cocoon>")
+  ENDIF (GIT_FIND_REQUIRED)
+ENDIF (GIT_FOUND)
