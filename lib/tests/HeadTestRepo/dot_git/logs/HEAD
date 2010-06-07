@@ -1,0 +1,6 @@
+0000000000000000000000000000000000000000 bc441701700e13d1554325cca2955d12c51a5525 Riyad Preukschas <riyad@informatik.uni-bremen.de> 1267549704 +0100	commit (initial): Empty inital commit.
+bc441701700e13d1554325cca2955d12c51a5525 bc441701700e13d1554325cca2955d12c51a5525 Riyad Preukschas <riyad@informatik.uni-bremen.de> 1267549714 +0100	checkout: moving from master to branch
+bc441701700e13d1554325cca2955d12c51a5525 632851d69abeb631f6529b50452611b9915be7fb Riyad Preukschas <riyad@informatik.uni-bremen.de> 1267549756 +0100	commit: Added branch_file.
+632851d69abeb631f6529b50452611b9915be7fb bc441701700e13d1554325cca2955d12c51a5525 Riyad Preukschas <riyad@informatik.uni-bremen.de> 1267549763 +0100	checkout: moving from branch to master
+bc441701700e13d1554325cca2955d12c51a5525 0c738edf8973ea249689a6ef18e6b9690b2712c9 Riyad Preukschas <riyad@informatik.uni-bremen.de> 1267549789 +0100	commit: Added master_file.
+0c738edf8973ea249689a6ef18e6b9690b2712c9 01e954978b4360d22cc6b57b474d5c01f7b8309c Riyad Preukschas <riyad@informatik.uni-bremen.de> 1267549795 +0100	merge branch: Merge made by recursive.
