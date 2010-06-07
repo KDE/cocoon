@@ -1,12 +1,6 @@
 # Used by kde4_add_unit_test to set the full path to test executables
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
-include_directories(
-	${CMAKE_CURRENT_SOURCE_DIR}
-	${CMAKE_SOURCE_DIR}/lib/src
-	${CMAKE_BINARY_DIR}/lib/src
-)
-
 MACRO(UNIT_TESTS)
 	FOREACH(_className ${ARGN})
 		set(_testName ${_className})

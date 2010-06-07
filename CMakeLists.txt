@@ -8,9 +8,11 @@ include (KDE4Defaults)
 find_package(CocoonGit REQUIRED)
 
 include_directories(
+	${CMAKE_CURRENT_SOURCE_DIR}
+	${CMAKE_SOURCE_DIR}/src
+	${CMAKE_SOURCE_DIR}/lib/src
 	${KDE4_INCLUDES}
 	${QT_INCLUDES}
-	/usr/local/include
 )
 
 add_subdirectory( doc )

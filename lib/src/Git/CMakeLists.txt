@@ -1,12 +1,9 @@
 
+add_subdirectory( 3rdparty )
+
 include_directories(
-	${CMAKE_CURRENT_SOURCE_DIR}
-	${CMAKE_SOURCE_DIR}/lib/src
-	${CMAKE_BINARY_DIR}/lib/src
 	${CMAKE_CURRENT_SOURCE_DIR}/3rdparty
 )
-
-add_subdirectory( 3rdparty )
 
 set(cocoon_git_LIB_SRCS
 	3rdparty/dvcsjob.cpp
