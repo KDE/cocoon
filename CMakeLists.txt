@@ -15,6 +15,6 @@ include_directories(
 	${QT_INCLUDES}
 )
 
-add_subdirectory( doc )
+#add_subdirectory( doc )
 add_subdirectory( lib )
 add_subdirectory( src )
