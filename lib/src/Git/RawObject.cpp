@@ -34,24 +34,30 @@ using namespace Git;
 
 RawObject::RawObject(const QString &id, QObject *parent)
 	: QObject(parent)
+	, m_data()
 	, m_id(id)
 	, m_repo(0)
+	, m_type(OBJ_NONE)
 {
 	kWarning() << "creating object without storage:" << id;
 }
 
 RawObject::RawObject(const QString &id, Repo &repo)
 	: QObject((QObject*)&repo)
+	, m_data()
 	, m_id(id)
 	, m_repo(&repo)
+	, m_type(OBJ_NONE)
 {
 	populateWith(m_repo->storageFor(m_id)->rawHeaderFor(m_id));
 }
 
 RawObject::RawObject(const QString &id, const QByteArray &rawData, Repo &repo)
 	: QObject((QObject*)&repo)
+	, m_data()
 	, m_id(id)
 	, m_repo(&repo)
+	, m_type(OBJ_NONE)
 {
 	populateWith(rawData);
 }
