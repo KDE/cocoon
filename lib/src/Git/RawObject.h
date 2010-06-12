@@ -70,6 +70,8 @@ class KDE_EXPORT RawObject : public QObject
 		static bool isOnlyHeader(const QByteArray &rawData);
 		static bool isValidHeader(const QString &possibleHeader);
 		static RawObject* newInstance(const QString& id, Repo &repo);
+		static ObjectType typeFromTypeName(const QString& name);
+		static const QString typeNameFromType(const ObjectType type);
 
 	protected:
 		RawObject(const QString &id, QObject *parent=0);

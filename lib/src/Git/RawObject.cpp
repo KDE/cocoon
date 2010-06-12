@@ -175,6 +175,25 @@ const QString& RawObject::type() const
 	return m_type;
 }
 
+ObjectType RawObject::typeFromTypeName(const QString &name)
+{
+	static const char* ObjectTypeNames[] = {"", "commit", "tree", "blob", "tag"};
+
+	for (uint i=4/*maximum index in ObjectTypeNames[]*/; i > 0; --i) {
+		if (name == ObjectTypeNames[i]) {
+			return (ObjectType)i;
+		}
+	}
+
+	return OBJ_NONE;
+}
+
+const QString RawObject::typeNameFromType(const ObjectType type)
+{
+	static const char* ObjectTypeNames[] = {"", "commit", "tree", "blob", "tag"};
+	return ObjectTypeNames[type];
+}
+
 
 
 #include "RawObject.moc"
