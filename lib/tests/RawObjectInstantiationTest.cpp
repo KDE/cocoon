@@ -61,7 +61,7 @@ class RawObjectInstantiationTest : public GitTestBase
 			Git::RawObject *obj = Git::RawObject::newInstance(id, *repo);
 
 			Q_ASSERT(obj);
-			QCOMPARE(obj->type(), QString("commit"));
+			QCOMPARE(obj->type(), Git::OBJ_COMMIT);
 			QCOMPARE(QString(obj->metaObject()->className()), QString("Git::Commit"));
 		}
 };
