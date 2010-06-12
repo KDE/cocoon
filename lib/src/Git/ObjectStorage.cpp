@@ -134,7 +134,7 @@ QList<RawObject*> ObjectStorage::allObjects()
 	return objects;
 }
 
-QList<RawObject*> ObjectStorage::allObjectsByType(const QString &type)
+QList<RawObject*> ObjectStorage::allObjectsByType(const ObjectType type)
 {
 	QList<RawObject*> objects;
 

@@ -45,10 +45,6 @@ using namespace Git;
 
 
 
-const char* ObjectTypeNames[] = {"", "commit", "tree", "blob", "tag"};
-
-
-
 PackedStorage::PackedStorage(const QString &name, Repo &repo)
 	: ObjectStorage(repo)
 	, d(new PackedStoragePrivate)
@@ -320,7 +316,7 @@ const QByteArray PackedStorage::rawDataFor(const QString &id)
 
 		QByteArray data = unpackObjectFrom(actualId);
 		data.prepend('\0');
-		data.prepend(d->objectTypes[actualId].toLatin1() + " " + QString::number(d->objectSizes[actualId]).toLatin1());
+		data.prepend(RawObject::typeNameFromType(d->objectTypes[actualId]).toLatin1() + " " + QString::number(d->objectSizes[actualId]).toLatin1());
 
 		d->rawData[actualId] = data;
 	}
@@ -455,10 +451,10 @@ const QByteArray PackedStorage::unpackObjectFrom(const QString &id, int offset)
 	case OBJ_TREE:
 		rawData = unpackCompressed(offset, size);
 		d->objectSizes[id] = size;
-		d->objectTypes[id] = ObjectTypeNames[type];
+		d->objectTypes[id] = (ObjectType)type;
 		break;
 	default:
-		kError() << "invalid type" << type << "in" << d->name;
+		kError() << "invalid type" << RawObject::typeNameFromType((ObjectType)type) << "in" << d->name;
 		/** @todo throw exception */
 		return QByteArray();
 	}

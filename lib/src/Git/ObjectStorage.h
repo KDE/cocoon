@@ -22,6 +22,7 @@
 #include <QObject>
 
 #include "ObjectStorage_p.h"
+#include "RawObject.h"
 
 #include <kdemacros.h>
 
@@ -46,7 +47,7 @@ class KDE_EXPORT ObjectStorage : public QObject
 		const QString actualIdFor(const QString &shortId);
 		virtual const QStringList allIds() = 0;
 		virtual QList<RawObject*> allObjects();
-		virtual QList<RawObject*> allObjectsByType(const QString &type);
+		virtual QList<RawObject*> allObjectsByType(const ObjectType type);
 		virtual bool contains(const QString &id);
 		virtual const QByteArray rawDataFor(const QString &id) = 0;
 		virtual const QByteArray rawHeaderFor(const QString &id) = 0;

@@ -64,7 +64,7 @@ public:
 	quint32 indexVersion;
 	QString name;
 	QHash<QString, int> objectSizes;
-	QHash<QString, QString> objectTypes;
+	QHash<QString, ObjectType> objectTypes;
 	QFile packFile;
 	QHash<QString, QByteArray> rawData;
 	QHash<QString, RawObject*> rawObjects;
