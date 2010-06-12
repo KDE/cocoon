@@ -108,12 +108,12 @@ const QString& RawObject::id() const
 
 bool RawObject::isBlob() const
 {
-	return type() == "blob";
+	return type() == OBJ_BLOB;
 }
 
 bool RawObject::isCommit() const
 {
-	return type() == "commit";
+	return type() == OBJ_COMMIT;
 }
 
 bool RawObject::isOnlyHeader(const QByteArray &rawData)
@@ -123,12 +123,12 @@ bool RawObject::isOnlyHeader(const QByteArray &rawData)
 
 bool RawObject::isTag() const
 {
-	return type() == "tag";
+	return type() == OBJ_TAG;
 }
 
 bool RawObject::isTree() const
 {
-	return type() == "tree";
+	return type() == OBJ_TREE;
 }
 
 bool RawObject::isValidHeader(const QString &possibleHeader)
@@ -162,7 +162,7 @@ void RawObject::populateWith(const QByteArray &rawData)
 	}
 
 	m_data = rawData.mid(header.size()+1);
-	m_type = extractObjectTypeFrom(header);
+	m_type = typeFromTypeName(extractObjectTypeFrom(header));
 }
 
 Repo& RawObject::repo() const
@@ -170,7 +170,7 @@ Repo& RawObject::repo() const
 	return *m_repo;
 }
 
-const QString& RawObject::type() const
+ObjectType RawObject::type() const
 {
 	return m_type;
 }

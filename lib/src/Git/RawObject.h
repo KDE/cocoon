@@ -56,7 +56,7 @@ class KDE_EXPORT RawObject : public QObject
 
 		const QByteArray&  data();
 		const QString&     id() const;
-		const QString&     type() const;
+		ObjectType         type() const;
 
 		bool isBlob() const;
 		bool isCommit() const;
@@ -83,7 +83,7 @@ class KDE_EXPORT RawObject : public QObject
 		QByteArray  m_data;
 		QString     m_id;
 		Repo       *m_repo;
-		QString     m_type;
+		ObjectType  m_type;
 
 	friend class ::RawObjectTest;
 	friend class ::RawObjectTypeTest;
