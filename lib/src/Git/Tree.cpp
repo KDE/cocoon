@@ -29,11 +29,17 @@ using namespace Git;
 
 Tree::Tree(const QString &id, QObject *parent)
 	: RawObject(id, parent)
+	, m_entries()
+	, m_entryModes()
+	, m_entryNames()
 {
 }
 
 Tree::Tree(const QString& id, Repo &repo)
 	: RawObject(id, repo)
+	, m_entries()
+	, m_entryModes()
+	, m_entryNames()
 {
 	fillFromString(this, data());
 }
