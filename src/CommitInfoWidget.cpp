@@ -57,7 +57,7 @@ void CommitInfoWidget::updateView()
 	ui->diffView->setDiff(m_commit->diff());
 }
 
-void CommitInfoWidget::setCommit(const Git::Commit *commit)
+void CommitInfoWidget::setCommit(Git::Commit *commit)
 {
 	m_commit = commit;
 	updateView();

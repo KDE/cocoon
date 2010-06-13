@@ -39,14 +39,14 @@ class CommitInfoWidget : public QWidget
 		explicit CommitInfoWidget(QWidget *parent = 0);
 		~CommitInfoWidget();
 
-		void setCommit(const Git::Commit *commit);
+		void setCommit(Git::Commit *commit);
 
 	public slots:
 		void clear();
 		void updateView();
 
 	private:
-		const Git::Commit *m_commit;
+		Git::Commit *m_commit;
 		Ui::CommitInfoWidget *ui;
 };
 

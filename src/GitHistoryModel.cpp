@@ -62,7 +62,7 @@ QVariant GitHistoryModel::data(const QModelIndex &index, int role) const
 		return QVariant();
 	}
 
-	const Git::Commit *commit = mapToCommit(index);
+	Git::Commit *commit = mapToCommit(index);
 
 	QString data;
 	switch (index.column()) {
@@ -117,7 +117,7 @@ void GitHistoryModel::loadCommits()
 	/** @todo change to m_repo.commits(m_branch, Git::NoLimit); */
 }
 
-const Git::Commit* GitHistoryModel::mapToCommit(const QModelIndex &index) const
+Git::Commit* GitHistoryModel::mapToCommit(const QModelIndex &index) const
 {
 	if (!index.isValid()) {
 		return 0;
