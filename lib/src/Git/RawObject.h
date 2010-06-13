@@ -52,10 +52,10 @@ class KDE_EXPORT RawObject : public QObject
 
 	public:
 		RawObject(const QString& id, Repo &repo);
-		RawObject(const QString& id, const QByteArray &rawData, Repo &repo);
 
 		const QByteArray&  data();
 		const QString&     id() const;
+		int                size() const;
 		ObjectType         type() const;
 
 		bool isBlob() const;
@@ -66,7 +66,7 @@ class KDE_EXPORT RawObject : public QObject
 	// static
 		static const QString extractHeaderForm(const QByteArray &rawData);
 		static int extractObjectSizeFrom(const QString &header);
-		static const QString extractObjectTypeFrom(const QString &header);
+		static ObjectType extractObjectTypeFrom(const QString &header);
 		static bool isOnlyHeader(const QByteArray &rawData);
 		static bool isValidHeader(const QString &possibleHeader);
 		static RawObject* newInstance(const QString& id, Repo &repo);
@@ -76,11 +76,12 @@ class KDE_EXPORT RawObject : public QObject
 	protected:
 		RawObject(const QString &id, QObject *parent=0);
 
-		virtual void populateWith(const QByteArray &rawData);
+		virtual void populateHeader();
 		Repo& repo() const;
 
 	private:
 		QByteArray  m_data;
+		int         m_dataSize;
 		QString     m_id;
 		Repo       *m_repo;
 		ObjectType  m_type;

@@ -35,6 +35,7 @@ using namespace Git;
 RawObject::RawObject(const QString &id, QObject *parent)
 	: QObject(parent)
 	, m_data()
+	, m_dataSize(-1)
 	, m_id(id)
 	, m_repo(0)
 	, m_type(OBJ_NONE)
@@ -45,21 +46,12 @@ RawObject::RawObject(const QString &id, QObject *parent)
 RawObject::RawObject(const QString &id, Repo &repo)
 	: QObject((QObject*)&repo)
 	, m_data()
+	, m_dataSize(-1)
 	, m_id(id)
 	, m_repo(&repo)
 	, m_type(OBJ_NONE)
 {
-	populateWith(m_repo->storageFor(m_id)->rawHeaderFor(m_id));
-}
-
-RawObject::RawObject(const QString &id, const QByteArray &rawData, Repo &repo)
-	: QObject((QObject*)&repo)
-	, m_data()
-	, m_id(id)
-	, m_repo(&repo)
-	, m_type(OBJ_NONE)
-{
-	populateWith(rawData);
+	populateHeader();
 }
 
 
@@ -67,8 +59,7 @@ RawObject::RawObject(const QString &id, const QByteArray &rawData, Repo &repo)
 const QByteArray& RawObject::data()
 {
 	if (m_data.isNull()) {
-		Q_ASSERT(m_repo);
-		populateWith(m_repo->storageFor(m_id)->rawDataFor(m_id));
+		m_data = m_repo->storageFor(m_id)->objectDataFor(m_id);
 	}
 
 	return m_data;
@@ -82,7 +73,7 @@ const QString RawObject::extractHeaderForm(const QByteArray &rawData)
 	if (nullByteIndex >= 0) {
 		possibleHeader = rawData.left(nullByteIndex);
 	} else {
-		Q_ASSERT(rawData.size() <= 7+9); // should suffice for even absurd headers (at least 9 digits size)
+		Q_ASSERT(rawData.size() <= 7+9); // should suffice for even absurd headers (up to 9 digits object size)
 		possibleHeader = rawData;
 	}
 
@@ -102,9 +93,9 @@ int RawObject::extractObjectSizeFrom(const QString &header)
 	return -1;
 }
 
-const QString RawObject::extractObjectTypeFrom(const QString &header)
+ObjectType RawObject::extractObjectTypeFrom(const QString &header)
 {
-	return header.left(header.indexOf(' '));
+	return typeFromTypeName(header.left(header.indexOf(' ')));
 }
 
 const QString& RawObject::id() const
@@ -146,34 +137,39 @@ RawObject* RawObject::newInstance(const QString &id, Repo &repo)
 {
 	ObjectStorage *storage = repo.storageFor(id);
 	QString actualId = storage->actualIdFor(id);
-	QString type = extractObjectTypeFrom(storage->rawHeaderFor(actualId));
+	ObjectType type = storage->objectTypeFor(actualId);
 
-	if (type == "blob") {
+	switch(type) {
+	case OBJ_BLOB:
 		return new Blob(actualId, repo);
-	} else if (type == "commit") {
+	case OBJ_COMMIT:
 		return new Commit(actualId, repo);
-	} else if (type == "tree") {
+	case OBJ_TREE:
 		return new Tree(actualId, repo);
+	default:
+		// as long as all types are not yet implemented
+		return new RawObject(actualId, repo);
 	}
-
-	return new RawObject(actualId, repo);
 }
 
-void RawObject::populateWith(const QByteArray &rawData)
+void RawObject::populateHeader()
 {
-	QString header = extractHeaderForm(rawData);
-	if (!isValidHeader(header)) {
-		kError() << "invalid header for object" << id();
-		return;
-	}
+	Q_ASSERT(m_repo);
+	ObjectStorage *store = m_repo->storageFor(id());
 
-	m_data = rawData.mid(header.size()+1);
-	m_type = typeFromTypeName(extractObjectTypeFrom(header));
+//	m_data = store->objectDataFor(id());
+	m_dataSize = store->objectSizeFor(id());
+	m_type = store->objectTypeFor(id());
 }
 
 Repo& RawObject::repo() const
 {
 	return *m_repo;
+}
+
+int RawObject::size() const
+{
+	return m_dataSize;
 }
 
 ObjectType RawObject::type() const
