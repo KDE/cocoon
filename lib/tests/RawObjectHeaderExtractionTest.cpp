@@ -80,20 +80,20 @@ class RawObjectHeaderExtractionTest : public GitTestBase
 
 		void shouldExtractObjectTypeCorrectly_data() {
 			QTest::addColumn<QString>("header");
-			QTest::addColumn<QString>("objectType");
+			QTest::addColumn<int>("objectType");
 
-			QTest::newRow("invalid header")    << QString()    << QString();
-			QTest::newRow("recognizes blob")   << "blob 123"   << "blob";
-			QTest::newRow("recognizes commit") << "commit 123" << "commit";
-			QTest::newRow("recognizes tag")    << "tag 123"    << "tag";
-			QTest::newRow("recognizes tree")   << "tree 123"   << "tree";
+			QTest::newRow("invalid header")    << QString()    << (int)Git::OBJ_NONE;
+			QTest::newRow("recognizes blob")   << "blob 123"   << (int)Git::OBJ_BLOB;
+			QTest::newRow("recognizes commit") << "commit 123" << (int)Git::OBJ_COMMIT;
+			QTest::newRow("recognizes tag")    << "tag 123"    << (int)Git::OBJ_TAG;
+			QTest::newRow("recognizes tree")   << "tree 123"   << (int)Git::OBJ_TREE;
 		}
 
 		void shouldExtractObjectTypeCorrectly() {
 			QFETCH(QString, header);
-			QFETCH(QString, objectType);
+			QFETCH(int, objectType);
 
-			QCOMPARE(Git::RawObject::extractObjectTypeFrom(header), objectType);
+			QCOMPARE((int)Git::RawObject::extractObjectTypeFrom(header), objectType);
 		}
 
 		void shouldExtractObjectSizeCorrectly_data() {
