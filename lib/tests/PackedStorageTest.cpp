@@ -100,35 +100,42 @@ class PackedStorageTest : public GitTestBase
 			QCOMPARE(storage->allIds()[8], QLatin1String("f760db3a96a9392a765d3c29e305060368afceac")); // tree for 2nd commit
 		}
 
-		void shouldOnlyExtractHeader() {
+		void objectTypeShouldBeCorrect() {
 			QString id = "b7566b7883e0dd74baba8cb194ed5dacaed5bb62";
-			QString rawHeader = storage->rawHeaderFor(id);
+			Git::ObjectType type = storage->objectTypeFor(id);
 
-			QCOMPARE(rawHeader, QString("commit 212"));
+			QCOMPARE(type, Git::OBJ_COMMIT);
+		}
+
+		void objectSizeShouldBeCorrect() {
+			QString id = "b7566b7883e0dd74baba8cb194ed5dacaed5bb62";
+			int size = storage->objectSizeFor(id);
+
+			QCOMPARE(size, 212);
 		}
 
 		void shouldExtractObject() {
 			QString id = "b7566b7883e0dd74baba8cb194ed5dacaed5bb62";
-			QByteArray data = storage->rawDataFor(id);
+			QByteArray data = storage->objectDataFor(id);
 
-			QCOMPARE(QTest::toHexRepresentation(data, 23), QTest::toHexRepresentation("commit 212\0tree 5b36b1f", 23));
-			QCOMPARE(data.size(), QString("commit 212").length() + 1 + 212);
+			QCOMPARE(QTest::toHexRepresentation(data, 12), QTest::toHexRepresentation("tree 5b36b1f", 12));
+			QCOMPARE(data.size(), 212);
 		}
 
 		void shouldExtractAnotherObject() {
 			QString id = "978dd50f4a265b83c793158a292ab83db82ded94";
-			QByteArray data = storage->rawDataFor(id);
+			QByteArray data = storage->objectDataFor(id);
 
-			QCOMPARE(QTest::toHexRepresentation(data, 37), QTest::toHexRepresentation("blob 3107\0Lorem ipsum dolor sit amet,", 37));
-			QCOMPARE(data.size(), QString("blob 3107").length() + 1 + 3107);
+			QCOMPARE(QTest::toHexRepresentation(data, 27), QTest::toHexRepresentation("Lorem ipsum dolor sit amet,", 27));
+			QCOMPARE(data.size(), 3107);
 		}
 
 		void shouldFindObjectByFullId() {
-			QCOMPARE(storage->rawObjectFor("b7566b7883e0dd74baba8cb194ed5dacaed5bb62")->id(), QLatin1String("b7566b7883e0dd74baba8cb194ed5dacaed5bb62"));
+			QCOMPARE(storage->objectFor("b7566b7883e0dd74baba8cb194ed5dacaed5bb62")->id(), QLatin1String("b7566b7883e0dd74baba8cb194ed5dacaed5bb62"));
 		}
 
 		void shouldFindObjectByShordId() {
-			QCOMPARE(storage->rawObjectFor("b7566b7")->id(), QLatin1String("b7566b7883e0dd74baba8cb194ed5dacaed5bb62"));
+			QCOMPARE(storage->objectFor("b7566b7")->id(), QLatin1String("b7566b7883e0dd74baba8cb194ed5dacaed5bb62"));
 		}
 };
 
