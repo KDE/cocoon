@@ -173,7 +173,7 @@ RefList Repo::heads()
 
 RawObject* Repo::object(const QString &id)
 {
-	return storageFor(id) ? storageFor(id)->rawObjectFor(id) : 0;
+	return storageFor(id) ? storageFor(id)->objectFor(id) : 0;
 }
 
 void Repo::reset()
