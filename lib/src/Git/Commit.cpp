@@ -54,16 +54,17 @@ Commit::Commit(const QString& id, Repo &repo)
 	, m_summary()
 	, m_tree(0)
 {
-	fillFromString(this, data());
 }
 
-const QString& Commit::author() const
+const QString& Commit::author()
 {
+	fillFromString(this, data());
 	return m_author;
 }
 
-const KDateTime& Commit::authoredAt() const
+const KDateTime& Commit::authoredAt()
 {
+	fillFromString(this, data());
 	return m_authoredAt;
 }
 
@@ -119,13 +120,15 @@ CommitList Commit::childrenOn(const QStringList &refs) const
 	return childrenByRefs[refKey];
 }
 
-const QString& Commit::committer() const
+const QString& Commit::committer()
 {
+	fillFromString(this, data());
 	return m_committer;
 }
 
-const KDateTime& Commit::committedAt() const
+const KDateTime& Commit::committedAt()
 {
+	fillFromString(this, data());
 	return m_committedAt;
 }
 
@@ -139,6 +142,13 @@ const QString Commit::diff() const
 
 void Commit::fillFromString(Commit *commit, const QString &raw)
 {
+	// if commit has already been filled
+	if (commit->m_tree || !commit->m_message.isEmpty()) {
+		return;
+	}
+
+	qDebug() << "fill commit" << commit->id();
+
 	QStringList lines = raw.split("\n");
 
 	Tree *tree = 0;
@@ -149,7 +159,8 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 	commit->m_tree = tree;
 
 	CommitList parents;
-	while (lines.first().startsWith("parent ")) {
+	while (!lines.isEmpty() && lines.first().startsWith("parent ")) {
+		qDebug() << "add parent" << lines.first();
 		QString parentId = lines.takeFirst().mid(strlen("parent "), -1);
 		parents << commit->repo().commit(parentId);
 	}
@@ -223,7 +234,6 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 	}
 }
 
-
 CommitList Commit::allReachableFrom(const Ref &ref)
 {
 	CommitList commits;
@@ -256,9 +266,9 @@ bool Commit::hasBranchedOn(const QStringList &refs) const
 	return childrenOn(refs).size() > 1;
 }
 
-bool Commit::isMerge() const
+bool Commit::isMerge()
 {
-	return m_parents.size() > 1;
+	return parents().size() > 1;
 }
 
 Commit* Commit::latestIn(const CommitList &commits)
@@ -273,23 +283,27 @@ Commit* Commit::latestIn(const CommitList &commits)
 	return latest;
 }
 
-const QString& Commit::message() const
+const QString& Commit::message()
 {
+	fillFromString(this, data());
 	return m_message;
 }
 
-const CommitList Commit::parents() const
+const CommitList Commit::parents()
 {
+	fillFromString(this, data());
 	return m_parents;
 }
 
-const QString& Commit::summary() const
+const QString& Commit::summary()
 {
+	fillFromString(this, data());
 	return m_summary;
 }
 
-const Tree* Commit::tree() const
+const Tree* Commit::tree()
 {
+	fillFromString(this, data());
 	return m_tree;
 }
 

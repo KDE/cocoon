@@ -50,10 +50,10 @@ class KDE_EXPORT Commit : public RawObject
 	public:
 		Commit(const QString& id, Repo &repo);
 
-		const QString&     author() const;
-		const KDateTime&   authoredAt() const;
-		const QString&     committer() const;
-		const KDateTime&   committedAt() const;
+		const QString&     author();
+		const KDateTime&   authoredAt();
+		const QString&     committer();
+		const KDateTime&   committedAt();
 		const QString      diff() const;
 
 		/**
@@ -85,11 +85,11 @@ class KDE_EXPORT Commit : public RawObject
 		 *
 		 * @return true if so, false otherwise.
 		 */
-		bool               isMerge() const;
-		const CommitList   parents() const;
-		const QString&     message() const;
-		const QString&     summary() const;
-		const Tree*        tree() const;
+		bool               isMerge();
+		const CommitList   parents();
+		const QString&     message();
+		const QString&     summary();
+		const Tree*        tree();
 
 	// static
 		static CommitList allReachableFrom(const Ref &branch);
