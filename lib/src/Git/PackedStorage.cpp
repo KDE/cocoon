@@ -294,7 +294,7 @@ const QByteArray PackedStorage::patchDelta(const QByteArray &base, const QByteAr
 		return QByteArray();
 	}
 
-	/*int destSize =*/ patchDeltaHeaderSize(delta, pos);
+	int destSize = patchDeltaHeaderSize(delta, pos);
 	Q_ASSERT(pos != 0);
 
 	QByteArray patched;
@@ -326,6 +326,8 @@ const QByteArray PackedStorage::patchDelta(const QByteArray &base, const QByteAr
 		}
 	}
 
+	Q_ASSERT(destSize == patched.size());
+
 	return patched;
 }
 
@@ -337,6 +339,9 @@ quint32 PackedStorage::patchDeltaHeaderSize(const QByteArray &delta, quint32 &po
 	char c;
 	do {
 		c = delta[pos];
+
+		// invalid delta header
+		Q_ASSERT(!delta.mid(pos, 1).isEmpty());
 
 		pos += 1;
 		size |= (c & 0x7F) << shift;
