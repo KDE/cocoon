@@ -32,11 +32,27 @@ using namespace Git;
 
 Commit::Commit(const QString &id, QObject *parent)
 	: RawObject(id, parent)
+	, m_author()
+	, m_authoredAt()
+	, m_committer()
+	, m_committedAt()
+	, m_message()
+	, m_parents()
+	, m_summary()
+	, m_tree(0)
 {
 }
 
 Commit::Commit(const QString& id, Repo &repo)
 	: RawObject(id, repo)
+	, m_author()
+	, m_authoredAt()
+	, m_committer()
+	, m_committedAt()
+	, m_message()
+	, m_parents()
+	, m_summary()
+	, m_tree(0)
 {
 	fillFromString(this, data());
 }
