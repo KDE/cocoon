@@ -79,11 +79,18 @@ class LooseStorageTest : public GitTestBase
 			QCOMPARE(rawData.size(), QString("commit 212").length() + 1 + 212);
 		}
 
-		void shouldOnlyExtractHeader() {
+		void objectTypeShouldBeCorrect() {
 			QString id = repo->commits()[0]->id();
-			QString rawHeader = storage->rawHeaderFor(id);
+			Git::ObjectType type = storage->objectTypeFor(id);
 
-			QCOMPARE(rawHeader, QString("commit 212"));
+			QCOMPARE(type, Git::OBJ_COMMIT);
+		}
+
+		void objectSizeShouldBeCorrect() {
+			QString id = repo->commits()[0]->id();
+			int size = storage->objectSizeFor(id);
+
+			QCOMPARE(size, 212);
 		}
 };
 
