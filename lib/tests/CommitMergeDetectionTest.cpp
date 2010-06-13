@@ -27,10 +27,19 @@ class CommitMergeDetectionTest : public GitTestBase
 	Q_OBJECT
 
 	private slots:
+		void initTestCase() {
+			GitTestBase::initTestCase();
+
+			commit = 0;
+
+			cloneFrom("CommitMergeDetectionTestRepo");
+		}
+
 		void init(){
 			GitTestBase::init();
 
-			commit = new Git::Commit("0123456");
+			commit = new Git::Commit("b462958a492e9abaaa3bd2725639932b5fd551d9", *repo);
+			commit->m_message = "alibi"; // to inhibit automatic popultation
 		}
 
 		void cleanup() {
