@@ -36,11 +36,11 @@ public:
 		, indexGlobalDataOffset(-1)
 		, indexVersion(0)
 		, name()
+		, objectData()
+		, objects()
 		, objectSizes()
 		, objectTypes()
 		, packFile()
-		, rawData()
-		, rawObjects()
 		, size(0)
 	{}
 	PackedStoragePrivate(const PackedStoragePrivate &other)
@@ -50,11 +50,11 @@ public:
 		, indexGlobalDataOffset(other.indexGlobalDataOffset)
 		, indexVersion(other.indexVersion)
 		, name(other.name)
+		, objectData(other.objectData)
+		, objects(other.objects)
 		, objectSizes(other.objectSizes)
 		, objectTypes(other.objectTypes)
 		, packFile(other.packFile.fileName())
-		, rawData(other.rawData)
-		, rawObjects(other.rawObjects)
 		, size(other.size)
 	{}
 
@@ -63,11 +63,11 @@ public:
 	int indexGlobalDataOffset;
 	quint32 indexVersion;
 	QString name;
-	QHash<QString, int> objectSizes;
+	QHash<QString, QByteArray> objectData;
+	QHash<QString, RawObject*> objects;
+	QHash<QString, int>        objectSizes;
 	QHash<QString, ObjectType> objectTypes;
 	QFile packFile;
-	QHash<QString, QByteArray> rawData;
-	QHash<QString, RawObject*> rawObjects;
 	quint32 size;
 };
 

@@ -245,6 +245,45 @@ void PackedStorage::initPack()
 	Q_UNUSED(ok);
 }
 
+const QByteArray PackedStorage::objectDataFor(const QString &id)
+{
+	QString actualId = actualIdFor(id);
+
+	if (!d->objectData.contains(actualId)) {
+		kDebug() << "loading data" << actualId << "from" << d->name;
+
+		d->objectData[actualId] = unpackObjectFrom(actualId);
+	}
+
+	return d->objectData[actualId];
+}
+
+int PackedStorage::objectSizeFor(const QString &id)
+{
+	QString actualId = actualIdFor(id);
+
+	if (!d->objectSizes.contains(actualId)) {
+		kDebug() << "loading size" << actualId << "from" << d->name;
+
+		unpackObjectFrom(actualId);
+	}
+
+	return d->objectSizes[actualId];
+}
+
+ObjectType PackedStorage::objectTypeFor(const QString &id)
+{
+	QString actualId = actualIdFor(id);
+
+	if (!d->objectTypes.contains(actualId)) {
+		kDebug() << "loading type" << actualId << "from" << d->name;
+
+		unpackObjectFrom(actualId);
+	}
+
+	return d->objectTypes[actualId];
+}
+
 const QByteArray PackedStorage::patchDelta(const QByteArray &base, const QByteArray &delta)
 {
 	quint32 pos = 0;
@@ -307,39 +346,16 @@ quint32 PackedStorage::patchDeltaHeaderSize(const QByteArray &delta, quint32 &po
 	return size;
 }
 
-const QByteArray PackedStorage::rawDataFor(const QString &id)
-{
-	QString actualId = actualIdFor(id);
-
-	if (!d->rawData.contains(actualId) || RawObject::isOnlyHeader(d->rawData[actualId])) {
-		kDebug() << "loading data" << actualId << "from" << d->name;
-
-		QByteArray data = unpackObjectFrom(actualId);
-		data.prepend('\0');
-		data.prepend(RawObject::typeNameFromType(d->objectTypes[actualId]).toLatin1() + " " + QString::number(d->objectSizes[actualId]).toLatin1());
-
-		d->rawData[actualId] = data;
-	}
-
-	return d->rawData[actualId];
-}
-
-const QByteArray PackedStorage::rawHeaderFor(const QString &id)
-{
-	kDebug() << "loading header" << id << "from" << d->name;
-	return rawDataFor(id);
-}
-
-RawObject* PackedStorage::rawObjectFor(const QString &id)
+RawObject* PackedStorage::objectFor(const QString &id)
 {
 	const QString actualId = actualIdFor(id);
 
-	if (!d->rawObjects.contains(actualId)) {
+	if (!d->objects.contains(actualId)) {
 		kDebug() << "loading object" << actualId << "from" << d->name;
-		d->rawObjects[actualId] = RawObject::newInstance(actualId, repo());
+		d->objects[actualId] = RawObject::newInstance(actualId, repo());
 	}
 
-	return d->rawObjects[actualId];
+	return d->objects[actualId];
 }
 
 const QByteArray PackedStorage::readIndexFrom(int offset, int length)
