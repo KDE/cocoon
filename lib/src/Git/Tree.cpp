@@ -21,6 +21,7 @@
 #include "Blob.h"
 #include "Repo.h"
 
+#include <QDebug>
 #include <QStringList>
 
 using namespace Git;
@@ -41,7 +42,6 @@ Tree::Tree(const QString& id, Repo &repo)
 	, m_entryModes()
 	, m_entryNames()
 {
-	fillFromString(this, data());
 }
 
 const QList<Blob*> Tree::blobs()
@@ -70,6 +70,7 @@ const QMap<QString, Blob*> Tree::blobsByName()
 
 const QList<RawObject*> Tree::entries()
 {
+	fillFromString(this, data());
 	return m_entries;
 }
 
@@ -86,6 +87,13 @@ const QMap<QString, RawObject*> Tree::entriesByName()
 
 void Tree::fillFromString(Tree *tree, const QByteArray &raw)
 {
+	// if commit has already been filled
+	if (tree->m_entries.size() > 0) {
+		return;
+	}
+
+	qDebug() << "fill tree" << tree->id();
+
 	int pos = 0;
 	int modeLen = 0;
 	int nameLen = 0;
@@ -112,12 +120,13 @@ void Tree::fillFromString(Tree *tree, const QByteArray &raw)
 
 }
 
-const QString Tree::nameFor(const QString &id) const
+const QString Tree::nameFor(const QString &id)
 {
+	fillFromString(this, data());
 	return m_entryNames[id];
 }
 
-const QString Tree::nameFor(const RawObject &object) const
+const QString Tree::nameFor(const RawObject &object)
 {
 	return nameFor(object.id());
 }

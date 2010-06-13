@@ -46,7 +46,7 @@ class KDE_EXPORT Tree : public RawObject
 		const QMap<QString, Blob*> blobsByName();
 		const QList<RawObject*> entries();
 		const QMap<QString, RawObject*> entriesByName();
-		const QString nameFor(const RawObject &object) const;
+		const QString nameFor(const RawObject &object);
 		const QList<Tree*> trees();
 		const QMap<QString, Tree*> treesByName();
 
@@ -64,7 +64,7 @@ class KDE_EXPORT Tree : public RawObject
 		static void fillFromString(Tree *tree, const QByteArray &raw);
 
 	private:
-		const QString nameFor(const QString &id) const;
+		const QString nameFor(const QString &id);
 
 	private:
 		QList<RawObject*>       m_entries;
