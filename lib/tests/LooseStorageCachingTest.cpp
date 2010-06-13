@@ -50,41 +50,28 @@ class LooseStorageCachingTest : public GitTestBase
 
 
 
-		void shouldCacheRawDataBetweenQueries() {
+		void shouldNotCacheRawDataBetweenQueries() {
 			QString id = repo->commits()[0]->id();
 			const char* pData1 = storage->rawDataFor(id).data();
 			const char* pData2 = storage->rawDataFor(id).data();
 
+			QVERIFY(pData1 != pData2);
+		}
+
+		void shouldCacheObjectDataBetweenQueries() {
+			QString id = repo->commits()[0]->id();
+			const char* pData1 = storage->objectDataFor(id).data();
+			const char* pData2 = storage->objectDataFor(id).data();
+
 			QVERIFY(pData1 == pData2);
 		}
 
-		void shouldCacheRawObjectsBetweenQueries() {
+		void shouldCacheObjectsBetweenQueries() {
 			QString id = repo->commits()[0]->id();
-			Git::RawObject* pObject1 = storage->rawObjectFor(id);
-			Git::RawObject* pObject2 = storage->rawObjectFor(id);
+			Git::RawObject* pObject1 = storage->objectFor(id);
+			Git::RawObject* pObject2 = storage->objectFor(id);
 
 			QVERIFY(pObject1 == pObject2);
-		}
-
-		void shouldCacheRawHeadersBetweenQueries() {
-			QString id = repo->commits()[0]->id();
-			const char* pData1 = storage->rawHeaderFor(id).data();
-			const char* pData2 = storage->rawHeaderFor(id).data();
-
-			QVERIFY(pData1 == pData2);
-
-			const QByteArray header1 = storage->rawHeaderFor(id);
-			const QByteArray header2 = storage->rawHeaderFor(id);
-
-			QVERIFY(header1.data() == header2.data());
-		}
-
-		void shouldReplaceRawHeadersWithRawData() {
-			QString id = repo->commits()[0]->id();
-			const QByteArray header = storage->rawHeaderFor(id);
-			const QByteArray data = storage->rawDataFor(id);
-
-			QVERIFY(header.data() != data.data());
 		}
 };
 
