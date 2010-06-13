@@ -31,20 +31,26 @@ class LooseStoragePrivate : public QSharedData {
 public:
 	LooseStoragePrivate()
 		: QSharedData()
+		, objectData()
+		, objects()
 		, objectsDir()
-		, rawData()
-		, rawObjects()
+		, objectSizes()
+		, objectTypes()
 	{}
 	LooseStoragePrivate(const LooseStoragePrivate &other)
 		: QSharedData(other)
+		, objectData(other.objectData)
+		, objects(other.objects)
 		, objectsDir(other.objectsDir)
-		, rawData(other.rawData)
-		, rawObjects(other.rawObjects)
+		, objectSizes(other.objectSizes)
+		, objectTypes(other.objectTypes)
 	{}
 
+	QHash<QString, QByteArray> objectData;
+	QHash<QString, RawObject*> objects;
 	QDir objectsDir;
-	QHash<QString, QByteArray> rawData;
-	QHash<QString, RawObject*> rawObjects;
+	QHash<QString, int>        objectSizes;
+	QHash<QString, ObjectType> objectTypes;
 };
 
 };

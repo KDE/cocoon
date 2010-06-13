@@ -24,6 +24,7 @@
 #include "LooseStorage_p.h"
 
 class LooseStorageTest;
+class LooseStorageCachingTest;
 
 namespace Git {
 
@@ -38,17 +39,21 @@ class KDE_EXPORT LooseStorage : public ObjectStorage
 		LooseStorage(const LooseStorage &other);
 
 		const QStringList allIds();
-		const QByteArray rawDataFor(const QString &id);
-		const QByteArray rawHeaderFor(const QString &id);
-		RawObject* rawObjectFor(const QString &id);
+		const QByteArray objectDataFor(const QString &id);
+		RawObject*       objectFor(const QString &id);
+		int              objectSizeFor(const QString &id);
+		ObjectType       objectTypeFor(const QString &id);
 
 	protected:
+		void loadHeaderDataFor(const QString &id);
+		const QByteArray rawDataFor(const QString &id, const qint64 maxRead = -1);
 		const QString sourceFor(const QString &id);
 
 	private:
 		QSharedDataPointer<LooseStoragePrivate> d;
 
 	friend class ::LooseStorageTest;
+	friend class ::LooseStorageCachingTest;
 };
 
 }

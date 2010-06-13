@@ -62,58 +62,85 @@ const QStringList LooseStorage::allIds()
 	return ids;
 }
 
-const QByteArray LooseStorage::rawDataFor(const QString &id)
+void LooseStorage::loadHeaderDataFor(const QString &id)
+{
+	if (!d->objectSizes.contains(id)) {
+		Q_ASSERT(!d->objectTypes.contains(id));
+		kDebug() << "Loading header for" << id;
+
+		QString header = RawObject::extractHeaderForm(rawDataFor(id));
+		d->objectSizes[id] = RawObject::extractObjectSizeFrom(header);
+		d->objectTypes[id] = RawObject::extractObjectTypeFrom(header);
+	}
+}
+
+const QByteArray LooseStorage::objectDataFor(const QString &id)
 {
 	QString actualId = actualIdFor(id);
 
-	if (!d->rawData.contains(actualId) || RawObject::isOnlyHeader(d->rawData[actualId])) {
+	if (!d->objectData.contains(actualId)) {
 		kDebug() << "Loading data for" << actualId;
 
-		QFile objectFile(sourceFor(actualId));
-		Q_ASSERT(objectFile.exists());
+		QByteArray rawData = rawDataFor(actualId);
 
-		// open the object's file
-		bool ok = objectFile.open(QIODevice::ReadOnly);
-		Q_ASSERT(ok);
-		Q_UNUSED(ok);
-
-		d->rawData[actualId] = inflate(objectFile.readAll());
+		d->objectData[actualId] = rawData.mid(RawObject::extractHeaderForm(rawData).size()+1);
 	}
 
-	return d->rawData[actualId];
+	return d->objectData[actualId];
 }
 
-const QByteArray LooseStorage::rawHeaderFor(const QString &id)
+RawObject* LooseStorage::objectFor(const QString &id)
 {
 	QString actualId = actualIdFor(id);
 
-	if (!d->rawData.contains(actualId)) {
-		kDebug() << "Loading header for" << actualId;
-
-		QFile objectFile(sourceFor(actualId));
-		Q_ASSERT(objectFile.exists());
-
-		// open the object's file
-		bool ok = objectFile.open(QIODevice::ReadOnly);
-		Q_ASSERT(ok);
-		Q_UNUSED(ok);
-
-		d->rawData[actualId] = RawObject::extractHeaderForm(inflate(objectFile.read(DEFLATED_HEADER_READ_SIZE))).toLatin1();
+	if (!d->objects.contains(actualId)) {
+		kDebug() << "load object" << actualId;
+		d->objects[actualId] = RawObject::newInstance(actualId, repo());
 	}
 
-	return d->rawData[actualId];
+	return d->objects[actualId];
 }
 
-RawObject* LooseStorage::rawObjectFor(const QString &id)
+int LooseStorage::objectSizeFor(const QString &id)
 {
 	QString actualId = actualIdFor(id);
 
-	if (!d->rawObjects.contains(actualId)) {
-		kDebug() << "load object:" << actualId;
-		d->rawObjects[actualId] = RawObject::newInstance(actualId, repo());
+	loadHeaderDataFor(actualId);
+
+	return d->objectSizes[actualId];
+}
+
+ObjectType LooseStorage::objectTypeFor(const QString &id)
+{
+	QString actualId = actualIdFor(id);
+
+	loadHeaderDataFor(actualId);
+
+	return d->objectTypes[actualId];
+}
+
+const QByteArray LooseStorage::rawDataFor(const QString &id, const qint64 maxRead)
+{
+	kDebug() << "Loading raw data for" << id;
+
+	QFile objectFile(sourceFor(id));
+	Q_ASSERT(objectFile.exists());
+
+	// open the object's file
+	bool ok = objectFile.open(QIODevice::ReadOnly);
+	Q_ASSERT(ok);
+	Q_UNUSED(ok);
+
+	QByteArray rawData;
+	if (maxRead > 0) {
+		rawData = objectFile.read(maxRead);
+	} else {
+		rawData = inflate(objectFile.readAll());
 	}
 
-	return d->rawObjects[actualId];
+	objectFile.close();
+
+	return rawData;
 }
 
 const QString LooseStorage::sourceFor(const QString &id)
