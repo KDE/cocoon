@@ -49,9 +49,10 @@ class KDE_EXPORT ObjectStorage : public QObject
 		virtual QList<RawObject*> allObjects();
 		virtual QList<RawObject*> allObjectsByType(const ObjectType type);
 		virtual bool contains(const QString &id);
-		virtual const QByteArray rawDataFor(const QString &id) = 0;
-		virtual const QByteArray rawHeaderFor(const QString &id) = 0;
-		virtual RawObject* rawObjectFor(const QString &id) = 0;
+		virtual const QByteArray objectDataFor(const QString &id) = 0;
+		virtual RawObject*       objectFor(const QString &id) = 0;
+		virtual int              objectSizeFor(const QString &id) = 0;
+		virtual ObjectType       objectTypeFor(const QString &id) = 0;
 
 	protected:
 		const QByteArray inflate(const QByteArray deflated);

@@ -60,6 +60,30 @@ const QString ObjectStorage::actualIdFor(const QString &shortId)
 	return shortId;
 }
 
+QList<RawObject*> ObjectStorage::allObjects()
+{
+	QList<RawObject*> objects;
+
+	foreach (const QString &id, allIds()) {
+		objects << objectFor(id);
+	}
+
+	return objects;
+}
+
+QList<RawObject*> ObjectStorage::allObjectsByType(const ObjectType type)
+{
+	QList<RawObject*> objects;
+
+	foreach (RawObject *object, allObjects()) {
+		if (object->type() == type) {
+			objects << object;
+		}
+	}
+
+	return objects;
+}
+
 bool ObjectStorage::contains(const QString &id)
 {
 	return allIds().contains(actualIdFor(id));
@@ -121,30 +145,6 @@ const QByteArray ObjectStorage::inflate(QByteArray deflatedData)
 Repo& ObjectStorage::repo() const
 {
 	return d->repo;
-}
-
-QList<RawObject*> ObjectStorage::allObjects()
-{
-	QList<RawObject*> objects;
-
-	foreach (const QString &id, allIds()) {
-		objects << rawObjectFor(id);
-	}
-
-	return objects;
-}
-
-QList<RawObject*> ObjectStorage::allObjectsByType(const ObjectType type)
-{
-	QList<RawObject*> objects;
-
-	foreach (RawObject *object, allObjects()) {
-		if (object->type() == type) {
-			objects << object;
-		}
-	}
-
-	return objects;
 }
 
 
