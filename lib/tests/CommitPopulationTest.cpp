@@ -49,6 +49,30 @@ class CommitPopulationTest : public GitTestBase
 
 
 
+		void shouldNotPopulateOnConstruction() {
+			QVERIFY( commit->m_author.isNull());
+			QVERIFY( commit->m_authoredAt.isNull());
+			QVERIFY( commit->m_committer.isNull());
+			QVERIFY( commit->m_committedAt.isNull());
+			QVERIFY( commit->m_message.isNull());
+			QVERIFY( commit->m_parents.isEmpty());
+			QVERIFY( commit->m_summary.isNull());
+			QVERIFY(!commit->m_tree);
+		}
+
+		void shouldPopulateOnPropertyAccess() {
+			commit->message();
+
+			QVERIFY(!commit->m_author.isEmpty());
+			QVERIFY(!commit->m_authoredAt.isNull());
+			QVERIFY(!commit->m_committer.isEmpty());
+			QVERIFY(!commit->m_committedAt.isNull());
+			QVERIFY(!commit->m_message.isEmpty());
+			QVERIFY(!commit->m_parents.isEmpty());
+			QVERIFY(!commit->m_summary.isEmpty());
+			QVERIFY( commit->m_tree);
+		}
+
 		void shouldPopulateTreeCorrectly() {
 			QStringList rawData;
 			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
@@ -56,7 +80,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "author Me 1234567890 +0100";
 			rawData << "committer You 1234567890 +0100";
 			rawData << "";
-			rawData << "    Some message.";
+			rawData << "Some message.";
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
@@ -69,7 +93,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "author Me 1234567890 +0100";
 			rawData << "committer You 1234567890 +0100";
 			rawData << "";
-			rawData << "    Some message.";
+			rawData << "Some message.";
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
@@ -83,7 +107,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "author Me 1234567890 +0100";
 			rawData << "committer You 1234567890 +0100";
 			rawData << "";
-			rawData << "    Some message.";
+			rawData << "Some message.";
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
@@ -100,7 +124,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "author Me 1234567890 +0100";
 			rawData << "committer You 1234567890 +0100";
 			rawData << "";
-			rawData << "    Some message.";
+			rawData << "Some message.";
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
@@ -117,7 +141,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "author Me 1234567890 +0100";
 			rawData << "committer You 1234567890 +0100";
 			rawData << "";
-			rawData << "    Some message.";
+			rawData << "Some message.";
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
@@ -131,7 +155,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "author Me <me@some.tld> 1234567890 +0100";
 			rawData << "committer You <you@some.tld> 1234567890 +0100";
 			rawData << "";
-			rawData << "    Some message.";
+			rawData << "Some message.";
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
@@ -145,7 +169,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "author Me 1234567890 +0100";
 			rawData << "committer You 1234567890 +0100";
 			rawData << "";
-			rawData << "    Some message.";
+			rawData << "Some message.";
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
@@ -162,7 +186,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "author Me 1234567890 +0100";
 			rawData << "committer You 1234567890 +0100";
 			rawData << "";
-			rawData << "    Some message.";
+			rawData << "Some message.";
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
@@ -176,7 +200,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "author Me <me@some.tld> 1234567890 +0100";
 			rawData << "committer You <you@some.tld> 1234567890 +0100";
 			rawData << "";
-			rawData << "    Some message.";
+			rawData << "Some message.";
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
@@ -190,7 +214,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "author Me 1234567890 +0100";
 			rawData << "committer You 1234567890 +0100";
 			rawData << "";
-			rawData << "    Some message.";
+			rawData << "Some message.";
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
@@ -207,7 +231,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "author Me 1234567890 +0100";
 			rawData << "committer You 1234567890 +0100";
 			rawData << "";
-			rawData << "    Some message.";
+			rawData << "Some message.";
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
@@ -221,7 +245,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "author Me 1234567890 +0100";
 			rawData << "committer You 1234567890 +0100";
 			rawData << "";
-			rawData << "    Some message.";
+			rawData << "Some message.";
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
@@ -235,9 +259,9 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "author Me 1234567890 +0100";
 			rawData << "committer You 1234567890 +0100";
 			rawData << "";
-			rawData << "    Some message.";
-			rawData << "    More message.";
-			rawData << "    Even more message.";
+			rawData << "Some message.";
+			rawData << "More message.";
+			rawData << "Even more message.";
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
@@ -251,9 +275,9 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "author Me 1234567890 +0100";
 			rawData << "committer You 1234567890 +0100";
 			rawData << "";
-			rawData << "    Some message.";
-			rawData << "    More message.";
-			rawData << "    Even more message.";
+			rawData << "Some message.";
+			rawData << "More message.";
+			rawData << "Even more message.";
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 

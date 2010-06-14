@@ -58,7 +58,7 @@ class CommitPopulationErrorsTest : public GitTestBase
 			rawData << "author Me 1234567890 +0100";
 			rawData << "committer You 1234567890 +0100";
 			rawData << "";
-			rawData << "    Some message.";
+			rawData << "Some message.";
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
@@ -78,7 +78,7 @@ class CommitPopulationErrorsTest : public GitTestBase
 			rawData << "author 1234567890 +0100"; // name/email missing
 			rawData << "committer You 1234567890 +0100";
 			rawData << "";
-			rawData << "    Some message.";
+			rawData << "Some message.";
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
@@ -98,7 +98,7 @@ class CommitPopulationErrorsTest : public GitTestBase
 			rawData << "author Me";// 1234567890 +0100";
 			rawData << "committer You 1234567890 +0100";
 			rawData << "";
-			rawData << "    Some message.";
+			rawData << "Some message.";
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
@@ -118,7 +118,7 @@ class CommitPopulationErrorsTest : public GitTestBase
 			rawData << "author Me 1234567890 +0100";
 			rawData << "committer 1234567890 +0100"; // name/email missing
 			rawData << "";
-			rawData << "    Some message.";
+			rawData << "Some message.";
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
@@ -138,7 +138,7 @@ class CommitPopulationErrorsTest : public GitTestBase
 			rawData << "author Me 1234567890 +0100";
 			rawData << "committer You";// 1234567890 +0100";
 			rawData << "";
-			rawData << "    Some message.";
+			rawData << "Some message.";
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
@@ -151,27 +151,6 @@ class CommitPopulationErrorsTest : public GitTestBase
 			QCOMPARE(commit->message(), QString("Some message."));
 		}
 
-		void shouldIgnoreUnidentedMessage() {
-			QStringList rawData;
-			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
-			rawData << "parent abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d";
-			rawData << "author Me 1234567890 +0100";
-			rawData << "committer You 1234567890 +0100";
-			rawData << "";
-			rawData << "Some message."; // missing leading spaces
-			rawData << "More message."; // missing leading spaces
-			rawData << "";
-			Git::Commit::fillFromString(commit, rawData.join("\n"));
-
-			QCOMPARE(commit->message(), QString());
-
-			QCOMPARE(commit->tree()->id(), QString("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
-			QCOMPARE(commit->parents().size(), 1);
-			QCOMPARE(commit->author(), QString("Me"));
-			QCOMPARE(commit->committer(), QString("You"));
-			//QCOMPARE(commit->message(), QString("Some message.\nMore message."));
-		}
-
 		void shouldHandleCutOffData() {
 			QStringList rawData;
 			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
@@ -179,7 +158,7 @@ class CommitPopulationErrorsTest : public GitTestBase
 			rawData << "author Me";// 1234567890 +0100";
 			//rawData << "committer You 1234567890 +0100";
 			//rawData << "";
-			//rawData << "    Some message.";
+			//rawData << "Some message.";
 			//rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
