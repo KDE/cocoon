@@ -18,7 +18,6 @@
 
 #include "GitTestBase.h"
 
-#include "Git/Commit.h"
 #include "Git/PackedStorage.h"
 
 
@@ -74,14 +73,6 @@ class PackedNormalExtractionStorageTest : public GitTestBase
 
 			QCOMPARE(QTest::toHexRepresentation(data, 12), QTest::toHexRepresentation("tree 5b36b1f", 12));
 			QCOMPARE(data.size(), 212);
-		}
-
-		void shouldFindObjectByFullId() {
-			QCOMPARE(storage->objectFor("b7566b7883e0dd74baba8cb194ed5dacaed5bb62")->id(), QLatin1String("b7566b7883e0dd74baba8cb194ed5dacaed5bb62"));
-		}
-
-		void shouldFindObjectByShordId() {
-			QCOMPARE(storage->objectFor("b7566b7")->id(), QLatin1String("b7566b7883e0dd74baba8cb194ed5dacaed5bb62"));
 		}
 };
 

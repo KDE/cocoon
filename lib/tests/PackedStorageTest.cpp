@@ -18,7 +18,6 @@
 
 #include "GitTestBase.h"
 
-#include "Git/Commit.h"
 #include "Git/PackedStorage.h"
 
 
