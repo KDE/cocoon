@@ -153,7 +153,7 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 
 	Tree *tree = 0;
 	if (!lines.isEmpty() && lines.first().startsWith("tree ")) {
-		QString treeId = lines.takeFirst().mid(strlen("tree "), -1);
+		QString treeId = lines.takeFirst().mid(qstrlen("tree "), -1);
 		tree = commit->repo().tree(treeId);
 	}
 	commit->m_tree = tree;
@@ -161,7 +161,7 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 	CommitList parents;
 	while (!lines.isEmpty() && lines.first().startsWith("parent ")) {
 		qDebug() << "add parent" << lines.first();
-		QString parentId = lines.takeFirst().mid(strlen("parent "), -1);
+		QString parentId = lines.takeFirst().mid(qstrlen("parent "), -1);
 		parents << commit->repo().commit(parentId);
 	}
 	commit->m_parents = parents;
@@ -173,7 +173,7 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 	if (!lines.isEmpty() && lines.first().startsWith("author ")) {
 		QString zoneOffset;
 
-		foreach (const QString part, lines.takeFirst().mid(strlen("author "), -1).split(" ")) {
+		foreach (const QString part, lines.takeFirst().mid(qstrlen("author "), -1).split(" ")) {
 			if (part.contains(QRegExp("^[+-]\\d{4}$"))) {
 				zoneOffset = part;
 			} else if (part.contains(QRegExp("^\\d{9,11}$"))) {
@@ -196,7 +196,7 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 	if (!lines.isEmpty() && lines.first().startsWith("committer ")) {
 		QString zoneOffset;
 
-		foreach (const QString part, lines.takeFirst().mid(strlen("committer "), -1).split(" ")) {
+		foreach (const QString part, lines.takeFirst().mid(qstrlen("committer "), -1).split(" ")) {
 			if (part.contains(QRegExp("^[+-]\\d{4}$"))) {
 				zoneOffset = part;
 			} else if (part.contains(QRegExp("^\\d{9,11}$"))) {
