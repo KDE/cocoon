@@ -379,6 +379,11 @@ const QByteArray PackedStorage::readIndexFrom(int offset, int length)
 	return d->indexFile.read(length);
 }
 
+int PackedStorage::size()
+{
+	return d->size;
+}
+
 const QByteArray PackedStorage::unpackCompressed(int offset, int destSize)
 {
 	QByteArray unpackedData;

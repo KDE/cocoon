@@ -42,6 +42,7 @@ class KDE_EXPORT PackedStorage : public ObjectStorage
 		RawObject*       objectFor(const QString &id);
 		int              objectSizeFor(const QString &id);
 		ObjectType       objectTypeFor(const QString &id);
+		int              size();
 
 	// static
 		static const QStringList allNamesIn(const Repo &repo);
