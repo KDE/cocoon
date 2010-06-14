@@ -32,16 +32,36 @@ using namespace Git;
 
 
 
-#define FanOutCount   256
-#define SHA1Size       20
-#define IdxOffsetSize   4
-#define OffsetSize      4
-#define CrcSize         4
+#define FanOutCount        256
+#define Sha1Size            20
+#define IdxOffsetSize        4
+#define OffsetSize           4
+#define CrcSize              4
+#define LargePackOffsetSize  8
 
-#define OffsetStart  FanOutCount * IdxOffsetSize
-#define SHA1Start    OffsetStart + OffsetSize
-#define EntrySize    OffsetSize + SHA1Size
-#define EntrySizeV2  SHA1Size + CrcSize + OffsetSize
+#define FanOutEntrySize   IdxOffsetSize
+#define FanOutTableSize  (FanOutCount * FanOutEntrySize)
+#define Sha1TableSize    (size() * Sha1Size)
+#define CrcTableSize     (size() * CrcSize)
+
+
+#define indexV1_OffsetTableEntrySize  (OffsetSize + Sha1Size)
+#define indexV1_OffsetTableSize       (size() * indexV1_OffsetTableEntrySize)
+
+#define indexV1_HeaderSize         0
+#define indexV1_FanOutTableStart   indexV1_HeaderSize
+#define indexV1_OffsetTableStart  (indexV1_FanOutTableStart + FanOutTableSize)
+#define indexV1_TrailerStart      (indexV1_OffsetTableStart + indexV1_OffsetTableSize)
+
+
+#define indexV2_OffsetTableSize        (size() * OffsetSize)
+
+#define indexV2_HeaderSize         8
+#define indexV2_FanOutTableStart   indexV2_HeaderSize
+#define indexV2_Sha1TableStart    (indexV2_FanOutTableStart + FanOutTableSize)
+#define indexV2_CrcTableStart     (indexV2_Sha1TableStart + Sha1TableSize)
+#define indexV2_OffsetTableStart  (indexV2_CrcTableStart + CrcTableSize)
+#define indexV2_TrailerStart      (indexV2_OffsetTableStart + indexV2_OffsetTableSize)
 
 
 
@@ -79,10 +99,10 @@ const QStringList PackedStorage::allIds_v1()
 {
 	QStringList ids;
 
-	int pos = SHA1Start;
+	int pos = indexV1_OffsetTableStart + OffsetSize;
 	for(uint i=0; i < d->size; ++i) {
-		QString id = readIndexFrom(pos, SHA1Size).toHex();
-		pos += EntrySize;
+		QString id = readIndexFrom(pos, Sha1Size).toHex();
+		pos += indexV1_OffsetTableEntrySize;
 		ids << id;
 	}
 
@@ -93,10 +113,10 @@ const QStringList PackedStorage::allIds_v2()
 {
 	QStringList ids;
 
-	int pos = OffsetStart;
+	int pos = indexV2_Sha1TableStart;
 	for(uint i=0; i < d->size; ++i) {
-		QString id = readIndexFrom(pos, SHA1Size).toHex();
-		pos += SHA1Size;
+		QString id = readIndexFrom(pos, Sha1Size).toHex();
+		pos += Sha1Size;
 		ids << id;
 	}
 
@@ -134,7 +154,7 @@ int PackedStorage::dataOffsetFor_v1(const QString &id)
 	int last = d->indexDataOffsets[slot+1];
 	while (first < last) {
 		int mid = (first + last) / 2;
-		QString midId = readIndexFrom(SHA1Start + mid * EntrySize, SHA1Size).toHex();
+		QString midId = readIndexFrom(indexV1_OffsetTableStart + OffsetSize + (mid * indexV1_OffsetTableEntrySize), Sha1Size).toHex();
 		int cmp = midId.compare(id);
 
 		if (cmp < 0) {
@@ -142,7 +162,7 @@ int PackedStorage::dataOffsetFor_v1(const QString &id)
 		} else if (cmp > 0) {
 			last = mid;
 		} else {
-			int pos = OffsetStart + mid * EntrySize;
+			int pos = indexV1_OffsetTableStart + (mid * indexV1_OffsetTableEntrySize);
 			int offset = ntohl(*(uint32_t*)readIndexFrom(pos, OffsetSize).data());
 			return offset;
 		}
@@ -161,7 +181,7 @@ int PackedStorage::dataOffsetFor_v2(const QString &id)
 	int last = d->indexDataOffsets[slot+1];
 	while (first < last) {
 		int mid = (first + last) / 2;
-		QString midId = readIndexFrom(OffsetStart + (mid * SHA1Size), SHA1Size).toHex();
+		QString midId = readIndexFrom(indexV2_Sha1TableStart + (mid * Sha1Size), Sha1Size).toHex();
 		int cmp = midId.compare(id);
 
 		if (cmp < 0) {
@@ -169,7 +189,7 @@ int PackedStorage::dataOffsetFor_v2(const QString &id)
 		} else if (cmp > 0) {
 			last = mid;
 		} else {
-			int pos = OffsetStart + (d->size * (SHA1Size + CrcSize)) + (mid * OffsetSize);
+			int pos = indexV2_OffsetTableStart + (mid * OffsetSize);
 			int offset = ntohl(*(uint32_t*)readIndexFrom(pos, OffsetSize).data());
 			kDebug() << d->name << "found offset" << QString::number(offset, 16) << "for" << id;
 			return offset;
@@ -196,7 +216,8 @@ void PackedStorage::initIndexOffsets()
 {
 	d->indexDataOffsets << 0;
 	for (int i=0; i < FanOutCount; ++i) {
-		quint32 pos = ntohl(*(uint32_t*)readIndexFrom(i*IdxOffsetSize, IdxOffsetSize).data());
+		quint32 fanOutTableStart = d->indexVersion == 2 ? indexV2_FanOutTableStart : indexV1_FanOutTableStart;
+		quint32 pos = ntohl(*(uint32_t*)readIndexFrom(fanOutTableStart + (i*FanOutEntrySize), FanOutEntrySize).data());
 		if (pos < d->indexDataOffsets[i]) {
 			kError() << d->name << "has discontinuous index" << i;
 			/** @todo throw exception */
@@ -229,13 +250,11 @@ void PackedStorage::initIndexVersion()
 void PackedStorage::initIndexVersion_v1()
 {
 	d->indexVersion = 1;
-	d->indexGlobalDataOffset = 0;
 }
 
 void PackedStorage::initIndexVersion_v2()
 {
 	d->indexVersion = 2;
-	d->indexGlobalDataOffset = 8;
 }
 
 void PackedStorage::initPack()
@@ -367,8 +386,6 @@ const QByteArray PackedStorage::readIndexFrom(int offset, int length)
 {
 	Q_ASSERT(d->indexFile.isOpen());
 
-	offset += d->indexGlobalDataOffset;
-
 	Q_ASSERT(length != 0);
 
 	if (length < 0) {
@@ -413,7 +430,7 @@ const QByteArray PackedStorage::unpackCompressed(int offset, int destSize)
 const QByteArray  PackedStorage::unpackDeltified(const QString &id, int type, int offset, int objOffset, int size)
 {
 	d->packFile.seek(offset);
-	QByteArray data = d->packFile.read(SHA1Size);
+	QByteArray data = d->packFile.read(Sha1Size);
 
 	int baseOffset = -1;
 	if (type == OBJ_OFS_DELTA) {
@@ -430,7 +447,7 @@ const QByteArray  PackedStorage::unpackDeltified(const QString &id, int type, in
 		offset += i + 1;
 	} else {
 		baseOffset = dataOffsetFor(data/*.toHex() ?*/);
-		offset += SHA1Size;
+		offset += Sha1Size;
 	}
 
 	Q_ASSERT(baseOffset >= 0);

@@ -33,7 +33,6 @@ public:
 		: QSharedData()
 		, indexDataOffsets()
 		, indexFile()
-		, indexGlobalDataOffset(-1)
 		, indexVersion(0)
 		, name()
 		, objectData()
@@ -47,7 +46,6 @@ public:
 		: QSharedData(other)
 		, indexDataOffsets(other.indexDataOffsets)
 		, indexFile(other.indexFile.fileName())
-		, indexGlobalDataOffset(other.indexGlobalDataOffset)
 		, indexVersion(other.indexVersion)
 		, name(other.name)
 		, objectData(other.objectData)
@@ -60,7 +58,6 @@ public:
 
 	QList<quint32> indexDataOffsets;
 	QFile indexFile;
-	int indexGlobalDataOffset;
 	quint32 indexVersion;
 	QString name;
 	QHash<QString, QByteArray> objectData;
