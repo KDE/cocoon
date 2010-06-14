@@ -47,6 +47,23 @@ class TreeTest : public GitTestBase
 			QCOMPARE(object->data().size(), 97);
 		}
 
+		void shouldNotPopulateOnConstruction() {
+			Git::Tree *tree = (Git::Tree*)Git::RawObject::newInstance("273b4fb", *repo);
+
+			QVERIFY( tree->m_entries.isEmpty());
+			QVERIFY( tree->m_entryModes.isEmpty());
+			QVERIFY( tree->m_entryNames.isEmpty());
+		}
+
+		void shouldPopulateOnPropertyAccess() {
+			Git::Tree *tree = (Git::Tree*)Git::RawObject::newInstance("273b4fb", *repo);
+			tree->entries();
+
+			QVERIFY(!tree->m_entries.isEmpty());
+			QVERIFY(!tree->m_entryModes.isEmpty());
+			QVERIFY(!tree->m_entryNames.isEmpty());
+		}
+
 		void shouldHaveCorrectNumberOfEntries() {
 			Git::Tree *tree = repo->tree("273b4fb");
 			QCOMPARE(tree->entries().count(), 3);
