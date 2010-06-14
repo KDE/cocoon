@@ -164,11 +164,12 @@ int PackedStorage::dataOffsetFor_v1(const QString &id)
 		} else {
 			int pos = indexV1_OffsetTableStart + (mid * indexV1_OffsetTableEntrySize);
 			int offset = ntohl(*(uint32_t*)readIndexFrom(pos, OffsetSize).data());
+			kDebug() << "found offset" << QString::number(offset, 16).prepend("0x") << "for" << id << "in" << d->name;
 			return offset;
 		}
 	}
 
-	kDebug() << d->name << "has no offset for" << id;
+	kDebug() << "no offset for" << id << "in" << d->name;
 
 	return -1;
 }
@@ -191,12 +192,12 @@ int PackedStorage::dataOffsetFor_v2(const QString &id)
 		} else {
 			int pos = indexV2_OffsetTableStart + (mid * OffsetSize);
 			int offset = ntohl(*(uint32_t*)readIndexFrom(pos, OffsetSize).data());
-			kDebug() << d->name << "found offset" << QString::number(offset, 16) << "for" << id;
+			kDebug() << "found offset" << QString::number(offset, 16).prepend("0x") << "for" << id << "in" << d->name;
 			return offset;
 		}
 	}
 
-	kDebug() << d->name << "has no offset for" << id;
+	kDebug() << "no offset for" << id << "in" << d->name;
 
 	return -1;
 }
@@ -269,7 +270,7 @@ const QByteArray PackedStorage::objectDataFor(const QString &id)
 	QString actualId = actualIdFor(id);
 
 	if (!d->objectData.contains(actualId)) {
-		kDebug() << "loading data" << actualId << "from" << d->name;
+		kDebug() << "loading data for" << actualId << "in" << d->name;
 
 		d->objectData[actualId] = unpackObjectFrom(actualId);
 	}
@@ -282,7 +283,7 @@ int PackedStorage::objectSizeFor(const QString &id)
 	QString actualId = actualIdFor(id);
 
 	if (!d->objectSizes.contains(actualId)) {
-		kDebug() << "loading size" << actualId << "from" << d->name;
+		kDebug() << "loading size for" << actualId << "in" << d->name;
 
 		unpackObjectFrom(actualId);
 	}
@@ -295,7 +296,7 @@ ObjectType PackedStorage::objectTypeFor(const QString &id)
 	QString actualId = actualIdFor(id);
 
 	if (!d->objectTypes.contains(actualId)) {
-		kDebug() << "loading type" << actualId << "from" << d->name;
+		kDebug() << "loading type for" << actualId << "in" << d->name;
 
 		unpackObjectFrom(actualId);
 	}
@@ -309,7 +310,7 @@ const QByteArray PackedStorage::patchDelta(const QByteArray &base, const QByteAr
 	int srcSize = patchDeltaHeaderSize(delta, pos/* = 0 */);
 	Q_ASSERT(pos != 0);
 	if (srcSize != base.size()) {
-		kError() << "invalid delta data";
+		kError() << "invalid delta header in" << d->name;
 		return QByteArray();
 	}
 
@@ -340,7 +341,7 @@ const QByteArray PackedStorage::patchDelta(const QByteArray &base, const QByteAr
 			patched += delta.mid(pos, c);
 			pos += c;
 		} else {
-			kError() << d->name << "has invalid delta data";
+			kError() << "invalid delta data in" << d->name;
 			/** @todo raise exception */
 		}
 	}
@@ -375,7 +376,7 @@ RawObject* PackedStorage::objectFor(const QString &id)
 	const QString actualId = actualIdFor(id);
 
 	if (!d->objects.contains(actualId)) {
-		kDebug() << "loading object" << actualId << "from" << d->name;
+		kDebug() << "loading object" << actualId << "in" << d->name;
 		d->objects[actualId] = RawObject::newInstance(actualId, repo());
 	}
 
