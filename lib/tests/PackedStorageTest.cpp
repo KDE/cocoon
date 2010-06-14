@@ -114,7 +114,7 @@ class PackedStorageTest : public GitTestBase
 			QCOMPARE(size, 212);
 		}
 
-		void shouldExtractObject() {
+		void shouldExtractFullObject() {
 			QString id = "b7566b7883e0dd74baba8cb194ed5dacaed5bb62";
 			QByteArray data = storage->objectDataFor(id);
 
@@ -122,11 +122,12 @@ class PackedStorageTest : public GitTestBase
 			QCOMPARE(data.size(), 212);
 		}
 
-		void shouldExtractAnotherObject() {
+		void shouldExtractDeltifiedObject() {
 			QString id = "978dd50f4a265b83c793158a292ab83db82ded94";
 			QByteArray data = storage->objectDataFor(id);
 
 			QCOMPARE(QTest::toHexRepresentation(data, 27), QTest::toHexRepresentation("Lorem ipsum dolor sit amet,", 27));
+			QCOMPARE(QTest::toHexRepresentation(data.right(28), 28), QTest::toHexRepresentation("dolore magna aliquyam erat.\n", 28));
 			QCOMPARE(data.size(), 3107);
 		}
 
