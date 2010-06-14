@@ -219,15 +219,17 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 	}
 
 	QString message;
-	while (!lines.isEmpty() && lines.first().startsWith("    ")) {
-		if (message.isEmpty()) {
-			message = lines.takeFirst().mid(4, -1);
+	QString summary;
+	while (!lines.isEmpty() && !lines.first().isEmpty()) {
+		if (summary.isEmpty()) {
+			summary = lines.takeFirst();
+			message = summary;
 		} else {
-			message += "\n" + lines.takeFirst().mid(4, -1);
+			message += "\n" + lines.takeFirst();
 		}
 	}
 	commit->m_message = message;
-	commit->m_summary = message.split("\n")[0];
+	commit->m_summary = summary;
 
 	while (!lines.isEmpty() && lines.first().isEmpty())  {
 		lines.removeFirst();
