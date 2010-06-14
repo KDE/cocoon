@@ -60,11 +60,11 @@ class KDE_EXPORT PackedStorage : public ObjectStorage
 		int dataOffsetFor_v2(const QString &id);
 		void initPack();
 		const QByteArray patchDelta(const QByteArray &base, const QByteArray &delta);
-		quint32 patchDeltaHeaderSize(const QByteArray &delta, quint32 &pos);
+		quint64 patchDeltaHeaderSize(const QByteArray &delta, quint32 &pos);
 		const QByteArray readIndexFrom(int offset, int length = -1);
 		const QByteArray unpackCompressed(int offset, int destSize);
-		const QByteArray unpackDeltified(const QString &id, int type, int offset, int objOffset, int size);
-		const QByteArray unpackObjectFrom(const QString &id, int offset = -1);
+		const QByteArray unpackDeltified(const QString &id, ObjectType deltaType, quint32 dataOffset, quint32 packEntryOffset, int size);
+		const QByteArray unpackObjectFrom(const QString &id, qint32 offset = -1);
 
 	private:
 		QSharedDataPointer<PackedStoragePrivate> d;
