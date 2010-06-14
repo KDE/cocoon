@@ -387,11 +387,12 @@ const QByteArray PackedStorage::readIndexFrom(int offset, int length)
 {
 	Q_ASSERT(d->indexFile.isOpen());
 
-	Q_ASSERT(length != 0);
+	/*Q_ASSERT(length != 0);
 
 	if (length < 0) {
 		length = 1;
-	}
+	}*/
+	Q_ASSERT(length > 0);
 
 	d->indexFile.seek(offset);
 	return d->indexFile.read(length);
