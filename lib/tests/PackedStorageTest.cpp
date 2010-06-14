@@ -100,51 +100,6 @@ class PackedStorageTest : public GitTestBase
 			QCOMPARE(storage->allIds()[8], QLatin1String("f760db3a96a9392a765d3c29e305060368afceac")); // tree for 2nd commit
 		}
 
-		void normalObjectTypeShouldBeCorrect() {
-			QString id = "b7566b7883e0dd74baba8cb194ed5dacaed5bb62";
-			Git::ObjectType type = storage->objectTypeFor(id);
-
-			QCOMPARE(type, Git::OBJ_COMMIT);
-		}
-
-		void deltifiedObjectTypeShouldBeCorrect() {
-			QString id = "978dd50f4a265b83c793158a292ab83db82ded94";
-			Git::ObjectType type = storage->objectTypeFor(id);
-
-			QCOMPARE(type, Git::OBJ_BLOB);
-		}
-
-		void normalObjectSizeShouldBeCorrect() {
-			QString id = "b7566b7883e0dd74baba8cb194ed5dacaed5bb62";
-			int size = storage->objectSizeFor(id);
-
-			QCOMPARE(size, 212);
-		}
-
-		void deltifiedObjectSizeShouldBeCorrect() {
-			QString id = "978dd50f4a265b83c793158a292ab83db82ded94";
-			int size = storage->objectSizeFor(id);
-
-			QCOMPARE(size, 3107);
-		}
-
-		void shouldExtractNormalObject() {
-			QString id = "b7566b7883e0dd74baba8cb194ed5dacaed5bb62";
-			QByteArray data = storage->objectDataFor(id);
-
-			QCOMPARE(QTest::toHexRepresentation(data, 12), QTest::toHexRepresentation("tree 5b36b1f", 12));
-			QCOMPARE(data.size(), 212);
-		}
-
-		void shouldExtractDeltifiedObject() {
-			QString id = "978dd50f4a265b83c793158a292ab83db82ded94";
-			QByteArray data = storage->objectDataFor(id);
-
-			QCOMPARE(QTest::toHexRepresentation(data, 27), QTest::toHexRepresentation("Lorem ipsum dolor sit amet,", 27));
-			QCOMPARE(QTest::toHexRepresentation(data.right(28), 28), QTest::toHexRepresentation("dolore magna aliquyam erat.\n", 28));
-			QCOMPARE(data.size(), 3107);
-		}
-
 		void shouldFindObjectByFullId() {
 			QCOMPARE(storage->objectFor("b7566b7883e0dd74baba8cb194ed5dacaed5bb62")->id(), QLatin1String("b7566b7883e0dd74baba8cb194ed5dacaed5bb62"));
 		}
