@@ -100,21 +100,35 @@ class PackedStorageTest : public GitTestBase
 			QCOMPARE(storage->allIds()[8], QLatin1String("f760db3a96a9392a765d3c29e305060368afceac")); // tree for 2nd commit
 		}
 
-		void objectTypeShouldBeCorrect() {
+		void normalObjectTypeShouldBeCorrect() {
 			QString id = "b7566b7883e0dd74baba8cb194ed5dacaed5bb62";
 			Git::ObjectType type = storage->objectTypeFor(id);
 
 			QCOMPARE(type, Git::OBJ_COMMIT);
 		}
 
-		void objectSizeShouldBeCorrect() {
+		void deltifiedObjectTypeShouldBeCorrect() {
+			QString id = "978dd50f4a265b83c793158a292ab83db82ded94";
+			Git::ObjectType type = storage->objectTypeFor(id);
+
+			QCOMPARE(type, Git::OBJ_BLOB);
+		}
+
+		void normalObjectSizeShouldBeCorrect() {
 			QString id = "b7566b7883e0dd74baba8cb194ed5dacaed5bb62";
 			int size = storage->objectSizeFor(id);
 
 			QCOMPARE(size, 212);
 		}
 
-		void shouldExtractFullObject() {
+		void deltifiedObjectSizeShouldBeCorrect() {
+			QString id = "978dd50f4a265b83c793158a292ab83db82ded94";
+			int size = storage->objectSizeFor(id);
+
+			QCOMPARE(size, 3107);
+		}
+
+		void shouldExtractNormalObject() {
 			QString id = "b7566b7883e0dd74baba8cb194ed5dacaed5bb62";
 			QByteArray data = storage->objectDataFor(id);
 
