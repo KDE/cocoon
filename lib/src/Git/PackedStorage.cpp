@@ -354,8 +354,11 @@ const QByteArray PackedStorage::patchDelta(const QByteArray &base, const QByteAr
 	}
 
 	// sanity check
-	if (pos != delta.size() || destSize != patched.size()) {
-		kError() << "delta replay has gone wild in" << d->name;
+	if (pos != delta.size()) {
+		kError() << "patched" << pos << "bytes out of" << delta.size() << "byte delta in" << d->name;
+		return QByteArray();
+	} else if (destSize != patched.size()) {
+		kError() << "patched data has size" << patched.size() << "but should have benn" << destSize << "!=" << " in" << d->name;
 		return QByteArray();
 	}
 
@@ -462,6 +465,7 @@ const QByteArray  PackedStorage::unpackDeltified(const QString &id, ObjectType d
 
 	Q_ASSERT(baseOffset >= 0);
 
+	kDebug() << "patching base object with delta from" << id << "in" << d->name;
 	QByteArray base = unpackObjectFrom(id, baseOffset);
 	QByteArray delta = unpackCompressed(dataOffset, size);
 	return patchDelta(base, delta);
