@@ -160,7 +160,6 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 
 	CommitList parents;
 	while (!lines.isEmpty() && lines.first().startsWith("parent ")) {
-		qDebug() << "add parent" << lines.first();
 		QString parentId = lines.takeFirst().mid(qstrlen("parent "), -1);
 		parents << commit->repo().commit(parentId);
 	}
