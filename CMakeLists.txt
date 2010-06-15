@@ -62,7 +62,7 @@ message(STATUS)
 ###### INSTALL CMAKE ######
 if(INSTALL_DEVEL_FILES AND CMAKE_INSTALL_PREFIX STREQUAL "/usr")
 	install(FILES
-		cmake/FindCocoonGit.cmake
+		cmake/modules/FindCocoonGit.cmake
 		DESTINATION
 		${CMAKE_ROOT}/Modules
 	)
