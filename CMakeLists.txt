@@ -14,7 +14,9 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules" ${CMAKE_MODULE_PATH})
 find_package(KDE4 REQUIRED)
 include (KDE4Defaults)
 
-find_package(CocoonGit REQUIRED)
+#if(KDE4_BUILD_TESTS)
+#	add_definitions(-DCMAKE_BUILD_TYPE=debug)
+#endif(KDE4_BUILD_TESTS)
 
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}
