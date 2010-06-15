@@ -349,6 +349,7 @@ const QByteArray PackedStorage::patchDelta(const QByteArray &base, const QByteAr
 		} else {
 			kError() << "unexpected delta opcode 0 in" << d->name;
 			/** @todo raise exception */
+			return QByteArray();
 		}
 	}
 
