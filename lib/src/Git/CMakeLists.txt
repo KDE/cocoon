@@ -38,17 +38,19 @@ install(TARGETS CocoonGit ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
+if(INSTALL_DEVEL_FILES)
 # install header files
-install( FILES
-	Blob.h
-	CloneRepositoryProcess.h
-	Commit.h
-	Head.h
-	RawObject.h
-	Ref.h
-	Ref_p.h
-	Repo.h
-	Status.h
-	Tree.h
-	DESTINATION ${INCLUDE_INSTALL_DIR}/Git COMPONENT Devel
-)
+	install( FILES
+		Blob.h
+		CloneRepositoryProcess.h
+		Commit.h
+		Head.h
+		RawObject.h
+		Ref.h
+		Ref_p.h
+		Repo.h
+		Status.h
+		Tree.h
+		DESTINATION ${INCLUDE_INSTALL_DIR}/Git COMPONENT Devel
+	)
+endif()
