@@ -341,16 +341,17 @@ const QByteArray PackedStorage::patchDelta(const QByteArray &base, const QByteAr
 		quint32 cmd_pos = pos;
 		quint8 cmd = delta[pos++];
 		if (cmd & 0x80) { // highest bit is 1
-			quint64 cpOff  = 0;
-			quint64 cpSize = 0;
+			quint32 cpOff  = 0;
+			quint32 cpSize = 0;
 
-			if (cmd & 0x01) { cpOff   = delta[pos++]; }
-			if (cmd & 0x02) { cpOff  |= delta[pos++] <<  8; }
-			if (cmd & 0x04) { cpOff  |= delta[pos++] << 16; }
-			if (cmd & 0x08) { cpOff  |= delta[pos++] << 24; }
-			if (cmd & 0x10) { cpSize  = delta[pos++]; }
-			if (cmd & 0x20) { cpSize |= delta[pos++] <<  8; }
-			if (cmd & 0x40) { cpSize |= delta[pos++] << 16; }
+			if (cmd & 0x01) { cpOff   =  (quint8)delta[pos++]; }
+			if (cmd & 0x02) { cpOff  |= ((quint8)delta[pos++]) <<  8; }
+			if (cmd & 0x04) { cpOff  |= ((quint8)delta[pos++]) << 16; }
+			if (cmd & 0x08) { cpOff  |= ((quint8)delta[pos++]) << 24; }
+			if (cmd & 0x10) { cpSize  =  (quint8)delta[pos++]; }
+			if (cmd & 0x20) { cpSize |= ((quint8)delta[pos++]) <<  8; }
+			if (cmd & 0x40) { cpSize |= ((quint8)delta[pos++]) << 16; }
+			if (cpSize == 0) { cpSize = 0x10000; }
 			if (cpOff + cpSize < cpSize ||
 				cpOff + cpSize > srcSize ||
 				cpSize > destSize) {
