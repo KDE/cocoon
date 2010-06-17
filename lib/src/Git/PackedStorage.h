@@ -24,6 +24,7 @@
 #include "PackedStorage_p.h"
 
 class PackedStorageTest;
+class PackedStorageDeltifiedExtractionTest;
 
 namespace Git {
 
@@ -70,6 +71,7 @@ class KDE_EXPORT PackedStorage : public ObjectStorage
 		QSharedDataPointer<PackedStoragePrivate> d;
 
 	friend class ::PackedStorageTest;
+	friend class ::PackedStorageDeltifiedExtractionTest;
 };
 
 }
