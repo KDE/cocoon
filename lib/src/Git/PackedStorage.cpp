@@ -487,6 +487,7 @@ const QByteArray PackedStorage::unpackObjectFrom(const QString &id, qint32 offse
 		Q_ASSERT(offset >= 0);
 	}
 
+	Q_ASSERT(d->packFile.isOpen());
 	quint32 packEntryOffset = offset;
 	d->packFile.seek(offset);
 
