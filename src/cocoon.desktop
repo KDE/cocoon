@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=Cocoon
+Name[x-test]=xxCocoonxx
 Exec=cocoon %i -caption "%c"
 Icon=cocoon
 Type=Application
 X-DocPath=cocoon/index.html
 GenericName=Git GUI for KDE
+GenericName[x-test]=xxGit GUI for KDExx
 Categories=Development;RevisionControl;
 Terminal=false
