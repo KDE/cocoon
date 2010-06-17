@@ -291,6 +291,22 @@ int PackedStorage::objectSizeFor(const QString &id)
 	return d->objectSizes[actualId];
 }
 
+quint32 PackedStorage::objectSizeIn(const QByteArray &delta, quint32 &pos)
+{
+	quint32 size = 0;
+	int shift = 0;
+
+	quint8 cmd;
+	do {
+		cmd = delta[pos++];
+
+		size |= (cmd & 0x7F) << shift; // get the lower 7 bits and put them to their proper location
+		shift += 7;                    // shift the next piece of size information by another 7 bits
+	} while (cmd & 0x80 && pos < delta.size()); // untill the highest bit is 0
+
+	return size;
+}
+
 ObjectType PackedStorage::objectTypeFor(const QString &id)
 {
 	QString actualId = actualIdFor(id);
@@ -309,14 +325,14 @@ const QByteArray PackedStorage::patchDelta(const QByteArray &base, const QByteAr
 	Q_ASSERT(delta.size() >= 4); // minimal delta size
 
 	quint32 pos = 0;
-	quint64 srcSize = patchDeltaHeaderSize(delta, pos/* = 0 */);
+	quint32 srcSize = objectSizeIn(delta, pos/* = 0 */);
 	Q_ASSERT(pos != 0);
 	if (srcSize != base.size()) {
 		kError() << "invalid delta header in" << d->name;
 		return QByteArray();
 	}
 
-	quint64 destSize = patchDeltaHeaderSize(delta, pos);
+	quint32 destSize = objectSizeIn(delta, pos);
 	Q_ASSERT(pos != 0);
 
 	QByteArray patched;
@@ -363,22 +379,6 @@ const QByteArray PackedStorage::patchDelta(const QByteArray &base, const QByteAr
 	}
 
 	return patched;
-}
-
-quint64 PackedStorage::patchDeltaHeaderSize(const QByteArray &delta, quint32 &pos)
-{
-	quint64 size = 0;
-	int shift = 0;
-
-	quint8 cmd;
-	do {
-		cmd = delta[pos++];
-
-		size |= (cmd & 0x7F) << shift; // get the lower 7 bits and put them to their proper location
-		shift += 7;                    // shift the next piece of size information by another 7 bits
-	} while (cmd & 0x80 && pos < delta.size()); // untill the highest bit is 0
-
-	return size;
 }
 
 RawObject* PackedStorage::objectFor(const QString &id)
