@@ -338,6 +338,7 @@ const QByteArray PackedStorage::patchDelta(const QByteArray &base, const QByteAr
 	QByteArray patched;
 
 	while (pos < delta.size()) {
+		quint32 cmd_pos = pos;
 		quint8 cmd = delta[pos++];
 		if (cmd & 0x80) { // highest bit is 1
 			quint64 cpOff  = 0;
@@ -353,14 +354,18 @@ const QByteArray PackedStorage::patchDelta(const QByteArray &base, const QByteAr
 			if (cpOff + cpSize < cpSize ||
 				cpOff + cpSize > srcSize ||
 				cpSize > destSize) {
+				kError() << "At"<< QString::number(cmd_pos, 16).prepend("0x") << "in delta error copying from source data in" << d->name;
 				break;
 			}
 			patched += base.mid(cpOff, cpSize);
+			kDebug() << "At"<< QString::number(cmd_pos, 16).prepend("0x") << "in delta copy" << cpSize << "from source at" << QString::number(cpOff, 16).prepend("0x") << "in" << d->name;
 		} else if (cmd) {
 			if (cmd > destSize) {
+				kError() << "At"<< QString::number(cmd_pos, 16).prepend("0x") << "in delta error copying from delta in" << d->name;
 				break;
 			}
 			patched += delta.mid(pos, cmd);
+			kDebug() << "At"<< QString::number(cmd_pos, 16).prepend("0x") << "in delta copy" << cmd << "from delta at" << QString::number(pos, 16).prepend("0x") << "in" << d->name;
 			pos += cmd;
 		} else {
 			kError() << "unexpected delta opcode 0 in" << d->name;
@@ -465,7 +470,7 @@ const QByteArray  PackedStorage::unpackDeltified(const QString &id, ObjectType d
 
 	Q_ASSERT(baseOffset >= 0);
 
-	kDebug() << "patching base object with delta from" << id << "in" << d->name;
+	kDebug() << "patching base object from offset" << QString::number(baseOffset, 16).prepend("0x") << "with delta from offest" << QString::number(packEntryOffset, 16).prepend("0x") << "in" << d->name;
 	QByteArray base = unpackObjectFrom(id, baseOffset);
 	QByteArray delta = unpackCompressed(dataOffset, size);
 	return patchDelta(base, delta);
