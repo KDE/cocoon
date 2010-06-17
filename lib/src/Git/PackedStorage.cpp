@@ -423,6 +423,9 @@ const QByteArray PackedStorage::unpackCompressed(int offset, int destSize)
 	QByteArray unpackedData;
 	d->packFile.seek(offset);
 
+	// check for zlib header
+	Q_ASSERT(d->packFile.peek(2) == QByteArray(QByteArray::fromHex("789c"), 2));
+
 	while (unpackedData.size() < destSize) {
 		QByteArray packedData = d->packFile.read(4096);
 		if (packedData.size() == 0) {
