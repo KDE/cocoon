@@ -291,6 +291,22 @@ int PackedStorage::objectSizeFor(const QString &id)
 	return d->objectSizes[actualId];
 }
 
+quint32 PackedStorage::objectSizeIn(const QByteArray &delta, quint32 &pos)
+{
+	quint32 size = 0;
+	int shift = 0;
+
+	quint8 cmd;
+	do {
+		cmd = delta[pos++];
+
+		size |= (cmd & 0x7F) << shift; // get the lower 7 bits and put them to their proper location
+		shift += 7;                    // shift the next piece of size information by another 7 bits
+	} while (cmd & 0x80 && pos < delta.size()); // untill the highest bit is 0
+
+	return size;
+}
+
 ObjectType PackedStorage::objectTypeFor(const QString &id)
 {
 	QString actualId = actualIdFor(id);
@@ -309,72 +325,66 @@ const QByteArray PackedStorage::patchDelta(const QByteArray &base, const QByteAr
 	Q_ASSERT(delta.size() >= 4); // minimal delta size
 
 	quint32 pos = 0;
-	quint64 srcSize = patchDeltaHeaderSize(delta, pos/* = 0 */);
+	quint32 srcSize = objectSizeIn(delta, pos/* = 0 */);
 	Q_ASSERT(pos != 0);
 	if (srcSize != base.size()) {
 		kError() << "invalid delta header in" << d->name;
 		return QByteArray();
 	}
 
-	quint64 destSize = patchDeltaHeaderSize(delta, pos);
+	quint32 destSize = objectSizeIn(delta, pos);
 	Q_ASSERT(pos != 0);
 
 	QByteArray patched;
 
 	while (pos < delta.size()) {
+		quint32 cmd_pos = pos;
 		quint8 cmd = delta[pos++];
 		if (cmd & 0x80) { // highest bit is 1
-			quint64 cpOff  = 0;
-			quint64 cpSize = 0;
+			quint32 cpOff  = 0;
+			quint32 cpSize = 0;
 
-			if (cmd & 0x01) { cpOff   = delta[pos++]; }
-			if (cmd & 0x02) { cpOff  |= delta[pos++] <<  8; }
-			if (cmd & 0x04) { cpOff  |= delta[pos++] << 16; }
-			if (cmd & 0x08) { cpOff  |= delta[pos++] << 24; }
-			if (cmd & 0x10) { cpSize  = delta[pos++]; }
-			if (cmd & 0x20) { cpSize |= delta[pos++] <<  8; }
-			if (cmd & 0x40) { cpSize |= delta[pos++] << 16; }
+			if (cmd & 0x01) { cpOff   =  (quint8)delta[pos++]; }
+			if (cmd & 0x02) { cpOff  |= ((quint8)delta[pos++]) <<  8; }
+			if (cmd & 0x04) { cpOff  |= ((quint8)delta[pos++]) << 16; }
+			if (cmd & 0x08) { cpOff  |= ((quint8)delta[pos++]) << 24; }
+			if (cmd & 0x10) { cpSize  =  (quint8)delta[pos++]; }
+			if (cmd & 0x20) { cpSize |= ((quint8)delta[pos++]) <<  8; }
+			if (cmd & 0x40) { cpSize |= ((quint8)delta[pos++]) << 16; }
+			if (cpSize == 0) { cpSize = 0x10000; }
 			if (cpOff + cpSize < cpSize ||
 				cpOff + cpSize > srcSize ||
 				cpSize > destSize) {
+				kError() << "At"<< QString::number(cmd_pos, 16).prepend("0x") << "in delta error copying from source data in" << d->name;
 				break;
 			}
 			patched += base.mid(cpOff, cpSize);
+			kDebug() << "At"<< QString::number(cmd_pos, 16).prepend("0x") << "in delta copy" << cpSize << "from source at" << QString::number(cpOff, 16).prepend("0x") << "in" << d->name;
 		} else if (cmd) {
 			if (cmd > destSize) {
+				kError() << "At"<< QString::number(cmd_pos, 16).prepend("0x") << "in delta error copying from delta in" << d->name;
 				break;
 			}
 			patched += delta.mid(pos, cmd);
+			kDebug() << "At"<< QString::number(cmd_pos, 16).prepend("0x") << "in delta copy" << cmd << "from delta at" << QString::number(pos, 16).prepend("0x") << "in" << d->name;
 			pos += cmd;
 		} else {
 			kError() << "unexpected delta opcode 0 in" << d->name;
 			/** @todo raise exception */
+			return QByteArray();
 		}
 	}
 
 	// sanity check
-	if (pos != delta.size() || destSize != patched.size()) {
-		kError() << "delta replay has gone wild in" << d->name;
+	if (pos != delta.size()) {
+		kError() << "patched" << pos << "bytes out of" << delta.size() << "byte delta in" << d->name;
+		return QByteArray();
+	} else if (destSize != patched.size()) {
+		kError() << "patched data has size" << patched.size() << "but should have benn" << destSize << "!=" << " in" << d->name;
 		return QByteArray();
 	}
 
 	return patched;
-}
-
-quint64 PackedStorage::patchDeltaHeaderSize(const QByteArray &delta, quint32 &pos)
-{
-	quint64 size = 0;
-	int shift = 0;
-
-	quint8 cmd;
-	do {
-		cmd = delta[pos++];
-
-		size |= (cmd & 0x7F) << shift; // get the lower 7 bits and put them to their proper location
-		shift += 7;                    // shift the next piece of size information by another 7 bits
-	} while (cmd & 0x80 && pos < delta.size()); // untill the highest bit is 0
-
-	return size;
 }
 
 RawObject* PackedStorage::objectFor(const QString &id)
@@ -413,6 +423,9 @@ const QByteArray PackedStorage::unpackCompressed(int offset, int destSize)
 {
 	QByteArray unpackedData;
 	d->packFile.seek(offset);
+
+	// check for zlib header
+	Q_ASSERT(d->packFile.peek(2) == QByteArray(QByteArray::fromHex("789c"), 2));
 
 	while (unpackedData.size() < destSize) {
 		QByteArray packedData = d->packFile.read(4096);
@@ -461,6 +474,7 @@ const QByteArray  PackedStorage::unpackDeltified(const QString &id, ObjectType d
 
 	Q_ASSERT(baseOffset >= 0);
 
+	kDebug() << "patching base object from offset" << QString::number(baseOffset, 16).prepend("0x") << "with delta from offest" << QString::number(packEntryOffset, 16).prepend("0x") << "in" << d->name;
 	QByteArray base = unpackObjectFrom(id, baseOffset);
 	QByteArray delta = unpackCompressed(dataOffset, size);
 	return patchDelta(base, delta);

@@ -35,13 +35,13 @@ class PackedStorageDeltifiedExtractionTest : public GitTestBase
 
 			storage = 0;
 
-			cloneFrom("PackedStorageTestRepo");
+			cloneFrom("PackedStorageDeltifiedExtractionTestRepo");
 		}
 
 		void init() {
 			GitTestBase::init();
 
-			packName = "pack-6e6471a59ce1759c3fb91189036c587088492a8d";
+			packName = "pack-f8a3b0b5e0629c6ad65fa669f9af2f0bc9db0ffd";
 
 			storage = new Git::PackedStorage(packName, *repo);
 		}
@@ -54,26 +54,33 @@ class PackedStorageDeltifiedExtractionTest : public GitTestBase
 
 
 		void deltifiedObjectTypeShouldBeCorrect() {
-			QString id = "978dd50f4a265b83c793158a292ab83db82ded94";
+			QString id = "7096645927485680189876d157c499423fd423a5";
 			Git::ObjectType type = storage->objectTypeFor(id);
 
 			QCOMPARE(type, Git::OBJ_BLOB);
 		}
 
 		void deltifiedObjectSizeShouldBeCorrect() {
-			QString id = "978dd50f4a265b83c793158a292ab83db82ded94";
+			QString id = "7096645927485680189876d157c499423fd423a5";
 			int size = storage->objectSizeFor(id);
 
-			QCOMPARE(size, 3107);
+			QCOMPARE(size, 182);
+		}
+
+		void deltifiedObjectOffsetShouldBeCorrect() {
+			QString id = "7096645927485680189876d157c499423fd423a5";
+			int offset = storage->dataOffsetFor(id);
+
+			QCOMPARE(offset, 0x1cd);
 		}
 
 		void shouldExtractDeltifiedObject() {
-			QString id = "978dd50f4a265b83c793158a292ab83db82ded94";
+			QString id = "7096645927485680189876d157c499423fd423a5";
 			QByteArray data = storage->objectDataFor(id);
 
-			QCOMPARE(QTest::toHexRepresentation(data, 27), QTest::toHexRepresentation("Lorem ipsum dolor sit amet,", 27));
-			QCOMPARE(QTest::toHexRepresentation(data.right(28), 28), QTest::toHexRepresentation("dolore magna aliquyam erat.\n", 28));
-			QCOMPARE(data.size(), 3107);
+			QCOMPARE(QTest::toHexRepresentation(data, 27), QTest::toHexRepresentation("#!/bin/env/ruby\n\ndef do_foo", 27));
+			QCOMPARE(QTest::toHexRepresentation(data.right(20), 20), QTest::toHexRepresentation("enough!\"\nend\n\ndo_foo", 20));
+			QCOMPARE(data.size(), 182);
 		}
 };
 

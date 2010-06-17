@@ -24,7 +24,6 @@
 #include "Git/Repo.h"
 #include "Git/Status.h"
 
-#include <QtTest/QtTest>
 #include <qtest_kde.h>
 
 #include <QProcess>
