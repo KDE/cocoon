@@ -94,10 +94,27 @@ def all_offsets
   offsets
 end
 
+def size_from_delta_header(delta, pos)
+  size = 0
+  shift = 0
+  begin
+    c = delta[pos]
+    if c == nil
+      raise 'invalid delta header'
+    end
+    pos += 1
+    size |= (c & 0x7f) << shift
+    shift += 7
+  end while c & 0x80 != 0
+  [size, pos]
+end
+
 def id_at(offset)
   all_offsets.each_with_index do |ofs, i|
     return all_ids[i] if ofs == offset
   end
+
+  raise "no id for offset #{"0x%08x"%offset} found"
 end
 
 def init_index()
@@ -172,6 +189,8 @@ def offset_for(id)
   all_ids.each_with_index do |sha1, i|
     return all_offsets[i] if sha1.start_with?(id)
   end
+
+  raise "id #{id} not found"
 end
 
 def pack_data_at(offset)
@@ -207,9 +226,47 @@ def pack_data_at(offset)
         end
         base_offset = offset - offset_to_base
         delta_data_offset = data_offset + i + 1
+        base_data = pack_data_at(base_offset)[:data]
+        base_size = pack_data_at(base_offset)[:dest_size]
         pack.seek(delta_data_offset)
-        delta_data = Zlib::Inflate.inflate(pack.read(4096))
-        delta = {:offset_to_base => offset_to_base, :base_offset => base_offset, :data_offset => delta_data_offset, :data => delta_data}
+
+        delta_data = { :raw => Zlib::Inflate.inflate(pack.read(base_size)), :parsed => [] }
+        pos = 0
+        delta_src_size, pos = size_from_delta_header(delta_data[:raw], pos)
+        delta_dest_size, pos = size_from_delta_header(delta_data[:raw], pos)
+        delta_data[:src_size] = delta_src_size
+        delta_data[:dest_size] = delta_dest_size
+
+        dest_data = ""
+        while pos < delta_data[:raw].size
+          cmd_offset = pos
+          c = delta_data[:raw][pos]
+          pos += 1
+          if c & 0x80 != 0
+            pos -= 1
+            cp_off = cp_size = 0
+            cp_off = delta_data[:raw][pos += 1] if c & 0x01 != 0
+            cp_off |= delta_data[:raw][pos += 1] << 8 if c & 0x02 != 0
+            cp_off |= delta_data[:raw][pos += 1] << 16 if c & 0x04 != 0
+            cp_off |= delta_data[:raw][pos += 1] << 24 if c & 0x08 != 0
+            cp_size = delta_data[:raw][pos += 1] if c & 0x10 != 0
+            cp_size |= delta_data[:raw][pos += 1] << 8 if c & 0x20 != 0
+            cp_size |= delta_data[:raw][pos += 1] << 16 if c & 0x40 != 0
+            cp_size = 0x10000 if cp_size == 0
+            pos += 1
+            dest_data += base_data[cp_off,cp_size]
+            delta_data[:parsed] << {:cmd => :from_src, :offset => cp_off, :size => cp_size, :cmd_offset => cmd_offset}
+          elsif c != 0
+            dest_data += delta_data[:raw][pos,c]
+            delta_data[:parsed] << {:cmd => :from_delta, :offset => pos, :size => c, :cmd_offset => cmd_offset}
+            pos += c
+          else
+            raise 'invalid delta data'
+          end
+        end
+        dest_data
+
+        delta = {:offset_to_base => offset_to_base, :base_offset => base_offset, :data_offset => delta_data_offset, :data => delta_data, :dest_data => dest_data}
       else
         base_sha1 = delta_data.to_hex_s
         delta_data_offset += Sha1Size
@@ -230,7 +287,14 @@ def packed_size_for(id)
   offset = offset_for(id)
   offsets = all_offsets.sort
   offsets.sort.each_with_index do |ofs, i|
-    return offsets[i+1] - offset if ofs == offset
+    if ofs == offset
+      unless i+1 == offsets.size
+        next_offset = offsets[i+1]
+      else
+        next_offset = File.stat("#{@pack_name}.pack").size - Sha1Size
+      end
+      return next_offset - offset
+    end
   end
 end
 
@@ -308,15 +372,33 @@ def print_pack_data_at
     puts pack_data[:data]
   else
     delta_data = pack_data[:delta]
+    src_data = pack_data_at(delta_data[:base_offset])[:data]
     puts "delta ------------------------"
     if :index_delta
       puts "      base offset: #{"0x%08x"%delta_data[:base_offset]} = #{"0x%08x"%offset} - #{"0x%08x"%delta_data[:offset_to_base]}"
     else
       puts "          base id: #{delta_data[:base_id]}"
     end
-      puts "     src obj size: #{}"
-    puts "data -------------------------"
-    puts delta_data[:data].inspect
+      puts "     src obj size: #{delta_data[:data][:src_size]}"
+      puts "    dest obj size: #{delta_data[:data][:dest_size]}"
+    puts "raw delta data ---------------"
+    puts delta_data[:data][:raw].to_hex_s
+    puts "parsed delta data ------------"
+    delta_data[:data][:parsed].each do |cp|
+      if cp[:cmd] == :from_src
+        puts "  At #{"0x%08x"%cp[:cmd_offset]} in delta copy from source"
+        puts "    offset: #{"0x%08x"%cp[:offset]}"
+        puts "      size: #{cp[:size]}"
+        puts "      data: #{src_data[cp[:offset],cp[:size]].inspect}"
+      else
+        puts "  At #{"0x%08x"%cp[:cmd_offset]} in delta copy from delta"
+        puts "    offset: #{"0x%08x"%cp[:offset]}"
+        puts "      size: #{cp[:size]}"
+        puts "      data: #{delta_data[:data][:raw][cp[:offset],cp[:size]].inspect}"
+      end
+    end
+    puts "dest data --------------------"
+    puts delta_data[:dest_data]
   end
 end
 
