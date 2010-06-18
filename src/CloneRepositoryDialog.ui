@@ -102,7 +102,7 @@ Note: This directory must be empty.</string>
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>Delete it's contents</string>
+             <string>Delete its contents</string>
             </property>
            </widget>
           </item>
