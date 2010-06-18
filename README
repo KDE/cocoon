@@ -1,5 +1,5 @@
 Cocoon
-=====================
+======
 
 
 This project brings you a GUI for the Git version control system using the KDE4
@@ -20,7 +20,7 @@ framework.
 
 ## Build instructions ##
 
-For compiling and using this plasmoid you will need:
+For compiling and using this application you will need:
 
 * KDE >= 4.2
 * Git >= 1.6.2
