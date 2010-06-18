@@ -1,0 +1,39 @@
+This is a atempt to give an overview on things that can be improved or added.
+Plase visit the project Wiki at [1] for the most recent list of TODOs.
+
+[1] http://gitorious.org/cocoon/pages/ToDo
+
+
+
+## Functionality ##
+
+### Stage ###
+
+* (Un)Staging hunks and lines
+* Syntax highlighting
+
+### Branches ###
+
+* Managing branches
+* Merging branches
+* Interactive merge conflict resolution
+
+### Remotes ###
+
+* Managing remotes
+* Fetching remotes
+* Pushing to remotes
+* Managing submodules
+
+### Configuration ###
+
+* Manage ignored files and directories
+* General configuration
+
+
+
+## Visualisations ##
+
+* Syntax highlighting in all content views
+* A nicely rendered view of the revision tree
+* Some activity statistics
