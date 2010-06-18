@@ -8,7 +8,7 @@ Homepage: http://gitorious.org/cocoon
 
 Package: cocoon
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, git-core (>= 1.6.2)
 Description: A Git GUI front end for KDE
  Features:
  * Creating and cloning repos
