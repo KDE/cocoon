@@ -22,12 +22,13 @@ framework.
 
 For compiling and using this plasmoid you will need:
 
-* KDE 4.4
+* KDE >= 4.2
+* Git >= 1.6.2
 
 ### Install needed packages ###
 
 When using Debian or (K)Ubuntu you can install the necessary packages with
-    sudo aptitude install build-essential debhelper devscripts cmake kdelibs5-dev
+    sudo aptitude install build-essential debhelper devscripts git-core cmake kdelibs5-dev
 
 ### Build it ###
 
