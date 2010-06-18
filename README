@@ -31,11 +31,11 @@ When using Debian or (K)Ubuntu you can install the necessary packages with
 
 ### Build it ###
 
-If you are using Debian or (K)Ubuntu you can build a .dep package and install it:
+If you are using Debian or (K)Ubuntu you can build a .deb package and install it:
 
     cd /where/you/downloaded/cocoon
     ./builddeb.sh
-    sudo dpkg -i ../prayer-times-plasmoid*.deb
+    sudo dpkg -i ../cocoon*.deb
 
 Users of other systems please follow the general recipe:
 
