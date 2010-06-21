@@ -2,6 +2,7 @@
 Name=Cocoon
 Name[de]=Cocoon
 Name[es]=Cocoon
+Name[nds]=Kokon
 Name[pt]=Cocoon
 Name[pt_BR]=Cocoon
 Name[uk]=Cocoon
@@ -13,6 +14,7 @@ X-DocPath=cocoon/index.html
 GenericName=Git GUI for KDE
 GenericName[de]=Git-Oberfläche für KDE
 GenericName[es]=Interfaz de usuario Git para KDE
+GenericName[nds]=KDE-Böversiet för Git
 GenericName[pt]=Um GUI de Git para o KDE
 GenericName[pt_BR]=Interface Git para o KDE
 GenericName[uk]=Графічний інтерфейс для роботи з Git у KDE
