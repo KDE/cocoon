@@ -227,8 +227,9 @@ def pack_data_at(offset)
         end
         base_offset = offset - offset_to_base
         delta_data_offset = data_offset + i + 1
-        base_data = pack_data_at(base_offset)[:data]
-        base_size = pack_data_at(base_offset)[:dest_size]
+        base_pack_data = pack_data_at(base_offset)
+        base_data = base_pack_data[:data]
+        base_size = base_pack_data[:dest_size]
         pack.seek(delta_data_offset)
 
         delta_data = { :raw => Zlib::Inflate.inflate(pack.read(base_size)), :parsed => [] }
