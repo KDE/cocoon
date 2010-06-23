@@ -53,6 +53,7 @@ class KDE_EXPORT PackedStorage : public ObjectStorage
 	private:
 		const QStringList allIds_v1();
 		const QStringList allIds_v2();
+		const QString idIn(quint32 slot);
 		void initIndex();
 		void initIndexOffsets();
 		void initIndexVersion();
