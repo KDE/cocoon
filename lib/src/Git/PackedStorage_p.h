@@ -32,35 +32,41 @@ class PackedStoragePrivate : public QSharedData {
 public:
 	PackedStoragePrivate()
 		: QSharedData()
+		, idAt()
 		, indexDataOffsets()
 		, indexFile()
 		, indexVersion(0)
 		, name()
 		, objectData()
 		, objects()
+		, offsetFor()
 		, packFile()
 		, packObjects()
 		, size(0)
 	{}
 	PackedStoragePrivate(const PackedStoragePrivate &other)
 		: QSharedData(other)
+		, idAt(other.idAt)
 		, indexDataOffsets(other.indexDataOffsets)
 		, indexFile(other.indexFile.fileName())
 		, indexVersion(other.indexVersion)
 		, name(other.name)
 		, objectData(other.objectData)
 		, objects(other.objects)
+		, offsetFor(other.offsetFor)
 		, packFile(other.packFile.fileName())
 		, packObjects(other.packObjects)
 		, size(other.size)
 	{}
 
+	QHash<quint32, QString> idAt;
 	QList<quint32> indexDataOffsets;
 	QFile indexFile;
 	quint32 indexVersion;
 	QString name;
 	QHash<QString, QByteArray> objectData;
 	QHash<QString, RawObject*> objects;
+	QHash<QString, quint32> offsetFor;
 	QFile packFile;
 	QHash<QString, PackedStorageObject*> packObjects;
 	quint32 size;
