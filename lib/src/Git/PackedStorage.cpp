@@ -203,6 +203,13 @@ void PackedStorage::initIndexOffsets()
 		d->indexDataOffsets << pos;
 	}
 	d->size = d->indexDataOffsets.last();
+
+	for (int i=0; i < d->size; ++i) {
+		quint32 offset = offsetIn(i);
+		const QString &id = idIn(i);
+		d->idAt[offset] = id;
+		d->offsetFor[id] = offset;
+	}
 }
 
 void PackedStorage::initIndexVersion()
