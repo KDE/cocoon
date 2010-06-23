@@ -320,6 +320,12 @@ ObjectType PackedStorage::objectTypeFor(const QString &id)
 	return d->objectTypes[actualId];
 }
 
+QFile& PackedStorage::packFile()
+{
+	Q_ASSERT(d->packFile.isOpen());
+	return d->packFile;
+}
+
 const QByteArray PackedStorage::patchDelta(const QByteArray &base, const QByteArray &delta)
 {
 	Q_ASSERT(delta.size() >= 4); // minimal delta size
@@ -422,13 +428,13 @@ int PackedStorage::size()
 const QByteArray PackedStorage::unpackCompressed(int offset, int destSize)
 {
 	QByteArray unpackedData;
-	d->packFile.seek(offset);
+	packFile().seek(offset);
 
 	// check for zlib header
-	Q_ASSERT(d->packFile.peek(2) == QByteArray(QByteArray::fromHex("789c"), 2));
+	Q_ASSERT(packFile().peek(2) == QByteArray(QByteArray::fromHex("789c"), 2));
 
 	while (unpackedData.size() < destSize) {
-		QByteArray packedData = d->packFile.read(4096);
+		QByteArray packedData = packFile().read(4096);
 		if (packedData.size() == 0) {
 			kError() << "could not read packed data in" << d->name;
 			/** @todo throw exception */
@@ -450,8 +456,8 @@ const QByteArray PackedStorage::unpackCompressed(int offset, int destSize)
 
 const QByteArray  PackedStorage::unpackDeltified(const QString &id, ObjectType deltaType, quint32 dataOffset, quint32 packEntryOffset, int size)
 {
-	d->packFile.seek(dataOffset);
-	QByteArray data = d->packFile.read(Sha1Size);
+	packFile().seek(dataOffset);
+	QByteArray data = packFile().read(Sha1Size);
 
 	int baseOffset = -1;
 	if (deltaType == OBJ_OFS_DELTA) {
@@ -487,18 +493,17 @@ const QByteArray PackedStorage::unpackObjectFrom(const QString &id, qint32 offse
 		Q_ASSERT(offset >= 0);
 	}
 
-	Q_ASSERT(d->packFile.isOpen());
 	quint32 packEntryOffset = offset;
-	d->packFile.seek(offset);
+	packFile().seek(offset);
 
-	quint8 c = d->packFile.read(1)[0]; // read 1 byte
+	quint8 c = packFile().read(1)[0]; // read 1 byte
 	quint32 destSize = c & 0xf; // the lowest 4 bits are the lowest 4 bits of the final object size
 	ObjectType type = (ObjectType)((c >> 4) & 7); // the next 3 bits are the object type
 	int shift  = 4;             // shift the next piece of size information by 4 bits
 	offset    += 1;             // we have read another byte
 
 	while ((c & 0x80) != 0) { // untill the highest bit is 0
-		c = d->packFile.read(1)[0]; // read 1 byte
+		c = packFile().read(1)[0]; // read 1 byte
 
 		destSize |= ((c & 0x7f) << shift); // get the lower 7 bits and put them to their proper location in destSize
 		shift    += 7; // shift the next piece of size information by another 7 bits
