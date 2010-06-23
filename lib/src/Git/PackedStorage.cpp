@@ -281,15 +281,7 @@ const QByteArray PackedStorage::objectDataFor(const QString &id)
 
 int PackedStorage::objectSizeFor(const QString &id)
 {
-	QString actualId = actualIdFor(id);
-
-	if (!d->objectSizes.contains(actualId)) {
-		kDebug() << "loading size for" << actualId << "in" << d->name;
-
-		unpackObjectFrom(actualId);
-	}
-
-	return d->objectSizes[actualId];
+	return packObjectFor(id)->finalSize();
 }
 
 quint32 PackedStorage::objectSizeIn(const QByteArray &delta, quint32 &pos)
