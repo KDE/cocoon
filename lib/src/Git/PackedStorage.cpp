@@ -137,25 +137,15 @@ const QStringList PackedStorage::allNamesIn(const Repo &repo)
 	return names;
 }
 
-int PackedStorage::dataOffsetFor(const QString &id)
+quint32 PackedStorage::dataOffsetFor(const QString &id)
 {
-	switch(d->indexVersion) {
-	case 2:
-		return dataOffsetFor_v2(id);
-	default:
-		return dataOffsetFor_v1(id);
-	}
-}
+	quint8 slot = QByteArray::fromHex(id.toLatin1())[0];
 
-int PackedStorage::dataOffsetFor_v1(const QString &id)
-{
-	int slot = (quint8)QByteArray::fromHex(id.toLatin1())[0];
-
-	int first = d->indexDataOffsets[slot];
-	int last = d->indexDataOffsets[slot+1];
+	quint32 first = d->indexDataOffsets[slot];
+	quint32 last = d->indexDataOffsets[slot+1];
 	while (first < last) {
-		int mid = (first + last) / 2;
-		QString midId = readIndexFrom(indexV1_OffsetTableStart + OffsetSize + (mid * indexV1_OffsetTableEntrySize), Sha1Size).toHex();
+		quint32 mid = (first + last) / 2;
+		QString midId = idIn(mid);
 		int cmp = midId.compare(id);
 
 		if (cmp < 0) {
@@ -163,44 +153,20 @@ int PackedStorage::dataOffsetFor_v1(const QString &id)
 		} else if (cmp > 0) {
 			last = mid;
 		} else {
-			int pos = indexV1_OffsetTableStart + (mid * indexV1_OffsetTableEntrySize);
-			int offset = ntohl(*(uint32_t*)readIndexFrom(pos, OffsetSize).data());
+			quint32 offset = offsetIn(mid);
 			kDebug() << "found offset" << QString::number(offset, 16).prepend("0x") << "for" << id << "in" << d->name;
 			return offset;
 		}
 	}
 
-	kDebug() << "no offset for" << id << "in" << d->name;
+	kWarning() << "no offset for" << id << "in" << d->name;
 
-	return -1;
+	return 0;
 }
 
-int PackedStorage::dataOffsetFor_v2(const QString &id)
 {
-	int slot = (quint8)QByteArray::fromHex(id.toLatin1())[0];
 
-	int first = d->indexDataOffsets[slot];
-	int last = d->indexDataOffsets[slot+1];
-	while (first < last) {
-		int mid = (first + last) / 2;
-		QString midId = readIndexFrom(indexV2_Sha1TableStart + (mid * Sha1Size), Sha1Size).toHex();
-		int cmp = midId.compare(id);
-
-		if (cmp < 0) {
-			first = mid + 1;
-		} else if (cmp > 0) {
-			last = mid;
-		} else {
-			int pos = indexV2_OffsetTableStart + (mid * OffsetSize);
-			int offset = ntohl(*(uint32_t*)readIndexFrom(pos, OffsetSize).data());
-			kDebug() << "found offset" << QString::number(offset, 16).prepend("0x") << "for" << id << "in" << d->name;
-			return offset;
-		}
 	}
-
-	kDebug() << "no offset for" << id << "in" << d->name;
-
-	return -1;
 }
 
 void PackedStorage::initIndex()
