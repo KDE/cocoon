@@ -38,8 +38,6 @@ public:
 		, name()
 		, objectData()
 		, objects()
-		, objectSizes()
-		, objectTypes()
 		, packFile()
 		, packObjects()
 		, size(0)
@@ -52,8 +50,6 @@ public:
 		, name(other.name)
 		, objectData(other.objectData)
 		, objects(other.objects)
-		, objectSizes(other.objectSizes)
-		, objectTypes(other.objectTypes)
 		, packFile(other.packFile.fileName())
 		, packObjects(other.packObjects)
 		, size(other.size)
@@ -65,13 +61,11 @@ public:
 	QString name;
 	QHash<QString, QByteArray> objectData;
 	QHash<QString, RawObject*> objects;
-	QHash<QString, int>        objectSizes;
-	QHash<QString, ObjectType> objectTypes;
 	QFile packFile;
 	QHash<QString, PackedStorageObject*> packObjects;
 	quint32 size;
 };
 
-};
+}
 
 #endif // PACKEDSTORAGE_P_H
