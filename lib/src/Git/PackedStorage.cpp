@@ -302,15 +302,7 @@ quint32 PackedStorage::objectSizeIn(const QByteArray &delta, quint32 &pos)
 
 ObjectType PackedStorage::objectTypeFor(const QString &id)
 {
-	QString actualId = actualIdFor(id);
-
-	if (!d->objectTypes.contains(actualId)) {
-		kDebug() << "loading type for" << actualId << "in" << d->name;
-
-		unpackObjectFrom(actualId);
-	}
-
-	return d->objectTypes[actualId];
+	return packObjectFor(id)->finalType();
 }
 
 QFile& PackedStorage::packFile()
