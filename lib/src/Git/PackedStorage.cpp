@@ -164,6 +164,11 @@ quint32 PackedStorage::dataOffsetFor(const QString &id)
 	return 0;
 }
 
+const QString PackedStorage::idForObjectAt(quint32 offset)
+{
+	return d->idAt[offset];
+}
+
 const QString PackedStorage::idIn(quint32 slot)
 {
 	quint32 pos = 0;
