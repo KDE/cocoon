@@ -24,6 +24,7 @@
 
 namespace Git {
 
+class PackedStorageObject;
 class RawObject;
 
 
@@ -40,6 +41,7 @@ public:
 		, objectSizes()
 		, objectTypes()
 		, packFile()
+		, packObjects()
 		, size(0)
 	{}
 	PackedStoragePrivate(const PackedStoragePrivate &other)
@@ -53,6 +55,7 @@ public:
 		, objectSizes(other.objectSizes)
 		, objectTypes(other.objectTypes)
 		, packFile(other.packFile.fileName())
+		, packObjects(other.packObjects)
 		, size(other.size)
 	{}
 
@@ -65,6 +68,7 @@ public:
 	QHash<QString, int>        objectSizes;
 	QHash<QString, ObjectType> objectTypes;
 	QFile packFile;
+	QHash<QString, PackedStorageObject*> packObjects;
 	quint32 size;
 };
 
