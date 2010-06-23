@@ -268,15 +268,7 @@ void PackedStorage::initPack()
 
 const QByteArray PackedStorage::objectDataFor(const QString &id)
 {
-	QString actualId = actualIdFor(id);
-
-	if (!d->objectData.contains(actualId)) {
-		kDebug() << "loading data for" << actualId << "in" << d->name;
-
-		d->objectData[actualId] = unpackObjectFrom(actualId);
-	}
-
-	return d->objectData[actualId];
+	return packObjectFor(id)->finalData();
 }
 
 int PackedStorage::objectSizeFor(const QString &id)
