@@ -164,9 +164,18 @@ quint32 PackedStorage::dataOffsetFor(const QString &id)
 	return 0;
 }
 
+const QString PackedStorage::idIn(quint32 slot)
 {
-
+	quint32 pos = 0;
+	switch(d->indexVersion) {
+	case 2:
+		pos = indexV2_Sha1TableStart + (slot * Sha1Size);
+		break;
+	default:
+		pos = indexV1_OffsetTableStart + OffsetSize + (slot * indexV1_OffsetTableEntrySize);
+		break;
 	}
+	return readIndexFrom(pos, Sha1Size).toHex();
 }
 
 void PackedStorage::initIndex()
