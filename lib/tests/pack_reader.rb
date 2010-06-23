@@ -110,8 +110,9 @@ def size_from_delta_header(delta, pos)
 end
 
 def id_at(offset)
+  ids = all_ids
   all_offsets.each_with_index do |ofs, i|
-    return all_ids[i] if ofs == offset
+    return ids[i] if ofs == offset
   end
 
   raise "no id for offset #{"0x%08x"%offset} found"
