@@ -276,12 +276,23 @@ int PackedStorage::objectSizeFor(const QString &id)
 	return packObjectFor(id)->finalSize();
 }
 
-{
-}
-
 ObjectType PackedStorage::objectTypeFor(const QString &id)
 {
 	return packObjectFor(id)->finalType();
+}
+
+quint32 PackedStorage::offsetIn(quint32 slot)
+{
+	quint32 pos = 0;
+	switch(d->indexVersion) {
+	case 2:
+		pos = indexV2_OffsetTableStart + (slot * OffsetSize);
+		break;
+	default:
+		pos = indexV1_OffsetTableStart + (slot * indexV1_OffsetTableEntrySize);
+		break;
+	}
+	return ntohl(*(uint32_t*)readIndexFrom(pos, OffsetSize).data());
 }
 
 QFile& PackedStorage::packFile()
