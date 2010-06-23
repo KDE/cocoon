@@ -250,12 +250,12 @@ def pack_data_at(offset)
           if c & 0x80 != 0
             pos -= 1
             cp_off = cp_size = 0
-            cp_off = delta_data[:raw][pos += 1] if c & 0x01 != 0
-            cp_off |= delta_data[:raw][pos += 1] << 8 if c & 0x02 != 0
-            cp_off |= delta_data[:raw][pos += 1] << 16 if c & 0x04 != 0
-            cp_off |= delta_data[:raw][pos += 1] << 24 if c & 0x08 != 0
-            cp_size = delta_data[:raw][pos += 1] if c & 0x10 != 0
-            cp_size |= delta_data[:raw][pos += 1] << 8 if c & 0x20 != 0
+            cp_off   = delta_data[:raw][pos += 1]       if c & 0x01 != 0
+            cp_off  |= delta_data[:raw][pos += 1] <<  8 if c & 0x02 != 0
+            cp_off  |= delta_data[:raw][pos += 1] << 16 if c & 0x04 != 0
+            cp_off  |= delta_data[:raw][pos += 1] << 24 if c & 0x08 != 0
+            cp_size  = delta_data[:raw][pos += 1]       if c & 0x10 != 0
+            cp_size |= delta_data[:raw][pos += 1] <<  8 if c & 0x20 != 0
             cp_size |= delta_data[:raw][pos += 1] << 16 if c & 0x40 != 0
             cp_size = 0x10000 if cp_size == 0
             pos += 1
