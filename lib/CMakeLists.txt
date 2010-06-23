@@ -8,4 +8,7 @@ set(LIB_VERSION_MINOR 1)
 set(LIB_VERSION_PATCH 0)
 
 add_subdirectory( src )
-add_subdirectory( tests )
+
+if(BUILD_TESTS)
+	add_subdirectory( tests )
+endif(BUILD_TESTS)
