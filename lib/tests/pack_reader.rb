@@ -230,6 +230,9 @@ def pack_data_at(offset)
         base_pack_data = pack_data_at(base_offset)
         base_data = base_pack_data[:data]
         base_size = base_pack_data[:dest_size]
+
+        pack.seek(delta_data_offset)
+        raise "Invalid Zlib header at #{delta_data_offset.to_hex_s}" if pack.read(2) != "\x78\x9c"
         pack.seek(delta_data_offset)
 
         delta_data = { :raw => Zlib::Inflate.inflate(pack.read(base_size)), :parsed => [] }
