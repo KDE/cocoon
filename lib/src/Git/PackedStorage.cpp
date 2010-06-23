@@ -18,6 +18,7 @@
 
 #include "PackedStorage.h"
 
+#include "PackedStorageObject.h"
 #include "RawObject.h"
 #include "Repo.h"
 
@@ -324,6 +325,19 @@ QFile& PackedStorage::packFile()
 {
 	Q_ASSERT(d->packFile.isOpen());
 	return d->packFile;
+}
+
+PackedStorageObject* PackedStorage::packObjectFor(const QString &id)
+{
+	QString actualId = actualIdFor(id);
+
+	if (!d->packObjects.contains(actualId)) {
+		kDebug() << "loading pack object for" << actualId << "in" << d->name;
+
+		d->packObjects[actualId] = new PackedStorageObject(*this, dataOffsetFor(actualId), actualId);
+	}
+
+	return d->packObjects[actualId];
 }
 
 const QByteArray PackedStorage::patchDelta(const QByteArray &base, const QByteArray &delta)
