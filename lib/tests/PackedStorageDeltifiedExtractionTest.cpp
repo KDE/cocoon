@@ -53,6 +53,14 @@ class PackedStorageDeltifiedExtractionTest : public GitTestBase
 
 
 
+		void deltifiedObjectOffsetShouldBeCorrect() {
+			QString id = "7096645927485680189876d157c499423fd423a5";
+			quint32 offset = storage->dataOffsetFor(id);
+
+			QCOMPARE(offset, (unsigned)0x1cd);
+		}
+
+
 		void deltifiedObjectTypeShouldBeCorrect() {
 			QString id = "7096645927485680189876d157c499423fd423a5";
 			Git::ObjectType type = storage->objectTypeFor(id);
@@ -65,13 +73,6 @@ class PackedStorageDeltifiedExtractionTest : public GitTestBase
 			int size = storage->objectSizeFor(id);
 
 			QCOMPARE(size, 182);
-		}
-
-		void deltifiedObjectOffsetShouldBeCorrect() {
-			QString id = "7096645927485680189876d157c499423fd423a5";
-			int offset = storage->dataOffsetFor(id);
-
-			QCOMPARE(offset, 0x1cd);
 		}
 
 		void shouldExtractDeltifiedObject() {
