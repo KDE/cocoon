@@ -22,7 +22,7 @@
 
 
 
-class PackedNormalExtractionStorageTest : public GitTestBase
+class PackedStorageNormalExtractionTest : public GitTestBase
 {
 	Q_OBJECT
 
@@ -76,8 +76,8 @@ class PackedNormalExtractionStorageTest : public GitTestBase
 		}
 };
 
-QTEST_KDEMAIN_CORE(PackedNormalExtractionStorageTest);
+QTEST_KDEMAIN_CORE(PackedStorageNormalExtractionTest);
 
 
 
-#include "PackedNormalExtractionStorageTest.moc"
+#include "PackedStorageNormalExtractionTest.moc"
