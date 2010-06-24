@@ -19,7 +19,6 @@
 #include "GitTestBase.h"
 
 #include "Git/PackedStorage.h"
-#include "Git/PackedStorageObject.h"
 
 
 
@@ -59,13 +58,6 @@ class PackedStorageNormalExtractionTest : public GitTestBase
 			quint32 offset = storage->dataOffsetFor(id);
 
 			QCOMPARE(offset, (unsigned)0x177);
-		}
-
-		void normalObjectShouldNotBeDeltified() {
-			QString id = "b7566b7883e0dd74baba8cb194ed5dacaed5bb62";
-			Git::PackedStorageObject *obj = storage->packObjectFor(id);
-
-			QVERIFY(!obj->isDeltified());
 		}
 
 		void normalObjectTypeShouldBeCorrect() {
