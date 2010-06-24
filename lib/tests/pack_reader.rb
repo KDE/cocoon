@@ -227,58 +227,63 @@ def pack_data_at(offset)
         end
         base_offset = offset - offset_to_base
         delta_data_offset = data_offset + i + 1
-        base_pack_data = pack_data_at(base_offset)
-        base_data = base_pack_data[:data]
-        base_size = base_pack_data[:dest_size]
 
-        pack.seek(delta_data_offset)
-        raise "Invalid Zlib header at #{delta_data_offset.to_hex_s}" if pack.read(2) != "\x78\x9c"
-        pack.seek(delta_data_offset)
-
-        delta_data = { :raw => Zlib::Inflate.inflate(pack.read(base_size)), :parsed => [] }
-        pos = 0
-        delta_src_size, pos = size_from_delta_header(delta_data[:raw], pos)
-        delta_dest_size, pos = size_from_delta_header(delta_data[:raw], pos)
-        delta_data[:src_size] = delta_src_size
-        delta_data[:dest_size] = delta_dest_size
-
-        dest_data = ""
-        while pos < delta_data[:raw].size
-          cmd_offset = pos
-          c = delta_data[:raw][pos]
-          pos += 1
-          if c & 0x80 != 0
-            pos -= 1
-            cp_off = cp_size = 0
-            cp_off   = delta_data[:raw][pos += 1]       if c & 0x01 != 0
-            cp_off  |= delta_data[:raw][pos += 1] <<  8 if c & 0x02 != 0
-            cp_off  |= delta_data[:raw][pos += 1] << 16 if c & 0x04 != 0
-            cp_off  |= delta_data[:raw][pos += 1] << 24 if c & 0x08 != 0
-            cp_size  = delta_data[:raw][pos += 1]       if c & 0x10 != 0
-            cp_size |= delta_data[:raw][pos += 1] <<  8 if c & 0x20 != 0
-            cp_size |= delta_data[:raw][pos += 1] << 16 if c & 0x40 != 0
-            cp_size = 0x10000 if cp_size == 0
-            pos += 1
-            dest_data += base_data[cp_off,cp_size]
-            delta_data[:parsed] << {:cmd => :from_src, :offset => cp_off, :size => cp_size, :cmd_offset => cmd_offset}
-          elsif c != 0
-            dest_data += delta_data[:raw][pos,c]
-            delta_data[:parsed] << {:cmd => :from_delta, :offset => pos, :size => c, :cmd_offset => cmd_offset}
-            pos += c
-          else
-            raise 'invalid delta data'
-          end
-        end
-        dest_data
-
-        delta = {:offset_to_base => offset_to_base, :base_offset => base_offset, :data_offset => delta_data_offset, :data => delta_data, :dest_data => dest_data}
+        delta = {:offset_to_base => offset_to_base, :base_offset => base_offset, :data_offset => delta_data_offset}
       else
         base_sha1 = delta_data.to_hex_s
         delta_data_offset += Sha1Size
-        delta_data = Zlib::Inflate.inflate(pack.read(dest_size))
-        delta = {:base_id => base_sha1, :data_offset => delta_data_offset, :data => delta_data}
+        base_offset = offset_for(base_sha1)
+
+        delta = {:base_id => base_sha1, :base_offset => base_offset, :data_offset => delta_data_offset}
       end
-      return {:type => type, :dest_size => dest_size, :data_offset => data_offset, :delta => delta}
+
+      base_pack_data = pack_data_at(base_offset)
+      base_data = base_pack_data[:data]
+      base_size = base_pack_data[:dest_size]
+
+      pack.seek(delta_data_offset)
+      raise "Invalid Zlib header at #{delta_data_offset.to_hex_s}" if pack.read(2) != "\x78\x9c"
+      pack.seek(delta_data_offset)
+      delta_data = { :raw => Zlib::Inflate.inflate(pack.read(base_size + dest_size)), :parsed => [] }
+
+      pos = 0
+      delta_src_size, pos = size_from_delta_header(delta_data[:raw], pos)
+      delta_dest_size, pos = size_from_delta_header(delta_data[:raw], pos)
+      delta_data[:src_size] = delta_src_size
+      delta_data[:dest_size] = delta_dest_size
+
+      dest_data = ""
+      while pos < delta_data[:raw].size
+        cmd_offset = pos
+        c = delta_data[:raw][pos]
+        pos += 1
+        if c & 0x80 != 0
+          pos -= 1
+          cp_off = cp_size = 0
+          cp_off   = delta_data[:raw][pos += 1]       if c & 0x01 != 0
+          cp_off  |= delta_data[:raw][pos += 1] <<  8 if c & 0x02 != 0
+          cp_off  |= delta_data[:raw][pos += 1] << 16 if c & 0x04 != 0
+          cp_off  |= delta_data[:raw][pos += 1] << 24 if c & 0x08 != 0
+          cp_size  = delta_data[:raw][pos += 1]       if c & 0x10 != 0
+          cp_size |= delta_data[:raw][pos += 1] <<  8 if c & 0x20 != 0
+          cp_size |= delta_data[:raw][pos += 1] << 16 if c & 0x40 != 0
+          cp_size = 0x10000 if cp_size == 0
+          pos += 1
+          dest_data += base_data[cp_off,cp_size]
+          delta_data[:parsed] << {:cmd => :from_src, :offset => cp_off, :size => cp_size, :cmd_offset => cmd_offset}
+        elsif c != 0
+          dest_data += delta_data[:raw][pos,c]
+          delta_data[:parsed] << {:cmd => :from_delta, :offset => pos, :size => c, :cmd_offset => cmd_offset}
+          pos += c
+        else
+          raise 'invalid delta data'
+        end
+      end
+      dest_data
+
+      delta.merge!({:data => delta_data, :dest_data => dest_data})
+
+      return {:type => type, :dest_size => dest_size, :data_offset => data_offset, :data => dest_data, :delta => delta}
     when :commit, :tree, :blob, :tag
       data = Zlib::Inflate.inflate(pack.read(dest_size))
       return {:type => type, :dest_size => dest_size, :data_offset => data_offset, :data => data}
@@ -381,11 +386,14 @@ def print_pack_data_at
     puts "delta ------------------------"
     if :index_delta
       puts "      base offset: #{"0x%08x"%delta_data[:base_offset]} = #{"0x%08x"%offset} - #{"0x%08x"%delta_data[:offset_to_base]}"
+    elsif :ref_delta
+      puts "      base   sha1: #{delta_data[:base_id]}"
+      puts "      base offset: #{"0x%08x"%delta_data[:base_offset]}"
     else
       puts "          base id: #{delta_data[:base_id]}"
     end
-      puts "     src obj size: #{delta_data[:data][:src_size]}"
-      puts "    dest obj size: #{delta_data[:data][:dest_size]}"
+    puts "     src obj size: #{delta_data[:data][:src_size]}"
+    puts "    dest obj size: #{delta_data[:data][:dest_size]}"
     puts "raw delta data ---------------"
     puts delta_data[:data][:raw].to_hex_s
     puts "parsed delta data ------------"
