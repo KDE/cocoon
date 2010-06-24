@@ -25,6 +25,7 @@
 
 class PackedStorageTest;
 class PackedStorageDeltifiedExtractionTest;
+class PackedStorageNormalExtractionTest;
 
 namespace Git {
 
@@ -72,6 +73,7 @@ class KDE_EXPORT PackedStorage : public ObjectStorage
 
 	friend class ::PackedStorageTest;
 	friend class ::PackedStorageDeltifiedExtractionTest;
+	friend class ::PackedStorageNormalExtractionTest;
 };
 
 }
