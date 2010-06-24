@@ -54,11 +54,11 @@ class PackedStorageNormalExtractionTest : public GitTestBase
 
 
 
-		void normalObjectTypeShouldBeCorrect() {
+		void normalObjectOffestShouldBeCorrect() {
 			QString id = "b7566b7883e0dd74baba8cb194ed5dacaed5bb62";
-			Git::ObjectType type = storage->objectTypeFor(id);
+			quint32 offset = storage->dataOffsetFor(id);
 
-			QCOMPARE(type, Git::OBJ_COMMIT);
+			QCOMPARE(offset, (unsigned)0x177);
 		}
 
 		void normalObjectShouldNotBeDeltified() {
@@ -68,11 +68,11 @@ class PackedStorageNormalExtractionTest : public GitTestBase
 			QVERIFY(!obj->isDeltified());
 		}
 
-		void normalObjectOffestShouldBeCorrect() {
+		void normalObjectTypeShouldBeCorrect() {
 			QString id = "b7566b7883e0dd74baba8cb194ed5dacaed5bb62";
-			quint32 offset = storage->dataOffsetFor(id);
+			Git::ObjectType type = storage->objectTypeFor(id);
 
-			QCOMPARE(offset, (unsigned)0x177);
+			QCOMPARE(type, Git::OBJ_COMMIT);
 		}
 
 		void normalObjectSizeShouldBeCorrect() {
