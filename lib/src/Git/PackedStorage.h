@@ -71,6 +71,8 @@ class KDE_EXPORT PackedStorage : public ObjectStorage
 	private:
 		QSharedDataPointer<PackedStoragePrivate> d;
 
+	friend class PackedStorageObject;
+
 	friend class ::PackedStorageTest;
 	friend class ::PackedStorageDeltifiedExtractionTest;
 	friend class ::PackedStorageNormalExtractionTest;

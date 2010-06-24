@@ -15,6 +15,7 @@ set(cocoon_git_LIB_SRCS
 	LooseStorage.cpp
 	ObjectStorage.cpp
 	PackedStorage.cpp
+	PackedStorageObject.cpp
 	RawObject.cpp
 	Ref.cpp
 	Repo.cpp
