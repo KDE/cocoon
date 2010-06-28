@@ -84,6 +84,23 @@ PackedStorage::PackedStorage(const PackedStorage &other)
 {
 }
 
+PackedStorage::~PackedStorage()
+{
+	if (!d->objects.isEmpty()) {
+		foreach (RawObject *object, d->objects) {
+			delete object;
+		}
+	}
+	d->objects.clear();
+
+	if (!d->packObjects.isEmpty()) {
+		foreach (PackedStorageObject *object, d->packObjects) {
+			delete object;
+		}
+	}
+	d->packObjects.clear();
+}
+
 
 
 const QStringList PackedStorage::allIds()
