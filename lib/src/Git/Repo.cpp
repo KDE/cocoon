@@ -54,6 +54,7 @@ Repo::Repo(const Repo &other)
 
 Repo::~Repo()
 {
+	reset();
 }
 
 
