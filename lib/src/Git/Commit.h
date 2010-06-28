@@ -19,6 +19,7 @@
 #ifndef COMMIT_H
 #define COMMIT_H
 
+#include "Commit_p.h"
 #include "RawObject.h"
 
 #include <KDateTime>
@@ -38,8 +39,6 @@ class Commit;
 class Ref;
 class Repo;
 class Tree;
-
-typedef QList<Commit*>  CommitList;
 
 
 
@@ -119,19 +118,12 @@ class KDE_EXPORT Commit : public RawObject
 		static Commit* latestIn(const CommitList &commits);
 
 	private:
-		QString     m_author;
-		KDateTime   m_authoredAt;
-		QString     m_committer;
-		KDateTime   m_committedAt;
-		QString     m_message;
-		CommitList  m_parents;
-		QString     m_summary;
-		Tree       *m_tree;
+		QSharedDataPointer<CommitPrivate> d;
 
-		friend class ::CommitListingTest;
-		friend class ::CommitMergeDetectionTest;
-		friend class ::CommitPopulationTest;
-		friend class ::CommitPopulationErrorsTest;
+	friend class ::CommitListingTest;
+	friend class ::CommitMergeDetectionTest;
+	friend class ::CommitPopulationTest;
+	friend class ::CommitPopulationErrorsTest;
 };
 
 }
