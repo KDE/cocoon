@@ -40,7 +40,7 @@ class KDE_EXPORT Tree : public RawObject
 	Q_OBJECT
 
 	public:
-		Tree(const QString& id, Repo &repo);
+		explicit Tree(const QString& id, Repo &repo);
 
 		const QList<Blob*> blobs();
 		const QMap<QString, Blob*> blobsByName();
@@ -51,7 +51,7 @@ class KDE_EXPORT Tree : public RawObject
 		const QMap<QString, Tree*> treesByName();
 
 	protected:
-		Tree(const QString& id, QObject *parent=0);
+		explicit Tree(const QString& id, QObject *parent=0);
 
 	private:
 		// static
