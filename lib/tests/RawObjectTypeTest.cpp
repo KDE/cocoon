@@ -46,7 +46,7 @@ class RawObjectTypeTest : public GitTestBase
 
 
 		void testIsBlob() {
-			object->m_type = Git::OBJ_BLOB;
+			object->d->type = Git::OBJ_BLOB;
 
 			QVERIFY( object->isBlob());
 			QVERIFY(!object->isCommit());
@@ -55,7 +55,7 @@ class RawObjectTypeTest : public GitTestBase
 		}
 
 		void testIsCommit() {
-			object->m_type = Git::OBJ_COMMIT;
+			object->d->type = Git::OBJ_COMMIT;
 
 			QVERIFY(!object->isBlob());
 			QVERIFY( object->isCommit());
@@ -64,7 +64,7 @@ class RawObjectTypeTest : public GitTestBase
 		}
 
 		void testIsTag() {
-			object->m_type = Git::OBJ_TAG;
+			object->d->type = Git::OBJ_TAG;
 
 			QVERIFY(!object->isBlob());
 			QVERIFY(!object->isCommit());
@@ -73,7 +73,7 @@ class RawObjectTypeTest : public GitTestBase
 		}
 
 		void testIsTree() {
-			object->m_type = Git::OBJ_TREE;
+			object->d->type = Git::OBJ_TREE;
 
 			QVERIFY(!object->isBlob());
 			QVERIFY(!object->isCommit());
