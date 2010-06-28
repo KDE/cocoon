@@ -42,7 +42,7 @@ class KDE_EXPORT RawObject : public QObject
 	Q_OBJECT
 
 	public:
-		RawObject(const QString& id, Repo &repo);
+		explicit RawObject(const QString& id, Repo &repo);
 
 		const QByteArray&  data();
 		const QString&     id() const;
@@ -65,7 +65,7 @@ class KDE_EXPORT RawObject : public QObject
 		static const QString typeNameFromType(const ObjectType type);
 
 	protected:
-		RawObject(const QString &id, QObject *parent=0);
+		explicit RawObject(const QString &id, QObject *parent=0);
 
 		virtual void populateHeader();
 		Repo& repo() const;
