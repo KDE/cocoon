@@ -37,6 +37,7 @@ class KDE_EXPORT LooseStorage : public ObjectStorage
 	public:
 		explicit LooseStorage(Repo &repo);
 		LooseStorage(const LooseStorage &other);
+		virtual ~LooseStorage();
 
 		const QStringList allIds();
 		const QByteArray objectDataFor(const QString &id);
