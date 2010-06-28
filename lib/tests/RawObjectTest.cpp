@@ -52,8 +52,8 @@ class RawObjectTest : public GitTestBase
 
 
 		void shouldOnlyPopulateHeaderOnCreation() {
-			QVERIFY(object->m_type != Git::OBJ_NONE);
-			QVERIFY(object->m_data.isNull());
+			QVERIFY(object->d->type != Git::OBJ_NONE);
+			QVERIFY(object->d->data.isNull());
 		}
 
 		void shouldPopulateFullyOnDataAccess() {
