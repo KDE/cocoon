@@ -40,6 +40,8 @@ class Ref;
 class Repo;
 class Tree;
 
+typedef QList<Commit*>  CommitList;
+
 
 
 class KDE_EXPORT Commit : public RawObject

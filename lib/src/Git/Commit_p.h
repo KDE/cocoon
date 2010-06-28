@@ -30,8 +30,6 @@ namespace Git {
 class Commit;
 class Tree;
 
-typedef QList<Commit*>  CommitList;
-
 
 
 class CommitPrivate : public QSharedData {
@@ -59,14 +57,14 @@ public:
 		, tree(other.tree)
 	{}
 
-	QString     author;
-	KDateTime   authoredAt;
-	QString     committer;
-	KDateTime   committedAt;
-	QString     message;
-	CommitList  parents;
-	QString     summary;
-	Tree       *tree;
+	QString   author;
+	KDateTime authoredAt;
+	QString   committer;
+	KDateTime committedAt;
+	QString   message;
+	QList<Commit*> parents;
+	QString   summary;
+	Tree     *tree;
 };
 
 }
