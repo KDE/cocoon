@@ -187,7 +187,7 @@ void Repo::reset()
 
 void Repo::resetCommits()
 {
-	if (d->commits.size() > 0) {
+	if (!d->commits.isEmpty()) {
 		d->commits.clear();
 
 		emit indexChanged();
