@@ -34,7 +34,7 @@ using namespace Git;
 
 RawObject::RawObject(const QString &id, QObject *parent)
 	: QObject(parent)
-	, d(new RawObjectPrivate) /** @todo this should be done in the derived classes */
+	, d(new RawObjectPrivate)
 {
 	d->id = id;
 	kWarning() << "creating object without storage:" << id;
@@ -42,7 +42,7 @@ RawObject::RawObject(const QString &id, QObject *parent)
 
 RawObject::RawObject(const QString &id, Repo &repo)
 	: QObject((QObject*)&repo)
-	, d(new RawObjectPrivate) /** @todo this should be done in the derived classes */
+	, d(new RawObjectPrivate)
 {
 	d->id = id;
 	d->repo = &repo;
