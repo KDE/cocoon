@@ -19,7 +19,9 @@
 #ifndef COMMIT_P_H
 #define COMMIT_P_H
 
-#include "RawObject_p.h"
+#include <QSharedData>
+
+#include <KDateTime>
 
 
 
@@ -32,10 +34,10 @@ typedef QList<Commit*>  CommitList;
 
 
 
-class CommitPrivate : public RawObjectPrivate {
+class CommitPrivate : public QSharedData {
 public:
 	CommitPrivate()
-		: RawObjectPrivate()
+		: QSharedData()
 		, author()
 		, authoredAt()
 		, committer()
@@ -46,7 +48,7 @@ public:
 		, tree(0)
 	{}
 	CommitPrivate(const CommitPrivate &other)
-		: RawObjectPrivate(other)
+		: QSharedData(other)
 		, author(other.author)
 		, authoredAt(other.authoredAt)
 		, committer(other.committer)
