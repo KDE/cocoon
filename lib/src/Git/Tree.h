@@ -20,6 +20,7 @@
 #define TREE_H
 
 #include "RawObject.h"
+#include "Tree_p.h"
 
 #include <QHash>
 #include <QMap>
@@ -67,9 +68,7 @@ class KDE_EXPORT Tree : public RawObject
 		const QString nameFor(const QString &id);
 
 	private:
-		QList<RawObject*>       m_entries;
-		QHash<QString, QString> m_entryModes;
-		QHash<QString, QString> m_entryNames;
+		QSharedDataPointer<TreePrivate> d;
 
 	friend class ::TreeTest;
 };
