@@ -135,6 +135,8 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 		return;
 	}
 
+	kDebug() << "fill commit" << commit->id();
+
 	QStringList lines = raw.split("\n");
 
 	Tree *tree = 0;
