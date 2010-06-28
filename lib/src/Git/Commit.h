@@ -47,7 +47,7 @@ class KDE_EXPORT Commit : public RawObject
 	Q_OBJECT
 
 	public:
-		Commit(const QString& id, Repo &repo);
+		explicit Commit(const QString& id, Repo &repo);
 
 		const QString&     author();
 		const KDateTime&   authoredAt();
@@ -94,7 +94,7 @@ class KDE_EXPORT Commit : public RawObject
 		static CommitList allReachableFrom(const Ref &branch);
 
 	protected:
-		Commit(const QString& id, QObject *parent=0);
+		explicit Commit(const QString& id, QObject *parent=0);
 
 	private:
 	// static
