@@ -181,6 +181,7 @@ void Repo::reset()
 	resetCommits();
 	resetHeads();
 	resetStatus();
+	resetStorages();
 }
 
 void Repo::resetCommits()
@@ -209,6 +210,22 @@ void Repo::resetStatus()
 		d->status = 0;
 
 		emit indexChanged();
+	}
+}
+
+void Repo::resetStorages()
+{
+	if (!d->storages.isEmpty()) {
+		foreach (ObjectStorage *storage, d->storages) {
+			storage->deleteLater();
+		}
+	}
+	d->storages.clear();
+
+
+	if (d->looseStorage) {
+		d->looseStorage->deleteLater();
+		d->looseStorage = 0;
 	}
 }
 

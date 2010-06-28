@@ -93,6 +93,7 @@ class KDE_EXPORT Repo : public QObject
 		void resetCommits();
 		void resetHeads();
 		void resetStatus();
+		void resetStorages();
 
 	signals:
 //		void currentHeadChanged();
