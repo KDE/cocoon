@@ -21,6 +21,8 @@
 
 #include <QObject>
 
+#include "RawObject_p.h"
+
 #include <kdemacros.h>
 
 
@@ -34,7 +36,7 @@ class ObjectStorage;
 class Repo;
 
 
-typedef enum {
+/*typedef enum {
 	OBJ_NONE = 0,
 	OBJ_COMMIT = 1,
 	OBJ_TREE = 2,
@@ -43,7 +45,7 @@ typedef enum {
 //	OBJ_SOMETHING = 5, // reserved
 	OBJ_OFS_DELTA = 6,
 	OBJ_REF_DELTA = 7,
-} ObjectType;
+} ObjectType;*/
 
 
 
@@ -81,11 +83,7 @@ class KDE_EXPORT RawObject : public QObject
 		Repo& repo() const;
 
 	private:
-		QByteArray  m_data;
-		int         m_dataSize;
-		QString     m_id;
-		Repo       *m_repo;
-		ObjectType  m_type;
+		QSharedDataPointer<RawObjectPrivate> d;
 
 	friend class ::RawObjectTest;
 	friend class ::RawObjectTypeTest;

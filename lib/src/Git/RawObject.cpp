@@ -34,23 +34,18 @@ using namespace Git;
 
 RawObject::RawObject(const QString &id, QObject *parent)
 	: QObject(parent)
-	, m_data()
-	, m_dataSize(-1)
-	, m_id(id)
-	, m_repo(0)
-	, m_type(OBJ_NONE)
+	, d(new RawObjectPrivate) /** @todo this should be done in the derived classes */
 {
+	d->id = id;
 	kWarning() << "creating object without storage:" << id;
 }
 
 RawObject::RawObject(const QString &id, Repo &repo)
 	: QObject((QObject*)&repo)
-	, m_data()
-	, m_dataSize(-1)
-	, m_id(id)
-	, m_repo(&repo)
-	, m_type(OBJ_NONE)
+	, d(new RawObjectPrivate) /** @todo this should be done in the derived classes */
 {
+	d->id = id;
+	d->repo = &repo;
 	populateHeader();
 }
 
@@ -58,11 +53,11 @@ RawObject::RawObject(const QString &id, Repo &repo)
 
 const QByteArray& RawObject::data()
 {
-	if (m_data.isNull()) {
-		m_data = m_repo->storageFor(m_id)->objectDataFor(m_id);
+	if (d->data.isNull()) {
+		d->data = d->repo->storageFor(d->id)->objectDataFor(d->id);
 	}
 
-	return m_data;
+	return d->data;
 }
 
 const QString RawObject::extractHeaderForm(const QByteArray &rawData)
@@ -100,7 +95,7 @@ ObjectType RawObject::extractObjectTypeFrom(const QString &header)
 
 const QString& RawObject::id() const
 {
-	return m_id;
+	return d->id;
 }
 
 bool RawObject::isBlob() const
@@ -154,27 +149,27 @@ RawObject* RawObject::newInstance(const QString &id, Repo &repo)
 
 void RawObject::populateHeader()
 {
-	Q_ASSERT(m_repo);
-	ObjectStorage *store = m_repo->storageFor(id());
+	Q_ASSERT(d->repo);
+	ObjectStorage *store = d->repo->storageFor(id());
 
-//	m_data = store->objectDataFor(id());
-	m_dataSize = store->objectSizeFor(id());
-	m_type = store->objectTypeFor(id());
+//	d->m_data = store->objectDataFor(id());
+	d->dataSize = store->objectSizeFor(id());
+	d->type = store->objectTypeFor(id());
 }
 
 Repo& RawObject::repo() const
 {
-	return *m_repo;
+	return *(d->repo);
 }
 
 int RawObject::size() const
 {
-	return m_dataSize;
+	return d->dataSize;
 }
 
 ObjectType RawObject::type() const
 {
-	return m_type;
+	return d->type;
 }
 
 ObjectType RawObject::typeFromTypeName(const QString &name)
