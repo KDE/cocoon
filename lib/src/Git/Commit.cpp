@@ -32,40 +32,26 @@ using namespace Git;
 
 Commit::Commit(const QString &id, QObject *parent)
 	: RawObject(id, parent)
-	, m_author()
-	, m_authoredAt()
-	, m_committer()
-	, m_committedAt()
-	, m_message()
-	, m_parents()
-	, m_summary()
-	, m_tree(0)
+	, d(new CommitPrivate)
 {
 }
 
 Commit::Commit(const QString& id, Repo &repo)
 	: RawObject(id, repo)
-	, m_author()
-	, m_authoredAt()
-	, m_committer()
-	, m_committedAt()
-	, m_message()
-	, m_parents()
-	, m_summary()
-	, m_tree(0)
+	, d(new CommitPrivate)
 {
 }
 
 const QString& Commit::author()
 {
 	fillFromString(this, data());
-	return m_author;
+	return d->author;
 }
 
 const KDateTime& Commit::authoredAt()
 {
 	fillFromString(this, data());
-	return m_authoredAt;
+	return d->authoredAt;
 }
 
 QStringList Commit::childrenOf(const Commit &commit, const QStringList &refs)
@@ -123,13 +109,13 @@ CommitList Commit::childrenOn(const QStringList &refs) const
 const QString& Commit::committer()
 {
 	fillFromString(this, data());
-	return m_committer;
+	return d->committer;
 }
 
 const KDateTime& Commit::committedAt()
 {
 	fillFromString(this, data());
-	return m_committedAt;
+	return d->committedAt;
 }
 
 const QString Commit::diff() const
@@ -143,7 +129,7 @@ const QString Commit::diff() const
 void Commit::fillFromString(Commit *commit, const QString &raw)
 {
 	// if commit has already been filled
-	if (commit->m_tree || !commit->m_message.isEmpty()) {
+	if (commit->d->tree || !commit->d->message.isEmpty()) {
 		return;
 	}
 
@@ -156,14 +142,14 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 		QString treeId = lines.takeFirst().mid(qstrlen("tree "), -1);
 		tree = commit->repo().tree(treeId);
 	}
-	commit->m_tree = tree;
+	commit->d->tree = tree;
 
 	CommitList parents;
 	while (!lines.isEmpty() && lines.first().startsWith("parent ")) {
 		QString parentId = lines.takeFirst().mid(qstrlen("parent "), -1);
 		parents << commit->repo().commit(parentId);
 	}
-	commit->m_parents = parents;
+	commit->d->parents = parents;
 
 	QRegExp actorRegExp("^(.*) (\\d+) ([+-]\\d+)$");
 
@@ -187,8 +173,8 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 
 		/** @todo add zone offset */
 	}
-	commit->m_author = author;
-	commit->m_authoredAt = authoredAt;
+	commit->d->author = author;
+	commit->d->authoredAt = authoredAt;
 
 	QString committer;
 	KDateTime committedAt;
@@ -210,8 +196,8 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 
 		/** @todo add zone offset */
 	}
-	commit->m_committer = committer;
-	commit->m_committedAt = committedAt;
+	commit->d->committer = committer;
+	commit->d->committedAt = committedAt;
 
 	while (!lines.isEmpty() && lines.first().isEmpty()) {
 		lines.removeFirst();
@@ -227,8 +213,8 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 			message += "\n" + lines.takeFirst();
 		}
 	}
-	commit->m_message = message;
-	commit->m_summary = summary;
+	commit->d->message = message;
+	commit->d->summary = summary;
 
 	while (!lines.isEmpty() && lines.first().isEmpty())  {
 		lines.removeFirst();
@@ -287,25 +273,25 @@ Commit* Commit::latestIn(const CommitList &commits)
 const QString& Commit::message()
 {
 	fillFromString(this, data());
-	return m_message;
+	return d->message;
 }
 
 const CommitList Commit::parents()
 {
 	fillFromString(this, data());
-	return m_parents;
+	return d->parents;
 }
 
 const QString& Commit::summary()
 {
 	fillFromString(this, data());
-	return m_summary;
+	return d->summary;
 }
 
 const Tree* Commit::tree()
 {
 	fillFromString(this, data());
-	return m_tree;
+	return d->tree;
 }
 
 #include "Commit.moc"
