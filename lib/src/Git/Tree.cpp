@@ -30,17 +30,13 @@ using namespace Git;
 
 Tree::Tree(const QString &id, QObject *parent)
 	: RawObject(id, parent)
-	, m_entries()
-	, m_entryModes()
-	, m_entryNames()
+	, d(new TreePrivate)
 {
 }
 
 Tree::Tree(const QString& id, Repo &repo)
 	: RawObject(id, repo)
-	, m_entries()
-	, m_entryModes()
-	, m_entryNames()
+	, d(new TreePrivate)
 {
 }
 
@@ -71,7 +67,7 @@ const QMap<QString, Blob*> Tree::blobsByName()
 const QList<RawObject*> Tree::entries()
 {
 	fillFromString(this, data());
-	return m_entries;
+	return d->entries;
 }
 
 const QMap<QString, RawObject*> Tree::entriesByName()
@@ -88,7 +84,7 @@ const QMap<QString, RawObject*> Tree::entriesByName()
 void Tree::fillFromString(Tree *tree, const QByteArray &raw)
 {
 	// if commit has already been filled
-	if (tree->m_entries.size() > 0) {
+	if (tree->d->entries.size() > 0) {
 		return;
 	}
 
@@ -98,9 +94,9 @@ void Tree::fillFromString(Tree *tree, const QByteArray &raw)
 	int modeLen = 0;
 	int nameLen = 0;
 
-	tree->m_entries.clear();
-	tree->m_entryModes.clear();
-	tree->m_entryNames.clear();
+	tree->d->entries.clear();
+	tree->d->entryModes.clear();
+	tree->d->entryNames.clear();
 
 	while(pos < raw.size()) {
 		modeLen = raw.indexOf(" ", pos)-pos;
@@ -113,9 +109,9 @@ void Tree::fillFromString(Tree *tree, const QByteArray &raw)
 		pos += 20; // skip the id
 
 		RawObject* entry = tree->repo().object(id);
-		tree->m_entries << entry;
-		tree->m_entryModes[id] = mode;
-		tree->m_entryNames[id] = name;
+		tree->d->entries << entry;
+		tree->d->entryModes[id] = mode;
+		tree->d->entryNames[id] = name;
 	}
 
 }
@@ -123,7 +119,7 @@ void Tree::fillFromString(Tree *tree, const QByteArray &raw)
 const QString Tree::nameFor(const QString &id)
 {
 	fillFromString(this, data());
-	return m_entryNames[id];
+	return d->entryNames[id];
 }
 
 const QString Tree::nameFor(const RawObject &object)
