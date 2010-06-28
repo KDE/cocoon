@@ -197,6 +197,9 @@ void Repo::resetCommits()
 void Repo::resetHeads()
 {
 	if (!d->heads.isEmpty()) {
+		foreach (Ref *ref, heads()) {
+			delete ref;
+		}
 		d->heads.clear();
 
 		emit headsChanged();
