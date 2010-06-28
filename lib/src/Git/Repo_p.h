@@ -52,6 +52,7 @@ public:
 	RefList heads;
 	LooseStorage *looseStorage;
 	Status *status;
+	QList<ObjectStorage*> storages;
 	QString workingDir;
 };
 

@@ -246,14 +246,15 @@ ObjectStorage* Repo::storageFor(const QString &id)
 
 const QList<ObjectStorage*> Repo::storages()
 {
-	QList<ObjectStorage*> storages;
+	if (d->storages.isEmpty()) {
 
-	storages << d->looseStorage;
-	foreach(const QString &name, PackedStorage::allNamesIn(*this)) {
-		storages << new PackedStorage(name, *this);
+		d->storages << d->looseStorage;
+		foreach(const QString &name, PackedStorage::allNamesIn(*this)) {
+			d->storages << new PackedStorage(name, *this);
+		}
 	}
 
-	return storages;
+	return d->storages;
 }
 
 Tree* Repo::tree(const QString &id)
