@@ -42,6 +42,8 @@ Commit::Commit(const QString& id, Repo &repo)
 {
 }
 
+
+
 const QString& Commit::author()
 {
 	fillFromString(this, data());
