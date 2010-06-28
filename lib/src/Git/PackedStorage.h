@@ -40,6 +40,7 @@ class KDE_EXPORT PackedStorage : public ObjectStorage
 	public:
 		explicit PackedStorage(const QString &name, Repo &repo);
 		PackedStorage(const PackedStorage &other);
+		virtual ~PackedStorage();
 
 		const QStringList allIds();
 		const QByteArray objectDataFor(const QString &id);
