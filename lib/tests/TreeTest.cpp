@@ -50,18 +50,18 @@ class TreeTest : public GitTestBase
 		void shouldNotPopulateOnConstruction() {
 			Git::Tree *tree = (Git::Tree*)Git::RawObject::newInstance("273b4fb", *repo);
 
-			QVERIFY( tree->m_entries.isEmpty());
-			QVERIFY( tree->m_entryModes.isEmpty());
-			QVERIFY( tree->m_entryNames.isEmpty());
+			QVERIFY( tree->d->entries.isEmpty());
+			QVERIFY( tree->d->entryModes.isEmpty());
+			QVERIFY( tree->d->entryNames.isEmpty());
 		}
 
 		void shouldPopulateOnPropertyAccess() {
 			Git::Tree *tree = (Git::Tree*)Git::RawObject::newInstance("273b4fb", *repo);
 			tree->entries();
 
-			QVERIFY(!tree->m_entries.isEmpty());
-			QVERIFY(!tree->m_entryModes.isEmpty());
-			QVERIFY(!tree->m_entryNames.isEmpty());
+			QVERIFY(!tree->d->entries.isEmpty());
+			QVERIFY(!tree->d->entryModes.isEmpty());
+			QVERIFY(!tree->d->entryNames.isEmpty());
 		}
 
 		void shouldHaveCorrectNumberOfEntries() {
