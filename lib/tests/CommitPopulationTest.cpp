@@ -50,27 +50,27 @@ class CommitPopulationTest : public GitTestBase
 
 
 		void shouldNotPopulateOnConstruction() {
-			QVERIFY( commit->m_author.isNull());
-			QVERIFY( commit->m_authoredAt.isNull());
-			QVERIFY( commit->m_committer.isNull());
-			QVERIFY( commit->m_committedAt.isNull());
-			QVERIFY( commit->m_message.isNull());
-			QVERIFY( commit->m_parents.isEmpty());
-			QVERIFY( commit->m_summary.isNull());
-			QVERIFY(!commit->m_tree);
+			QVERIFY( commit->d->author.isNull());
+			QVERIFY( commit->d->authoredAt.isNull());
+			QVERIFY( commit->d->committer.isNull());
+			QVERIFY( commit->d->committedAt.isNull());
+			QVERIFY( commit->d->message.isNull());
+			QVERIFY( commit->d->parents.isEmpty());
+			QVERIFY( commit->d->summary.isNull());
+			QVERIFY(!commit->d->tree);
 		}
 
 		void shouldPopulateOnPropertyAccess() {
 			commit->message();
 
-			QVERIFY(!commit->m_author.isEmpty());
-			QVERIFY(!commit->m_authoredAt.isNull());
-			QVERIFY(!commit->m_committer.isEmpty());
-			QVERIFY(!commit->m_committedAt.isNull());
-			QVERIFY(!commit->m_message.isEmpty());
-			QVERIFY(!commit->m_parents.isEmpty());
-			QVERIFY(!commit->m_summary.isEmpty());
-			QVERIFY( commit->m_tree);
+			QVERIFY(!commit->d->author.isEmpty());
+			QVERIFY(!commit->d->authoredAt.isNull());
+			QVERIFY(!commit->d->committer.isEmpty());
+			QVERIFY(!commit->d->committedAt.isNull());
+			QVERIFY(!commit->d->message.isEmpty());
+			QVERIFY(!commit->d->parents.isEmpty());
+			QVERIFY(!commit->d->summary.isEmpty());
+			QVERIFY( commit->d->tree);
 		}
 
 		void shouldPopulateTreeCorrectly() {
