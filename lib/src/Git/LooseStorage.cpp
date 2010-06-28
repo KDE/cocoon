@@ -43,6 +43,16 @@ LooseStorage::LooseStorage(const LooseStorage &other)
 {
 }
 
+LooseStorage::~LooseStorage()
+{
+	if (!d->objects.isEmpty()) {
+		foreach (RawObject *object, d->objects) {
+			delete object;
+		}
+	}
+	d->objects.clear();
+}
+
 
 
 const QStringList LooseStorage::allIds()
