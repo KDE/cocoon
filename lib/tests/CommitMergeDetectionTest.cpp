@@ -39,7 +39,7 @@ class CommitMergeDetectionTest : public GitTestBase
 			GitTestBase::init();
 
 			commit = new Git::Commit("b462958a492e9abaaa3bd2725639932b5fd551d9", *repo);
-			commit->m_message = "alibi"; // to inhibit automatic popultation
+			commit->d->message = "alibi"; // to inhibit automatic popultation
 		}
 
 		void cleanup() {
@@ -61,32 +61,32 @@ QTEST_KDEMAIN_CORE(CommitMergeDetectionTest)
 
 void CommitMergeDetectionTest::testMergeDetectionWithNoParents()
 {
-	QVERIFY(commit->m_parents.isEmpty());
+	QVERIFY(commit->d->parents.isEmpty());
 
 	QVERIFY(!commit->isMerge());
 }
 
 void CommitMergeDetectionTest::testMergeDetectionWithOneParent()
 {
-	commit->m_parents << new Git::Commit("1234567");
-	QCOMPARE(commit->m_parents.size(), 1);
+	commit->d->parents << new Git::Commit("1234567");
+	QCOMPARE(commit->d->parents.size(), 1);
 
 	QVERIFY(!commit->isMerge());
 }
 
 void CommitMergeDetectionTest::testMergeDetectionWithMoreParents()
 {
-	commit->m_parents << new Git::Commit("1234567");
-	commit->m_parents << new Git::Commit("2345678");
-	QCOMPARE(commit->m_parents.size(), 2);
+	commit->d->parents << new Git::Commit("1234567");
+	commit->d->parents << new Git::Commit("2345678");
+	QCOMPARE(commit->d->parents.size(), 2);
 	QVERIFY(commit->isMerge());
 
-	commit->m_parents << new Git::Commit("3456789");
-	QCOMPARE(commit->m_parents.size(), 3);
+	commit->d->parents << new Git::Commit("3456789");
+	QCOMPARE(commit->d->parents.size(), 3);
 	QVERIFY(commit->isMerge());
 
-	commit->m_parents << new Git::Commit("4567890");
-	QCOMPARE(commit->m_parents.size(), 4);
+	commit->d->parents << new Git::Commit("4567890");
+	QCOMPARE(commit->d->parents.size(), 4);
 	QVERIFY(commit->isMerge());
 }
 
