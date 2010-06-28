@@ -21,11 +21,6 @@
 
 #include <QSharedData>
 
-#include <KDateTime>
-
-#include <QByteArray>
-#include <QString>
-
 
 
 namespace Git {
