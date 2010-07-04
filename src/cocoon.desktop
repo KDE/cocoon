@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Cocoon
+Name[bg]=Cocoon
 Name[cs]=Cocoon
 Name[de]=Cocoon
 Name[es]=Cocoon
@@ -14,6 +15,7 @@ Icon=cocoon
 Type=Application
 X-DocPath=cocoon/index.html
 GenericName=Git GUI for KDE
+GenericName[bg]=Програма за Git в KDE
 GenericName[de]=Git-Oberfläche für KDE
 GenericName[es]=Interfaz de usuario Git para KDE
 GenericName[fr]=Interface graphique Git pour KDE
