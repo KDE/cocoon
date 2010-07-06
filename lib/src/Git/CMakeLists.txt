@@ -12,6 +12,7 @@ set(cocoon_git_LIB_SRCS
 	CloneRepositoryProcess.cpp
 	Commit.cpp
 	Head.cpp
+	Id.cpp
 	LooseStorage.cpp
 	ObjectStorage.cpp
 	PackedStorage.cpp
@@ -46,6 +47,7 @@ if(INSTALL_DEVEL_FILES)
 		CloneRepositoryProcess.h
 		Commit.h
 		Head.h
+		id.h
 		RawObject.h
 		Ref.h
 		Ref_p.h
