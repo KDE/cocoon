@@ -30,7 +30,7 @@ using namespace Git;
 
 
 
-Commit::Commit(const QString& id, Repo &repo)
+Commit::Commit(const Id& id, Repo &repo)
 	: RawObject(id, repo)
 	, d(new CommitPrivate)
 {
@@ -60,13 +60,13 @@ QStringList Commit::childrenOf(const Commit &commit, const QStringList &refs)
 
 	QStringList commits;
 	commits << refs;
-	commits << QString("^%1^@").arg(commit.id());
+	commits << QString("^%1^@").arg(commit.id().toString());
 
 	runner.revList(opts, commits);
 
 	QStringList revList = runner.getResult().split("\n");
 	revList.removeLast();
-	int revIndexForCommit = revList.indexOf(QRegExp(QString("^%1 .*$").arg(commit.id())));
+	int revIndexForCommit = revList.indexOf(QRegExp(QString("^%1 .*$").arg(commit.id().toString())));
 	if (revIndexForCommit != -1) {
 		const QString &revLineForCommit = revList[revIndexForCommit];
 
@@ -86,14 +86,14 @@ CommitList Commit::childrenOn(const QStringList &refs) const
 	// used for caching the result
 	static QHash<QString, CommitList> childrenByRefs;
 
-	QString refKey = id() + ": " + actualRefs.join(" ");
+	QString refKey = id().toString() + ": " + actualRefs.join(" ");
 
 	if (!childrenByRefs.contains(refKey)) {
 		QStringList childrenIds = childrenOf(*this, actualRefs);
 
 		CommitList children;
 		foreach (const QString &id, childrenIds) {
-			children << new Commit(id, repo());
+			children << new Commit(Id(id, repo()), repo());
 		}
 
 		childrenByRefs[refKey] = children;
@@ -118,7 +118,7 @@ const QString Commit::diff() const
 {
 	GitRunner runner;
 	runner.setDirectory(repo().workingDir());
-	runner.commitDiff(id());
+	runner.commitDiff(id().toString());
 	return runner.getResult();
 }
 
@@ -129,7 +129,7 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 		return;
 	}
 
-	kDebug() << "fill commit" << commit->id();
+	kDebug() << "fill commit" << commit->id().toString();
 
 	QStringList lines = raw.split("\n");
 
