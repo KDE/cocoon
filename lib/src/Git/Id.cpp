@@ -50,9 +50,28 @@ Id::Id(const Id &other)
 {
 }
 
+Id::Id()
+	: QObject()
+	, d(new IdPrivate)
+{
+}
 
+
+
+Id& Id::operator=(const Id &other)
+{
+	setParent(other.parent());
+	d = other.d;
+
+	return *this;
+}
 
 const QString& Id::sha1() const
+{
+	return d->sha1;
+}
+
+const QString& Id::toString() const
 {
 	return d->sha1;
 }

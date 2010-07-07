@@ -23,24 +23,33 @@
 
 #include "Id_p.h"
 
+#include <kdemacros.h>
+
 
 
 namespace Git {
 
+class ObjectStorage;
 class Repo;
 
 
 
-class Id : public QObject
+class KDE_EXPORT Id : public QObject
 {
 	Q_OBJECT
 
 	public:
 		explicit Id(const QString &sha1, Repo &repo);
-		explicit Id(const QByteArray &binarySha1, Repo &repo);
 		explicit Id(const Id &other);
+		explicit Id();
 
+		bool exists() const;
+		bool isIn(const ObjectStorage &storage) const;
+		bool isValid() const;
 		const QString& sha1() const;
+		const QString& toString() const;
+
+		Id& operator=(const Id &id);
 
 	private:
 		QSharedDataPointer<IdPrivate> d;
