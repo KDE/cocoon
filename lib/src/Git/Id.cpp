@@ -60,6 +60,8 @@ Id::Id()
 
 Id& Id::operator=(const Id &other)
 {
+	Q_ASSERT(&other != this);
+
 	setParent(other.parent());
 	d = other.d;
 
