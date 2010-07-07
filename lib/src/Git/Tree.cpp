@@ -28,7 +28,7 @@ using namespace Git;
 
 
 
-Tree::Tree(const QString& id, Repo &repo)
+Tree::Tree(const Id& id, Repo &repo)
 	: RawObject(id, repo)
 	, d(new TreePrivate)
 {
@@ -82,7 +82,7 @@ void Tree::fillFromString(Tree *tree, const QByteArray &raw)
 		return;
 	}
 
-	qDebug() << "fill tree" << tree->id();
+	qDebug() << "fill tree" << tree->id().toString();
 
 	int pos = 0;
 	int modeLen = 0;
@@ -118,7 +118,7 @@ const QString Tree::nameFor(const QString &id)
 
 const QString Tree::nameFor(const RawObject &object)
 {
-	return nameFor(object.id());
+	return nameFor(object.id().toString());
 }
 
 const QList<Tree*> Tree::trees()

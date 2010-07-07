@@ -41,7 +41,7 @@ class KDE_EXPORT Tree : public RawObject
 	Q_OBJECT
 
 	public:
-		explicit Tree(const QString& id, Repo &repo);
+		explicit Tree(const Id& id, Repo &repo);
 
 		const QList<Blob*> blobs();
 		const QMap<QString, Blob*> blobsByName();
