@@ -84,9 +84,9 @@ void LooseStorage::loadHeaderDataFor(const QString &id)
 	}
 }
 
-const QByteArray LooseStorage::objectDataFor(const QString &id)
+const QByteArray LooseStorage::objectDataFor(const Id &id)
 {
-	QString actualId = actualIdFor(id);
+	QString actualId = actualIdFor(id.toString());
 
 	if (!d->objectData.contains(actualId)) {
 		kDebug() << "Loading data for" << actualId;
@@ -105,7 +105,7 @@ RawObject* LooseStorage::objectFor(const QString &id)
 
 	if (!d->objects.contains(actualId)) {
 		kDebug() << "load object" << actualId;
-		d->objects[actualId] = RawObject::newInstance(actualId, repo());
+		d->objects[actualId] = RawObject::newInstance(Id(actualId, repo()), repo());
 	}
 
 	return d->objects[actualId];
