@@ -270,9 +270,9 @@ void PackedStorage::initPack()
 	Q_UNUSED(ok);
 }
 
-const QByteArray PackedStorage::objectDataFor(const QString &id)
+const QByteArray PackedStorage::objectDataFor(const Id &id)
 {
-	return packObjectFor(id)->finalData();
+	return packObjectFor(id.toString())->finalData();
 }
 
 int PackedStorage::objectSizeFor(const QString &id)
@@ -324,7 +324,7 @@ RawObject* PackedStorage::objectFor(const QString &id)
 
 	if (!d->objects.contains(actualId)) {
 		kDebug() << "loading object" << actualId << "in" << d->name;
-		d->objects[actualId] = RawObject::newInstance(actualId, repo());
+		d->objects[actualId] = RawObject::newInstance(Id(actualId, repo()), repo());
 	}
 
 	return d->objects[actualId];
