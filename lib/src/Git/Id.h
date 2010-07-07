@@ -59,6 +59,7 @@ class KDE_EXPORT Id : public QObject
 
 
 
+QDataStream& operator<<(QDataStream &stream, const Git::Id &id);
 uint qHash(const Git::Id &id);
 
 

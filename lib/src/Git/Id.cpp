@@ -78,6 +78,12 @@ const QString& Id::toString() const
 
 
 
+QDataStream& operator<<(QDataStream &stream, const Id &id)
+{
+	stream << id.toString();
+	return stream;
+}
+
 uint qHash(const Id &id)
 {
 	return id.sha1().left(2*sizeof(uint)).toUInt(0, 16);
