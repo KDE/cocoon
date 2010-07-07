@@ -50,6 +50,7 @@ class KDE_EXPORT Id : public QObject
 		const QString& toString() const;
 
 		Id& operator=(const Id &id);
+		bool operator==(const Id &other) const;
 
 	private:
 		QSharedDataPointer<IdPrivate> d;

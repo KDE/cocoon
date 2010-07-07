@@ -66,6 +66,11 @@ Id& Id::operator=(const Id &other)
 	return *this;
 }
 
+bool Id::operator==(const Id &other) const
+{
+	return d->sha1 == other.d->sha1 && d->repo == other.d->repo;
+}
+
 const QString& Id::sha1() const
 {
 	return d->sha1;
