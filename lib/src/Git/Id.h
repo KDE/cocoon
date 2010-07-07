@@ -40,7 +40,7 @@ class KDE_EXPORT Id : public QObject
 
 	public:
 		explicit Id(const QString &sha1, Repo &repo);
-		explicit Id(const Id &other);
+		Id(const Id &other);
 		explicit Id();
 
 		bool exists() const;
