@@ -76,7 +76,7 @@ class PackedStorageDeltifiedExtractionTest : public GitTestBase
 		}
 
 		void shouldExtractDeltifiedObject() {
-			QString id = "7096645927485680189876d157c499423fd423a5";
+			Git::Id id("7096645927485680189876d157c499423fd423a5", *repo);
 			QByteArray data = storage->objectDataFor(id);
 
 			QCOMPARE(QTest::toHexRepresentation(data, 27), QTest::toHexRepresentation("#!/bin/env/ruby\n\ndef do_foo", 27));

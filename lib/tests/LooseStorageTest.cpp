@@ -80,14 +80,14 @@ class LooseStorageTest : public GitTestBase
 		}
 
 		void objectTypeShouldBeCorrect() {
-			QString id = repo->commits()[0]->id();
+			QString id = repo->commits()[0]->id().toString();
 			Git::ObjectType type = storage->objectTypeFor(id);
 
 			QCOMPARE(type, Git::OBJ_COMMIT);
 		}
 
 		void objectSizeShouldBeCorrect() {
-			QString id = repo->commits()[0]->id();
+			QString id = repo->commits()[0]->id().toString();
 			int size = storage->objectSizeFor(id);
 
 			QCOMPARE(size, 212);

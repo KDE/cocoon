@@ -40,7 +40,7 @@ class RawObjectTest : public GitTestBase
 		void init() {
 			GitTestBase::init();
 
-			QString id = "c56dada2cf4f67b35ed0019ddd4651a8c8a337e8";
+			Git::Id id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *repo);
 			object = new Git::RawObject(id, *repo);
 		}
 

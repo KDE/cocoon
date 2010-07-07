@@ -75,7 +75,7 @@ class PackedStorageNormalExtractionTest : public GitTestBase
 		}
 
 		void shouldExtractNormalObject() {
-			QString id = "b7566b7883e0dd74baba8cb194ed5dacaed5bb62";
+			Git::Id id("b7566b7883e0dd74baba8cb194ed5dacaed5bb62", *repo);
 			QByteArray data = storage->objectDataFor(id);
 
 			QCOMPARE(QTest::toHexRepresentation(data, 12), QTest::toHexRepresentation("tree 5b36b1f", 12));

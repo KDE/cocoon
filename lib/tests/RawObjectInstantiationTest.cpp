@@ -43,7 +43,7 @@ class RawObjectInstantiationTest : public GitTestBase
 			GitTestBase::init();
 			storage = new Git::LooseStorage(*repo);
 
-			QString id = "c56dada2cf4f67b35ed0019ddd4651a8c8a337e8";
+			Git::Id id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *repo);
 			object = new Git::RawObject(id, *repo);
 		}
 
@@ -56,8 +56,7 @@ class RawObjectInstantiationTest : public GitTestBase
 
 
 		void shouldCreateInstanceOfCommit() {
-			QString id = "c56dada2cf4f67b35ed0019ddd4651a8c8a337e8";
-
+			Git::Id id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *repo);
 			Git::RawObject *obj = Git::RawObject::newInstance(id, *repo);
 
 			Q_ASSERT(obj);

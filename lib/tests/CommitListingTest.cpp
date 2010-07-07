@@ -66,7 +66,7 @@ class CommitListingTest : public GitTestBase
 			Git::Commit* listCommit = Git::Commit::allReachableFrom(*repo->head())[0];
 
 			foreach (Git::Commit *commit, Git::Commit::allReachableFrom(*repo->head())) {
-				qDebug() << commit->committedAt().toString() << commit->id() << commit->summary();
+				qDebug() << commit->committedAt().toString() << commit->id().toString() << commit->summary();
 			}
 
 			QCOMPARE(listCommit->id(), headCommit->id());
