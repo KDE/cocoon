@@ -21,10 +21,13 @@
 
 #include <QSharedData>
 
+#include "Id.h"
+
 
 
 namespace Git {
 
+class Id;
 class Repo;
 
 typedef enum {
@@ -61,7 +64,7 @@ public:
 
 	QByteArray  data;
 	int         dataSize;
-	QString     id;
+	Id          id;
 	Repo       *repo;
 	ObjectType  type;
 };

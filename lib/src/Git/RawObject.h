@@ -32,6 +32,7 @@ class RawObjectTypeTest;
 
 namespace Git {
 
+class Id;
 class ObjectStorage;
 class Repo;
 
@@ -42,12 +43,12 @@ class KDE_EXPORT RawObject : public QObject
 	Q_OBJECT
 
 	public:
-		explicit RawObject(const QString& id, Repo &repo);
+		explicit RawObject(const Id& id, Repo &repo);
 
-		const QByteArray&  data();
-		const QString&     id() const;
-		int                size() const;
-		ObjectType         type() const;
+		const QByteArray& data();
+		const Id&         id() const;
+		int               size() const;
+		ObjectType        type() const;
 
 		bool isBlob() const;
 		bool isCommit() const;
@@ -60,7 +61,7 @@ class KDE_EXPORT RawObject : public QObject
 		static ObjectType extractObjectTypeFrom(const QString &header);
 		static bool isOnlyHeader(const QByteArray &rawData);
 		static bool isValidHeader(const QString &possibleHeader);
-		static RawObject* newInstance(const QString& id, Repo &repo);
+		static RawObject* newInstance(const Id& id, Repo &repo);
 		static ObjectType typeFromTypeName(const QString& name);
 		static const QString typeNameFromType(const ObjectType type);
 
