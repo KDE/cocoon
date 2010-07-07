@@ -122,7 +122,7 @@ QString Repo::diff(const Commit &a, const Commit &b) const
 	GitRunner runner;
 	runner.setDirectory(workingDir());
 
-	runner.diffCommits(a.id(), b.id());
+	runner.diffCommits(a.id().toString(), b.id().toString());
 
 	return runner.getResult();
 }
