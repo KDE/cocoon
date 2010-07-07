@@ -28,12 +28,6 @@ using namespace Git;
 
 
 
-Tree::Tree(const QString &id, QObject *parent)
-	: RawObject(id, parent)
-	, d(new TreePrivate)
-{
-}
-
 Tree::Tree(const QString& id, Repo &repo)
 	: RawObject(id, repo)
 	, d(new TreePrivate)

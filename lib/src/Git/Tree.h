@@ -51,9 +51,6 @@ class KDE_EXPORT Tree : public RawObject
 		const QList<Tree*> trees();
 		const QMap<QString, Tree*> treesByName();
 
-	protected:
-		explicit Tree(const QString& id, QObject *parent=0);
-
 	private:
 		// static
 		/**

@@ -32,14 +32,6 @@ using namespace Git;
 
 
 
-RawObject::RawObject(const QString &id, QObject *parent)
-	: QObject(parent)
-	, d(new RawObjectPrivate)
-{
-	d->id = id;
-	kWarning() << "creating object without storage:" << id;
-}
-
 RawObject::RawObject(const QString &id, Repo &repo)
 	: QObject((QObject*)&repo)
 	, d(new RawObjectPrivate)

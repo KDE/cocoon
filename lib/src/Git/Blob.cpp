@@ -22,11 +22,6 @@ using namespace Git;
 
 
 
-Blob::Blob(const QString &id, QObject *parent)
-	: RawObject(id, parent)
-{
-}
-
 Blob::Blob(const QString& id, Repo &repo)
 	: RawObject(id, repo)
 {

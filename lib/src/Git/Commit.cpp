@@ -30,12 +30,6 @@ using namespace Git;
 
 
 
-Commit::Commit(const QString &id, QObject *parent)
-	: RawObject(id, parent)
-	, d(new CommitPrivate)
-{
-}
-
 Commit::Commit(const QString& id, Repo &repo)
 	: RawObject(id, repo)
 	, d(new CommitPrivate)

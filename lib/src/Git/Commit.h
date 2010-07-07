@@ -95,9 +95,6 @@ class KDE_EXPORT Commit : public RawObject
 	// static
 		static CommitList allReachableFrom(const Ref &branch);
 
-	protected:
-		explicit Commit(const QString& id, QObject *parent=0);
-
 	private:
 	// static
 		/**
