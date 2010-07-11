@@ -27,6 +27,8 @@
 
 
 
+class IdTest;
+
 namespace Git {
 
 class IdPrivate;
@@ -60,6 +62,8 @@ class KDE_EXPORT Id : public QObject
 
 	private:
 		QSharedDataPointer<IdPrivate> d;
+
+	friend class ::IdTest;
 };
 
 }
