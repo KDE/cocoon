@@ -21,6 +21,7 @@
 #include "Git/Commit.h"
 #include "Git/LooseStorage.h"
 #include "Git/RawObject.h"
+#include "Git/RawObject_p.h"
 
 
 
