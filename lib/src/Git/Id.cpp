@@ -80,6 +80,16 @@ Id::~Id()
 
 
 
+bool Id::exists() const
+{
+	return isValid() && d->storage->contains(d->sha1);
+}
+
+bool Id::isValid() const
+{
+	return d->storage;
+}
+
 Id& Id::operator=(const Id &other)
 {
 	Q_ASSERT(&other != this);
