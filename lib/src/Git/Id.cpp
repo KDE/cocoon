@@ -102,7 +102,7 @@ Id& Id::operator=(const Id &other)
 
 bool Id::operator==(const Id &other) const
 {
-	return d->sha1 == other.d->sha1 && d->repo == other.d->repo;
+	return d->sha1 == other.d->sha1 && d->storage == other.d->storage;
 }
 
 const QString& Id::sha1() const
