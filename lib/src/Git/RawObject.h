@@ -21,6 +21,7 @@
 
 #include <QObject>
 
+#include "Id.h"
 #include "RawObject_p.h"
 
 #include <kdemacros.h>
@@ -32,7 +33,6 @@ class RawObjectTypeTest;
 
 namespace Git {
 
-class Id;
 class ObjectStorage;
 class Repo;
 
