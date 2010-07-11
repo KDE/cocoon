@@ -33,7 +33,7 @@ Id::Id()
 }
 
 Id::Id(const Id &other)
-	: QObject(d->storage)
+	: QObject(other.d->storage)
 	, d(other.d)
 {
 }
