@@ -55,6 +55,7 @@ class KDE_EXPORT RawObject : public QObject
 
 	public:
 		explicit RawObject(const Id& id, Repo &repo);
+		virtual ~RawObject();
 
 		const QByteArray& data();
 		const Id&         id() const;

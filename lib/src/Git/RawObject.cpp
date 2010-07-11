@@ -41,6 +41,10 @@ RawObject::RawObject(const Id &id, Repo &repo)
 	populateHeader();
 }
 
+RawObject::~RawObject()
+{
+}
+
 
 
 const QByteArray& RawObject::data()

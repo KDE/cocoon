@@ -51,6 +51,7 @@ public:
 		, repo(other.repo)
 		, type(other.type)
 	{}
+	~RawObjectPrivate() {}
 
 	QByteArray  data;
 	int         dataSize;
