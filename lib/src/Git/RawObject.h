@@ -22,9 +22,10 @@
 #include <QObject>
 
 #include "Id.h"
-#include "RawObject_p.h"
 
 #include <kdemacros.h>
+
+#include <QSharedDataPointer>
 
 
 
@@ -34,6 +35,7 @@ class RawObjectTypeTest;
 namespace Git {
 
 class ObjectStorage;
+class RawObjectPrivate;
 class Repo;
 
 typedef enum {

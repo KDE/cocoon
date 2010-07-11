@@ -17,6 +17,7 @@
 */
 
 #include "RawObject.h"
+#include "RawObject_p.h"
 
 #include "Blob.h"
 #include "Commit.h"
