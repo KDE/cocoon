@@ -62,14 +62,16 @@ Id::Id(const QString &sha1, ObjectStorage &storage)
 	: QObject(&storage)
 	, d(new IdPrivate)
 {
-	d->storage = &storage;
+	if (storage.contains(sha1)) {
+		d->storage = &storage;
 
-	if (sha1.size() == 40) {
-		d->sha1 = sha1;
-	} else {
-		QString actualId = d->storage->actualIdFor(sha1);
-		if (!actualId.isEmpty()) {
-			d->sha1 = actualId;
+		if (sha1.size() == 40) {
+			d->sha1 = sha1;
+		} else {
+			QString actualId = storage.actualIdFor(sha1);
+			if (!actualId.isEmpty()) {
+				d->sha1 = actualId;
+			}
 		}
 	}
 }
