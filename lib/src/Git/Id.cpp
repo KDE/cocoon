@@ -26,34 +26,55 @@ using namespace Git;
 
 
 
+Id::Id()
+	: QObject()
+	, d(new IdPrivate)
+{
+}
+
+Id::Id(const Id &other)
+	: QObject(d->storage)
+	, d(other.d)
+{
+}
+
 Id::Id(const QString &sha1, Repo &repo)
 	: QObject(&repo)
 	, d(new IdPrivate)
 {
-	d->repo = &repo;
+	ObjectStorage *storage = repo.storageFor(sha1);
+	if(storage) {
+		d->storage = storage;
+		setParent(storage);
 
-	if (sha1.size() == 40) {
-		d->sha1 = sha1;
-	} else {
-		foreach(ObjectStorage *storage, d->repo->storages()) {
-			QString actualId = storage->actualIdFor(sha1);
+		if (sha1.size() == 40) {
+			d->sha1 = sha1;
+		} else {
+			QString actualId = d->storage->actualIdFor(sha1);
 			if (!actualId.isEmpty()) {
 				d->sha1 = actualId;
-				break;
 			}
 		}
 	}
 }
 
-Id::Id(const Id &other)
-	: QObject(d->repo)
-	, d(other.d)
+Id::Id(const QString &sha1, ObjectStorage &storage)
+	: QObject(&storage)
+	, d(new IdPrivate)
 {
+	d->storage = &storage;
+
+	if (sha1.size() == 40) {
+		d->sha1 = sha1;
+	} else {
+		QString actualId = d->storage->actualIdFor(sha1);
+		if (!actualId.isEmpty()) {
+			d->sha1 = actualId;
+		}
+	}
 }
 
-Id::Id()
-	: QObject()
-	, d(new IdPrivate)
+Id::~Id()
 {
 }
 
