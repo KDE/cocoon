@@ -100,11 +100,11 @@ class PackedStorageTest : public GitTestBase
 		}
 
 		void shouldFindObjectByFullId() {
-			QCOMPARE(storage->objectFor("b7566b7883e0dd74baba8cb194ed5dacaed5bb62")->id().toString(), QLatin1String("b7566b7883e0dd74baba8cb194ed5dacaed5bb62"));
+			QCOMPARE(storage->objectFor("b7566b7883e0dd74baba8cb194ed5dacaed5bb62")->id().toSha1String(), QLatin1String("b7566b7883e0dd74baba8cb194ed5dacaed5bb62"));
 		}
 
 		void shouldFindObjectByShordId() {
-			QCOMPARE(storage->objectFor("b7566b7")->id().toString(), QLatin1String("b7566b7883e0dd74baba8cb194ed5dacaed5bb62"));
+			QCOMPARE(storage->objectFor("b7566b7")->id().toSha1String(), QLatin1String("b7566b7883e0dd74baba8cb194ed5dacaed5bb62"));
 		}
 };
 
