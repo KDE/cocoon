@@ -53,6 +53,8 @@ const QString ObjectStorage::actualIdFor(const QString &shortId)
 				return idFromList;
 			}
 		}
+
+		return QString();
 	}
 
 	Q_ASSERT(shortId.size() == 40);
