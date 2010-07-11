@@ -17,6 +17,7 @@
 */
 
 #include "Id.h"
+#include "Id_p.h"
 
 #include "ObjectStorage.h"
 #include "Repo.h"

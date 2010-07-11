@@ -21,14 +21,15 @@
 
 #include <QObject>
 
-#include "Id_p.h"
-
 #include <kdemacros.h>
+
+#include <QSharedDataPointer>
 
 
 
 namespace Git {
 
+class IdPrivate;
 class ObjectStorage;
 class Repo;
 
