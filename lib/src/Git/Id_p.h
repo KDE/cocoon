@@ -23,9 +23,10 @@
 
 
 
+
 namespace Git {
 
-class Repo;
+class ObjectStorage;
 
 
 
@@ -33,17 +34,18 @@ class IdPrivate : public QSharedData {
 public:
 	IdPrivate()
 		: QSharedData()
-		, repo(0)
 		, sha1()
+		, storage(0)
 	{}
 	IdPrivate(const IdPrivate &other)
 		: QSharedData(other)
-		, repo(other.repo)
 		, sha1(other.sha1)
+		, storage(other.storage)
 	{}
+	~IdPrivate() {}
 
-	Repo    *repo;
-	QString  sha1;
+	QString        sha1;
+	ObjectStorage *storage;
 };
 
 }
