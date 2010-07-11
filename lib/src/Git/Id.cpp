@@ -105,27 +105,42 @@ bool Id::operator==(const Id &other) const
 	return d->sha1 == other.d->sha1 && d->storage == other.d->storage;
 }
 
-const QString& Id::sha1() const
+ObjectStorage& Id::storage() const
+{
+	return *d->storage;
+}
+
+const QByteArray Id::toBinarySha1() const
+{
+	return d->sha1.toLatin1().toHex();
+}
+
+const QString& Id::toSha1String() const
 {
 	return d->sha1;
 }
 
-const QString& Id::toString() const
+const QString Id::toShortSha1String() const
 {
-	return d->sha1;
+	return d->sha1.left(7);
+}
+
+const QString Id::toString() const
+{
+	return toShortSha1String();
 }
 
 
 
 QDataStream& operator<<(QDataStream &stream, const Id &id)
 {
-	stream << id.toString();
+	stream << id.toSha1String();
 	return stream;
 }
 
 uint qHash(const Id &id)
 {
-	return id.sha1().left(2*sizeof(uint)).toUInt(0, 16);
+	return id.toSha1String().left(2*sizeof(uint)).toUInt(0, 16);
 }
 
 #include "Id.moc"
