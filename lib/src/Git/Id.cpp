@@ -33,19 +33,18 @@ Id::Id()
 }
 
 Id::Id(const Id &other)
-	: QObject(other.d->storage)
+	: QObject()
 	, d(other.d)
 {
 }
 
 Id::Id(const QString &sha1, Repo &repo)
-	: QObject(&repo)
+	: QObject()
 	, d(new IdPrivate)
 {
 	ObjectStorage *storage = repo.storageFor(sha1);
 	if(storage) {
 		d->storage = storage;
-		setParent(storage);
 
 		if (sha1.size() == 40) {
 			d->sha1 = sha1;
@@ -59,7 +58,7 @@ Id::Id(const QString &sha1, Repo &repo)
 }
 
 Id::Id(const QString &sha1, ObjectStorage &storage)
-	: QObject(&storage)
+	: QObject()
 	, d(new IdPrivate)
 {
 	if (storage.contains(sha1)) {
