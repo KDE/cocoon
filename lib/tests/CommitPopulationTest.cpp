@@ -85,7 +85,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
-			QCOMPARE(commit->tree()->id().toString(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
+			QCOMPARE(commit->tree()->id().toSha1String(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
 		}
 
 		void shouldPopulateNoParentCorrectly() {
@@ -113,7 +113,7 @@ class CommitPopulationTest : public GitTestBase
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
 			QCOMPARE(commit->parents().size(), 1);
-			QCOMPARE(commit->parents().first()->id().toString(), QLatin1String("abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d"));
+			QCOMPARE(commit->parents().first()->id().toSha1String(), QLatin1String("abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d"));
 		}
 
 		void shouldPopulateMultiParentCorrectly() {
@@ -130,9 +130,9 @@ class CommitPopulationTest : public GitTestBase
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
 			QCOMPARE(commit->parents().size(), 3);
-			QCOMPARE(commit->parents()[0]->id().toString(), QLatin1String("abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d"));
-			QCOMPARE(commit->parents()[1]->id().toString(), QLatin1String("6421f09a627d8ea6a85a9155e481cae7ed483b50"));
-			QCOMPARE(commit->parents()[2]->id().toString(), QLatin1String("4262f0d5b0d062a0d655f16c2fc372c92689c853"));
+			QCOMPARE(commit->parents()[0]->id().toSha1String(), QLatin1String("abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d"));
+			QCOMPARE(commit->parents()[1]->id().toSha1String(), QLatin1String("6421f09a627d8ea6a85a9155e481cae7ed483b50"));
+			QCOMPARE(commit->parents()[2]->id().toSha1String(), QLatin1String("4262f0d5b0d062a0d655f16c2fc372c92689c853"));
 		}
 
 		void shouldPopulateAuthorCorrectly() {

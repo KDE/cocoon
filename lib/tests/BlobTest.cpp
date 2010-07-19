@@ -45,7 +45,7 @@ class BlobTest : public GitTestBase
 		void shouldBeCorrectObject() {
 			Git::Id id("a907ec3", *repo);
 			Git::RawObject *object = Git::RawObject::newInstance(id, *repo);
-			QCOMPARE(object->id().toString(), QLatin1String("a907ec3f431eeb6b1c75799a7e4ba73ca6dc627a"));
+			QCOMPARE(object->id().toSha1String(), QLatin1String("a907ec3f431eeb6b1c75799a7e4ba73ca6dc627a"));
 		}
 
 		void file1ShouldHaveCorrectContent() {
