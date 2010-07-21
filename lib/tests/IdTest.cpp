@@ -28,18 +28,26 @@ class IdTest : public GitTestBase
 {
 	Q_OBJECT
 
+	Git::ObjectStorage *storage;
+
 	private slots:
 		void initTestCase() {
 			GitTestBase::initTestCase();
+
+			storage = 0;
 
 			cloneFrom("IdTestRepo");
 		}
 
 		void init() {
 			GitTestBase::init();
+
+			storage = repo->storages()[0];
 		}
 
 		void cleanup() {
+			storage = 0;
+
 			GitTestBase::cleanup();
 		}
 
@@ -55,27 +63,27 @@ class IdTest : public GitTestBase
 		void shouldInstantiateWithRepo() {
 			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *repo);
 
-			QCOMPARE(id.d->sha1, QString("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7"));
+			QCOMPARE(id.d->sha1, QLatin1String("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7"));
 			QVERIFY(id.d->storage);
 		}
 
 		void shouldInstantiateWithStorage() {
-			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *repo->storages()[0]);
+			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *storage);
 
-			QCOMPARE(id.d->sha1, QString("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7"));
-			QCOMPARE(id.d->storage, repo->storages()[0]);
+			QCOMPARE(id.d->sha1, QLatin1String("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7"));
+			QCOMPARE(id.d->storage, storage);
 		}
 
 		void shouldBeCopyable() {
-			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *repo->storages()[0]);
+			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *storage);
 			Git::Id copyId = id;
 
-			QCOMPARE(copyId.d->sha1, QString("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7"));
-			QCOMPARE(copyId.d->storage, repo->storages()[0]);
+			QCOMPARE(copyId.d->sha1, QLatin1String("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7"));
+			QCOMPARE(copyId.d->storage, storage);
 		}
 
 		void copyShouldShareInternalData() {
-			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *repo->storages()[0]);
+			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *storage);
 			Git::Id copyId = id;
 
 			QCOMPARE(id.d.constData(), copyId.d.constData());
@@ -91,14 +99,14 @@ class IdTest : public GitTestBase
 			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *repo);
 
 			QVERIFY(id.isValid());
-			QCOMPARE(id.d->storage, repo->storages()[0]);
+			QCOMPARE(id.d->storage, storage);
 		}
 
 		void existingIdInStorageShouldBeValid() {
-			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *repo->storages()[0]);
+			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *storage);
 
 			QVERIFY(id.isValid());
-			QCOMPARE(id.d->storage, repo->storages()[0]);
+			QCOMPARE(id.d->storage, storage);
 		}
 
 		void nonExistingIdInRepoShouldNotBeValid() {
@@ -110,7 +118,7 @@ class IdTest : public GitTestBase
 		}
 
 		void nonExistingIdInStorageShouldNonBeValid() {
-			Git::Id id("1234567", *repo->storages()[0]);
+			Git::Id id("1234567", *storage);
 
 			QVERIFY(!id.isValid());
 			QCOMPARE(id.d->sha1, QString());
@@ -118,28 +126,28 @@ class IdTest : public GitTestBase
 		}
 
 		void shouldDetermineExistanceCorrectly() {
-			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *repo->storages()[0]);
+			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *storage);
 
 			QVERIFY(id.exists());
 			QVERIFY(id.storage().contains(id.toSha1String()));
 		}
 
 		void shouldFindActualIdInRepo() {
-			Git::Id id("d97d4abb", *repo);
+			Git::Id id("d97d4ab", *repo);
 
-			QCOMPARE(id.toSha1String(), QString("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7"));
+			QCOMPARE(id.toSha1String(), QLatin1String("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7"));
 		}
 
 		void shouldFindActualIdInStorage() {
-			Git::Id id("d97d4abb", *repo->storages()[0]);
+			Git::Id id("d97d4ab", *storage);
 
-			QCOMPARE(id.toSha1String(), QString("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7"));
+			QCOMPARE(id.toSha1String(), QLatin1String("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7"));
 		}
 
 		void shouldProduceCorrectShortId() {
-			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *repo->storages()[0]);
+			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *storage);
 
-			QCOMPARE(id.toShortSha1String(), QString("d97d4ab"));
+			QCOMPARE(id.toShortSha1String(), QLatin1String("d97d4ab"));
 		}
 };
 
