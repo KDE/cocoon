@@ -91,6 +91,11 @@ bool Id::isValid() const
 	return d->storage;
 }
 
+bool Id::operator<(const Id &other) const
+{
+	return d->sha1 < other.d->sha1;
+}
+
 Id& Id::operator=(const Id &other)
 {
 	Q_ASSERT(&other != this);
