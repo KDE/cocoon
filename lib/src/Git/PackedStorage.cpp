@@ -272,7 +272,7 @@ void PackedStorage::initPack()
 
 const QByteArray PackedStorage::objectDataFor(const Id &id)
 {
-	return packObjectFor(id.toString())->finalData();
+	return packObjectFor(id.toSha1String())->finalData();
 }
 
 int PackedStorage::objectSizeFor(const QString &id)

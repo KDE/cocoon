@@ -86,7 +86,7 @@ void LooseStorage::loadHeaderDataFor(const QString &id)
 
 const QByteArray LooseStorage::objectDataFor(const Id &id)
 {
-	QString actualId = actualIdFor(id.toString());
+	const QString &actualId = id.toSha1String();
 
 	if (!d->objectData.contains(actualId)) {
 		kDebug() << "Loading data for" << actualId;

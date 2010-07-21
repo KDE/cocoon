@@ -60,13 +60,13 @@ QStringList Commit::childrenOf(const Commit &commit, const QStringList &refs)
 
 	QStringList commits;
 	commits << refs;
-	commits << QString("^%1^@").arg(commit.id().toString());
+	commits << QString("^%1^@").arg(commit.id().toSha1String());
 
 	runner.revList(opts, commits);
 
 	QStringList revList = runner.getResult().split("\n");
 	revList.removeLast();
-	int revIndexForCommit = revList.indexOf(QRegExp(QString("^%1 .*$").arg(commit.id().toString())));
+	int revIndexForCommit = revList.indexOf(QRegExp(QString("^%1 .*$").arg(commit.id().toSha1String())));
 	if (revIndexForCommit != -1) {
 		const QString &revLineForCommit = revList[revIndexForCommit];
 
@@ -86,7 +86,7 @@ CommitList Commit::childrenOn(const QStringList &refs) const
 	// used for caching the result
 	static QHash<QString, CommitList> childrenByRefs;
 
-	QString refKey = id().toString() + ": " + actualRefs.join(" ");
+	QString refKey = id().toSha1String() + ": " + actualRefs.join(" ");
 
 	if (!childrenByRefs.contains(refKey)) {
 		QStringList childrenIds = childrenOf(*this, actualRefs);
@@ -118,7 +118,7 @@ const QString Commit::diff() const
 {
 	GitRunner runner;
 	runner.setDirectory(repo().workingDir());
-	runner.commitDiff(id().toString());
+	runner.commitDiff(id().toSha1String());
 	return runner.getResult();
 }
 

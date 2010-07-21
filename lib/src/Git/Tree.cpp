@@ -118,7 +118,7 @@ const QString Tree::nameFor(const QString &id)
 
 const QString Tree::nameFor(const RawObject &object)
 {
-	return nameFor(object.id().toString());
+	return nameFor(object.id().toSha1String());
 }
 
 const QList<Tree*> Tree::trees()

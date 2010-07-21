@@ -51,7 +51,7 @@ RawObject::~RawObject()
 const QByteArray& RawObject::data()
 {
 	if (d->data.isNull()) {
-		d->data = d->repo->storageFor(d->id.toString())->objectDataFor(d->id);
+		d->data = d->id.storage().objectDataFor(d->id);
 	}
 
 	return d->data;
@@ -127,8 +127,10 @@ bool RawObject::isValidHeader(const QString &possibleHeader)
 
 RawObject* RawObject::newInstance(const Id &id, Repo &repo)
 {
-	ObjectStorage *storage = repo.storageFor(id.toString());
-	ObjectType type = storage->objectTypeFor(id.toString());
+	Q_ASSERT(id.exists());
+
+	ObjectStorage &storage = id.storage();
+	ObjectType type = storage.objectTypeFor(id.toSha1String());
 
 	switch(type) {
 	case OBJ_BLOB:
@@ -146,11 +148,13 @@ RawObject* RawObject::newInstance(const Id &id, Repo &repo)
 void RawObject::populateHeader()
 {
 	Q_ASSERT(d->repo);
-	ObjectStorage *store = d->repo->storageFor(id().toString());
+	Q_ASSERT(id().exists());
 
-//	d->m_data = store->objectDataFor(id().toString());
-	d->dataSize = store->objectSizeFor(id().toString());
-	d->type     = store->objectTypeFor(id().toString());
+	ObjectStorage &store = id().storage();
+
+//	d->m_data = store.objectDataFor(id().toSha1String());
+	d->dataSize = store.objectSizeFor(id().toSha1String());
+	d->type     = store.objectTypeFor(id().toSha1String());
 }
 
 Repo& RawObject::repo() const
