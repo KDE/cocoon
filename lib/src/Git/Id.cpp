@@ -110,6 +110,11 @@ bool Id::operator==(const Id &other) const
 	return d->sha1 == other.d->sha1;
 }
 
+bool Id::operator!=(const Id &other) const
+{
+	return d->sha1 != other.d->sha1;
+}
+
 ObjectStorage& Id::storage() const
 {
 	return *d->storage;

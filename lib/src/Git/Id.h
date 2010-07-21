@@ -60,6 +60,7 @@ class KDE_EXPORT Id : public QObject
 		bool operator<(const Id &other) const;
 		Id&  operator=(const Id &id);
 		bool operator==(const Id &other) const;
+		bool operator!=(const Id &other) const;
 
 	private:
 		QSharedDataPointer<IdPrivate> d;
