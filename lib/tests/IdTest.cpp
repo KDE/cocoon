@@ -149,6 +149,56 @@ class IdTest : public GitTestBase
 
 			QCOMPARE(id.toShortSha1String(), QLatin1String("d97d4ab"));
 		}
+
+		void toStringShouldProduceShortId() {
+			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *storage);
+
+			QCOMPARE(id.toString(), QLatin1String("d97d4ab"));
+		}
+
+		void comparisonWithEqualIdFromSameStorageShouldBeCorrect() {
+			Git::Id      id("d97d4ab", *storage);
+			Git::Id otherId("d97d4ab", *storage);
+
+			QVERIFY( (id == otherId));
+			QVERIFY(!(id != otherId));
+			QVERIFY(!(id <  otherId));
+		}
+
+		void comparisonWithEqualIdFromDifferentStorageShouldBeCorrect() {
+			Git::Repo otherRepo(repo->workingDir());
+
+			Git::Id      id("d97d4ab", *storage);
+			Git::Id otherId("d97d4ab", *otherRepo.storages()[0]);
+
+			QVERIFY( (id == otherId));
+			QVERIFY(!(id != otherId));
+			QVERIFY(!(id <  otherId));
+		}
+
+		void comparisonWithLargerIdShouldBeCorrect() {
+			Git::Id      id("d97d4ab", *storage);
+			Git::Id otherId("e2994c5", *storage);
+
+			QVERIFY(!(id == otherId));
+			QVERIFY( (id != otherId));
+			QVERIFY( (id <  otherId));
+		}
+
+		void comparisonWithSmallerIdShouldBeCorrect() {
+			Git::Id      id("d97d4ab", *storage);
+			Git::Id otherId("4bd4b7b", *storage);
+
+			QVERIFY(!(id == otherId));
+			QVERIFY( (id != otherId));
+			QVERIFY(!(id <  otherId));
+		}
+
+		void shouldProduceCorrectHash() {
+			Git::Id id("d97d4ab", *storage);
+
+			QCOMPARE(qHash(id), (unsigned)0xd97d4abb);
+		}
 };
 
 QTEST_KDEMAIN_CORE(IdTest);
