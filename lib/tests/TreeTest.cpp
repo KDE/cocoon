@@ -39,12 +39,14 @@ class TreeTest : public GitTestBase
 		void shouldBeInstanceOfTree() {
 			Git::Id id("273b4fb", *repo);
 			Git::RawObject *object = Git::RawObject::newInstance(id, *repo);
+
 			QCOMPARE(object->metaObject()->className(), "Git::Tree");
 		}
 
 		void shouldBeCorrectObject() {
 			Git::Id id("273b4fb", *repo);
 			Git::RawObject *object = Git::RawObject::newInstance(id, *repo);
+
 			QCOMPARE(object->id().toSha1String(), QLatin1String("273b4fbfa8910e2806d6999c8433f29c95c1ac86"));
 			QCOMPARE(object->data().size(), 97);
 		}
@@ -70,6 +72,7 @@ class TreeTest : public GitTestBase
 
 		void shouldHaveCorrectNumberOfEntries() {
 			Git::Tree *tree = repo->tree("273b4fb");
+
 			QCOMPARE(tree->entries().count(), 3);
 			QCOMPARE(tree->entriesByName().count(), 3);
 		}
@@ -109,12 +112,14 @@ class TreeTest : public GitTestBase
 
 		void shouldHaveCorrectNumberOfTrees() {
 			Git::Tree *tree = repo->tree("273b4fb");
+
 			QCOMPARE(tree->trees().count(), 1);
 			QCOMPARE(tree->treesByName().count(), 1);
 		}
 
 		void shouldHaveCorrectNumberOfBlobs() {
 			Git::Tree *tree = repo->tree("273b4fb");
+
 			QCOMPARE(tree->blobs().count(), 2);
 			QCOMPARE(tree->blobsByName().count(), 2);
 		}
