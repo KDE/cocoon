@@ -17,6 +17,7 @@
 */
 
 #include "PackedStorageObject.h"
+#include "PackedStorageObject_p.h"
 
 #include "PackedStorage.h"
 #include "PackedStorage_p.h"

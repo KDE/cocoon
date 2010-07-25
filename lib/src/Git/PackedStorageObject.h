@@ -21,12 +21,12 @@
 
 #include "PackedStorage.h"
 
-#include "PackedStorageObject_p.h"
-
 class PackedStorageTest;
 class PackedStorageDeltifiedExtractionTest;
 
 namespace Git {
+
+class PackedStorageObjectPrivate;
 
 
 
