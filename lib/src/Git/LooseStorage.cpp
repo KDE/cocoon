@@ -17,6 +17,7 @@
 */
 
 #include "LooseStorage.h"
+#include "LooseStorage_p.h"
 
 #include "Repo.h"
 

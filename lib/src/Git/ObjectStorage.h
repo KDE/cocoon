@@ -22,7 +22,6 @@
 #include <QObject>
 
 #include "Id.h"
-#include "ObjectStorage_p.h"
 #include "RawObject.h"
 
 #include <kdemacros.h>
@@ -31,6 +30,7 @@
 
 namespace Git {
 
+class ObjectStoragePrivate;
 class RawObject;
 
 

@@ -17,6 +17,7 @@
 */
 
 #include "ObjectStorage.h"
+#include "ObjectStorage_p.h"
 
 #include "RawObject.h"
 

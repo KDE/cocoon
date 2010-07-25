@@ -21,7 +21,7 @@
 
 #include "ObjectStorage.h"
 
-#include "PackedStorage_p.h"
+class QFile;
 
 class PackedStorageTest;
 class PackedStorageDeltifiedExtractionTest;
@@ -30,6 +30,7 @@ class PackedStorageNormalExtractionTest;
 namespace Git {
 
 class PackedStorageObject;
+class PackedStoragePrivate;
 
 
 

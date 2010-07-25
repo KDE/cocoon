@@ -21,12 +21,12 @@
 
 #include "ObjectStorage.h"
 
-#include "LooseStorage_p.h"
-
 class LooseStorageTest;
 class LooseStorageCachingTest;
 
 namespace Git {
+
+class LooseStoragePrivate;
 
 
 

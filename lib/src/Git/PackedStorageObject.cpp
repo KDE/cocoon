@@ -19,6 +19,7 @@
 #include "PackedStorageObject.h"
 
 #include "PackedStorage.h"
+#include "PackedStorage_p.h"
 
 #include <KDebug>
 
