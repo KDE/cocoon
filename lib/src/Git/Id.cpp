@@ -135,9 +135,9 @@ const QString Id::toShortSha1String() const
 	return d->sha1.left(7);
 }
 
-const QString Id::toString() const
+const QString& Id::toString() const
 {
-	return toShortSha1String();
+	return toSha1String();
 }
 
 

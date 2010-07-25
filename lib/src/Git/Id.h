@@ -55,7 +55,7 @@ class KDE_EXPORT Id : public QObject
 		const QByteArray toBinarySha1() const;
 		const QString&   toSha1String() const;
 		const QString    toShortSha1String() const;
-		const QString    toString() const;
+		const QString&   toString() const;
 
 		bool operator<(const Id &other) const;
 		Id&  operator=(const Id &id);
