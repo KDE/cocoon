@@ -44,7 +44,7 @@ PackedStorageObject::PackedStorageObject(PackedStorage &storage, quint32 offset)
 	readHeader();
 }
 
-PackedStorageObject::PackedStorageObject(PackedStorage &storage, quint32 offset, const QString &id)
+PackedStorageObject::PackedStorageObject(PackedStorage &storage, quint32 offset, const Id &id)
 	: QObject(&storage)
 	, d(new PackedStorageObjectPrivate)
 {
@@ -83,7 +83,7 @@ const QByteArray PackedStorageObject::data()
 	while (unpackedData.size() < size()) {
 		QByteArray packedData = pack.read(4096);
 		if (packedData.size() == 0) {
-			kError() << "could not read packed data for" << d->id << "in" << d->storage->d->name;
+			kError() << "could not read packed data for" << d->id.toString() << "in" << d->storage->d->name;
 			/** @todo throw exception */
 			return QByteArray();
 		}
@@ -91,7 +91,7 @@ const QByteArray PackedStorageObject::data()
 	}
 
 	if (unpackedData.size() > size()) {
-			kError() << "unpacked more data than expected for" << d->id << "in" << d->storage->d->name;
+			kError() << "unpacked more data than expected for" << d->id.toString() << "in" << d->storage->d->name;
 			/** @todo throw exception */
 			return QByteArray();
 	}
@@ -128,7 +128,7 @@ ObjectType PackedStorageObject::finalType()
 	}
 }
 
-const QString PackedStorageObject::id()
+const Id& PackedStorageObject::id()
 {
 	return d->id;
 }
@@ -162,7 +162,7 @@ quint32 PackedStorageObject::objectSizeIn(const QByteArray &delta, quint32 &pos)
 
 const QByteArray PackedStorageObject::patchedData()
 {
-	kDebug() << "patching base object" << d->baseObject->id() << "with delta" << id() << "in" << d->storage->d->name;
+	kDebug() << "patching base object" << d->baseObject->id().toString() << "with delta" << id().toString() << "in" << d->storage->d->name;
 	QByteArray base = d->baseObject->finalData();
 	QByteArray delta = data();
 	return patchDelta(base, delta);
@@ -173,7 +173,7 @@ const QByteArray PackedStorageObject::patchDelta(const QByteArray &base, const Q
 	Q_ASSERT(delta.size() >= 4); // minimal delta size
 
 	if (d->baseSize != base.size()) {
-		kError() << "invalid delta header for" << id() << "in" << d->storage->d->name;
+		kError() << "invalid delta header for" << id().toString() << "in" << d->storage->d->name;
 		return QByteArray();
 	}
 
@@ -199,21 +199,21 @@ const QByteArray PackedStorageObject::patchDelta(const QByteArray &base, const Q
 			if (cpOff + cpSize < cpSize ||
 				cpOff + cpSize > d->baseSize ||
 				cpSize > d->patchedSize) {
-				kError() << "In delta" << id() << "at" << QString::number(cmd_pos, 16).prepend("0x") << "error copying from source data in" << d->storage->d->name;
+				kError() << "In delta" << id().toString() << "at" << QString::number(cmd_pos, 16).prepend("0x") << "error copying from source data in" << d->storage->d->name;
 				break;
 			}
 			patched += base.mid(cpOff, cpSize);
-			kDebug() << "In delta" << id() << "at" << QString::number(cmd_pos, 16).prepend("0x") << "copy" << cpSize << "from source at" << QString::number(cpOff, 16).prepend("0x") << "in" << d->storage->d->name;
+			kDebug() << "In delta" << id().toString() << "at" << QString::number(cmd_pos, 16).prepend("0x") << "copy" << cpSize << "from source at" << QString::number(cpOff, 16).prepend("0x") << "in" << d->storage->d->name;
 		} else if (cmd) {
 			if (cmd > d->patchedSize) {
-				kError() << "In delta" << id() << "at" << QString::number(cmd_pos, 16).prepend("0x") << "error copying from delta in" << d->storage->d->name;
+				kError() << "In delta" << id().toString() << "at" << QString::number(cmd_pos, 16).prepend("0x") << "error copying from delta in" << d->storage->d->name;
 				break;
 			}
 			patched += delta.mid(pos, cmd);
-			kDebug() << "In delta" << id() << "at" << QString::number(cmd_pos, 16).prepend("0x") << "copy" << cmd << "from delta at" << QString::number(pos, 16).prepend("0x") << "in" << d->storage->d->name;
+			kDebug() << "In delta" << id().toString() << "at" << QString::number(cmd_pos, 16).prepend("0x") << "copy" << cmd << "from delta at" << QString::number(pos, 16).prepend("0x") << "in" << d->storage->d->name;
 			pos += cmd;
 		} else {
-			kError() << "In delta" << id() << "at" << QString::number(cmd_pos, 16).prepend("0x") << "unexpected opcode 0 in" << d->storage->d->name;
+			kError() << "In delta" << id().toString() << "at" << QString::number(cmd_pos, 16).prepend("0x") << "unexpected opcode 0 in" << d->storage->d->name;
 			/** @todo raise exception */
 			return QByteArray();
 		}
@@ -253,7 +253,7 @@ void PackedStorageObject::readDeltaHeader()
 		}
 		baseOffset = d->offset - baseOffset;
 	} else {
-		baseOffset = d->storage->dataOffsetFor(pack.read(Sha1Size).toHex());
+		baseOffset = d->storage->dataOffsetFor(Id(pack.read(Sha1Size).toHex(), *d->storage));
 		d->deltaDataOffset += Sha1Size;
 	}
 
@@ -270,7 +270,7 @@ void PackedStorageObject::readDeltaHeader()
 	Q_ASSERT(d->patchDataOffset != 0);
 
 	if (d->baseSize != d->baseObject->finalSize()) {
-		kError() << "invalid delta header for" << id() << "in" << d->storage->d->name;
+		kError() << "invalid delta header for" << id().toString() << "in" << d->storage->d->name;
 	}
 
 	d->patchedSize = objectSizeIn(delta, d->patchDataOffset);

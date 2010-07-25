@@ -62,7 +62,7 @@ public:
 	qint32 baseSize;
 	quint32 dataOffset;
 	qint32 deltaDataOffset;
-	QString id;
+	Id id;
 	quint32 offset;
 	quint32 patchDataOffset;
 	qint32 patchedSize;

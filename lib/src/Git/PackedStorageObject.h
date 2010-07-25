@@ -36,7 +36,7 @@ class PackedStorageObject : public QObject
 
 	public:
 		explicit PackedStorageObject(PackedStorage &storage, quint32 offset);
-		explicit PackedStorageObject(PackedStorage &storage, quint32 offset, const QString &id);
+		explicit PackedStorageObject(PackedStorage &storage, quint32 offset, const Id &id);
 		PackedStorageObject(const PackedStorageObject &other);
 		~PackedStorageObject();
 
@@ -45,7 +45,7 @@ class PackedStorageObject : public QObject
 		const QByteArray finalData();
 		quint32 finalSize();
 		ObjectType finalType();
-		const QString id();
+		const Id& id();
 		bool isDeltified();
 		quint32 offset();
 //		const QString sha1();
