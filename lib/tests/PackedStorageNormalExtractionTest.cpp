@@ -54,28 +54,28 @@ class PackedStorageNormalExtractionTest : public GitTestBase
 
 
 		void normalObjectOffestShouldBeCorrect() {
-			QString id = "b7566b7883e0dd74baba8cb194ed5dacaed5bb62";
+			Git::Id id("b7566b7883e0dd74baba8cb194ed5dacaed5bb62", *storage);
 			quint32 offset = storage->dataOffsetFor(id);
 
 			QCOMPARE(offset, (unsigned)0x177);
 		}
 
 		void normalObjectTypeShouldBeCorrect() {
-			QString id = "b7566b7883e0dd74baba8cb194ed5dacaed5bb62";
+			Git::Id id("b7566b7883e0dd74baba8cb194ed5dacaed5bb62", *storage);
 			Git::ObjectType type = storage->objectTypeFor(id);
 
 			QCOMPARE(type, Git::OBJ_COMMIT);
 		}
 
 		void normalObjectSizeShouldBeCorrect() {
-			QString id = "b7566b7883e0dd74baba8cb194ed5dacaed5bb62";
+			Git::Id id("b7566b7883e0dd74baba8cb194ed5dacaed5bb62", *storage);
 			int size = storage->objectSizeFor(id);
 
 			QCOMPARE(size, 212);
 		}
 
 		void shouldExtractNormalObject() {
-			Git::Id id("b7566b7883e0dd74baba8cb194ed5dacaed5bb62", *repo);
+			Git::Id id("b7566b7883e0dd74baba8cb194ed5dacaed5bb62", *storage);
 			QByteArray data = storage->objectDataFor(id);
 
 			QCOMPARE(QTest::toHexRepresentation(data, 12), QTest::toHexRepresentation("tree 5b36b1f", 12));
