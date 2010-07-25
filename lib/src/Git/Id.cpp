@@ -83,12 +83,7 @@ Id::~Id()
 
 bool Id::exists() const
 {
-	return isValid() && d->storage->contains(d->sha1);
-}
-
-bool Id::isValid() const
-{
-	return d->storage;
+	return d->storage && d->storage->contains(d->sha1);
 }
 
 bool Id::operator<(const Id &other) const
