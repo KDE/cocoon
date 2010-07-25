@@ -59,16 +59,16 @@ public:
 		, size(other.size)
 	{}
 
-	QHash<quint32, QString> idAt;
+	QHash<quint32, Id> idAt;
 	QList<quint32> indexDataOffsets;
 	QFile indexFile;
 	quint32 indexVersion;
 	QString name;
-	QHash<QString, QByteArray> objectData;
-	QHash<QString, RawObject*> objects;
-	QHash<QString, quint32> offsetFor;
+	QHash<Id, QByteArray> objectData;
+	QHash<Id, RawObject*> objects;
+	QHash<Id, quint32> offsetFor;
 	QFile packFile;
-	QHash<QString, PackedStorageObject*> packObjects;
+	QHash<Id, PackedStorageObject*> packObjects;
 	quint32 size;
 };
 
