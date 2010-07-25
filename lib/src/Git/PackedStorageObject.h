@@ -38,6 +38,7 @@ class PackedStorageObject : public QObject
 		explicit PackedStorageObject(PackedStorage &storage, quint32 offset);
 		explicit PackedStorageObject(PackedStorage &storage, quint32 offset, const QString &id);
 		PackedStorageObject(const PackedStorageObject &other);
+		~PackedStorageObject();
 
 //		quint32 crc();
 		const QByteArray data();

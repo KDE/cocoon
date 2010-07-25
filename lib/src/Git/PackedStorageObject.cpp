@@ -60,6 +60,10 @@ PackedStorageObject::PackedStorageObject(const PackedStorageObject &other)
 {
 }
 
+PackedStorageObject::~PackedStorageObject()
+{
+}
+
 
 
 const QByteArray PackedStorageObject::data()
