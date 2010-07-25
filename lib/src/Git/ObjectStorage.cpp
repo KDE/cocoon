@@ -41,6 +41,10 @@ ObjectStorage::ObjectStorage(const ObjectStorage &other)
 {
 }
 
+ObjectStorage::~ObjectStorage()
+{
+}
+
 
 
 

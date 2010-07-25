@@ -42,6 +42,7 @@ class KDE_EXPORT ObjectStorage : public QObject
 	public:
 		explicit ObjectStorage(Repo &repo);
 		ObjectStorage(const ObjectStorage &other);
+		~ObjectStorage();
 
 		Repo& repo() const;
 
