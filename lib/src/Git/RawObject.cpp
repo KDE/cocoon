@@ -130,7 +130,7 @@ RawObject* RawObject::newInstance(const Id &id, Repo &repo)
 	Q_ASSERT(id.exists());
 
 	ObjectStorage &storage = id.storage();
-	ObjectType type = storage.objectTypeFor(id.toSha1String());
+	ObjectType type = storage.objectTypeFor(id);
 
 	switch(type) {
 	case OBJ_BLOB:
@@ -152,9 +152,9 @@ void RawObject::populateHeader()
 
 	ObjectStorage &store = id().storage();
 
-//	d->m_data = store.objectDataFor(id().toSha1String());
-	d->dataSize = store.objectSizeFor(id().toSha1String());
-	d->type     = store.objectTypeFor(id().toSha1String());
+//	d->m_data = store.objectDataFor(id());
+	d->dataSize = store.objectSizeFor(id());
+	d->type     = store.objectTypeFor(id());
 }
 
 Repo& RawObject::repo() const

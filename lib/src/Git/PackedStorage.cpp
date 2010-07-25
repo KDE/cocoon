@@ -309,7 +309,7 @@ PackedStorageObject* PackedStorage::packObjectFor(const Id &id)
 	if (!d->packObjects.contains(id)) {
 		kDebug() << "loading pack object for" << id.toString() << "in" << d->name;
 
-		d->packObjects[id] = new PackedStorageObject(*this, dataOffsetFor(id), id.toSha1String());
+		d->packObjects[id] = new PackedStorageObject(*this, dataOffsetFor(id), id);
 	}
 
 	return d->packObjects[id];
