@@ -39,16 +39,16 @@ class KDE_EXPORT LooseStorage : public ObjectStorage
 		LooseStorage(const LooseStorage &other);
 		virtual ~LooseStorage();
 
-		const QStringList allIds();
+		const QList<Id> allIds();
 		const QByteArray objectDataFor(const Id &id);
-		RawObject*       objectFor(const QString &id);
-		int              objectSizeFor(const QString &id);
-		ObjectType       objectTypeFor(const QString &id);
+		RawObject*       objectFor(const Id &id);
+		int              objectSizeFor(const Id &id);
+		ObjectType       objectTypeFor(const Id &id);
 
 	protected:
-		void loadHeaderDataFor(const QString &id);
-		const QByteArray rawDataFor(const QString &id, const qint64 maxRead = -1);
-		const QString sourceFor(const QString &id);
+		void loadHeaderDataFor(const Id &id);
+		const QByteArray rawDataFor(const Id &id, const qint64 maxRead = -1);
+		const QString sourceFor(const Id &id);
 
 	private:
 		QSharedDataPointer<LooseStoragePrivate> d;

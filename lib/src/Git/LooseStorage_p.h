@@ -46,11 +46,11 @@ public:
 		, objectTypes(other.objectTypes)
 	{}
 
-	QHash<QString, QByteArray> objectData;
-	QHash<QString, RawObject*> objects;
+	QHash<Id, QByteArray> objectData;
+	QHash<Id, RawObject*> objects;
 	QDir objectsDir;
-	QHash<QString, int>        objectSizes;
-	QHash<QString, ObjectType> objectTypes;
+	QHash<Id, int>        objectSizes;
+	QHash<Id, ObjectType> objectTypes;
 };
 
 };

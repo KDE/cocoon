@@ -56,15 +56,15 @@ LooseStorage::~LooseStorage()
 
 
 
-const QStringList LooseStorage::allIds()
+const QList<Id> LooseStorage::allIds()
 {
-	QStringList ids;
+	QList<Id> ids;
 
 	foreach (const QString &dir, d->objectsDir.entryList()) {
 		if (dir.contains(QRegExp("^[0-9a-fA-F]{2}$"))) {
 			foreach (const QString &file, QDir(d->objectsDir.path() + "/" + dir).entryList()) {
 				if (file.contains(QRegExp("^[0-9a-fA-F]{38}$"))) {
-					ids << dir + file;
+					ids << Id(dir + file, *this);
 				}
 			}
 		}
@@ -73,11 +73,11 @@ const QStringList LooseStorage::allIds()
 	return ids;
 }
 
-void LooseStorage::loadHeaderDataFor(const QString &id)
+void LooseStorage::loadHeaderDataFor(const Id &id)
 {
 	if (!d->objectSizes.contains(id)) {
 		Q_ASSERT(!d->objectTypes.contains(id));
-		kDebug() << "Loading header for" << id;
+		kDebug() << "Loading header for" << id.toString();
 
 		QString header = RawObject::extractHeaderForm(rawDataFor(id));
 		d->objectSizes[id] = RawObject::extractObjectSizeFrom(header);
@@ -87,52 +87,44 @@ void LooseStorage::loadHeaderDataFor(const QString &id)
 
 const QByteArray LooseStorage::objectDataFor(const Id &id)
 {
-	const QString &actualId = id.toSha1String();
+	if (!d->objectData.contains(id)) {
+		kDebug() << "Loading data for" << id.toString();
 
-	if (!d->objectData.contains(actualId)) {
-		kDebug() << "Loading data for" << actualId;
+		QByteArray rawData = rawDataFor(id);
 
-		QByteArray rawData = rawDataFor(actualId);
-
-		d->objectData[actualId] = rawData.mid(RawObject::extractHeaderForm(rawData).size()+1);
+		d->objectData[id] = rawData.mid(RawObject::extractHeaderForm(rawData).size()+1);
 	}
 
-	return d->objectData[actualId];
+	return d->objectData[id];
 }
 
-RawObject* LooseStorage::objectFor(const QString &id)
+RawObject* LooseStorage::objectFor(const Id &id)
 {
-	QString actualId = actualIdFor(id);
-
-	if (!d->objects.contains(actualId)) {
-		kDebug() << "load object" << actualId;
-		d->objects[actualId] = RawObject::newInstance(Id(actualId, *this), repo());
+	if (!d->objects.contains(id)) {
+		kDebug() << "load object" << id.toString();
+		d->objects[id] = RawObject::newInstance(id, repo());
 	}
 
-	return d->objects[actualId];
+	return d->objects[id];
 }
 
-int LooseStorage::objectSizeFor(const QString &id)
+int LooseStorage::objectSizeFor(const Id &id)
 {
-	QString actualId = actualIdFor(id);
+	loadHeaderDataFor(id);
 
-	loadHeaderDataFor(actualId);
-
-	return d->objectSizes[actualId];
+	return d->objectSizes[id];
 }
 
-ObjectType LooseStorage::objectTypeFor(const QString &id)
+ObjectType LooseStorage::objectTypeFor(const Id &id)
 {
-	QString actualId = actualIdFor(id);
+	loadHeaderDataFor(id);
 
-	loadHeaderDataFor(actualId);
-
-	return d->objectTypes[actualId];
+	return d->objectTypes[id];
 }
 
-const QByteArray LooseStorage::rawDataFor(const QString &id, const qint64 maxRead)
+const QByteArray LooseStorage::rawDataFor(const Id &id, const qint64 maxRead)
 {
-	kDebug() << "Loading raw data for" << id;
+	kDebug() << "Loading raw data for" << id.toString();
 
 	QFile objectFile(sourceFor(id));
 	Q_ASSERT(objectFile.exists());
@@ -154,19 +146,11 @@ const QByteArray LooseStorage::rawDataFor(const QString &id, const qint64 maxRea
 	return rawData;
 }
 
-const QString LooseStorage::sourceFor(const QString &id)
+const QString LooseStorage::sourceFor(const Id &id)
 {
-	QString actualId = actualIdFor(id);
-
 	Q_ASSERT(id.size() >= 7);
-	QString idDirPath = actualId.left(2);
-	QString idFilePath = actualId.mid(2);
-
-	if (id.size() < 40) {
-		QStringList possibleFileIds = QDir(d->objectsDir.filePath(idDirPath)).entryList(QStringList() << QString("%1*").arg(idFilePath));
-		Q_ASSERT(possibleFileIds.size() == 1);
-		idFilePath = possibleFileIds.first();
-	}
+	QString idDirPath  = id.toSha1String().left(2);
+	QString idFilePath = id.toSha1String().mid(2);
 
 	QString sourcePath = d->objectsDir.filePath("%1/%2").arg(idDirPath).arg(idFilePath);
 	return sourcePath;
