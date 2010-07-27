@@ -56,6 +56,7 @@ class KDE_EXPORT Id : public QObject
 		const QString    toShortSha1String() const;
 		const QString&   toString() const;
 
+		int compare(const Id &other) const;
 		bool operator<(const Id &other) const;
 		Id&  operator=(const Id &id);
 		bool operator==(const Id &other) const;

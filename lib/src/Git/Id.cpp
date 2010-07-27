@@ -78,6 +78,11 @@ Id::~Id()
 
 
 
+int Id::compare(const Id &other) const
+{
+	return d->sha1.compare(other.d->sha1);
+}
+
 bool Id::exists() const
 {
 	return d->storage && d->storage->contains(*this);
