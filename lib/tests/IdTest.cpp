@@ -156,6 +156,12 @@ class IdTest : public GitTestBase
 			QCOMPARE(id.toString(), QLatin1String("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7"));
 		}
 
+		void shouldProduceCorrectBinaryId() {
+			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *storage);
+
+			QCOMPARE(id.toBinarySha1(), QByteArray::fromHex("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7"));
+		}
+
 		void comparisonWithEqualIdFromSameStorageShouldBeCorrect() {
 			Git::Id      id("d97d4ab", *storage);
 			Git::Id otherId("d97d4ab", *storage);
