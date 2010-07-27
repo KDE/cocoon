@@ -119,7 +119,7 @@ ObjectStorage& Id::storage() const
 
 const QByteArray Id::toBinarySha1() const
 {
-	return d->sha1.toLatin1().toHex();
+	return QByteArray::fromHex(d->sha1.toLatin1());
 }
 
 const QString& Id::toSha1String() const
