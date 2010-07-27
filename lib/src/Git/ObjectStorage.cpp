@@ -53,6 +53,7 @@ ObjectStorage::~ObjectStorage()
 const QString ObjectStorage::actualIdFor(const QString &shortId)
 {
 	if(shortId.size() < 40) {
+		/** @todo make the search more intelligent. allIds() should return a sorted list. */
 		foreach(const Id &idFromList, allIds()) {
 			if (idFromList.toSha1String().startsWith(shortId)) {
 				return idFromList.toSha1String();
