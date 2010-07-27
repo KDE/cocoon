@@ -92,37 +92,37 @@ class IdTest : public GitTestBase
 		void constructedWithDefaultCtorShouldNotBeValid() {
 			Git::Id id = Git::Id();
 
-			QVERIFY(!id.isValid());
+			QVERIFY(!id.exists());
 		}
 
 		void existingIdInRepoShouldBeValid() {
 			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *repo);
 
-			QVERIFY(id.isValid());
+			QVERIFY( id.exists());
 			QCOMPARE(id.d->storage, storage);
 		}
 
 		void existingIdInStorageShouldBeValid() {
 			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *storage);
 
-			QVERIFY(id.isValid());
+			QVERIFY( id.exists());
 			QCOMPARE(id.d->storage, storage);
 		}
 
 		void nonExistingIdInRepoShouldNotBeValid() {
 			Git::Id id("1234567", *repo);
 
-			QVERIFY(!id.isValid());
-			QCOMPARE(id.d->sha1, QString());
+			QVERIFY(!id.exists());
 			QVERIFY(!id.d->storage);
+			QCOMPARE(id.d->sha1, QString());
 		}
 
 		void nonExistingIdInStorageShouldNonBeValid() {
 			Git::Id id("1234567", *storage);
 
-			QVERIFY(!id.isValid());
+			QVERIFY(!id.exists());
+			QVERIFY( id.d->storage);
 			QCOMPARE(id.d->sha1, QString());
-			QVERIFY(!id.d->storage);
 		}
 
 		void shouldDetermineExistanceCorrectly() {
@@ -150,10 +150,10 @@ class IdTest : public GitTestBase
 			QCOMPARE(id.toShortSha1String(), QLatin1String("d97d4ab"));
 		}
 
-		void toStringShouldProduceShortId() {
+		void toStringShouldProduceFullId() {
 			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *storage);
 
-			QCOMPARE(id.toString(), QLatin1String("d97d4ab"));
+			QCOMPARE(id.toString(), QLatin1String("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7"));
 		}
 
 		void comparisonWithEqualIdFromSameStorageShouldBeCorrect() {
