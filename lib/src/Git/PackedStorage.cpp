@@ -161,8 +161,8 @@ quint32 PackedStorage::dataOffsetFor(const Id &id)
 	quint32 last = d->indexDataOffsets[slot+1];
 	while (first < last) {
 		quint32 mid = (first + last) / 2;
-		QString midId = idIn(mid).toSha1String();
-		int cmp = midId.compare(id.toSha1String());
+		Id midId = idIn(mid);
+		int cmp = midId.compare(id);
 
 		if (cmp < 0) {
 			first = mid + 1;
