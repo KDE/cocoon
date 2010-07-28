@@ -146,6 +146,16 @@ const QByteArray LooseStorage::rawDataFor(const Id &id, const qint64 maxRead)
 	return rawData;
 }
 
+void LooseStorage::reset()
+{
+	d = new LooseStoragePrivate();
+//	d->ids.clear();
+//	d->objects.clear();
+//	d->objectData.clear();
+//	d->objectSizes.clear();
+//	d->objectTypes.clear();
+}
+
 const QString LooseStorage::sourceFor(const Id &id)
 {
 	Q_ASSERT(id.size() >= 7);

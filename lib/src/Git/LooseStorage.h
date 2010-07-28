@@ -45,6 +45,9 @@ class KDE_EXPORT LooseStorage : public ObjectStorage
 		int              objectSizeFor(const Id &id);
 		ObjectType       objectTypeFor(const Id &id);
 
+	public slots:
+		void reset();
+
 	protected:
 		void loadHeaderDataFor(const Id &id);
 		const QByteArray rawDataFor(const Id &id, const qint64 maxRead = -1);
