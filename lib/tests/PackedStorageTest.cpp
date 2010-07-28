@@ -109,6 +109,13 @@ class PackedStorageTest : public GitTestBase
 		void shouldFindObjectByShordId() {
 			QCOMPARE(storage->objectFor(Git::Id("b7566b7", *storage))->id().toSha1String(), QLatin1String("b7566b7883e0dd74baba8cb194ed5dacaed5bb62"));
 		}
+
+		void shoudlCacheIdsBetweenQueries() {
+			const Git::Id *pId1 = &storage->allIds()[0];
+			const Git::Id *pId2 = &storage->allIds()[0];
+
+			QVERIFY(pId1 == pId2);
+		}
 };
 
 QTEST_KDEMAIN_CORE(PackedStorageTest);

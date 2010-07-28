@@ -60,6 +60,7 @@ public:
 	{}
 
 	QHash<quint32, Id> idAt;
+	QList<Id> ids;
 	QList<quint32> indexDataOffsets;
 	QFile indexFile;
 	quint32 indexVersion;

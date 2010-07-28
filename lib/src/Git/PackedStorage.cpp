@@ -106,12 +106,18 @@ PackedStorage::~PackedStorage()
 
 const QList<Id> PackedStorage::allIds()
 {
-	switch(d->indexVersion) {
-	case 2:
-		return allIds_v2();
-	default:
-		return allIds_v1();
+	if (d->ids.isEmpty()) {
+		switch(d->indexVersion) {
+		case 2:
+			d->ids = allIds_v2();
+			break;
+		default:
+			d->ids = allIds_v1();
+			break;
+		}
 	}
+
+	return d->ids;
 }
 
 const QList<Id> PackedStorage::allIds_v1()
