@@ -73,6 +73,13 @@ class LooseStorageCachingTest : public GitTestBase
 
 			QVERIFY(pObject1 == pObject2);
 		}
+
+		void shoudlCacheIdsBetweenQueries() {
+			const Git::Id *pId1 = &storage->allIds()[0];
+			const Git::Id *pId2 = &storage->allIds()[0];
+
+			QVERIFY(pId1 == pId2);
+		}
 };
 
 QTEST_KDEMAIN_CORE(LooseStorageCachingTest);

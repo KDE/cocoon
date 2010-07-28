@@ -58,19 +58,19 @@ LooseStorage::~LooseStorage()
 
 const QList<Id> LooseStorage::allIds()
 {
-	QList<Id> ids;
-
-	foreach (const QString &dir, d->objectsDir.entryList()) {
-		if (dir.contains(QRegExp("^[0-9a-fA-F]{2}$"))) {
-			foreach (const QString &file, QDir(d->objectsDir.path() + "/" + dir).entryList()) {
-				if (file.contains(QRegExp("^[0-9a-fA-F]{38}$"))) {
-					ids << Id(dir + file, *this);
+	if(d->ids.isEmpty()) {
+		foreach (const QString &dir, d->objectsDir.entryList()) {
+			if (dir.contains(QRegExp("^[0-9a-fA-F]{2}$"))) {
+				foreach (const QString &file, QDir(d->objectsDir.path() + "/" + dir).entryList()) {
+					if (file.contains(QRegExp("^[0-9a-fA-F]{38}$"))) {
+						d->ids << Id(dir + file, *this);
+					}
 				}
 			}
 		}
 	}
 
-	return ids;
+	return d->ids;
 }
 
 void LooseStorage::loadHeaderDataFor(const Id &id)

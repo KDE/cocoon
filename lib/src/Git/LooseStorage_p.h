@@ -46,6 +46,7 @@ public:
 		, objectTypes(other.objectTypes)
 	{}
 
+	QList<Id> ids;
 	QHash<Id, QByteArray> objectData;
 	QHash<Id, RawObject*> objects;
 	QDir objectsDir;
