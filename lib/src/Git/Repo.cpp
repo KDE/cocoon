@@ -86,6 +86,7 @@ void Repo::commitIndex(const QString &message, const QStringList &options)
 
 	resetCommits();
 	resetStatus();
+	resetLooseStorage();
 
 	emit indexChanged();
 	emit historyChanged();
