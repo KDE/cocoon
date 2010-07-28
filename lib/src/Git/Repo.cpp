@@ -183,7 +183,8 @@ void Repo::reset()
 	resetCommits();
 	resetHeads();
 	resetStatus();
-	resetStorages();
+	resetLooseStorage();
+	resetPackedStorages();
 }
 
 void Repo::resetCommits()
@@ -218,7 +219,12 @@ void Repo::resetStatus()
 	}
 }
 
-void Repo::resetStorages()
+void Repo::resetLooseStorage()
+{
+	d->looseStorage->reset();
+}
+
+void Repo::resetPackedStorages()
 {
 	if (!d->storages.isEmpty()) {
 		foreach (ObjectStorage *storage, d->storages) {
@@ -226,12 +232,6 @@ void Repo::resetStorages()
 		}
 	}
 	d->storages.clear();
-
-
-	if (d->looseStorage) {
-		d->looseStorage->deleteLater();
-		d->looseStorage = 0;
-	}
 }
 
 void Repo::stageFiles(const QStringList &paths)
