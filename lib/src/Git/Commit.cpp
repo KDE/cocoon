@@ -17,6 +17,7 @@
 */
 
 #include "Commit.h"
+#include "Commit_p.h"
 
 #include "gitrunner.h"
 

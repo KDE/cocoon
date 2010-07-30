@@ -19,7 +19,6 @@
 #ifndef COMMIT_H
 #define COMMIT_H
 
-#include "Commit_p.h"
 #include "RawObject.h"
 
 #include <KDateTime>
@@ -36,6 +35,7 @@ class CommitPopulationErrorsTest;
 namespace Git {
 
 class Commit;
+class CommitPrivate;
 class Ref;
 class Repo;
 class Tree;
