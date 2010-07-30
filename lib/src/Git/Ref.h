@@ -21,7 +21,7 @@
 
 #include <QObject>
 
-#include "Ref_p.h"
+#include "Ref_p.h" // this should not be here, but there are strange compilation errors without it
 
 #include <kdemacros.h>
 

@@ -17,6 +17,7 @@
 */
 
 #include "Ref.h"
+#include "Ref_p.h"
 
 #include <KDebug>
 
