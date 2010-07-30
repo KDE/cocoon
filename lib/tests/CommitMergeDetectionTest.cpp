@@ -53,28 +53,28 @@ class CommitMergeDetectionTest : public GitTestBase
 
 		void testMergeDetectionWithNoParents()
 		{
-			QVERIFY(commit->d->parents.isEmpty());
+			QVERIFY(commit->d->parentIds.isEmpty());
 
 			QVERIFY(!commit->isMerge());
 		}
 
 		void testMergeDetectionWithOneParent()
 		{
-			commit->d->parents << new Git::Commit(Git::Id("abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d", *repo), *repo);
-			QCOMPARE(commit->d->parents.size(), 1);
+			commit->d->parentIds << Git::Id("abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d", *repo);
+			QCOMPARE(commit->d->parentIds.size(), 1);
 
 			QVERIFY(!commit->isMerge());
 		}
 
 		void testMergeDetectionWithMoreParents()
 		{
-			commit->d->parents << new Git::Commit(Git::Id("abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d", *repo), *repo);
-			commit->d->parents << new Git::Commit(Git::Id("6421f09a627d8ea6a85a9155e481cae7ed483b50", *repo), *repo);
-			QCOMPARE(commit->d->parents.size(), 2);
+			commit->d->parentIds << Git::Id("abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d", *repo);
+			commit->d->parentIds << Git::Id("6421f09a627d8ea6a85a9155e481cae7ed483b50", *repo);
+			QCOMPARE(commit->d->parentIds.size(), 2);
 			QVERIFY(commit->isMerge());
 
-			commit->d->parents << new Git::Commit(Git::Id("4262f0d5b0d062a0d655f16c2fc372c92689c853", *repo), *repo);
-			QCOMPARE(commit->d->parents.size(), 3);
+			commit->d->parentIds << Git::Id("4262f0d5b0d062a0d655f16c2fc372c92689c853", *repo);
+			QCOMPARE(commit->d->parentIds.size(), 3);
 			QVERIFY(commit->isMerge());
 		}
 };

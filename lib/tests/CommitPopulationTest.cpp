@@ -57,9 +57,9 @@ class CommitPopulationTest : public GitTestBase
 			QVERIFY( commit->d->committer.isNull());
 			QVERIFY( commit->d->committedAt.isNull());
 			QVERIFY( commit->d->message.isNull());
-			QVERIFY( commit->d->parents.isEmpty());
+			QVERIFY( commit->d->parentIds.isEmpty());
 			QVERIFY( commit->d->summary.isNull());
-			QVERIFY(!commit->d->tree);
+			QVERIFY( commit->d->treeId.isNull());
 		}
 
 		void shouldPopulateOnPropertyAccess() {
@@ -70,9 +70,9 @@ class CommitPopulationTest : public GitTestBase
 			QVERIFY(!commit->d->committer.isEmpty());
 			QVERIFY(!commit->d->committedAt.isNull());
 			QVERIFY(!commit->d->message.isEmpty());
-			QVERIFY(!commit->d->parents.isEmpty());
+			QVERIFY(!commit->d->parentIds.isEmpty());
 			QVERIFY(!commit->d->summary.isEmpty());
-			QVERIFY( commit->d->tree);
+			QVERIFY(!commit->d->treeId.isNull());
 		}
 
 		void shouldPopulateTreeCorrectly() {
