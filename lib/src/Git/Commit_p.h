@@ -28,6 +28,7 @@
 namespace Git {
 
 class Commit;
+class Id;
 class Tree;
 
 
@@ -41,9 +42,9 @@ public:
 		, committer()
 		, committedAt()
 		, message()
-		, parents()
+		, parentIds()
 		, summary()
-		, tree(0)
+		, treeId()
 	{}
 	CommitPrivate(const CommitPrivate &other)
 		: QSharedData(other)
@@ -52,9 +53,9 @@ public:
 		, committer(other.committer)
 		, committedAt(other.committedAt)
 		, message(other.message)
-		, parents(other.parents)
+		, parentIds(other.parentIds)
 		, summary(other.summary)
-		, tree(other.tree)
+		, treeId(other.treeId)
 	{}
 	~CommitPrivate() {}
 
@@ -63,9 +64,9 @@ public:
 	QString   committer;
 	KDateTime committedAt;
 	QString   message;
-	QList<Commit*> parents;
+	QList<Id> parentIds;
 	QString   summary;
-	Tree     *tree;
+	Id        treeId;
 };
 
 }

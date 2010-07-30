@@ -24,6 +24,7 @@
 #include "ObjectStorage.h"
 #include "Ref.h"
 #include "Repo.h"
+#include "Tree.h"
 
 #include <QStringList>
 
@@ -126,7 +127,7 @@ const QString Commit::diff() const
 void Commit::fillFromString(Commit *commit, const QString &raw)
 {
 	// if commit has already been filled
-	if (commit->d->tree || !commit->d->message.isEmpty()) {
+	if (commit->d->treeId.exists() || !commit->d->message.isEmpty()) {
 		return;
 	}
 
@@ -134,19 +135,19 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 
 	QStringList lines = raw.split("\n");
 
-	Tree *tree = 0;
+	Id treeId;
 	if (!lines.isEmpty() && lines.first().startsWith("tree ")) {
-		QString treeId = lines.takeFirst().mid(qstrlen("tree "), -1);
-		tree = commit->repo().tree(treeId);
+		QString treeIdString = lines.takeFirst().mid(qstrlen("tree "), -1);
+		treeId = commit->repo().tree(treeIdString)->id();
 	}
-	commit->d->tree = tree;
+	commit->d->treeId = treeId;
 
-	CommitList parents;
+	QList<Id> parentIds;
 	while (!lines.isEmpty() && lines.first().startsWith("parent ")) {
-		QString parentId = lines.takeFirst().mid(qstrlen("parent "), -1);
-		parents << commit->repo().commit(parentId);
+		QString parentIdString = lines.takeFirst().mid(qstrlen("parent "), -1);
+		parentIds << commit->repo().commit(parentIdString)->id();
 	}
-	commit->d->parents = parents;
+	commit->d->parentIds = parentIds;
 
 	QRegExp actorRegExp("^(.*) (\\d+) ([+-]\\d+)$");
 
@@ -276,7 +277,13 @@ const QString& Commit::message()
 const CommitList Commit::parents()
 {
 	fillFromString(this, data());
-	return d->parents;
+
+	CommitList commits;
+	foreach (const Id &id, d->parentIds) {
+		commits << qobject_cast<Commit*>(id.object());
+	}
+
+	return commits;
 }
 
 const QString& Commit::summary()
@@ -288,7 +295,8 @@ const QString& Commit::summary()
 const Tree* Commit::tree()
 {
 	fillFromString(this, data());
-	return d->tree;
+
+	return qobject_cast<Tree*>(d->treeId.object());
 }
 
 #include "Commit.moc"
