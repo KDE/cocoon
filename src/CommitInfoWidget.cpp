@@ -51,7 +51,7 @@ void CommitInfoWidget::updateView()
 		return;
 	}
 
-	ui->idLabel->setText(m_commit->id());
+	ui->idLabel->setText(m_commit->id().toSha1String());
 	ui->authorLabel->setText(i18n("%1 %2", m_commit->author(), m_commit->authoredAt().toString()));
 	ui->messageLabel->setText(m_commit->message());
 	ui->diffView->setDiff(m_commit->diff());

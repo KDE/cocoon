@@ -86,6 +86,7 @@ void Repo::commitIndex(const QString &message, const QStringList &options)
 	resetHeads();
 	resetCommits();
 	resetStatus();
+	resetLooseStorage();
 
 	emit headsChanged();
 	emit indexChanged();
@@ -123,7 +124,7 @@ QString Repo::diff(const Commit &a, const Commit &b) const
 	GitRunner runner;
 	runner.setDirectory(workingDir());
 
-	runner.diffCommits(a.id(), b.id());
+	runner.diffCommits(a.id().toSha1String(), b.id().toSha1String());
 
 	return runner.getResult();
 }
@@ -175,7 +176,8 @@ RefList Repo::heads()
 
 RawObject* Repo::object(const QString &id)
 {
-	return storageFor(id) ? storageFor(id)->objectFor(id) : 0;
+	ObjectStorage *storage = storageFor(id);
+	return storage ? storage->objectFor(Id(id, *storage)) : 0;
 }
 
 void Repo::reset()
@@ -183,7 +185,8 @@ void Repo::reset()
 	resetCommits();
 	resetHeads();
 	resetStatus();
-	resetStorages();
+	resetLooseStorage();
+	resetPackedStorages();
 }
 
 void Repo::resetCommits()
@@ -212,7 +215,12 @@ void Repo::resetStatus()
 	}
 }
 
-void Repo::resetStorages()
+void Repo::resetLooseStorage()
+{
+	d->looseStorage->reset();
+}
+
+void Repo::resetPackedStorages()
 {
 	if (!d->storages.isEmpty()) {
 		foreach (ObjectStorage *storage, d->storages) {
@@ -220,12 +228,6 @@ void Repo::resetStorages()
 		}
 	}
 	d->storages.clear();
-
-
-	if (d->looseStorage) {
-		d->looseStorage->deleteLater();
-		d->looseStorage = 0;
-	}
 }
 
 void Repo::stageFiles(const QStringList &paths)

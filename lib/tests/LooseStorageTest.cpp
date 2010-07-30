@@ -20,6 +20,7 @@
 
 #include "Git/Commit.h"
 #include "Git/LooseStorage.h"
+#include "Git/LooseStorage_p.h"
 
 
 
@@ -59,35 +60,35 @@ class LooseStorageTest : public GitTestBase
 		}
 
 		void testSourceForFullIdIsCorrect() {
-			QString sourcePath = storage->sourceFor("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8");
+			QString sourcePath = storage->sourceFor(Git::Id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *storage));
 
 			QCOMPARE(sourcePath, QString("%1/objects/c5/6dada2cf4f67b35ed0019ddd4651a8c8a337e8").arg(repo->gitDir()));
 		}
 
 		void testSourceForShortIdIsCorrect() {
 			QString id = "c56dada2cf4f67b35ed0019ddd4651a8c8a337e8";
-			QString sourcePath = storage->sourceFor(id.left(7));
+			QString sourcePath = storage->sourceFor(Git::Id(id.left(7), *storage));
 
 			QCOMPARE(sourcePath, QString("%1/objects/%2/%3").arg(repo->gitDir()).arg(id.left(2)).arg(id.mid(2)));
 		}
 
 		void testInflationIsWorking() {
 			QString id = "c56dada2cf4f67b35ed0019ddd4651a8c8a337e8";
-			QByteArray rawData = storage->rawDataFor(id);
+			QByteArray rawData = storage->rawDataFor(Git::Id(id, *storage));
 
 			QCOMPARE(QTest::toHexRepresentation(rawData, 16), QTest::toHexRepresentation("commit 212\0tree ", 16));
 			QCOMPARE(rawData.size(), QString("commit 212").length() + 1 + 212);
 		}
 
 		void objectTypeShouldBeCorrect() {
-			QString id = repo->commits()[0]->id();
+			Git::Id id = repo->commits()[0]->id();
 			Git::ObjectType type = storage->objectTypeFor(id);
 
 			QCOMPARE(type, Git::OBJ_COMMIT);
 		}
 
 		void objectSizeShouldBeCorrect() {
-			QString id = repo->commits()[0]->id();
+			Git::Id id = repo->commits()[0]->id();
 			int size = storage->objectSizeFor(id);
 
 			QCOMPARE(size, 212);

@@ -46,6 +46,7 @@ public:
 		, status(other.status)
 		, workingDir(other.workingDir)
 	{}
+	~RepoPrivate() {}
 
 	QHash<QString, CommitList> commits;
 	QString gitDir;

@@ -21,9 +21,11 @@
 
 #include <QObject>
 
-#include "RawObject_p.h"
+#include "Id.h"
 
 #include <kdemacros.h>
+
+#include <QSharedDataPointer>
 
 
 
@@ -33,7 +35,19 @@ class RawObjectTypeTest;
 namespace Git {
 
 class ObjectStorage;
+class RawObjectPrivate;
 class Repo;
+
+typedef enum {
+	OBJ_NONE = 0,
+	OBJ_COMMIT = 1,
+	OBJ_TREE = 2,
+	OBJ_BLOB = 3,
+	OBJ_TAG = 4,
+//	OBJ_SOMETHING = 5, // reserved
+	OBJ_OFS_DELTA = 6,
+	OBJ_REF_DELTA = 7,
+} ObjectType;
 
 
 
@@ -42,12 +56,13 @@ class KDE_EXPORT RawObject : public QObject
 	Q_OBJECT
 
 	public:
-		explicit RawObject(const QString& id, Repo &repo);
+		explicit RawObject(const Id& id, Repo &repo);
+		virtual ~RawObject();
 
-		const QByteArray&  data();
-		const QString&     id() const;
-		int                size() const;
-		ObjectType         type() const;
+		const QByteArray& data();
+		const Id&         id() const;
+		int               size() const;
+		ObjectType        type() const;
 
 		bool isBlob() const;
 		bool isCommit() const;
@@ -60,13 +75,11 @@ class KDE_EXPORT RawObject : public QObject
 		static ObjectType extractObjectTypeFrom(const QString &header);
 		static bool isOnlyHeader(const QByteArray &rawData);
 		static bool isValidHeader(const QString &possibleHeader);
-		static RawObject* newInstance(const QString& id, Repo &repo);
+		static RawObject* newInstance(const Id& id, Repo &repo);
 		static ObjectType typeFromTypeName(const QString& name);
 		static const QString typeNameFromType(const ObjectType type);
 
 	protected:
-		explicit RawObject(const QString &id, QObject *parent=0);
-
 		virtual void populateHeader();
 		Repo& repo() const;
 

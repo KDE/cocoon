@@ -21,12 +21,12 @@
 
 #include "PackedStorage.h"
 
-#include "PackedStorageObject_p.h"
-
 class PackedStorageTest;
 class PackedStorageDeltifiedExtractionTest;
 
 namespace Git {
+
+class PackedStorageObjectPrivate;
 
 
 
@@ -36,15 +36,16 @@ class PackedStorageObject : public QObject
 
 	public:
 		explicit PackedStorageObject(PackedStorage &storage, quint32 offset);
-		explicit PackedStorageObject(PackedStorage &storage, quint32 offset, const QString &id);
+		explicit PackedStorageObject(PackedStorage &storage, quint32 offset, const Id &id);
 		PackedStorageObject(const PackedStorageObject &other);
+		~PackedStorageObject();
 
 //		quint32 crc();
 		const QByteArray data();
 		const QByteArray finalData();
 		quint32 finalSize();
 		ObjectType finalType();
-		const QString id();
+		const Id& id();
 		bool isDeltified();
 		quint32 offset();
 //		const QString sha1();

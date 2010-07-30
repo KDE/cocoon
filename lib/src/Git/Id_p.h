@@ -16,59 +16,38 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef COMMIT_P_H
-#define COMMIT_P_H
+#ifndef ID_P_H
+#define ID_P_H
 
 #include <QSharedData>
 
-#include <KDateTime>
 
 
 
 namespace Git {
 
-class Commit;
-class Id;
-class Tree;
+class ObjectStorage;
 
 
 
-class CommitPrivate : public QSharedData {
+class IdPrivate : public QSharedData {
 public:
-	CommitPrivate()
+	IdPrivate()
 		: QSharedData()
-		, author()
-		, authoredAt()
-		, committer()
-		, committedAt()
-		, message()
-		, parentIds()
-		, summary()
-		, treeId()
+		, sha1()
+		, storage(0)
 	{}
-	CommitPrivate(const CommitPrivate &other)
+	IdPrivate(const IdPrivate &other)
 		: QSharedData(other)
-		, author(other.author)
-		, authoredAt(other.authoredAt)
-		, committer(other.committer)
-		, committedAt(other.committedAt)
-		, message(other.message)
-		, parentIds(other.parentIds)
-		, summary(other.summary)
-		, treeId(other.treeId)
+		, sha1(other.sha1)
+		, storage(other.storage)
 	{}
-	~CommitPrivate() {}
+	~IdPrivate() {}
 
-	QString   author;
-	KDateTime authoredAt;
-	QString   committer;
-	KDateTime committedAt;
-	QString   message;
-	QList<Id> parentIds;
-	QString   summary;
-	Id        treeId;
+	QString        sha1;
+	ObjectStorage *storage;
 };
 
 }
 
-#endif // COMMIT_P_H
+#endif // ID_P_H

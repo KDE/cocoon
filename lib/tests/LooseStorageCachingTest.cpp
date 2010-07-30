@@ -51,7 +51,7 @@ class LooseStorageCachingTest : public GitTestBase
 
 
 		void shouldNotCacheRawDataBetweenQueries() {
-			QString id = repo->commits()[0]->id();
+			Git::Id id = repo->commits()[0]->id();
 			const char* pData1 = storage->rawDataFor(id).data();
 			const char* pData2 = storage->rawDataFor(id).data();
 
@@ -59,7 +59,7 @@ class LooseStorageCachingTest : public GitTestBase
 		}
 
 		void shouldCacheObjectDataBetweenQueries() {
-			QString id = repo->commits()[0]->id();
+			Git::Id id = repo->commits()[0]->id();
 			const char* pData1 = storage->objectDataFor(id).data();
 			const char* pData2 = storage->objectDataFor(id).data();
 
@@ -67,11 +67,42 @@ class LooseStorageCachingTest : public GitTestBase
 		}
 
 		void shouldCacheObjectsBetweenQueries() {
-			QString id = repo->commits()[0]->id();
+			Git::Id id = repo->commits()[0]->id();
 			Git::RawObject* pObject1 = storage->objectFor(id);
 			Git::RawObject* pObject2 = storage->objectFor(id);
 
 			QVERIFY(pObject1 == pObject2);
+		}
+
+		void shoudlCacheIdsBetweenQueries() {
+			const Git::Id *pId1 = &storage->allIds()[0];
+			const Git::Id *pId2 = &storage->allIds()[0];
+
+			QVERIFY(pId1 == pId2);
+		}
+
+		void resetShouldClearIds() {
+
+		}
+
+		void resetShouldClearObjects() {
+
+		}
+
+		void resetShouldClearObjectData() {
+
+		}
+
+		void resetShouldClearObjectSizes() {
+
+		}
+
+		void resetShouldClearObjectTypes() {
+
+		}
+
+		void repoHistoryChangeShouldTriggerReset() {
+
 		}
 };
 

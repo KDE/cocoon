@@ -37,22 +37,26 @@ class BlobTest : public GitTestBase
 
 
 		void shouldBeInstanceOfBlob() {
-			Git::RawObject *object = Git::RawObject::newInstance("a907ec3", *repo);
+			Git::Id id("a907ec3", *repo);
+			Git::RawObject *object = Git::RawObject::newInstance(id, *repo);
 			QCOMPARE(object->metaObject()->className(), "Git::Blob");
 		}
 
 		void shouldBeCorrectObject() {
-			Git::RawObject *object = Git::RawObject::newInstance("a907ec3", *repo);
-			QCOMPARE(object->id(), QLatin1String("a907ec3f431eeb6b1c75799a7e4ba73ca6dc627a"));
+			Git::Id id("a907ec3", *repo);
+			Git::RawObject *object = Git::RawObject::newInstance(id, *repo);
+			QCOMPARE(object->id().toSha1String(), QLatin1String("a907ec3f431eeb6b1c75799a7e4ba73ca6dc627a"));
 		}
 
 		void file1ShouldHaveCorrectContent() {
-			Git::RawObject *object = Git::RawObject::newInstance("a907ec3", *repo);
+			Git::Id id("a907ec3", *repo);
+			Git::RawObject *object = Git::RawObject::newInstance(id, *repo);
 			QCOMPARE(object->data(), QByteArray("foo\nbar"));
 		}
 
 		void file2ShouldHaveCorrectContent() {
-			Git::RawObject *object = Git::RawObject::newInstance("5eadda", *repo);
+			Git::Id id("5eadda", *repo);
+			Git::RawObject *object = Git::RawObject::newInstance(id, *repo);
 			QCOMPARE(object->data(), QByteArray("foo bar\nbaz\n"));
 		}
 };

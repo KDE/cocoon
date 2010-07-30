@@ -19,6 +19,7 @@
 #include "GitTestBase.h"
 
 #include "Git/Commit.h"
+#include "Git/Commit_p.h"
 #include "Git/Tree.h"
 
 
@@ -39,7 +40,8 @@ class CommitPopulationTest : public GitTestBase
 		void init() {
 			GitTestBase::init();
 
-			commit = new Git::Commit("b462958a492e9abaaa3bd2725639932b5fd551d9", *repo);
+			Git::Id id("b462958a492e9abaaa3bd2725639932b5fd551d9", *repo);
+			commit = new Git::Commit(id, *repo);
 		}
 
 		void cleanup() {
@@ -55,9 +57,9 @@ class CommitPopulationTest : public GitTestBase
 			QVERIFY( commit->d->committer.isNull());
 			QVERIFY( commit->d->committedAt.isNull());
 			QVERIFY( commit->d->message.isNull());
-			QVERIFY( commit->d->parents.isEmpty());
+			QVERIFY( commit->d->parentIds.isEmpty());
 			QVERIFY( commit->d->summary.isNull());
-			QVERIFY(!commit->d->tree);
+			QVERIFY( commit->d->treeId.isNull());
 		}
 
 		void shouldPopulateOnPropertyAccess() {
@@ -68,9 +70,9 @@ class CommitPopulationTest : public GitTestBase
 			QVERIFY(!commit->d->committer.isEmpty());
 			QVERIFY(!commit->d->committedAt.isNull());
 			QVERIFY(!commit->d->message.isEmpty());
-			QVERIFY(!commit->d->parents.isEmpty());
+			QVERIFY(!commit->d->parentIds.isEmpty());
 			QVERIFY(!commit->d->summary.isEmpty());
-			QVERIFY( commit->d->tree);
+			QVERIFY(!commit->d->treeId.isNull());
 		}
 
 		void shouldPopulateTreeCorrectly() {
@@ -84,7 +86,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
-			QCOMPARE(commit->tree()->id(), QString("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
+			QCOMPARE(commit->tree()->id().toSha1String(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
 		}
 
 		void shouldPopulateNoParentCorrectly() {
@@ -112,7 +114,7 @@ class CommitPopulationTest : public GitTestBase
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
 			QCOMPARE(commit->parents().size(), 1);
-			QCOMPARE(commit->parents().first()->id(), QString("abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d"));
+			QCOMPARE(commit->parents().first()->id().toSha1String(), QLatin1String("abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d"));
 		}
 
 		void shouldPopulateMultiParentCorrectly() {
@@ -129,9 +131,9 @@ class CommitPopulationTest : public GitTestBase
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
 			QCOMPARE(commit->parents().size(), 3);
-			QCOMPARE(commit->parents()[0]->id(), QString("abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d"));
-			QCOMPARE(commit->parents()[1]->id(), QString("6421f09a627d8ea6a85a9155e481cae7ed483b50"));
-			QCOMPARE(commit->parents()[2]->id(), QString("4262f0d5b0d062a0d655f16c2fc372c92689c853"));
+			QCOMPARE(commit->parents()[0]->id().toSha1String(), QLatin1String("abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d"));
+			QCOMPARE(commit->parents()[1]->id().toSha1String(), QLatin1String("6421f09a627d8ea6a85a9155e481cae7ed483b50"));
+			QCOMPARE(commit->parents()[2]->id().toSha1String(), QLatin1String("4262f0d5b0d062a0d655f16c2fc372c92689c853"));
 		}
 
 		void shouldPopulateAuthorCorrectly() {
@@ -145,7 +147,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
-			QCOMPARE(commit->author(), QString("Me"));
+			QCOMPARE(commit->author(), QLatin1String("Me"));
 		}
 
 		void shouldPopulateAuthorWithEmailCorrectly() {
@@ -159,7 +161,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
-			QCOMPARE(commit->author(), QString("Me <me@some.tld>"));
+			QCOMPARE(commit->author(), QLatin1String("Me <me@some.tld>"));
 		}
 
 		void shouldPopulateAuthoredAtCorrectly() {
@@ -190,7 +192,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
-			QCOMPARE(commit->committer(), QString("You"));
+			QCOMPARE(commit->committer(), QLatin1String("You"));
 		}
 
 		void shouldPopulateCommitterWithEmailCorrectly() {
@@ -204,7 +206,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
-			QCOMPARE(commit->committer(), QString("You <you@some.tld>"));
+			QCOMPARE(commit->committer(), QLatin1String("You <you@some.tld>"));
 		}
 
 		void shouldPopulateCommittedAtCorrectly() {
@@ -235,7 +237,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
-			QCOMPARE(commit->message(), QString("Some message."));
+			QCOMPARE(commit->message(), QLatin1String("Some message."));
 		}
 
 		void shouldPopulateSingleLineMessageSummaryCorrectly() {
@@ -249,7 +251,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
-			QCOMPARE(commit->summary(), QString("Some message."));
+			QCOMPARE(commit->summary(), QLatin1String("Some message."));
 		}
 
 		void shouldPopulateMultiLineMessageCorrectly() {
@@ -265,7 +267,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
-			QCOMPARE(commit->message(), QString("Some message.\nMore message.\nEven more message."));
+			QCOMPARE(commit->message(), QLatin1String("Some message.\nMore message.\nEven more message."));
 		}
 
 		void shouldPopulateMultiLineMessageSummaryCorrectly() {
@@ -281,7 +283,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
-			QCOMPARE(commit->summary(), QString("Some message."));
+			QCOMPARE(commit->summary(), QLatin1String("Some message."));
 		}
 };
 

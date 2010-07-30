@@ -3,3 +3,4 @@
 	filemode = true
 	bare = false
 	logallrefupdates = true
+	worktree = /home/riyad/src/cocoon/lib/tests/PackedStorageTestRepo

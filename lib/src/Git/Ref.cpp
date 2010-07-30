@@ -17,6 +17,7 @@
 */
 
 #include "Ref.h"
+#include "Ref_p.h"
 
 #include <KDebug>
 
@@ -74,7 +75,7 @@ const QString& Ref::name() const
 
 Commit* Ref::commit() const
 {
-	return d->commit;
+	return d->repo->commit(d->commitId.toSha1String());
 }
 
 Ref& Ref::operator=(const Ref &other)
@@ -94,7 +95,7 @@ void Ref::populate()
 	//kDebug() << "reading head:" << refFile.fileName();
 	//kDebug() << "head content:" << commitId;
 
-	d->commit = d->repo->commit(commitId);
+	d->commitId = Id(commitId, *d->repo);
 
 	refFile.close();
 }

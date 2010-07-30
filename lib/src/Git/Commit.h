@@ -19,7 +19,6 @@
 #ifndef COMMIT_H
 #define COMMIT_H
 
-#include "Commit_p.h"
 #include "RawObject.h"
 
 #include <KDateTime>
@@ -36,6 +35,7 @@ class CommitPopulationErrorsTest;
 namespace Git {
 
 class Commit;
+class CommitPrivate;
 class Ref;
 class Repo;
 class Tree;
@@ -49,7 +49,7 @@ class KDE_EXPORT Commit : public RawObject
 	Q_OBJECT
 
 	public:
-		explicit Commit(const QString& id, Repo &repo);
+		explicit Commit(const Id& id, Repo &repo);
 
 		const QString&     author();
 		const KDateTime&   authoredAt();
@@ -94,9 +94,6 @@ class KDE_EXPORT Commit : public RawObject
 
 	// static
 		static CommitList allReachableFrom(const Ref &branch);
-
-	protected:
-		explicit Commit(const QString& id, QObject *parent=0);
 
 	private:
 	// static

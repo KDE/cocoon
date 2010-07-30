@@ -20,7 +20,6 @@
 #define TREE_H
 
 #include "RawObject.h"
-#include "Tree_p.h"
 
 #include <QHash>
 #include <QMap>
@@ -33,6 +32,7 @@ namespace Git {
 
 class Blob;
 class RawObject;
+class TreePrivate;
 
 
 
@@ -41,7 +41,7 @@ class KDE_EXPORT Tree : public RawObject
 	Q_OBJECT
 
 	public:
-		explicit Tree(const QString& id, Repo &repo);
+		explicit Tree(const Id& id, Repo &repo);
 
 		const QList<Blob*> blobs();
 		const QMap<QString, Blob*> blobsByName();
@@ -50,9 +50,6 @@ class KDE_EXPORT Tree : public RawObject
 		const QString nameFor(const RawObject &object);
 		const QList<Tree*> trees();
 		const QMap<QString, Tree*> treesByName();
-
-	protected:
-		explicit Tree(const QString& id, QObject *parent=0);
 
 	private:
 		// static
