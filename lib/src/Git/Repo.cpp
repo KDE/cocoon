@@ -17,7 +17,6 @@
 */
 
 #include "Repo.h"
-
 #include "Repo_p.h"
 
 #include "gitrunner.h"
@@ -189,8 +188,6 @@ void Repo::resetCommits()
 {
 	if (!d->commits.isEmpty()) {
 		d->commits.clear();
-
-		emit indexChanged();
 	}
 }
 
@@ -201,8 +198,6 @@ void Repo::resetHeads()
 			delete ref;
 		}
 		d->heads.clear();
-
-		emit headsChanged();
 	}
 }
 
@@ -212,8 +207,6 @@ void Repo::resetStatus()
 	if (d->status) {
 		delete d->status;
 		d->status = 0;
-
-		emit indexChanged();
 	}
 }
 
