@@ -56,6 +56,7 @@ public:
 		, summary(other.summary)
 		, tree(other.tree)
 	{}
+	~CommitPrivate() {}
 
 	QString   author;
 	KDateTime authoredAt;
