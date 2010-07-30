@@ -80,6 +80,30 @@ class LooseStorageCachingTest : public GitTestBase
 
 			QVERIFY(pId1 == pId2);
 		}
+
+		void resetShouldClearIds() {
+
+		}
+
+		void resetShouldClearObjects() {
+
+		}
+
+		void resetShouldClearObjectData() {
+
+		}
+
+		void resetShouldClearObjectSizes() {
+
+		}
+
+		void resetShouldClearObjectTypes() {
+
+		}
+
+		void repoHistoryChangeShouldTriggerReset() {
+
+		}
 };
 
 QTEST_KDEMAIN_CORE(LooseStorageCachingTest);
