@@ -61,29 +61,29 @@ class IdTest : public GitTestBase
 		}
 
 		void shouldInstantiateWithRepo() {
-			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *repo);
+			Git::Id id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *repo);
 
-			QCOMPARE(id.d->sha1, QLatin1String("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7"));
+			QCOMPARE(id.d->sha1, QLatin1String("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8"));
 			QVERIFY(id.d->storage);
 		}
 
 		void shouldInstantiateWithStorage() {
-			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *storage);
+			Git::Id id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *storage);
 
-			QCOMPARE(id.d->sha1, QLatin1String("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7"));
+			QCOMPARE(id.d->sha1, QLatin1String("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8"));
 			QCOMPARE(id.d->storage, storage);
 		}
 
 		void shouldBeCopyable() {
-			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *storage);
+			Git::Id id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *storage);
 			Git::Id copyId = id;
 
-			QCOMPARE(copyId.d->sha1, QLatin1String("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7"));
+			QCOMPARE(copyId.d->sha1, QLatin1String("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8"));
 			QCOMPARE(copyId.d->storage, storage);
 		}
 
 		void copyShouldShareInternalData() {
-			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *storage);
+			Git::Id id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *storage);
 			Git::Id copyId = id;
 
 			QCOMPARE(id.d.constData(), copyId.d.constData());
@@ -96,14 +96,14 @@ class IdTest : public GitTestBase
 		}
 
 		void existingIdInRepoShouldBeValid() {
-			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *repo);
+			Git::Id id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *repo);
 
 			QVERIFY( id.exists());
 			QCOMPARE(id.d->storage, storage);
 		}
 
 		void existingIdInStorageShouldBeValid() {
-			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *storage);
+			Git::Id id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *storage);
 
 			QVERIFY( id.exists());
 			QCOMPARE(id.d->storage, storage);
@@ -126,45 +126,45 @@ class IdTest : public GitTestBase
 		}
 
 		void shouldDetermineExistanceCorrectly() {
-			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *storage);
+			Git::Id id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *storage);
 
 			QVERIFY(id.exists());
 			QVERIFY(id.storage().contains(id.toSha1String()));
 		}
 
 		void shouldFindActualIdInRepo() {
-			Git::Id id("d97d4ab", *repo);
+			Git::Id id("c56dada", *repo);
 
-			QCOMPARE(id.toSha1String(), QLatin1String("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7"));
+			QCOMPARE(id.toSha1String(), QLatin1String("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8"));
 		}
 
 		void shouldFindActualIdInStorage() {
-			Git::Id id("d97d4ab", *storage);
+			Git::Id id("c56dada", *storage);
 
-			QCOMPARE(id.toSha1String(), QLatin1String("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7"));
+			QCOMPARE(id.toSha1String(), QLatin1String("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8"));
 		}
 
 		void shouldProduceCorrectShortId() {
-			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *storage);
+			Git::Id id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *storage);
 
-			QCOMPARE(id.toShortSha1String(), QLatin1String("d97d4ab"));
+			QCOMPARE(id.toShortSha1String(), QLatin1String("c56dada"));
 		}
 
 		void toStringShouldProduceFullId() {
-			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *storage);
+			Git::Id id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *storage);
 
-			QCOMPARE(id.toString(), QLatin1String("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7"));
+			QCOMPARE(id.toString(), QLatin1String("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8"));
 		}
 
 		void shouldProduceCorrectBinaryId() {
-			Git::Id id("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7", *storage);
+			Git::Id id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *storage);
 
-			QCOMPARE(id.toBinarySha1(), QByteArray::fromHex("d97d4abbeb30f34fe85a2075b30103a3dcaf7fc7"));
+			QCOMPARE(id.toBinarySha1(), QByteArray::fromHex("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8"));
 		}
 
 		void comparisonWithEqualIdFromSameStorageShouldBeCorrect() {
-			Git::Id      id("d97d4ab", *storage);
-			Git::Id otherId("d97d4ab", *storage);
+			Git::Id      id("c56dada", *storage);
+			Git::Id otherId("c56dada", *storage);
 
 			QVERIFY( (id == otherId));
 			QVERIFY(!(id != otherId));
@@ -174,8 +174,8 @@ class IdTest : public GitTestBase
 		void comparisonWithEqualIdFromDifferentStorageShouldBeCorrect() {
 			Git::Repo otherRepo(repo->workingDir());
 
-			Git::Id      id("d97d4ab", *storage);
-			Git::Id otherId("d97d4ab", *otherRepo.storages()[0]);
+			Git::Id      id("c56dada", *storage);
+			Git::Id otherId("c56dada", *otherRepo.storages()[0]);
 
 			QVERIFY( (id == otherId));
 			QVERIFY(!(id != otherId));
@@ -183,8 +183,8 @@ class IdTest : public GitTestBase
 		}
 
 		void comparisonWithLargerIdShouldBeCorrect() {
-			Git::Id      id("d97d4ab", *storage);
-			Git::Id otherId("e2994c5", *storage);
+			Git::Id      id("86e041d", *storage);
+			Git::Id otherId("c56dada", *storage);
 
 			QVERIFY(!(id == otherId));
 			QVERIFY( (id != otherId));
@@ -192,8 +192,8 @@ class IdTest : public GitTestBase
 		}
 
 		void comparisonWithSmallerIdShouldBeCorrect() {
-			Git::Id      id("d97d4ab", *storage);
-			Git::Id otherId("4bd4b7b", *storage);
+			Git::Id      id("86e041d", *storage);
+			Git::Id otherId("5b36b1f", *storage);
 
 			QVERIFY(!(id == otherId));
 			QVERIFY( (id != otherId));
@@ -201,9 +201,9 @@ class IdTest : public GitTestBase
 		}
 
 		void shouldProduceCorrectHash() {
-			Git::Id id("d97d4ab", *storage);
+			Git::Id id("c56dada", *storage);
 
-			QCOMPARE(qHash(id), (unsigned)0xd97d4abb);
+			QCOMPARE(qHash(id), (unsigned)0xc56dada2);
 		}
 };
 
