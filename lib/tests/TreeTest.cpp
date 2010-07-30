@@ -19,6 +19,7 @@
 #include "GitTestBase.h"
 
 #include "Git/Tree.h"
+#include "Git/Tree_p.h"
 #include "Git/RawObject.h"
 
 
