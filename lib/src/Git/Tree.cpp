@@ -17,6 +17,7 @@
 */
 
 #include "Tree.h"
+#include "Tree_p.h"
 
 #include "Blob.h"
 #include "Repo.h"

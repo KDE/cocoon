@@ -20,7 +20,6 @@
 #define TREE_H
 
 #include "RawObject.h"
-#include "Tree_p.h"
 
 #include <QHash>
 #include <QMap>
@@ -33,6 +32,7 @@ namespace Git {
 
 class Blob;
 class RawObject;
+class TreePrivate;
 
 
 
