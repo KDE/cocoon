@@ -93,6 +93,15 @@ bool Id::isNull() const
 	return !d->storage || d->sha1.isEmpty();
 }
 
+RawObject* Id::object() const
+{
+	if (!d->storage) {
+		return 0;
+	}
+
+	return d->storage->objectFor(*this);
+}
+
 bool Id::operator<(const Id &other) const
 {
 	return d->sha1 < other.d->sha1;
