@@ -5,7 +5,7 @@ MACRO(UNIT_TESTS)
 	FOREACH(_className ${ARGN})
 		set(_testName ${_className})
 		kde4_add_unit_test(${_testName}
-			TESTNAME cocoon-git-${_testName}
+			TESTNAME ${_testName}
 			NOGUI ${_testName}.cpp GitTestBase.cpp
 		)
 		target_link_libraries(${_testName}
