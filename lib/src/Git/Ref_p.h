@@ -19,33 +19,39 @@
 #ifndef REF_P_H
 #define REF_P_H
 
+#include "Id.h"
 #include "Repo.h"
 
 #include <QDir>
 
+
+
 namespace Git {
+
+
 
 class RefPrivate : public QSharedData {
 public:
 	RefPrivate()
 		: QSharedData()
-		, commit(0)
+		, commitId()
 		, name()
 		, refsDir()
 		, repo(0)
 	{}
 	RefPrivate(const RefPrivate &other)
 		: QSharedData()
-		, commit(other.commit)
+		, commitId(other.commitId)
 		, name(other.name)
 		, refsDir(other.refsDir)
 		, repo(other.repo)
 	{}
+	~RefPrivate() {}
 
-	Commit *commit;
-	QString name;
-	QDir refsDir;
-	Repo *repo;
+	Id       commitId;
+	QString  name;
+	QDir     refsDir;
+	Repo    *repo;
 };
 
 };
