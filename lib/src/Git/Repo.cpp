@@ -83,9 +83,11 @@ void Repo::commitIndex(const QString &message, const QStringList &options)
 
 	runner.commit(opts);
 
+	resetHeads();
 	resetCommits();
 	resetStatus();
 
+	emit headsChanged();
 	emit indexChanged();
 	emit historyChanged();
 }
