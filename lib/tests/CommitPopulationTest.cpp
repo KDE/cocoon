@@ -19,6 +19,7 @@
 #include "GitTestBase.h"
 
 #include "Git/Commit.h"
+#include "Git/Commit_p.h"
 #include "Git/Tree.h"
 
 
