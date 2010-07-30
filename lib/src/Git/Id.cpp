@@ -88,6 +88,11 @@ bool Id::exists() const
 	return d->storage && d->storage->contains(*this);
 }
 
+bool Id::isNull() const
+{
+	return !d->storage || d->sha1.isEmpty();
+}
+
 bool Id::operator<(const Id &other) const
 {
 	return d->sha1 < other.d->sha1;
