@@ -19,7 +19,7 @@
 #ifndef COMMIT_P_H
 #define COMMIT_P_H
 
-#include <QSharedData>
+#include "RawObject_p.h"
 
 #include <KDateTime>
 
@@ -33,10 +33,21 @@ class Tree;
 
 
 
-class CommitPrivate : public QSharedData {
+class CommitPrivate : public RawObjectPrivate {
 public:
 	CommitPrivate()
-		: QSharedData()
+		: RawObjectPrivate()
+		, author()
+		, authoredAt()
+		, committer()
+		, committedAt()
+		, message()
+		, parentIds()
+		, summary()
+		, treeId()
+	{}
+	CommitPrivate(const RawObjectPrivate &other)
+		: RawObjectPrivate(other)
 		, author()
 		, authoredAt()
 		, committer()
@@ -47,7 +58,7 @@ public:
 		, treeId()
 	{}
 	CommitPrivate(const CommitPrivate &other)
-		: QSharedData(other)
+		: RawObjectPrivate(other)
 		, author(other.author)
 		, authoredAt(other.authoredAt)
 		, committer(other.committer)
