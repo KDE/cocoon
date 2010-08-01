@@ -83,7 +83,7 @@ class KDE_EXPORT RawObject : public QObject
 		virtual void populateHeader();
 		Repo& repo() const;
 
-	private:
+	protected:
 		QSharedDataPointer<RawObjectPrivate> d;
 
 	friend class ::RawObjectTest;
