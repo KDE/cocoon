@@ -34,7 +34,7 @@ using namespace Git;
 
 Commit::Commit(const Id& id, Repo &repo)
 	: RawObject(id, repo)
-	, d(new CommitPrivate)
+	, d(new CommitPrivate(*RawObject::d))
 {
 }
 

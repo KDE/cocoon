@@ -31,7 +31,7 @@ using namespace Git;
 
 Tree::Tree(const Id& id, Repo &repo)
 	: RawObject(id, repo)
-	, d(new TreePrivate)
+	, d(new TreePrivate(*RawObject::d))
 {
 }
 
