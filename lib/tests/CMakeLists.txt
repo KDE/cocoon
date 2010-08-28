@@ -22,6 +22,7 @@ unit_tests(
 	RepoCommitsCachingTest
 	RepoHeadsCachingTest
 	RepoStatusCachingTest
+	RepoCommitIndexTest
 
 # Ref tests
 	HeadTest
