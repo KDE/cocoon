@@ -149,6 +149,7 @@ const QByteArray LooseStorage::rawDataFor(const Id &id, const qint64 maxRead)
 void LooseStorage::reset()
 {
 	d = new LooseStoragePrivate();
+	d->objectsDir = QDir(repo().gitDir() + "/objects");
 //	d->ids.clear();
 //	d->objects.clear();
 //	d->objectData.clear();
