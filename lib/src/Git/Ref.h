@@ -50,6 +50,7 @@ class KDE_EXPORT Ref : public QObject
 		Commit* commit() const;
 		const QString& name() const;
 		const QString& prefix() const;
+		const QString  prefixedName() const;
 
 		RefList all() const;
 

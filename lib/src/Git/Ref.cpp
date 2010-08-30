@@ -106,6 +106,10 @@ const QString& Ref::prefix() const {
 	return d->prefix;
 }
 
+const QString Ref::prefixedName() const {
+	return QString("%1/%2").arg(prefix()).arg(name());
+}
+
 
 
 #include "Ref.moc"
