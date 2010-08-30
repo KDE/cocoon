@@ -82,7 +82,7 @@ CommitList Commit::childrenOn(const QStringList &refs) const
 {
 	QStringList actualRefs(refs);
 	if (actualRefs.isEmpty()) {
-		actualRefs << repo().head()->name();
+		actualRefs << repo().currentHead().name();
 	}
 
 	// used for caching the result

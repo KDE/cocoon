@@ -66,12 +66,12 @@ void CompareWidget::loadModels()
 
 void CompareWidget::on_branchAComboBox_currentIndexChanged(const QString &branchName)
 {
-	m_historyAModel->setBranch(m_repo->head(branchName)->name());
+	m_historyAModel->setBranch(m_repo->ref(branchName).name());
 }
 
 void CompareWidget::on_branchBComboBox_currentIndexChanged(const QString &branchName)
 {
-	m_historyBModel->setBranch(m_repo->head(branchName)->name());
+	m_historyBModel->setBranch(m_repo->ref(branchName).name());
 }
 
 void CompareWidget::on_historyAView_clicked(const QModelIndex &index)
@@ -94,7 +94,7 @@ void CompareWidget::setRepository(Git::Repo *repo)
 
 void CompareWidget::showCurrentBranch()
 {
-	int currentBranchIndex = ui->branchAComboBox->findText(m_repo->head()->name());
+	int currentBranchIndex = ui->branchAComboBox->findText(m_repo->currentHead().name());
 	ui->branchAComboBox->setCurrentIndex(currentBranchIndex);
 	ui->branchBComboBox->setCurrentIndex(currentBranchIndex);
 	updateComparison();
@@ -103,10 +103,10 @@ void CompareWidget::showCurrentBranch()
 void CompareWidget::updateComparison()
 {
 	if (m_commitAId.isNull()) {
-		m_commitAId = m_repo->commits(m_repo->head()->name()).first()->id();
+		m_commitAId = m_repo->commits(m_repo->currentHead().name()).first()->id();
 	}
 	if (m_commitBId.isNull()) {
-		m_commitBId = m_repo->commits(m_repo->head()->name()).first()->id();
+		m_commitBId = m_repo->commits(m_repo->currentHead().name()).first()->id();
 	}
 
 	Git::Commit *commitA = qobject_cast<Git::Commit*>(m_commitAId.object());
