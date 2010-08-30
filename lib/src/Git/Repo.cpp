@@ -53,6 +53,7 @@ Repo::Repo(const Repo &other)
 
 Repo::~Repo()
 {
+	disconnect();
 	reset();
 }
 
