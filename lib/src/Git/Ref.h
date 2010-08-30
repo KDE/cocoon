@@ -64,7 +64,7 @@ class KDE_EXPORT Ref : public QObject
 		Ref(const Ref &other);
 
 		Ref newInstance(const QString &name, const QString &prefix, Repo &repo) const;
-		virtual void populate();
+		void populate();
 
 	private:
 		QSharedDataPointer<RefPrivate> d;
