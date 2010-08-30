@@ -31,6 +31,7 @@ class LooseStoragePrivate : public QSharedData {
 public:
 	LooseStoragePrivate()
 		: QSharedData()
+		, ids()
 		, objectData()
 		, objects()
 		, objectsDir()
@@ -39,6 +40,7 @@ public:
 	{}
 	LooseStoragePrivate(const LooseStoragePrivate &other)
 		: QSharedData(other)
+		, ids(other.ids)
 		, objectData(other.objectData)
 		, objects(other.objects)
 		, objectsDir(other.objectsDir)
