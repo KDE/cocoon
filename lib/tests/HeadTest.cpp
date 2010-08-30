@@ -54,6 +54,12 @@ class HeadTest : public GitTestBase
 			QCOMPARE(head->d->refsDir.path(), QString("%1/refs/heads").arg(repo->gitDir()));
 		}
 
+		void shouldHaveCorrectPrefix() {
+			const Git::Ref head = Git::Head("master", *repo);
+
+			QCOMPARE(head.prefix(), QLatin1String("heads"));
+		}
+
 		void shouldFindAllHeads() {
 			QList<Git::Ref> heads = Git::Head(*repo).all();
 
