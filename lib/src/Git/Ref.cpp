@@ -66,9 +66,9 @@ Ref::Ref(const QString &name, const QString &prefix, Repo &repo)
 
 
 
-RefList Ref::all() const
+QList<Ref> Ref::all() const
 {
-	RefList refs;
+	QList<Ref> refs;
 
 	foreach (const QString &name, d->refsDir.entryList(QDir::Files)) {
 		//kDebug() << "ref found:" << name;

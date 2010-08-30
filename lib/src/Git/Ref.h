@@ -38,8 +38,6 @@ class Ref;
 class RefPrivate;
 class Repo;
 
-typedef QList<Ref*> RefList;
-
 
 
 class KDE_EXPORT Ref : public QObject
@@ -50,12 +48,13 @@ class KDE_EXPORT Ref : public QObject
 		explicit Ref();
 		Ref(const Ref &other);
 		explicit Ref(const QString &name, const QString &prefix, Repo &repo);
+
 		Commit* commit() const;
 		const QString& name() const;
 		const QString& prefix() const;
 		const QString  prefixedName() const;
 
-		RefList all() const;
+		QList<Ref> all() const;
 
 		Ref& operator=(const Ref &other);
 		bool operator==(const Ref &other) const;

@@ -38,7 +38,6 @@ typedef QList<Commit*>  CommitList;
 class ObjectStorage;
 class RawObject;
 class Ref;
-typedef QList<Ref*>  RefList;
 class RepoPrivate;
 class Status;
 class Tree;
