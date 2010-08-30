@@ -72,7 +72,7 @@ QList<Ref> Ref::all() const
 
 	foreach (const QString &name, d->refsDir.entryList(QDir::Files)) {
 		//kDebug() << "ref found:" << name;
-		refs << newInstance(name, *d->repo);
+		refs << newInstance(name, prefix(), *d->repo);
 	}
 
 	return refs;
