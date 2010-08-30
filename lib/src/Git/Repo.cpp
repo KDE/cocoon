@@ -187,6 +187,10 @@ void Repo::reset()
 	resetLooseStorage();
 	resetPackedStorages();
 	resetStatus();
+
+	emit headsChanged();
+	emit historyChanged();
+	emit indexChanged();
 }
 
 void Repo::resetCommits()
