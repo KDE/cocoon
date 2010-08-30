@@ -35,6 +35,7 @@ Ref::Ref(const QString &prefix, Repo &repo)
 	: QObject(&repo)
 	, d(new RefPrivate)
 {
+	d->prefix = prefix;
 	d->repo = &repo;
 	d->refsDir = QDir(d->repo->gitDir());
 	d->refsDir.cd("refs");
@@ -46,6 +47,7 @@ Ref::Ref(const QString &name, const QString &prefix, Repo &repo)
 	, d(new RefPrivate)
 {
 	d->name = name;
+	d->prefix = prefix;
 	d->repo = &repo;
 	d->refsDir = QDir(d->repo->gitDir());
 	d->refsDir.cd("refs");
@@ -98,6 +100,10 @@ void Ref::populate()
 	d->commitId = Id(commitId, *d->repo);
 
 	refFile.close();
+}
+
+const QString& Ref::prefix() const {
+	return d->prefix;
 }
 
 

@@ -36,6 +36,7 @@ public:
 		: QSharedData()
 		, commitId()
 		, name()
+		, prefix()
 		, refsDir()
 		, repo(0)
 	{}
@@ -43,6 +44,7 @@ public:
 		: QSharedData()
 		, commitId(other.commitId)
 		, name(other.name)
+		, prefix(other.prefix)
 		, refsDir(other.refsDir)
 		, repo(other.repo)
 	{}
@@ -50,6 +52,7 @@ public:
 
 	Id       commitId;
 	QString  name;
+	QString  prefix;
 	QDir     refsDir;
 	Repo    *repo;
 };
