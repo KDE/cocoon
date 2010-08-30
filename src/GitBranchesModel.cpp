@@ -29,7 +29,7 @@ GitBranchesModel::GitBranchesModel(Git::Repo &repo, QObject *parent)
 	: QAbstractTableModel(parent)
 	, m_repo(repo)
 {
-	connect(&m_repo, SIGNAL(historyChanged()), this, SLOT(reset()));
+	connect(&m_repo, SIGNAL(headsChanged()), this, SLOT(reset()));
 
 	loadBranches();
 }
