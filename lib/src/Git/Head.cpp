@@ -41,11 +41,4 @@ Head::Head(const QString &name, Repo &repo)
 
 
 
-Ref* Head::newInstance(const QString &name, Repo &repo) const
-{
-	return new Head(name, repo);
-}
-
-
-
 #include "Head.moc"

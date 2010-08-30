@@ -92,6 +92,16 @@ bool Ref::operator==(const Ref &other) const
 	return other.d->name == d->name && other.d->prefix == d->prefix;
 }
 
+Ref Ref::newInstance(const QString &name, const QString &prefix, Repo &repo) const
+{
+	if (prefix == "heads") {
+		return Head(name, repo);
+	}
+
+	/** @todo throw exception */
+	return Ref();
+}
+
 void Ref::populate()
 {
 	QFile refFile(d->refsDir.filePath(d->name));

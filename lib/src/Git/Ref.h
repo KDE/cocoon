@@ -62,7 +62,7 @@ class KDE_EXPORT Ref : public QObject
 		explicit Ref(const QString &name, const QString &prefix, Repo &repo);
 		Ref(const Ref &other);
 
-		virtual Ref* newInstance(const QString &name, Repo &repo) const = 0;
+		Ref newInstance(const QString &name, const QString &prefix, Repo &repo) const;
 		virtual void populate();
 
 	private:
