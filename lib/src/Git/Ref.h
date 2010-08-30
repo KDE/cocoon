@@ -48,6 +48,8 @@ class KDE_EXPORT Ref : public QObject
 
 	public:
 		explicit Ref();
+		Ref(const Ref &other);
+		explicit Ref(const QString &name, const QString &prefix, Repo &repo);
 		Commit* commit() const;
 		const QString& name() const;
 		const QString& prefix() const;
@@ -60,8 +62,6 @@ class KDE_EXPORT Ref : public QObject
 
 	protected:
 		explicit Ref(const QString &prefix, Repo &repo);
-		explicit Ref(const QString &name, const QString &prefix, Repo &repo);
-		Ref(const Ref &other);
 
 		Ref newInstance(const QString &name, const QString &prefix, Repo &repo) const;
 		void populate();
