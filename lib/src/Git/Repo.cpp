@@ -79,11 +79,7 @@ void Repo::commitIndex(const QString &message, const QStringList &options)
 	runner.setDirectory(workingDir());
 
 	QStringList opts = options;
-	if (message.isEmpty()) {
-		opts << "-m" << "\"\"";
-	} else {
-		opts << "-m" << message;
-	}
+	opts << "-m" << message;
 
 	runner.commit(opts);
 

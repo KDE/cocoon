@@ -65,7 +65,8 @@ class RepoCommitIndexTest : public GitTestBase
 			repo->stageFiles(QStringList() << pathTo("some_file.txt"));
 			repo->commitIndex("");
 
-			QCOMPARE(repo->commits()[0]->message(), QString(""));
+			/** @todo This will fail for now, as KProcess has a bug handling empty arguments. */
+			QCOMPARE(repo->commits()[0]->message(), QLatin1String(""));
 		}
 
 		void commitWithMessageShouldHaveCorrectMessage() {
