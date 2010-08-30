@@ -35,6 +35,7 @@ public:
 		, heads()
 		, looseStorage(0)
 		, status(0)
+		, storages()
 		, workingDir()
 	{}
 	RepoPrivate(const RepoPrivate &other)
@@ -44,6 +45,7 @@ public:
 		, heads(other.heads)
 		, looseStorage(other.looseStorage)
 		, status(other.status)
+		, storages(other.storages)
 		, workingDir(other.workingDir)
 	{}
 	~RepoPrivate() {}
