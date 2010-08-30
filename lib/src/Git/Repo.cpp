@@ -120,6 +120,28 @@ bool Repo::containsRepository(const QString &path)
 	return runner.isValidDirectory();
 }
 
+const Ref& Repo::currentHead()
+{
+	QString head("HEAD");
+
+	if (!d->refs.contains(head)) {
+		QFile headFile(gitDir() + "/HEAD");
+		kDebug() << "reading HEAD:" << headFile.fileName();
+
+		headFile.open(QFile::ReadOnly);
+		QString headContent = headFile.readAll();
+		headFile.close();
+
+		Q_ASSERT(headContent.startsWith("ref:"));
+		QString ref = headContent.mid(5).trimmed(); // 5 == "ref: ".length
+		kDebug() << "HEAD points at:" << ref;
+
+		d->refs[head] = this->ref(ref);
+	}
+
+	return d->refs[head];
+}
+
 QString Repo::diff(const Commit &a, const Commit &b) const
 {
 	GitRunner runner;
@@ -147,38 +169,55 @@ void Repo::init(const QString &newRepoPath)
 	}
 }
 
-Ref* Repo::head(const QString &head)
+QList<Ref> Repo::heads()
 {
-	QString name = head;
+	QList<Ref> refs;
 
-	if (name.isEmpty()) {
-		QFile head(gitDir() + "/HEAD");
-		//kDebug() << "reading HEAD:" << head.fileName();
-		head.open(QFile::ReadOnly);
-
-		/** @todo make it recognize any type of ref */
-		name = head.readAll().split('/').last().trimmed();
-
-		//kDebug() << "found head named:" << name;
-		head.close();
+	if (d->refs.isEmpty()) {
+		foreach (const Ref &head, Head(*this).all()) {
+			d->refs[head.prefixedName()] = head;
+		}
 	}
 
-	return new Head(name, *this);
-}
-
-RefList Repo::heads()
-{
-	if (d->heads.isEmpty()) {
-		d->heads = Head(*this).all();
+	foreach (const Ref &ref, d->refs.values()) {
+		if (ref.prefix() == "heads") {
+			refs << ref;
+		}
 	}
 
-	return d->heads;
+	return refs;
 }
 
 RawObject* Repo::object(const QString &id)
 {
 	ObjectStorage *storage = storageFor(id);
 	return storage ? storage->objectFor(Id(id, *storage)) : 0;
+}
+
+const Ref& Repo::ref(const QString &name)
+{
+	if (name == "HEAD") {
+		return currentHead();
+	}
+
+	QString ref;
+
+	if (!d->refs.contains(name)) {
+		if (name.contains("/")) {
+			QStringList parts = name.split("/"); // form: pefix/name
+			Q_ASSERT(parts.size() == 2);
+
+			ref = name;
+
+			d->refs[ref] = Ref(parts.last(), parts.first(), *this);
+		} else {
+			/** @todo search for refs */
+			ref = QString("heads/").append(name);
+			d->refs[ref] = Head(name, *this);
+		}
+	}
+
+	return d->refs[ref];
 }
 
 void Repo::reset()

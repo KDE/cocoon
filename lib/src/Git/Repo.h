@@ -69,10 +69,11 @@ class KDE_EXPORT Repo : public QObject
 
 		void commitIndex(const QString &message, const QStringList &options = QStringList());
 		CommitList commits(const QString &branch = QString());
+		const Ref& currentHead();
 		QString diff(const Commit &a, const Commit &b) const;
-		Ref* head(const QString &name = QString());
-		RefList heads();
+		QList<Ref> heads();
 		const QString& gitDir() const;
+		const Ref& ref(const QString &name);
 		/** Stages files to be included in the next commit. */
 		void stageFiles(const QStringList &paths);
 		Status* status();
