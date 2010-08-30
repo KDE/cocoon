@@ -19,11 +19,19 @@
 #include "Ref.h"
 #include "Ref_p.h"
 
+#include "Head.h"
+
 #include <KDebug>
 
 using namespace Git;
 
 
+
+Ref::Ref()
+	: QObject()
+	, d(new RefPrivate)
+{
+}
 
 Ref::Ref(const Ref &other)
 	: QObject(other.parent())
