@@ -55,10 +55,11 @@ class HeadTest : public GitTestBase
 		}
 
 		void shouldFindAllHeads() {
-			Git::RefList heads = Git::Head(*repo).all();
+			QList<Git::Ref> heads = Git::Head(*repo).all();
+
 			QCOMPARE(heads.size(), 2);
-			QCOMPARE(heads[0]->name(), QString("branch"));
-			QCOMPARE(heads[1]->name(), QString("master"));
+			QCOMPARE(heads[0].name(), QString("branch"));
+			QCOMPARE(heads[1].name(), QString("master"));
 		}
 
 		void shouldPointToCorrectCommit() {

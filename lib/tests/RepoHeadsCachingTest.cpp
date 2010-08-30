@@ -36,37 +36,37 @@ class RepoHeadsCachingTest : public GitTestBase
 
 
 		void shouldCacheHeads() {
-			QVERIFY(repo->d->heads.isEmpty());
+			QVERIFY(repo->d->refs.isEmpty());
 
-			Git::RefList heads1 = repo->heads();
+			QList<Git::Ref> heads1 = repo->heads();
 			QCOMPARE(heads1.size(), 1);
-			QCOMPARE(repo->d->heads.size(), 1);
+			QCOMPARE(repo->d->refs.size(), 1);
 
-			Git::RefList heads2 = repo->heads();
+			QList<Git::Ref> heads2 = repo->heads();
 			QCOMPARE(heads2.size(), 1);
-			QCOMPARE(repo->d->heads.size(), 1);
+			QCOMPARE(repo->d->refs.size(), 1);
 
 			QCOMPARE(heads2, heads1);
 		}
 
 		void testHeadsReset() {
-			QVERIFY(repo->d->heads.isEmpty());
+			QVERIFY(repo->d->refs.isEmpty());
 
 			repo->heads();
-			QVERIFY(!repo->d->heads.isEmpty());
+			QVERIFY(!repo->d->refs.isEmpty());
 
-			repo->resetHeads();
-			QVERIFY(repo->d->heads.isEmpty());
+			repo->resetRefs();
+			QVERIFY(repo->d->refs.isEmpty());
 		}
 
 		void testReset() {
-			QVERIFY(repo->d->heads.isEmpty());
+			QVERIFY(repo->d->refs.isEmpty());
 
 			repo->heads();
-			QVERIFY(!repo->d->heads.isEmpty());
+			QVERIFY(!repo->d->refs.isEmpty());
 
 			repo->reset();
-			QVERIFY(repo->d->heads.isEmpty());
+			QVERIFY(repo->d->refs.isEmpty());
 		}
 };
 
