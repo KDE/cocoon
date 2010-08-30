@@ -87,6 +87,11 @@ Ref& Ref::operator=(const Ref &other)
 	return *this;
 }
 
+bool Ref::operator==(const Ref &other) const
+{
+	return other.d->name == d->name && other.d->prefix == d->prefix;
+}
+
 void Ref::populate()
 {
 	QFile refFile(d->refsDir.filePath(d->name));

@@ -55,6 +55,7 @@ class KDE_EXPORT Ref : public QObject
 		RefList all() const;
 
 		Ref& operator=(const Ref &other);
+		bool operator==(const Ref &other) const;
 
 	protected:
 		explicit Ref(const QString &prefix, Repo &repo);
