@@ -85,7 +85,7 @@ void Repo::commitIndex(const QString &message, const QStringList &options)
 	runner.commit(opts);
 
 	resetCommits();
-	resetHeads();
+	resetRefs();
 	resetLooseStorage();
 	resetStatus();
 
@@ -223,7 +223,7 @@ const Ref& Repo::ref(const QString &name)
 void Repo::reset()
 {
 	resetCommits();
-	resetHeads();
+	resetRefs();
 	resetLooseStorage();
 	resetPackedStorages();
 	resetStatus();
@@ -240,13 +240,10 @@ void Repo::resetCommits()
 	}
 }
 
-void Repo::resetHeads()
+void Repo::resetRefs()
 {
-	if (!d->heads.isEmpty()) {
-		foreach (Ref *ref, heads()) {
-			delete ref;
-		}
-		d->heads.clear();
+	if (!d->refs.isEmpty()) {
+		d->refs.clear();
 	}
 }
 

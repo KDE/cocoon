@@ -91,7 +91,7 @@ class KDE_EXPORT Repo : public QObject
 	public slots:
 		void reset();
 		void resetCommits();
-		void resetHeads();
+		void resetRefs();
 		void resetLooseStorage();
 		void resetPackedStorages();
 		void resetStatus();
