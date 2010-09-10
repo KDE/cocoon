@@ -81,7 +81,7 @@ Commit* Ref::commit() const
 
 bool Ref::exists(const QString &name, const Repo &repo)
 {
-	return QDir(repo.gitDir()).exists(name);
+	return QFile::exists(QDir(repo.gitDir()).filePath(name));
 }
 
 const QString Ref::fullName() const
