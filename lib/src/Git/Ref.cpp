@@ -106,6 +106,7 @@ QString Ref::fullNameFor(const QString &name, const Repo &repo)
 	foreach (QString path, searchPaths) {
 		path = path.arg(name);
 		if (exists(path, repo)) {
+			kDebug() << "Full ref name for" << name << "is" << path;
 			return path;
 		}
 	}
