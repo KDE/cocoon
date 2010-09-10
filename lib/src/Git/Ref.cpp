@@ -86,6 +86,10 @@ bool Ref::exists(const QString &name, const Repo &repo)
 
 const QString Ref::fullName() const
 {
+	if (!isValid()) {
+		return QString();
+	}
+
 	if (isRemote()) {
 		return QString("refs/%3/%2/%1").arg(name()).arg(prefix()).arg(remote());
 	} else {
