@@ -30,12 +30,17 @@ Head::Head(const Head &other)
 }
 
 Head::Head(Repo &repo)
-	: Ref("heads", repo)
+	: Ref(QString(), "heads", QString(), repo)
 {
 }
 
 Head::Head(const QString &name, Repo &repo)
-	: Ref(name, "heads", repo)
+	: Ref(QString(), "heads", name, repo)
+{
+}
+
+Head::Head(const QString &remote, const QString &name, Repo &repo)
+	: Ref(remote, "heads", name, repo)
 {
 }
 
