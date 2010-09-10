@@ -62,7 +62,8 @@ class KDE_EXPORT Ref : public QObject
 		Ref& operator=(const Ref &other);
 		bool operator==(const Ref &other) const;
 
-		Ref newInstance(const QString &remote, const QString &prefix, const QString &name, Repo &repo) const;
+	public: //static
+		static Ref newInstance(const QString &remote, const QString &prefix, const QString &name, Repo &repo);
 		void populate();
 
 	private:
