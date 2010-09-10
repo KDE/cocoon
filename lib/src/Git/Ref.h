@@ -64,6 +64,7 @@ class KDE_EXPORT Ref : public QObject
 
 	public: //static
 		static bool exists(const QString &name, const Repo &repo);
+		static QString fullNameFor(const QString &name, const Repo &repo);
 		static Ref newInstance(const QString &remote, const QString &prefix, const QString &name, Repo &repo);
 
 	protected:

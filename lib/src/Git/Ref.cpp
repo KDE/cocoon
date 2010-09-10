@@ -84,6 +84,22 @@ bool Ref::exists(const QString &name, const Repo &repo)
 	return QDir(repo.gitDir()).exists(name);
 }
 
+QString Ref::fullNameFor(const QString &name, const Repo &repo)
+{
+	// see: http://www.kernel.org/pub/software/scm/git/docs/git-rev-parse.html
+	QStringList searchPaths;
+	searchPaths << "%1" << "refs/%1" << "refs/tags/%1" << "refs/heads/%1" << "refs/remotes/%1" << "refs/remotes/%1/HEAD";
+
+	foreach (QString path, searchPaths) {
+		path = path.arg(name);
+		if (exists(path, repo)) {
+			return path;
+		}
+	}
+
+	return QString();
+}
+
 bool Ref::isRemote() const
 {
 	return !remote().isEmpty();
