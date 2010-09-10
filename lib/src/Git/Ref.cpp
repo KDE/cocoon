@@ -89,6 +89,15 @@ bool Ref::isValid() const
 	return !name().isEmpty();
 }
 
+Ref Ref::newInstance(const QString &remote, const QString &prefix, const QString &name, Repo &repo)
+{
+	if (prefix == "heads") {
+		return Head(remote, name, repo);
+	}
+
+	return Ref(remote, prefix, name, repo);
+}
+
 Ref& Ref::operator=(const Ref &other)
 {
 	d = other.d;
@@ -99,16 +108,6 @@ Ref& Ref::operator=(const Ref &other)
 bool Ref::operator==(const Ref &other) const
 {
 	return other.d->name == d->name && other.d->prefix == d->prefix;
-}
-
-Ref Ref::newInstance(const QString &remote, const QString &prefix, const QString &name, Repo &repo) const
-{
-	if (prefix == "heads") {
-		return Head(remote, name, repo);
-	}
-
-	/** @todo throw exception */
-	return Ref();
 }
 
 void Ref::populate()
