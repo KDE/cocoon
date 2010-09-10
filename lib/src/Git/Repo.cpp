@@ -103,11 +103,12 @@ Commit* Repo::commit(const QString &id)
 
 CommitList Repo::commits(const QString &branch)
 {
-	if (!d->commits.contains(branch)) {
-		d->commits[branch] = Commit::allReachableFrom(ref(branch));
+	Ref branchRef = ref(branch);
+	if (!d->commits.contains(branchRef.fullName())) {
+		d->commits[branchRef.fullName()] = Commit::allReachableFrom(branchRef);
 	}
 
-	return d->commits[branch];
+	return d->commits[branchRef.fullName()];
 }
 
 bool Repo::containsRepository(const QString &path)
