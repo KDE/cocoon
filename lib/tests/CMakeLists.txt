@@ -27,6 +27,7 @@ unit_tests(
 
 # Ref tests
 	HeadTest
+	RepoRefsTest
 
 # Storage and Objects
 	LooseStorageTest
