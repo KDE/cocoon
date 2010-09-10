@@ -73,9 +73,6 @@ class HeadTest : public GitTestBase
 
 			QCOMPARE(Git::Head("branch", *repo).commit()->id().toSha1String(), id);
 		}
-
-		void shouldFindCurrentHead() {
-		}
 };
 
 QTEST_KDEMAIN_CORE(HeadTest);
