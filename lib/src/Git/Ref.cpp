@@ -39,26 +39,17 @@ Ref::Ref(const Ref &other)
 {
 }
 
-Ref::Ref(const QString &prefix, Repo &repo)
+Ref::Ref(const QString &remote, const QString &prefix, const QString &name, Repo &repo)
 	: QObject(&repo)
 	, d(new RefPrivate)
 {
+	d->remote = remote;
 	d->prefix = prefix;
-	d->repo = &repo;
-	d->refsDir = QDir(d->repo->gitDir());
-	d->refsDir.cd("refs");
-	d->refsDir.cd(prefix);
-}
-
-Ref::Ref(const QString &name, const QString &prefix, Repo &repo)
-	: QObject(&repo)
-	, d(new RefPrivate)
-{
 	d->name = name;
-	d->prefix = prefix;
 	d->repo = &repo;
 	d->refsDir = QDir(d->repo->gitDir());
 	d->refsDir.cd("refs");
+	d->refsDir.cd(remote);
 	d->refsDir.cd(prefix);
 
 	populate();
@@ -72,7 +63,7 @@ QList<Ref> Ref::all() const
 
 	foreach (const QString &name, d->refsDir.entryList(QDir::Files)) {
 		//kDebug() << "ref found:" << name;
-		refs << newInstance(name, prefix(), *d->repo);
+		refs << newInstance(remote(), prefix(), name, *d->repo);
 	}
 
 	return refs;
@@ -88,6 +79,16 @@ Commit* Ref::commit() const
 	return d->repo->commit(d->commitId.toSha1String());
 }
 
+bool Ref::isRemote() const
+{
+	return !remote().isEmpty();
+}
+
+bool Ref::isValid() const
+{
+	return !name().isEmpty();
+}
+
 Ref& Ref::operator=(const Ref &other)
 {
 	d = other.d;
@@ -100,10 +101,10 @@ bool Ref::operator==(const Ref &other) const
 	return other.d->name == d->name && other.d->prefix == d->prefix;
 }
 
-Ref Ref::newInstance(const QString &name, const QString &prefix, Repo &repo) const
+Ref Ref::newInstance(const QString &remote, const QString &prefix, const QString &name, Repo &repo) const
 {
 	if (prefix == "heads") {
-		return Head(name, repo);
+		return Head(remote, name, repo);
 	}
 
 	/** @todo throw exception */
@@ -125,12 +126,25 @@ void Ref::populate()
 	refFile.close();
 }
 
-const QString& Ref::prefix() const {
+const QString& Ref::prefix() const
+{
 	return d->prefix;
 }
 
-const QString Ref::prefixedName() const {
-	return QString("%1/%2").arg(prefix()).arg(name());
+const QString Ref::fullName() const
+{
+	QString fullName;
+	if (isRemote()) {
+		fullName = "refs/%3/%2/%1";
+	} else {
+		fullName = "refs/%2/%1";
+	}
+	return fullName.arg(name()).arg(prefix()).arg(remote());
+}
+
+const QString& Ref::remote() const
+{
+	return d->remote;
 }
 
 

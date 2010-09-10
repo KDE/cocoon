@@ -47,22 +47,22 @@ class KDE_EXPORT Ref : public QObject
 	public:
 		explicit Ref();
 		Ref(const Ref &other);
-		explicit Ref(const QString &name, const QString &prefix, Repo &repo);
+		explicit Ref(const QString &remote, const QString &prefix, const QString &name, Repo &repo);
 
 		Commit* commit() const;
+		const QString  fullName() const;
+		bool isRemote() const;
+		bool isValid() const;
 		const QString& name() const;
 		const QString& prefix() const;
-		const QString  prefixedName() const;
+		const QString& remote() const;
 
 		QList<Ref> all() const;
 
 		Ref& operator=(const Ref &other);
 		bool operator==(const Ref &other) const;
 
-	protected:
-		explicit Ref(const QString &prefix, Repo &repo);
-
-		Ref newInstance(const QString &name, const QString &prefix, Repo &repo) const;
+		Ref newInstance(const QString &remote, const QString &prefix, const QString &name, Repo &repo) const;
 		void populate();
 
 	private:

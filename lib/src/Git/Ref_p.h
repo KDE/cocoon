@@ -38,6 +38,7 @@ public:
 		, name()
 		, prefix()
 		, refsDir()
+		, remote()
 		, repo(0)
 	{}
 	RefPrivate(const RefPrivate &other)
@@ -46,6 +47,7 @@ public:
 		, name(other.name)
 		, prefix(other.prefix)
 		, refsDir(other.refsDir)
+		, remote(other.remote)
 		, repo(other.repo)
 	{}
 	~RefPrivate() {}
@@ -54,6 +56,7 @@ public:
 	QString  name;
 	QString  prefix;
 	QDir     refsDir;
+	QString  remote;
 	Repo    *repo;
 };
 
