@@ -64,6 +64,8 @@ class KDE_EXPORT Ref : public QObject
 
 	public: //static
 		static Ref newInstance(const QString &remote, const QString &prefix, const QString &name, Repo &repo);
+
+	protected:
 		void populate();
 
 	private:
