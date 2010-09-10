@@ -200,24 +200,25 @@ const Ref& Repo::ref(const QString &name)
 		return currentHead();
 	}
 
-	QString ref;
+	QString fullName = Ref::fullNameFor(name, *this);
+	Ref ref = d->refs[fullName]; // ref is invalid if it has not been loaded yet
 
-	if (!d->refs.contains(name)) {
-		if (name.contains("/")) {
-			QStringList parts = name.split("/"); // form: pefix/name
-			Q_ASSERT(parts.size() == 2);
+	if (!ref.isValid() && !fullName.isEmpty()) {
+		QStringList parts = fullName.split("/");
+		Q_ASSERT(parts[0] == "refs");
+		parts.removeFirst();
 
-			ref = name;
-
-			d->refs[ref] = Ref(parts.last(), parts.first(), *this);
+		if (parts.size() == 2) {
+			ref = Ref::newInstance(QString(), parts[0], parts[1], *this);
 		} else {
-			/** @todo search for refs */
-			ref = QString("heads/").append(name);
-			d->refs[ref] = Head(name, *this);
+			Q_ASSERT(parts.size() == 3);
+			ref = Ref::newInstance(parts[0], parts[1], parts[2], *this);
 		}
+
+		d->refs[fullName] = ref;
 	}
 
-	return d->refs[ref];
+	return d->refs[fullName];
 }
 
 void Repo::reset()
