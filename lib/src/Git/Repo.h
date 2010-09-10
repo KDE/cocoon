@@ -68,7 +68,7 @@ class KDE_EXPORT Repo : public QObject
 		Tree* tree(const QString &id);
 
 		void commitIndex(const QString &message, const QStringList &options = QStringList());
-		CommitList commits(const QString &branch = QString());
+		CommitList commits(const QString &branch = QString("HEAD"));
 		const Ref& currentHead();
 		QString diff(const Commit &a, const Commit &b) const;
 		QList<Ref> heads();
