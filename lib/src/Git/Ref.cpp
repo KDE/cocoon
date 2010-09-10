@@ -79,6 +79,11 @@ Commit* Ref::commit() const
 	return d->repo->commit(d->commitId.toSha1String());
 }
 
+bool Ref::exists(const QString &name, const Repo &repo)
+{
+	return QDir(repo.gitDir()).exists(name);
+}
+
 bool Ref::isRemote() const
 {
 	return !remote().isEmpty();
