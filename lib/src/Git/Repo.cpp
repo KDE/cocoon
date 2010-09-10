@@ -175,12 +175,12 @@ QList<Ref> Repo::heads()
 
 	if (d->refs.isEmpty()) {
 		foreach (const Ref &head, Head(*this).all()) {
-			d->refs[head.prefixedName()] = head;
+			d->refs[head.fullName()] = head;
 		}
 	}
 
 	foreach (const Ref &ref, d->refs.values()) {
-		if (ref.prefix() == "heads") {
+		if (!ref.isRemote() && ref.prefix() == "heads") {
 			refs << ref;
 		}
 	}
