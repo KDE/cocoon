@@ -33,29 +33,34 @@ class HeadTest : public GitTestBase
 		void initTestCase() {
 			GitTestBase::initTestCase();
 
-			head = 0;
-
 			cloneFrom("HeadTestRepo");
 		}
 
 		void init() {
 			GitTestBase::init();
-			head = new Git::Head(*repo);
 		}
 
 		void cleanup() {
-			delete head;
 			GitTestBase::cleanup();
 		}
 
 
 
 		void shouldHaveRefsDir() {
-			QCOMPARE(head->d->refsDir.path(), QString("%1/refs/heads").arg(repo->gitDir()));
+			Git::Ref head = Git::Head(*repo);
+
+			QCOMPARE(head.d->refsDir.path(), QString("%1/refs/heads").arg(repo->gitDir()));
+		}
+
+		void shouldNotBeRemote() {
+			Git::Ref head = Git::Head(*repo);
+
+			QVERIFY(head.remote().isEmpty());
+			QVERIFY(!head.isRemote());
 		}
 
 		void shouldHaveCorrectPrefix() {
-			const Git::Ref head = Git::Head("master", *repo);
+			Git::Ref head = Git::Head("master", *repo);
 
 			QCOMPARE(head.prefix(), QLatin1String("heads"));
 		}
