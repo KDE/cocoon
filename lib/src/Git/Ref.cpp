@@ -84,6 +84,15 @@ bool Ref::exists(const QString &name, const Repo &repo)
 	return QDir(repo.gitDir()).exists(name);
 }
 
+const QString Ref::fullName() const
+{
+	if (isRemote()) {
+		return QString("refs/%3/%2/%1").arg(name()).arg(prefix()).arg(remote());
+	} else {
+		return QString("refs/%2/%1").arg(name()).arg(prefix());
+	}
+}
+
 QString Ref::fullNameFor(const QString &name, const Repo &repo)
 {
 	// see: http://www.kernel.org/pub/software/scm/git/docs/git-rev-parse.html
@@ -149,17 +158,6 @@ void Ref::populate()
 const QString& Ref::prefix() const
 {
 	return d->prefix;
-}
-
-const QString Ref::fullName() const
-{
-	QString fullName;
-	if (isRemote()) {
-		fullName = "refs/%3/%2/%1";
-	} else {
-		fullName = "refs/%2/%1";
-	}
-	return fullName.arg(name()).arg(prefix()).arg(remote());
 }
 
 const QString& Ref::remote() const
