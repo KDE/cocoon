@@ -38,7 +38,7 @@ class KDE_EXPORT Head : public Ref
 	public:
 		explicit Head(const QString &name, Repo &repo);
 		explicit Head(const QString &remote, const QString &name, Repo &repo);
-		Head(const Head &other);
+		Head(const Ref &other);
 
 	protected:
 		explicit Head(Repo &repo);

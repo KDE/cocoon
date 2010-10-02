@@ -24,7 +24,7 @@ using namespace Git;
 
 
 
-Head::Head(const Head &other)
+Head::Head(const Ref &other)
 	: Ref(other)
 {
 }
