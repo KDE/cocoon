@@ -47,10 +47,10 @@ if(INSTALL_DEVEL_FILES)
 		CloneRepositoryProcess.h
 		Commit.h
 		Head.h
-		id.h
+		Id.h
+		ObjectStorage.h
 		RawObject.h
 		Ref.h
-		Ref_p.h
 		Repo.h
 		Status.h
 		Tree.h
