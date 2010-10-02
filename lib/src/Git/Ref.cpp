@@ -34,7 +34,7 @@ Ref::Ref()
 }
 
 Ref::Ref(const Ref &other)
-	: QObject(other.parent())
+	: QObject()
 	, d(other.d)
 {
 }
