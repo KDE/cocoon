@@ -177,7 +177,7 @@ QString FileStatusWidget::statusToIconName(Git::StatusFile::Status status)
 	case Git::StatusFile::Untracked:
 		return "git-file-untracked";
 	default:
-		return "git-file-none";
+		return "git-file-normal";
 	}
 }
 

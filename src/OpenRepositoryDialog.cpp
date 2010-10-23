@@ -36,7 +36,7 @@ OpenRepositoryDialog::OpenRepositoryDialog(QWidget *parent)
 {
 	ui->setupUi(this);
 
-	setWindowIcon(KIcon("repository"));
+	setWindowIcon(KIcon("git-repo"));
 
 	ui->repositorySearchLine->setListWidget(ui->repositoriesListWidget);
 
@@ -69,7 +69,7 @@ void OpenRepositoryDialog::addRepository(const QString &repoPath)
 	if (foundItems.isEmpty()) {
 		QListWidgetItem *item = new QListWidgetItem(repoPath, repoList);
 		if (Git::Repo::containsRepository(repoPath)) {
-			item->setIcon(KIcon("repository"));
+			item->setIcon(KIcon("git-repo"));
 		} else {
 			item->setForeground(QBrush(Qt::red));
 			if (QDir(repoPath).exists()) {
@@ -95,11 +95,11 @@ void OpenRepositoryDialog::addRepository(const QString &repoPath)
 void OpenRepositoryDialog::createActions()
 {
 	ui->addButton->setIcon(KIcon("list-add"));
-	ui->cloneButton->setIcon(KIcon("repository-clone"));
-	ui->newButton->setIcon(KIcon("repository-new"));
+	ui->cloneButton->setIcon(KIcon("git-repo-clone"));
+	ui->newButton->setIcon(KIcon("git-repo-new"));
 	ui->removeButton->setIcon(KIcon("list-remove"));
 
-	ui->openButton->setIcon(KIcon("repository-open"));
+	ui->openButton->setIcon(KIcon("git-repo-open"));
 
 	QPushButton *quitButton = ui->quitButton;
 	if (parent()) {
