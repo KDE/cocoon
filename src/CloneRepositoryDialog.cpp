@@ -41,16 +41,16 @@ CloneRepositoryDialog::CloneRepositoryDialog(QWidget *parent)
 	ui->cloneUrlRequester->setMode(KFile::Directory | KFile::ExistingOnly);
 	ui->localUrlRequester->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
 
-	setWindowIcon(KIcon("git-clone"));
+	setWindowIcon(KIcon("git-repo-clone"));
 	ui->cancelButton->setIcon(KIcon("dialog-cancel"));
-	ui->cloneButton->setIcon(KIcon("git-clone"));
-	ui->cloningFinishedIconLabel->setPixmap(KIcon("task-waiting").pixmap(32));
-	ui->cloningIconLabel->setPixmap(KIcon("git-clone").pixmap(128));
-	ui->compressingObjectsIconLabel->setPixmap(KIcon("task-waiting").pixmap(32));
-	ui->countingObjectsIconLabel->setPixmap(KIcon("task-waiting").pixmap(32));
+	ui->cloneButton->setIcon(KIcon("git-repo-clone"));
+	ui->cloningFinishedIconLabel->setPixmap(KIcon("git-clone-waiting").pixmap(32));
+	ui->cloningIconLabel->setPixmap(KIcon("git-repo-clone").pixmap(128));
+	ui->compressingObjectsIconLabel->setPixmap(KIcon("git-clone-task-waiting").pixmap(32));
+	ui->countingObjectsIconLabel->setPixmap(KIcon("git-clone-task-waiting").pixmap(32));
 	ui->finishedButton->setIcon(KIcon("dialog-ok"));
-	ui->receivingObjectsIconLabel->setPixmap(KIcon("task-waiting").pixmap(32));
-	ui->resolvingDeltasIconLabel->setPixmap(KIcon("task-waiting").pixmap(32));
+	ui->receivingObjectsIconLabel->setPixmap(KIcon("git-clone-task-waiting").pixmap(32));
+	ui->resolvingDeltasIconLabel->setPixmap(KIcon("git-clone-task-waiting").pixmap(32));
 
 	enableClone();
 }
@@ -119,11 +119,11 @@ void CloneRepositoryDialog::enableClone()
 void CloneRepositoryDialog::enableFinish()
 {
 	if (m_finished) {
-		ui->cloningFinishedIconLabel->setPixmap(KIcon("task-complete").pixmap(64));
-		ui->compressingObjectsIconLabel->setPixmap(KIcon("task-complete").pixmap(32));
-		ui->countingObjectsIconLabel->setPixmap(KIcon("task-complete").pixmap(32));
-		ui->receivingObjectsIconLabel->setPixmap(KIcon("task-complete").pixmap(32));
-		ui->resolvingDeltasIconLabel->setPixmap(KIcon("task-complete").pixmap(32));
+		ui->cloningFinishedIconLabel->setPixmap(KIcon("git-clone-complete").pixmap(64));
+		ui->compressingObjectsIconLabel->setPixmap(KIcon("git-clone-task-complete").pixmap(32));
+		ui->countingObjectsIconLabel->setPixmap(KIcon("git-clone-task-complete").pixmap(32));
+		ui->receivingObjectsIconLabel->setPixmap(KIcon("git-clone-task-complete").pixmap(32));
+		ui->resolvingDeltasIconLabel->setPixmap(KIcon("git-clone-task-complete").pixmap(32));
 	}
 	ui->finishedButton->setEnabled(m_finished);
 }
@@ -181,19 +181,19 @@ void CloneRepositoryDialog::slotCloningFinished()
 void CloneRepositoryDialog::slotCloningProgress(QString progress)
 {
 	if (progress.startsWith("remote: Counting objects")) {
-		ui->countingObjectsIconLabel->setPixmap(KIcon("task-in-progress").pixmap(32));
+		ui->countingObjectsIconLabel->setPixmap(KIcon("git-clone-task-in-progress").pixmap(32));
 		ui->countingObjectsLabel->setText(progress.mid(8)); // get rid of the "remote: " part
 	} else if (progress.startsWith("remote: Compressing objects")) {
-		ui->countingObjectsIconLabel->setPixmap(KIcon("task-complete").pixmap(32));
-		ui->compressingObjectsIconLabel->setPixmap(KIcon("task-in-progress").pixmap(32));
+		ui->countingObjectsIconLabel->setPixmap(KIcon("git-clone-task-complete").pixmap(32));
+		ui->compressingObjectsIconLabel->setPixmap(KIcon("git-clone-task-in-progress").pixmap(32));
 		ui->compressingObjectsLabel->setText(progress.mid(8)); // get rid of the "remote: " part
 	} else if (progress.startsWith("Receiving objects")) {
-		ui->compressingObjectsIconLabel->setPixmap(KIcon("task-complete").pixmap(32));
-		ui->receivingObjectsIconLabel->setPixmap(KIcon("task-in-progress").pixmap(32));
+		ui->compressingObjectsIconLabel->setPixmap(KIcon("git-clone-task-complete").pixmap(32));
+		ui->receivingObjectsIconLabel->setPixmap(KIcon("git-clone-task-in-progress").pixmap(32));
 		ui->receivingObjectsLabel->setText(progress);
 	} else if (progress.startsWith("Resolving deltas")) {
-		ui->receivingObjectsIconLabel->setPixmap(KIcon("task-complete").pixmap(32));
-		ui->resolvingDeltasIconLabel->setPixmap(KIcon("task-in-progress").pixmap(32));
+		ui->receivingObjectsIconLabel->setPixmap(KIcon("git-clone-task-complete").pixmap(32));
+		ui->resolvingDeltasIconLabel->setPixmap(KIcon("git-clone-task-in-progress").pixmap(32));
 		ui->resolvingDeltasLabel->setText(progress);
 	}
 }
