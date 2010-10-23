@@ -18,6 +18,8 @@
 
 #include "GitTestBase.h"
 
+#include "Git/Status.h"
+
 
 
 class RepoFileStagingTest : public GitTestBase
@@ -25,40 +27,101 @@ class RepoFileStagingTest : public GitTestBase
 	Q_OBJECT
 
 	private slots:
-		void initTestCase() {
-			GitTestBase::initTestCase();
-
+		void init() {
+			workingDir = newTempDirName();
 			cloneFrom("RepoFileStagingTestRepo");
+			repo = new Git::Repo(workingDir, this);
+		}
+
+		void cleanup() {
+			delete repo;
+			repo = 0;
 		}
 
 
 
-		void shouldStageOneFile() {
+		void shouldNotStageBogusFile() {
+			repo->stageFiles(QStringList() << "bogus.txt");
 
+			QVERIFY(repo->status()->stagedFiles().isEmpty());
+		}
+
+		void shouldStageOneFile() {
+			repo->stageFiles(QStringList() << "file2.txt");
+			Git::Status *status = repo->status();
+
+			QCOMPARE(status->stagedFiles().size(), 1);
+			QCOMPARE(status->stagedFiles()[0]->path(), QLatin1String("file2.txt"));
 		}
 
 		void shouldStageMultipleFiles() {
+			repo->stageFiles(QStringList() << "file1.txt" << "some_dir/file4.txt");
+			Git::Status *status = repo->status();
 
+			QCOMPARE(status->stagedFiles().size(), 2);
+			QCOMPARE(status->stagedFiles()[0]->path(), QLatin1String("some_dir/file4.txt"));
+			QCOMPARE(status->stagedFiles()[1]->path(), QLatin1String("file1.txt"));
 		}
 
 		void shouldStageDirectory() {
+			repo->stageFiles(QStringList() << "some_dir");
+			Git::Status *status = repo->status();
 
+			QCOMPARE(status->stagedFiles().size(), 2);
+			QCOMPARE(status->stagedFiles()[0]->path(), QLatin1String("some_dir/file4.txt"));
+			QCOMPARE(status->stagedFiles()[1]->path(), QLatin1String("some_dir/file3.txt"));
+		}
+
+
+
+		void shouldNotUnstageBogusFile() {
+			repo->stageFiles(QStringList() << "file1.txt" << "file2.txt" << "some_dir");
+
+			repo->unstageFiles(QStringList() << "bogus.txt");
+			Git::Status *status = repo->status();
+
+			QCOMPARE(status->stagedFiles().size(), 4);
 		}
 
 		void shouldUnstageOneFile() {
+			repo->stageFiles(QStringList() << "file1.txt" << "file2.txt" << "some_dir");
 
+			repo->unstageFiles(QStringList() << "some_dir/file3.txt");
+			Git::Status *status = repo->status();
+
+			QCOMPARE(status->stagedFiles().size(), 3);
+			QCOMPARE(status->stagedFiles()[0]->path(), QLatin1String("some_dir/file4.txt"));
+			QCOMPARE(status->stagedFiles()[1]->path(), QLatin1String("file1.txt"));
+			QCOMPARE(status->stagedFiles()[2]->path(), QLatin1String("file2.txt"));
 		}
 
 		void shouldUnstageMultipleFiles() {
+			repo->stageFiles(QStringList() << "file1.txt" << "file2.txt" << "some_dir");
 
+			repo->unstageFiles(QStringList() << "some_dir/file3.txt" << "file2.txt");
+			Git::Status *status = repo->status();
+
+			QCOMPARE(status->stagedFiles().size(), 2);
+			QCOMPARE(status->stagedFiles()[0]->path(), QLatin1String("some_dir/file4.txt"));
+			QCOMPARE(status->stagedFiles()[1]->path(), QLatin1String("file1.txt"));
 		}
 
 		void shouldUnstageDirectory() {
+			repo->stageFiles(QStringList() << "file1.txt" << "file2.txt" << "some_dir");
 
+			repo->unstageFiles(QStringList() << "some_dir");
+			Git::Status *status = repo->status();
+
+			QCOMPARE(status->stagedFiles().size(), 2);
+			QCOMPARE(status->stagedFiles()[0]->path(), QLatin1String("file1.txt"));
+			QCOMPARE(status->stagedFiles()[1]->path(), QLatin1String("file2.txt"));
 		}
 
-		void shouldUnstageInEmptyRepo() {
+		void shouldNotUnstageInEmptyIndex() {
+			repo->unstageFiles(QStringList() << "some_dir");
+			Git::Status *status = repo->status();
 
+			QCOMPARE(status->stagedFiles().size(), 0);
 		}
 };
 
