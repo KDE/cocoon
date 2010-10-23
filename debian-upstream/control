@@ -2,13 +2,13 @@ Source: cocoon
 Section: kde
 Priority: extra
 Maintainer: Riyad Preukschas <riyad@informatik.uni-bremen.de>
-Build-Depends: debhelper (>= 7), devscripts, fakeroot, cmake, kdelibs5-dev (>= 4.2)
+Build-Depends: debhelper (>= 7), devscripts, fakeroot, cmake, kdelibs5-dev (>= 4.5)
 Standards-Version: 3.8.0
 Homepage: http://gitorious.org/cocoon
 
 Package: cocoon
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, git-core (>= 1.6.2) | git (>= 1.6.2)
+Depends: ${shlibs:Depends}, ${misc:Depends}, git-core (>= 1.7.1) | git (>= 1.7.1)
 Description: A Git GUI front end for KDE
  Features:
  * Creating and cloning repos
