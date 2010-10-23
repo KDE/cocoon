@@ -14,7 +14,7 @@ framework.
 * Stage with commit capability
 * History with branch and merge detection
 * Possibility to compare the changes between any two commits
-* Embedded command line for the advanced stuff
+* Embedded command line for the advanced tasks
 
 
 
@@ -22,13 +22,13 @@ framework.
 
 For compiling and using this application you will need:
 
-* KDE >= 4.2
-* Git >= 1.6.2
+* KDE >= 4.5
+* Git >= 1.7.1
 
 ### Install needed packages ###
 
 When using Debian or (K)Ubuntu you can install the necessary packages with
-    sudo aptitude install build-essential debhelper devscripts git-core cmake kdelibs5-dev
+    sudo aptitude install build-essential debhelper devscripts fakeroot git cmake kdelibs5-dev
 
 ### Build it ###
 
