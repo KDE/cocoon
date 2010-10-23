@@ -41,7 +41,11 @@ class RepoCommitIndexTest : public GitTestBase
 
 
 		void shouldNotCommitWithEmptyIndex() {
+			QVERIFY(repo->status()->stagedFiles().isEmpty());
 
+			repo->commitIndex("");
+
+			QCOMPARE(repo->commits().size(), 1);
 		}
 
 		void shouldNotCommitWithOutMessage() {
