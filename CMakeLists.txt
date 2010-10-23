@@ -13,7 +13,7 @@ option(INSTALL_DEVEL_FILES "Install the devel files" ON)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules" ${CMAKE_MODULE_PATH})
 
 find_package(KDE4 REQUIRED)
-include (KDE4Defaults)
+include(KDE4Defaults)
 
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}
