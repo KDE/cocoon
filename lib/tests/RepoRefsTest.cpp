@@ -69,7 +69,7 @@ class RepoRefsTest : public GitTestBase
 		}
 
 		void shouldReturnHead() {
-			const Git::Ref &ref = repo->ref("branch");
+			const Git::Head &ref = (const Git::Head&)repo->ref("branch");
 
 			QCOMPARE(ref.metaObject()->className(), "Git::Head");
 		}
