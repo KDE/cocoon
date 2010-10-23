@@ -88,9 +88,10 @@ bool Id::exists() const
 	return d->storage && d->storage->contains(*this);
 }
 
-bool Id::isNull() const
+bool Id::isValid() const
 {
-	return !d->storage || d->sha1.isEmpty();
+	// construction should imply d->storage && ...
+	return !d->sha1.isEmpty();
 }
 
 RawObject* Id::object() const

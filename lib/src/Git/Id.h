@@ -51,7 +51,7 @@ class KDE_EXPORT Id : public QObject
 
 		bool exists() const;
 		bool isIn(const ObjectStorage &storage) const;
-		bool isNull() const;
+		bool isValid() const;
 		RawObject* object() const;
 		ObjectStorage& storage() const;
 		const QByteArray toBinarySha1() const;
