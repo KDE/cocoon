@@ -44,10 +44,10 @@ target_link_libraries(cocoon
 	CocoonGit
 )
 
-install(TARGETS cocoon ${INSTALL_TARGETS_DEFAULT_ARGS})
-
 
 ########### install files ###############
+
+install(TARGETS cocoon ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES cocoon.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR} )
 install( FILES cocoon.kcfg  DESTINATION  ${KCFG_INSTALL_DIR} )
