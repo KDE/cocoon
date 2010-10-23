@@ -72,7 +72,7 @@ void CloneRepositoryDialog::startCloning()
 
 	Git::CloneRepositoryProcess *thread = new Git::CloneRepositoryProcess(repoUrl, path, this);
 
-	connect(thread, SIGNAL(cloningProgress(int)), this, SLOT(slotCloningProgress(int)));
+//	connect(thread, SIGNAL(cloningProgress(int)), this, SLOT(slotCloningProgress(int)));
 	connect(thread, SIGNAL(cloningProgress(QString)), this, SLOT(slotCloningProgress(QString)));
 	connect(thread, SIGNAL(cloningFinished()), this, SLOT(slotCloningFinished()));
 
