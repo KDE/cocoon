@@ -2,3 +2,6 @@
 # build directories
 build
 qtcreator-build
+
+# generated documentation
+doc
