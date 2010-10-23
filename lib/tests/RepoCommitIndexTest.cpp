@@ -44,14 +44,14 @@ class RepoCommitIndexTest : public GitTestBase
 
 		}
 
-		void shouldCommitWithOutMessage() {
+		void shouldNotCommitWithOutMessage() {
 			repo->stageFiles(QStringList() << pathTo("some_file.txt"));
 
 			QVERIFY(!repo->status()->forFile("some_file.txt").isEmpty());
 
 			repo->commitIndex("");
 
-			QCOMPARE(repo->commits().size(), 2);
+			QCOMPARE(repo->commits().size(), 1);
 		}
 
 		void shouldCommitWithMessage() {
@@ -59,14 +59,6 @@ class RepoCommitIndexTest : public GitTestBase
 			repo->commitIndex("Added some file.");
 
 			QCOMPARE(repo->commits().size(), 2);
-		}
-
-		void commitWithoutMessageShouldHaveCorrectMessage() {
-			repo->stageFiles(QStringList() << pathTo("some_file.txt"));
-			repo->commitIndex("");
-
-			/** @todo This will fail for now, as KProcess has a bug handling empty arguments. */
-			QCOMPARE(repo->commits()[0]->message(), QLatin1String(""));
 		}
 
 		void commitWithMessageShouldHaveCorrectMessage() {
