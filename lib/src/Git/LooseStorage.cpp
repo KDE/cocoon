@@ -159,7 +159,7 @@ void LooseStorage::reset()
 
 const QString LooseStorage::sourceFor(const Id &id)
 {
-	Q_ASSERT(!id.isNull());
+	Q_ASSERT(id.isValid());
 	QString idDirPath  = id.toSha1String().left(2);
 	QString idFilePath = id.toSha1String().mid(2);
 

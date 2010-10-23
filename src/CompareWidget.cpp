@@ -102,10 +102,10 @@ void CompareWidget::showCurrentBranch()
 
 void CompareWidget::updateComparison()
 {
-	if (m_commitAId.isNull()) {
+	if (!m_commitAId.isValid()) {
 		m_commitAId = m_repo->commits(m_repo->currentHead().name()).first()->id();
 	}
-	if (m_commitBId.isNull()) {
+	if (!m_commitBId.isValid()) {
 		m_commitBId = m_repo->commits(m_repo->currentHead().name()).first()->id();
 	}
 
