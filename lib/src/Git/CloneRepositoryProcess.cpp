@@ -35,8 +35,7 @@ CloneRepositoryProcess::CloneRepositoryProcess(const QString &fromRepo, const QS
 	setOutputChannelMode(KProcess::SeparateChannels);
 	setEnvironment(QProcess::systemEnvironment());
 
-	// -v needed for progress reports
-	setProgram("git", QStringList() << "clone" << "-v" << m_fromRepo << m_toDirectory);
+	setProgram("git", QStringList() << "clone" << "--progress" << m_fromRepo << m_toDirectory);
 
 	// progress is written to stderr
 	connect(this, SIGNAL(readyReadStandardError()), this, SLOT(slotReadyReadStandardError()));
