@@ -42,6 +42,7 @@ endif()
 ########### GUI ###########
 if(BUILD_GUI)
 	add_subdirectory( src )
+	add_subdirectory( icons )
 endif()
 
 message(STATUS)
