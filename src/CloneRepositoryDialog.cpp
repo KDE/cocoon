@@ -44,7 +44,7 @@ CloneRepositoryDialog::CloneRepositoryDialog(QWidget *parent)
 	setWindowIcon(KIcon("git-repo-clone"));
 	ui->cancelButton->setIcon(KIcon("dialog-cancel"));
 	ui->cloneButton->setIcon(KIcon("git-repo-clone"));
-	ui->cloningFinishedIconLabel->setPixmap(KIcon("git-clone-waiting").pixmap(32));
+	ui->cloningFinishedIconLabel->setPixmap(KIcon("git-clone-waiting").pixmap(64));
 	ui->cloningIconLabel->setPixmap(KIcon("git-repo-clone").pixmap(128));
 	ui->compressingObjectsIconLabel->setPixmap(KIcon("git-clone-task-waiting").pixmap(32));
 	ui->countingObjectsIconLabel->setPixmap(KIcon("git-clone-task-waiting").pixmap(32));
