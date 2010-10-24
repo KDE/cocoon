@@ -16,6 +16,12 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * @file
+ * @author Riyad Preukschas <riyad@informatik.uni-bremen.de>
+ * @short A Git commit object.
+ */
+
 #ifndef COMMIT_H
 #define COMMIT_H
 
@@ -44,6 +50,9 @@ typedef QList<Commit*>  CommitList;
 
 
 
+/**
+ * @short A Git commit object.
+ */
 class KDE_EXPORT Commit : public RawObject
 {
 	Q_OBJECT

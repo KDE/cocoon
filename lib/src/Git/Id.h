@@ -19,8 +19,7 @@
 /**
  * @file
  * @author Riyad Preukschas <riyad@informatik.uni-bremen.de>
- *
- * A Git object's id.
+ * @short A Git object's id.
  */
 
 #ifndef ID_H
