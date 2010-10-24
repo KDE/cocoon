@@ -79,8 +79,8 @@ class CommitPopulationTest : public GitTestBase
 			QStringList rawData;
 			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
 			rawData << "parent abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d";
-			rawData << "author Me 1234567890 +0100";
-			rawData << "committer You 1234567890 +0100";
+			rawData << "author Me 1234567890 -0230";
+			rawData << "committer You 1234567890 -0230";
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
@@ -92,8 +92,8 @@ class CommitPopulationTest : public GitTestBase
 		void shouldPopulateNoParentCorrectly() {
 			QStringList rawData;
 			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
-			rawData << "author Me 1234567890 +0100";
-			rawData << "committer You 1234567890 +0100";
+			rawData << "author Me 1234567890 -0230";
+			rawData << "committer You 1234567890 -0230";
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
@@ -106,8 +106,8 @@ class CommitPopulationTest : public GitTestBase
 			QStringList rawData;
 			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
 			rawData << "parent abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d";
-			rawData << "author Me 1234567890 +0100";
-			rawData << "committer You 1234567890 +0100";
+			rawData << "author Me 1234567890 -0230";
+			rawData << "committer You 1234567890 -0230";
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
@@ -123,8 +123,8 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "parent abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d";
 			rawData << "parent 6421f09a627d8ea6a85a9155e481cae7ed483b50";
 			rawData << "parent 4262f0d5b0d062a0d655f16c2fc372c92689c853";
-			rawData << "author Me 1234567890 +0100";
-			rawData << "committer You 1234567890 +0100";
+			rawData << "author Me 1234567890 -0230";
+			rawData << "committer You 1234567890 -0230";
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
@@ -140,8 +140,8 @@ class CommitPopulationTest : public GitTestBase
 			QStringList rawData;
 			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
 			rawData << "parent abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d";
-			rawData << "author Me 1234567890 +0100";
-			rawData << "committer You 1234567890 +0100";
+			rawData << "author Me 1234567890 -0230";
+			rawData << "committer You 1234567890 -0230";
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
@@ -154,8 +154,8 @@ class CommitPopulationTest : public GitTestBase
 			QStringList rawData;
 			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
 			rawData << "parent abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d";
-			rawData << "author Me <me@some.tld> 1234567890 +0100";
-			rawData << "committer You <you@some.tld> 1234567890 +0100";
+			rawData << "author Me <me@some.tld> 1234567890 -0230";
+			rawData << "committer You <you@some.tld> 1234567890 -0230";
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
@@ -168,8 +168,8 @@ class CommitPopulationTest : public GitTestBase
 			QStringList rawData;
 			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
 			rawData << "parent abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d";
-			rawData << "author Me 1234567890 +0100";
-			rawData << "committer You 1234567890 +0100";
+			rawData << "author Me 1234567890 -0230";
+			rawData << "committer You 1234567890 -0230";
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
@@ -177,16 +177,17 @@ class CommitPopulationTest : public GitTestBase
 
 			KDateTime authoredAt;
 			authoredAt.setTime_t(1234567890);
-			authoredAt = authoredAt.addSecs(3600/*==1h*/);
+			authoredAt.setTimeSpec(KDateTime::Spec(KDateTime::OffsetFromUTC, -9000/*==2,5h*/));
 			QCOMPARE(commit->authoredAt().toString(), authoredAt.toString());
+			QCOMPARE(commit->authoredAt().utcOffset(), -9000);
 		}
 
 		void shouldPopulateCommitterCorrectly() {
 			QStringList rawData;
 			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
 			rawData << "parent abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d";
-			rawData << "author Me 1234567890 +0100";
-			rawData << "committer You 1234567890 +0100";
+			rawData << "author Me 1234567890 -0230";
+			rawData << "committer You 1234567890 -0230";
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
@@ -199,8 +200,8 @@ class CommitPopulationTest : public GitTestBase
 			QStringList rawData;
 			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
 			rawData << "parent abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d";
-			rawData << "author Me <me@some.tld> 1234567890 +0100";
-			rawData << "committer You <you@some.tld> 1234567890 +0100";
+			rawData << "author Me <me@some.tld> 1234567890 -0230";
+			rawData << "committer You <you@some.tld> 1234567890 -0230";
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
@@ -213,8 +214,8 @@ class CommitPopulationTest : public GitTestBase
 			QStringList rawData;
 			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
 			rawData << "parent abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d";
-			rawData << "author Me 1234567890 +0100";
-			rawData << "committer You 1234567890 +0100";
+			rawData << "author Me 1234567890 -0230";
+			rawData << "committer You 1234567890 -0230";
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
@@ -222,16 +223,17 @@ class CommitPopulationTest : public GitTestBase
 
 			KDateTime committedAt;
 			committedAt.setTime_t(1234567890);
-			committedAt = committedAt.addSecs(3600/*==1h*/);
+			committedAt.setTimeSpec(KDateTime::Spec(KDateTime::OffsetFromUTC, -9000/*==2,5h*/));
 			QCOMPARE(commit->committedAt().toString(), committedAt.toString());
+			QCOMPARE(commit->committedAt().utcOffset(), -9000);
 		}
 
 		void shouldPopulateSingleLineMessageCorrectly() {
 			QStringList rawData;
 			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
 			rawData << "parent abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d";
-			rawData << "author Me 1234567890 +0100";
-			rawData << "committer You 1234567890 +0100";
+			rawData << "author Me 1234567890 -0230";
+			rawData << "committer You 1234567890 -0230";
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
@@ -244,8 +246,8 @@ class CommitPopulationTest : public GitTestBase
 			QStringList rawData;
 			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
 			rawData << "parent abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d";
-			rawData << "author Me 1234567890 +0100";
-			rawData << "committer You 1234567890 +0100";
+			rawData << "author Me 1234567890 -0230";
+			rawData << "committer You 1234567890 -0230";
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
@@ -258,8 +260,8 @@ class CommitPopulationTest : public GitTestBase
 			QStringList rawData;
 			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
 			rawData << "parent abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d";
-			rawData << "author Me 1234567890 +0100";
-			rawData << "committer You 1234567890 +0100";
+			rawData << "author Me 1234567890 -0230";
+			rawData << "committer You 1234567890 -0230";
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "More message.";
@@ -274,8 +276,8 @@ class CommitPopulationTest : public GitTestBase
 			QStringList rawData;
 			rawData << "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904";
 			rawData << "parent abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d";
-			rawData << "author Me 1234567890 +0100";
-			rawData << "committer You 1234567890 +0100";
+			rawData << "author Me 1234567890 -0230";
+			rawData << "committer You 1234567890 -0230";
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "More message.";
