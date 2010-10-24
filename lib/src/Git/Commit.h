@@ -116,6 +116,21 @@ class KDE_EXPORT Commit : public RawObject
 
 		static Commit* latestIn(const CommitList &commits);
 
+		/**
+		 * @short Parses zone offsets from string and returns the offset in seconds.
+		 *
+		 * It will parse +/-xx, +/-xxxx and +/-xx:xx offset formats.
+		 *
+		 * @code
+		 *   parseZoneOffset("-0230"); // -2,5h offset
+		 *   // will return -9000
+		 * @endcode
+		 *
+		 * @param zoneOffsetString The zone offset string.
+		 * @return The zone offset in seconds.
+		 */
+		static int parseZoneOffset(const QString &zoneOffsetString);
+
 	private:
 		QSharedDataPointer<CommitPrivate> d;
 

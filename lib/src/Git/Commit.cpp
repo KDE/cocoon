@@ -286,6 +286,36 @@ const CommitList Commit::parents()
 	return commits;
 }
 
+int Commit::parseZoneOffset(const QString &zoneOffsetString)
+{
+	int zoneOffsetSeconds = 0;
+	int hours = 0;
+	int minutes = 0;
+
+	// first  2 digits == hours
+	hours = zoneOffsetString.mid(1,2).toInt();
+
+	if (zoneOffsetString.size() == 5) { // assumes +/-xxxx format
+		// second 2 digits == minutes
+		minutes = zoneOffsetString.mid(3,2).toInt();
+	} else if (zoneOffsetString.size() == 6) { // assumes +/-xx:xx format
+		Q_ASSERT(zoneOffsetString.mid(3,1) == ":");
+		// second 2 digits == minutes
+		minutes = zoneOffsetString.mid(4,2).toInt();
+	} else if (zoneOffsetString.size() == 3) { // assumes +/-xx format
+		// nothing to do
+	} else {
+		kDebug() << "Error parsing zone offset" << zoneOffsetString;
+		return 0;
+	}
+
+	zoneOffsetSeconds += 3600*hours;
+	zoneOffsetSeconds +=   60*minutes;
+	zoneOffsetSeconds *= zoneOffsetString.startsWith('+') ? 1 : -1; // adjust to +/- sign
+
+	return zoneOffsetSeconds;
+}
+
 const QString& Commit::summary()
 {
 	fillFromString(this, data());
