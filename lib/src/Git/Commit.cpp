@@ -154,11 +154,9 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 	QString author;
 	KDateTime authoredAt;
 	if (!lines.isEmpty() && lines.first().startsWith("author ")) {
-		QString zoneOffset;
-
 		foreach (const QString part, lines.takeFirst().mid(qstrlen("author "), -1).split(" ")) {
 			if (part.contains(QRegExp("^[+-]\\d{4}$"))) {
-				zoneOffset = part;
+				authoredAt.setTimeSpec(KDateTime::Spec(KDateTime::OffsetFromUTC, parseZoneOffset(part)));
 			} else if (part.contains(QRegExp("^\\d{9,11}$"))) {
 				authoredAt.setTime_t(part.toLong()); // UTC time
 			} else {
@@ -168,8 +166,6 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 				author += part;
 			}
 		}
-
-		/** @todo add zone offset */
 	}
 	commit->d->author = author;
 	commit->d->authoredAt = authoredAt;
@@ -177,11 +173,9 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 	QString committer;
 	KDateTime committedAt;
 	if (!lines.isEmpty() && lines.first().startsWith("committer ")) {
-		QString zoneOffset;
-
 		foreach (const QString part, lines.takeFirst().mid(qstrlen("committer "), -1).split(" ")) {
 			if (part.contains(QRegExp("^[+-]\\d{4}$"))) {
-				zoneOffset = part;
+				committedAt.setTimeSpec(KDateTime::Spec(KDateTime::OffsetFromUTC, parseZoneOffset(part)));
 			} else if (part.contains(QRegExp("^\\d{9,11}$"))) {
 				committedAt.setTime_t(part.toLong()); // UTC time
 			} else {
@@ -191,8 +185,6 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 				committer += part;
 			}
 		}
-
-		/** @todo add zone offset */
 	}
 	commit->d->committer = committer;
 	commit->d->committedAt = committedAt;
