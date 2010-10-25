@@ -358,8 +358,8 @@ DvcsJob::JobStatus GitRunner::commit(const QStringList &options, const QStringLi
 	if (!options.isEmpty()) {
 		*job << options;
 	}
-	*job << "--";
 	if (!files.isEmpty()) {
+		*job << "--";
 		*job << files;
 	}
 

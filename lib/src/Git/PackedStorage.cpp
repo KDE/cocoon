@@ -17,6 +17,7 @@
 */
 
 #include "PackedStorage.h"
+#include "PackedStorage_p.h"
 
 #include "PackedStorageObject.h"
 #include "RawObject.h"
@@ -103,39 +104,43 @@ PackedStorage::~PackedStorage()
 
 
 
-const QStringList PackedStorage::allIds()
+const QList<Id> PackedStorage::allIds()
 {
-	switch(d->indexVersion) {
-	case 2:
-		return allIds_v2();
-	default:
-		return allIds_v1();
+	if (d->ids.isEmpty()) {
+		switch(d->indexVersion) {
+		case 2:
+			d->ids = allIds_v2();
+			break;
+		default:
+			d->ids = allIds_v1();
+			break;
+		}
 	}
+
+	return d->ids;
 }
 
-const QStringList PackedStorage::allIds_v1()
+const QList<Id> PackedStorage::allIds_v1()
 {
-	QStringList ids;
+	QList<Id> ids;
 
 	int pos = indexV1_OffsetTableStart + OffsetSize;
 	for(uint i=0; i < d->size; ++i) {
-		QString id = readIndexFrom(pos, Sha1Size).toHex();
+		ids << Id(readIndexFrom(pos, Sha1Size).toHex(), *this);
 		pos += indexV1_OffsetTableEntrySize;
-		ids << id;
 	}
 
 	return ids;
 }
 
-const QStringList PackedStorage::allIds_v2()
+const QList<Id> PackedStorage::allIds_v2()
 {
-	QStringList ids;
+	QList<Id> ids;
 
 	int pos = indexV2_Sha1TableStart;
 	for(uint i=0; i < d->size; ++i) {
-		QString id = readIndexFrom(pos, Sha1Size).toHex();
+		ids << Id(readIndexFrom(pos, Sha1Size).toHex(), *this);
 		pos += Sha1Size;
-		ids << id;
 	}
 
 	return ids;
@@ -154,15 +159,15 @@ const QStringList PackedStorage::allNamesIn(const Repo &repo)
 	return names;
 }
 
-quint32 PackedStorage::dataOffsetFor(const QString &id)
+quint32 PackedStorage::dataOffsetFor(const Id &id)
 {
-	quint8 slot = QByteArray::fromHex(id.toLatin1())[0];
+	quint8 slot = id.toBinarySha1()[0];
 
 	quint32 first = d->indexDataOffsets[slot];
 	quint32 last = d->indexDataOffsets[slot+1];
 	while (first < last) {
 		quint32 mid = (first + last) / 2;
-		QString midId = idIn(mid);
+		Id midId = idIn(mid);
 		int cmp = midId.compare(id);
 
 		if (cmp < 0) {
@@ -171,22 +176,22 @@ quint32 PackedStorage::dataOffsetFor(const QString &id)
 			last = mid;
 		} else {
 			quint32 offset = offsetIn(mid);
-			kDebug() << "found offset" << QString::number(offset, 16).prepend("0x") << "for" << id << "in" << d->name;
+			kDebug() << "found offset" << QString::number(offset, 16).prepend("0x") << "for" << id.toString() << "in" << d->name;
 			return offset;
 		}
 	}
 
-	kWarning() << "no offset for" << id << "in" << d->name;
+	kWarning() << "no offset for" << id.toString() << "in" << d->name;
 
 	return 0;
 }
 
-const QString PackedStorage::idForObjectAt(quint32 offset)
+const Id PackedStorage::idForObjectAt(quint32 offset)
 {
 	return d->idAt[offset];
 }
 
-const QString PackedStorage::idIn(quint32 slot)
+const Id PackedStorage::idIn(quint32 slot)
 {
 	quint32 pos = 0;
 	switch(d->indexVersion) {
@@ -197,7 +202,7 @@ const QString PackedStorage::idIn(quint32 slot)
 		pos = indexV1_OffsetTableStart + OffsetSize + (slot * indexV1_OffsetTableEntrySize);
 		break;
 	}
-	return readIndexFrom(pos, Sha1Size).toHex();
+	return Id(readIndexFrom(pos, Sha1Size).toHex(), *this);
 }
 
 void PackedStorage::initIndex()
@@ -228,7 +233,7 @@ void PackedStorage::initIndexOffsets()
 
 	for (int i=0; i < d->size; ++i) {
 		quint32 offset = offsetIn(i);
-		const QString &id = idIn(i);
+		const Id &id = idIn(i);
 		d->idAt[offset] = id;
 		d->offsetFor[id] = offset;
 	}
@@ -270,17 +275,17 @@ void PackedStorage::initPack()
 	Q_UNUSED(ok);
 }
 
-const QByteArray PackedStorage::objectDataFor(const QString &id)
+const QByteArray PackedStorage::objectDataFor(const Id &id)
 {
 	return packObjectFor(id)->finalData();
 }
 
-int PackedStorage::objectSizeFor(const QString &id)
+int PackedStorage::objectSizeFor(const Id &id)
 {
 	return packObjectFor(id)->finalSize();
 }
 
-ObjectType PackedStorage::objectTypeFor(const QString &id)
+ObjectType PackedStorage::objectTypeFor(const Id &id)
 {
 	return packObjectFor(id)->finalType();
 }
@@ -305,40 +310,30 @@ QFile& PackedStorage::packFile()
 	return d->packFile;
 }
 
-PackedStorageObject* PackedStorage::packObjectFor(const QString &id)
+PackedStorageObject* PackedStorage::packObjectFor(const Id &id)
 {
-	QString actualId = actualIdFor(id);
+	if (!d->packObjects.contains(id)) {
+		kDebug() << "loading pack object for" << id.toString() << "in" << d->name;
 
-	if (!d->packObjects.contains(actualId)) {
-		kDebug() << "loading pack object for" << actualId << "in" << d->name;
-
-		d->packObjects[actualId] = new PackedStorageObject(*this, dataOffsetFor(actualId), actualId);
+		d->packObjects[id] = new PackedStorageObject(*this, dataOffsetFor(id), id);
 	}
 
-	return d->packObjects[actualId];
+	return d->packObjects[id];
 }
 
-RawObject* PackedStorage::objectFor(const QString &id)
+RawObject* PackedStorage::objectFor(const Id &id)
 {
-	const QString actualId = actualIdFor(id);
-
-	if (!d->objects.contains(actualId)) {
-		kDebug() << "loading object" << actualId << "in" << d->name;
-		d->objects[actualId] = RawObject::newInstance(actualId, repo());
+	if (!d->objects.contains(id)) {
+		kDebug() << "loading object" << id.toString() << "in" << d->name;
+		d->objects[id] = RawObject::newInstance(id, repo());
 	}
 
-	return d->objects[actualId];
+	return d->objects[id];
 }
 
 const QByteArray PackedStorage::readIndexFrom(int offset, int length)
 {
 	Q_ASSERT(d->indexFile.isOpen());
-
-	/*Q_ASSERT(length != 0);
-
-	if (length < 0) {
-		length = 1;
-	}*/
 	Q_ASSERT(length > 0);
 
 	d->indexFile.seek(offset);

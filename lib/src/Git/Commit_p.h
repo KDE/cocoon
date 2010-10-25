@@ -19,7 +19,7 @@
 #ifndef COMMIT_P_H
 #define COMMIT_P_H
 
-#include <QSharedData>
+#include "RawObject_p.h"
 
 #include <KDateTime>
 
@@ -28,43 +28,56 @@
 namespace Git {
 
 class Commit;
+class Id;
 class Tree;
 
 
 
-class CommitPrivate : public QSharedData {
+class CommitPrivate : public RawObjectPrivate {
 public:
 	CommitPrivate()
-		: QSharedData()
+		: RawObjectPrivate()
 		, author()
 		, authoredAt()
 		, committer()
 		, committedAt()
 		, message()
-		, parents()
+		, parentIds()
 		, summary()
-		, tree(0)
+		, treeId()
+	{}
+	CommitPrivate(const RawObjectPrivate &other)
+		: RawObjectPrivate(other)
+		, author()
+		, authoredAt()
+		, committer()
+		, committedAt()
+		, message()
+		, parentIds()
+		, summary()
+		, treeId()
 	{}
 	CommitPrivate(const CommitPrivate &other)
-		: QSharedData(other)
+		: RawObjectPrivate(other)
 		, author(other.author)
 		, authoredAt(other.authoredAt)
 		, committer(other.committer)
 		, committedAt(other.committedAt)
 		, message(other.message)
-		, parents(other.parents)
+		, parentIds(other.parentIds)
 		, summary(other.summary)
-		, tree(other.tree)
+		, treeId(other.treeId)
 	{}
+	~CommitPrivate() {}
 
 	QString   author;
 	KDateTime authoredAt;
 	QString   committer;
 	KDateTime committedAt;
 	QString   message;
-	QList<Commit*> parents;
+	QList<Id> parentIds;
 	QString   summary;
-	Tree     *tree;
+	Id        treeId;
 };
 
 }

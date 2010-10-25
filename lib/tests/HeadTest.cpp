@@ -33,41 +33,50 @@ class HeadTest : public GitTestBase
 		void initTestCase() {
 			GitTestBase::initTestCase();
 
-			head = 0;
-
 			cloneFrom("HeadTestRepo");
 		}
 
 		void init() {
 			GitTestBase::init();
-			head = new Git::Head(*repo);
 		}
 
 		void cleanup() {
-			delete head;
 			GitTestBase::cleanup();
 		}
 
 
 
 		void shouldHaveRefsDir() {
-			QCOMPARE(head->d->refsDir.path(), QString("%1/refs/heads").arg(repo->gitDir()));
+			Git::Ref head = Git::Head(*repo);
+
+			QCOMPARE(head.d->refsDir.path(), QString("%1/refs/heads").arg(repo->gitDir()));
+		}
+
+		void shouldNotBeRemote() {
+			Git::Ref head = Git::Head(*repo);
+
+			QVERIFY(head.remote().isEmpty());
+			QVERIFY(!head.isRemote());
+		}
+
+		void shouldHaveCorrectPrefix() {
+			Git::Ref head = Git::Head("master", *repo);
+
+			QCOMPARE(head.prefix(), QLatin1String("heads"));
 		}
 
 		void shouldFindAllHeads() {
-			Git::RefList heads = Git::Head(*repo).all();
+			QList<Git::Ref> heads = Git::Head(*repo).all();
+
 			QCOMPARE(heads.size(), 2);
-			QCOMPARE(heads[0]->name(), QString("branch"));
-			QCOMPARE(heads[1]->name(), QString("master"));
+			QCOMPARE(heads[0].name(), QString("branch"));
+			QCOMPARE(heads[1].name(), QString("master"));
 		}
 
 		void shouldPointToCorrectCommit() {
 			QString id = "632851d69abeb631f6529b50452611b9915be7fb";
 
-			QCOMPARE(Git::Head("branch", *repo).commit()->id(), id);
-		}
-
-		void shouldFindCurrentHead() {
+			QCOMPARE(Git::Head("branch", *repo).commit()->id().toSha1String(), id);
 		}
 };
 

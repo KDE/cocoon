@@ -41,12 +41,12 @@ class RepoCommitsCachingTest : public GitTestBase
 			Git::CommitList commits1 = repo->commits();
 			QCOMPARE(commits1.size(), 4);
 			QCOMPARE(repo->d->commits.size(), 1);
-			QVERIFY(repo->d->commits.contains(QString()));
+			QVERIFY(repo->d->commits.contains("refs/heads/master"));
 
 			Git::CommitList commits2 = repo->commits();
 			QCOMPARE(commits2.size(), 4);
 			QCOMPARE(repo->d->commits.size(), 1);
-			QVERIFY(repo->d->commits.contains(QString()));
+			QVERIFY(repo->d->commits.contains("refs/heads/master"));
 
 			QCOMPARE(commits2, commits1);
 		}
@@ -57,12 +57,12 @@ class RepoCommitsCachingTest : public GitTestBase
 			Git::CommitList commits1 = repo->commits("master");
 			QCOMPARE(commits1.size(), 4);
 			QCOMPARE(repo->d->commits.size(), 1);
-			QVERIFY(repo->d->commits.contains("master"));
+			QVERIFY(repo->d->commits.contains("refs/heads/master"));
 
 			Git::CommitList commits2 = repo->commits("branch");
 			QCOMPARE(commits2.size(), 2);
 			QCOMPARE(repo->d->commits.size(), 2);
-			QVERIFY(repo->d->commits.contains("branch"));
+			QVERIFY(repo->d->commits.contains("refs/heads/branch"));
 		}
 
 		void testCommitsReset() {

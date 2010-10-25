@@ -34,12 +34,9 @@ class KDE_EXPORT Blob : public RawObject
 	Q_OBJECT
 
 	public:
-		Blob(const QString& id, Repo &repo);
+		Blob(const Id& id, Repo &repo);
 
-	protected:
-		Blob(const QString& id, QObject *parent=0);
-
-		friend class ::BlobTest;
+	friend class ::BlobTest;
 };
 
 }

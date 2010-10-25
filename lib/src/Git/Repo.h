@@ -38,7 +38,6 @@ typedef QList<Commit*>  CommitList;
 class ObjectStorage;
 class RawObject;
 class Ref;
-typedef QList<Ref*>  RefList;
 class RepoPrivate;
 class Status;
 class Tree;
@@ -69,11 +68,12 @@ class KDE_EXPORT Repo : public QObject
 		Tree* tree(const QString &id);
 
 		void commitIndex(const QString &message, const QStringList &options = QStringList());
-		CommitList commits(const QString &branch = QString());
+		CommitList commits(const QString &branch = QString("HEAD"));
+		const Ref& currentHead();
 		QString diff(const Commit &a, const Commit &b) const;
-		Ref* head(const QString &name = QString());
-		RefList heads();
+		QList<Ref> heads();
 		const QString& gitDir() const;
+		const Ref& ref(const QString &name);
 		/** Stages files to be included in the next commit. */
 		void stageFiles(const QStringList &paths);
 		Status* status();
@@ -91,9 +91,10 @@ class KDE_EXPORT Repo : public QObject
 	public slots:
 		void reset();
 		void resetCommits();
-		void resetHeads();
+		void resetRefs();
+		void resetLooseStorage();
+		void resetPackedStorages();
 		void resetStatus();
-		void resetStorages();
 
 	signals:
 //		void currentHeadChanged();

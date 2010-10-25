@@ -16,13 +16,18 @@ MACRO(UNIT_TESTS)
 ENDMACRO(UNIT_TESTS)
 
 unit_tests(
+	IdTest
+
 # Repo
 	RepoCommitsCachingTest
 	RepoHeadsCachingTest
 	RepoStatusCachingTest
+	RepoFileStagingTest
+	RepoCommitIndexTest
 
 # Ref tests
 	HeadTest
+	RepoRefsTest
 
 # Storage and Objects
 	LooseStorageTest

@@ -16,10 +16,15 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * @file
+ * @author Riyad Preukschas <riyad@informatik.uni-bremen.de>
+ * @short A Git commit object.
+ */
+
 #ifndef COMMIT_H
 #define COMMIT_H
 
-#include "Commit_p.h"
 #include "RawObject.h"
 
 #include <KDateTime>
@@ -36,6 +41,7 @@ class CommitPopulationErrorsTest;
 namespace Git {
 
 class Commit;
+class CommitPrivate;
 class Ref;
 class Repo;
 class Tree;
@@ -44,12 +50,15 @@ typedef QList<Commit*>  CommitList;
 
 
 
+/**
+ * @short A Git commit object.
+ */
 class KDE_EXPORT Commit : public RawObject
 {
 	Q_OBJECT
 
 	public:
-		explicit Commit(const QString& id, Repo &repo);
+		explicit Commit(const Id& id, Repo &repo);
 
 		const QString&     author();
 		const KDateTime&   authoredAt();
@@ -95,9 +104,6 @@ class KDE_EXPORT Commit : public RawObject
 	// static
 		static CommitList allReachableFrom(const Ref &branch);
 
-	protected:
-		explicit Commit(const QString& id, QObject *parent=0);
-
 	private:
 	// static
 		/**
@@ -118,6 +124,21 @@ class KDE_EXPORT Commit : public RawObject
 		static void fillFromString(Commit *commit, const QString &raw);
 
 		static Commit* latestIn(const CommitList &commits);
+
+		/**
+		 * @short Parses zone offsets from string and returns the offset in seconds.
+		 *
+		 * It will parse +/-xx, +/-xxxx and +/-xx:xx offset formats.
+		 *
+		 * @code
+		 *   parseZoneOffset("-0230"); // -2,5h offset
+		 *   // will return -9000
+		 * @endcode
+		 *
+		 * @param zoneOffsetString The zone offset string.
+		 * @return The zone offset in seconds.
+		 */
+		static int parseZoneOffset(const QString &zoneOffsetString);
 
 	private:
 		QSharedDataPointer<CommitPrivate> d;

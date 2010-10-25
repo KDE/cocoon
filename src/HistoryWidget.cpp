@@ -73,7 +73,7 @@ void HistoryWidget::setRepository(Git::Repo *repo)
 
 void HistoryWidget::showCurrentBranch()
 {
-	int currentBranchIndex = ui->branchComboBox->findText(m_repo->head()->name());
+	int currentBranchIndex = ui->branchComboBox->findText(m_repo->currentHead().name());
 	ui->branchComboBox->setCurrentIndex(currentBranchIndex);
 }
 

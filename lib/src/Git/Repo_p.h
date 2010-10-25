@@ -22,6 +22,7 @@
 #include "Commit.h"
 #include "Head.h"
 #include "LooseStorage.h"
+#include "Ref.h"
 #include "Status.h"
 
 namespace Git {
@@ -32,24 +33,27 @@ public:
 		: QSharedData()
 		, commits()
 		, gitDir()
-		, heads()
+		, refs()
 		, looseStorage(0)
 		, status(0)
+		, storages()
 		, workingDir()
 	{}
 	RepoPrivate(const RepoPrivate &other)
 		: QSharedData()
 		, commits(other.commits)
 		, gitDir(other.gitDir)
-		, heads(other.heads)
+		, refs(other.refs)
 		, looseStorage(other.looseStorage)
 		, status(other.status)
+		, storages(other.storages)
 		, workingDir(other.workingDir)
 	{}
+	~RepoPrivate() {}
 
 	QHash<QString, CommitList> commits;
 	QString gitDir;
-	RefList heads;
+	QHash<QString, Ref> refs;
 	LooseStorage *looseStorage;
 	Status *status;
 	QList<ObjectStorage*> storages;

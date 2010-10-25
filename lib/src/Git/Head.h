@@ -37,12 +37,11 @@ class KDE_EXPORT Head : public Ref
 
 	public:
 		explicit Head(const QString &name, Repo &repo);
-		Head(const Head &other);
+		explicit Head(const QString &remote, const QString &name, Repo &repo);
+		Head(const Ref &other);
 
 	protected:
 		explicit Head(Repo &repo);
-
-		virtual Ref* newInstance(const QString &name, Repo &repo) const;
 
 	friend class Repo;
 	friend class ::HeadTest;

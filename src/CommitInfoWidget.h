@@ -21,6 +21,8 @@
 
 #include <QWidget>
 
+#include "Git/Id.h"
+
 namespace Git {
 	class Commit;
 }
@@ -46,7 +48,7 @@ class CommitInfoWidget : public QWidget
 		void updateView();
 
 	private:
-		Git::Commit *m_commit;
+		Git::Id m_commitId;
 		Ui::CommitInfoWidget *ui;
 };
 

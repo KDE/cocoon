@@ -53,6 +53,7 @@ Repo::Repo(const Repo &other)
 
 Repo::~Repo()
 {
+	disconnect();
 	reset();
 }
 
@@ -83,8 +84,9 @@ void Repo::commitIndex(const QString &message, const QStringList &options)
 
 	runner.commit(opts);
 
-	resetHeads();
 	resetCommits();
+	resetRefs();
+	resetLooseStorage();
 	resetStatus();
 
 	emit headsChanged();
@@ -101,11 +103,12 @@ Commit* Repo::commit(const QString &id)
 
 CommitList Repo::commits(const QString &branch)
 {
-	if (!d->commits.contains(branch)) {
-		d->commits[branch] = Commit::allReachableFrom(*head(branch));
+	Ref branchRef = ref(branch);
+	if (!d->commits.contains(branchRef.fullName())) {
+		d->commits[branchRef.fullName()] = Commit::allReachableFrom(branchRef);
 	}
 
-	return d->commits[branch];
+	return d->commits[branchRef.fullName()];
 }
 
 bool Repo::containsRepository(const QString &path)
@@ -118,12 +121,34 @@ bool Repo::containsRepository(const QString &path)
 	return runner.isValidDirectory();
 }
 
+const Ref& Repo::currentHead()
+{
+	QString head("HEAD");
+
+	if (!d->refs.contains(head)) {
+		QFile headFile(gitDir() + "/HEAD");
+		kDebug() << "reading HEAD:" << headFile.fileName();
+
+		headFile.open(QFile::ReadOnly);
+		QString headContent = headFile.readAll();
+		headFile.close();
+
+		Q_ASSERT(headContent.startsWith("ref:"));
+		QString ref = headContent.mid(5).trimmed(); // 5 == "ref: ".length
+		kDebug() << "HEAD points at:" << ref;
+
+		d->refs[head] = this->ref(ref);
+	}
+
+	return d->refs[head];
+}
+
 QString Repo::diff(const Commit &a, const Commit &b) const
 {
 	GitRunner runner;
 	runner.setDirectory(workingDir());
 
-	runner.diffCommits(a.id(), b.id());
+	runner.diffCommits(a.id().toSha1String(), b.id().toSha1String());
 
 	return runner.getResult();
 }
@@ -145,45 +170,69 @@ void Repo::init(const QString &newRepoPath)
 	}
 }
 
-Ref* Repo::head(const QString &head)
+QList<Ref> Repo::heads()
 {
-	QString name = head;
+	QList<Ref> refs;
 
-	if (name.isEmpty()) {
-		QFile head(gitDir() + "/HEAD");
-		//kDebug() << "reading HEAD:" << head.fileName();
-		head.open(QFile::ReadOnly);
-
-		/** @todo make it recognize any type of ref */
-		name = head.readAll().split('/').last().trimmed();
-
-		//kDebug() << "found head named:" << name;
-		head.close();
+	if (d->refs.isEmpty()) {
+		foreach (const Ref &head, Head(*this).all()) {
+			d->refs[head.fullName()] = head;
+		}
 	}
 
-	return new Head(name, *this);
-}
-
-RefList Repo::heads()
-{
-	if (d->heads.isEmpty()) {
-		d->heads = Head(*this).all();
+	foreach (const Ref &ref, d->refs.values()) {
+		if (!ref.isRemote() && ref.prefix() == "heads") {
+			refs << ref;
+		}
 	}
 
-	return d->heads;
+	return refs;
 }
 
 RawObject* Repo::object(const QString &id)
 {
-	return storageFor(id) ? storageFor(id)->objectFor(id) : 0;
+	ObjectStorage *storage = storageFor(id);
+	return storage ? storage->objectFor(Id(id, *storage)) : 0;
+}
+
+const Ref& Repo::ref(const QString &name)
+{
+	if (name == "HEAD") {
+		return currentHead();
+	}
+
+	QString fullName = Ref::fullNameFor(name, *this);
+	Ref ref = d->refs[fullName]; // ref is invalid if it has not been loaded yet
+
+	if (!ref.isValid() && !fullName.isEmpty()) {
+		QStringList parts = fullName.split("/");
+		Q_ASSERT(parts[0] == "refs");
+		parts.removeFirst();
+
+		if (parts.size() == 2) {
+			ref = Ref::newInstance(QString(), parts[0], parts[1], *this);
+		} else {
+			Q_ASSERT(parts.size() == 3);
+			ref = Ref::newInstance(parts[0], parts[1], parts[2], *this);
+		}
+
+		d->refs[fullName] = ref;
+	}
+
+	return d->refs[fullName];
 }
 
 void Repo::reset()
 {
 	resetCommits();
-	resetHeads();
+	resetRefs();
+	resetLooseStorage();
+	resetPackedStorages();
 	resetStatus();
-	resetStorages();
+
+	emit headsChanged();
+	emit historyChanged();
+	emit indexChanged();
 }
 
 void Repo::resetCommits()
@@ -193,13 +242,10 @@ void Repo::resetCommits()
 	}
 }
 
-void Repo::resetHeads()
+void Repo::resetRefs()
 {
-	if (!d->heads.isEmpty()) {
-		foreach (Ref *ref, heads()) {
-			delete ref;
-		}
-		d->heads.clear();
+	if (!d->refs.isEmpty()) {
+		d->refs.clear();
 	}
 }
 
@@ -212,7 +258,12 @@ void Repo::resetStatus()
 	}
 }
 
-void Repo::resetStorages()
+void Repo::resetLooseStorage()
+{
+	d->looseStorage->reset();
+}
+
+void Repo::resetPackedStorages()
 {
 	if (!d->storages.isEmpty()) {
 		foreach (ObjectStorage *storage, d->storages) {
@@ -220,12 +271,6 @@ void Repo::resetStorages()
 		}
 	}
 	d->storages.clear();
-
-
-	if (d->looseStorage) {
-		d->looseStorage->deleteLater();
-		d->looseStorage = 0;
-	}
 }
 
 void Repo::stageFiles(const QStringList &paths)

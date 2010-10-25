@@ -21,8 +21,9 @@
 
 #include <QWidget>
 
+#include "Git/Id.h"
+
 namespace Git {
-	class Commit;
 	class Repo;
 }
 
@@ -62,8 +63,8 @@ class CompareWidget : public QWidget
 		GitBranchesModel *m_branchesModel;
 		GitHistoryModel *m_historyAModel;
 		GitHistoryModel *m_historyBModel;
-		const Git::Commit *m_commitA;
-		const Git::Commit *m_commitB;
+		Git::Id m_commitAId;
+		Git::Id m_commitBId;
 		Git::Repo *m_repo;
 		Ui::CompareWidget *ui;
 };

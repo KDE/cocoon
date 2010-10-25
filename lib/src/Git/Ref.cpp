@@ -17,6 +17,9 @@
 */
 
 #include "Ref.h"
+#include "Ref_p.h"
+
+#include "Head.h"
 
 #include <KDebug>
 
@@ -24,30 +27,29 @@ using namespace Git;
 
 
 
+Ref::Ref()
+	: QObject()
+	, d(new RefPrivate)
+{
+}
+
 Ref::Ref(const Ref &other)
-	: QObject(other.parent())
+	: QObject()
 	, d(other.d)
 {
 }
 
-Ref::Ref(const QString &prefix, Repo &repo)
+Ref::Ref(const QString &remote, const QString &prefix, const QString &name, Repo &repo)
 	: QObject(&repo)
 	, d(new RefPrivate)
 {
-	d->repo = &repo;
-	d->refsDir = QDir(d->repo->gitDir());
-	d->refsDir.cd("refs");
-	d->refsDir.cd(prefix);
-}
-
-Ref::Ref(const QString &name, const QString &prefix, Repo &repo)
-	: QObject(&repo)
-	, d(new RefPrivate)
-{
+	d->remote = remote;
+	d->prefix = prefix;
 	d->name = name;
 	d->repo = &repo;
 	d->refsDir = QDir(d->repo->gitDir());
 	d->refsDir.cd("refs");
+	d->refsDir.cd(remote);
 	d->refsDir.cd(prefix);
 
 	populate();
@@ -55,13 +57,13 @@ Ref::Ref(const QString &name, const QString &prefix, Repo &repo)
 
 
 
-RefList Ref::all() const
+QList<Ref> Ref::all() const
 {
-	RefList refs;
+	QList<Ref> refs;
 
 	foreach (const QString &name, d->refsDir.entryList(QDir::Files)) {
 		//kDebug() << "ref found:" << name;
-		refs << newInstance(name, *d->repo);
+		refs << newInstance(remote(), prefix(), name, *d->repo);
 	}
 
 	return refs;
@@ -74,7 +76,61 @@ const QString& Ref::name() const
 
 Commit* Ref::commit() const
 {
-	return d->commit;
+	return d->repo->commit(d->commitId.toSha1String());
+}
+
+bool Ref::exists(const QString &name, const Repo &repo)
+{
+	return QFile::exists(QDir(repo.gitDir()).filePath(name));
+}
+
+const QString Ref::fullName() const
+{
+	if (!isValid()) {
+		return QString();
+	}
+
+	if (isRemote()) {
+		return QString("refs/%3/%2/%1").arg(name()).arg(prefix()).arg(remote());
+	} else {
+		return QString("refs/%2/%1").arg(name()).arg(prefix());
+	}
+}
+
+QString Ref::fullNameFor(const QString &name, const Repo &repo)
+{
+	// see: http://www.kernel.org/pub/software/scm/git/docs/git-rev-parse.html
+	QStringList searchPaths;
+	searchPaths << "%1" << "refs/%1" << "refs/tags/%1" << "refs/heads/%1" << "refs/remotes/%1" << "refs/remotes/%1/HEAD";
+
+	foreach (QString path, searchPaths) {
+		path = path.arg(name);
+		if (exists(path, repo)) {
+			kDebug() << "Full ref name for" << name << "is" << path;
+			return path;
+		}
+	}
+
+	return QString();
+}
+
+bool Ref::isRemote() const
+{
+	return !remote().isEmpty();
+}
+
+bool Ref::isValid() const
+{
+	return !name().isEmpty();
+}
+
+Ref Ref::newInstance(const QString &remote, const QString &prefix, const QString &name, Repo &repo)
+{
+	if (prefix == "heads") {
+		return Head(remote, name, repo);
+	}
+
+	return Ref(remote, prefix, name, repo);
 }
 
 Ref& Ref::operator=(const Ref &other)
@@ -82,6 +138,11 @@ Ref& Ref::operator=(const Ref &other)
 	d = other.d;
 
 	return *this;
+}
+
+bool Ref::operator==(const Ref &other) const
+{
+	return other.d->name == d->name && other.d->prefix == d->prefix;
 }
 
 void Ref::populate()
@@ -94,9 +155,19 @@ void Ref::populate()
 	//kDebug() << "reading head:" << refFile.fileName();
 	//kDebug() << "head content:" << commitId;
 
-	d->commit = d->repo->commit(commitId);
+	d->commitId = Id(commitId, *d->repo);
 
 	refFile.close();
+}
+
+const QString& Ref::prefix() const
+{
+	return d->prefix;
+}
+
+const QString& Ref::remote() const
+{
+	return d->remote;
 }
 
 

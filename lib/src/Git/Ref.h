@@ -21,7 +21,7 @@
 
 #include <QObject>
 
-#include "Ref_p.h"
+#include "Ref_p.h" // this should not be here, but there are strange compilation errors without it
 
 #include <kdemacros.h>
 
@@ -38,8 +38,6 @@ class Ref;
 class RefPrivate;
 class Repo;
 
-typedef QList<Ref*> RefList;
-
 
 
 class KDE_EXPORT Ref : public QObject
@@ -47,20 +45,30 @@ class KDE_EXPORT Ref : public QObject
 	Q_OBJECT
 
 	public:
-		Commit* commit() const;
-		const QString& name() const;
+		explicit Ref();
+		Ref(const Ref &other);
+		explicit Ref(const QString &remote, const QString &prefix, const QString &name, Repo &repo);
 
-		RefList all() const;
+		Commit* commit() const;
+		const QString  fullName() const;
+		bool isRemote() const;
+		bool isValid() const;
+		const QString& name() const;
+		const QString& prefix() const;
+		const QString& remote() const;
+
+		QList<Ref> all() const;
 
 		Ref& operator=(const Ref &other);
+		bool operator==(const Ref &other) const;
+
+	public: //static
+		static bool exists(const QString &name, const Repo &repo);
+		static QString fullNameFor(const QString &name, const Repo &repo);
+		static Ref newInstance(const QString &remote, const QString &prefix, const QString &name, Repo &repo);
 
 	protected:
-		explicit Ref(const QString &prefix, Repo &repo);
-		explicit Ref(const QString &name, const QString &prefix, Repo &repo);
-		Ref(const Ref &other);
-
-		virtual Ref* newInstance(const QString &name, Repo &repo) const = 0;
-		virtual void populate();
+		void populate();
 
 	private:
 		QSharedDataPointer<RefPrivate> d;

@@ -62,11 +62,11 @@ class CommitListingTest : public GitTestBase
 		}
 
 		void firstCommitInListShouldBeTheRefCommit() {
-			Git::Commit* headCommit = repo->head()->commit();
-			Git::Commit* listCommit = Git::Commit::allReachableFrom(*repo->head())[0];
+			Git::Commit* headCommit = repo->currentHead().commit();
+			Git::Commit* listCommit = Git::Commit::allReachableFrom(repo->currentHead())[0];
 
-			foreach (Git::Commit *commit, Git::Commit::allReachableFrom(*repo->head())) {
-				qDebug() << commit->committedAt().toString() << commit->id() << commit->summary();
+			foreach (Git::Commit *commit, Git::Commit::allReachableFrom(repo->currentHead())) {
+				qDebug() << commit->committedAt().toString() << commit->id().toString() << commit->summary();
 			}
 
 			QCOMPARE(listCommit->id(), headCommit->id());

@@ -21,7 +21,7 @@
 
 #include <QObject>
 
-#include "ObjectStorage_p.h"
+#include "Id.h"
 #include "RawObject.h"
 
 #include <kdemacros.h>
@@ -30,6 +30,7 @@
 
 namespace Git {
 
+class ObjectStoragePrivate;
 class RawObject;
 
 
@@ -41,18 +42,20 @@ class KDE_EXPORT ObjectStorage : public QObject
 	public:
 		explicit ObjectStorage(Repo &repo);
 		ObjectStorage(const ObjectStorage &other);
+		~ObjectStorage();
 
 		Repo& repo() const;
 
 		const QString actualIdFor(const QString &shortId);
-		virtual const QStringList allIds() = 0;
+		virtual const QList<Id> allIds() = 0;
 		virtual QList<RawObject*> allObjects();
 		virtual QList<RawObject*> allObjectsByType(const ObjectType type);
+		virtual bool contains(const Id &id);
 		virtual bool contains(const QString &id);
-		virtual const QByteArray objectDataFor(const QString &id) = 0;
-		virtual RawObject*       objectFor(const QString &id) = 0;
-		virtual int              objectSizeFor(const QString &id) = 0;
-		virtual ObjectType       objectTypeFor(const QString &id) = 0;
+		virtual const QByteArray objectDataFor(const Id &id) = 0;
+		virtual RawObject*       objectFor(const Id &id) = 0;
+		virtual int              objectSizeFor(const Id &id) = 0;
+		virtual ObjectType       objectTypeFor(const Id &id) = 0;
 
 	protected:
 	// static

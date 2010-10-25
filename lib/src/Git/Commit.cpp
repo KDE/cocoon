@@ -17,12 +17,14 @@
 */
 
 #include "Commit.h"
+#include "Commit_p.h"
 
 #include "gitrunner.h"
 
 #include "ObjectStorage.h"
 #include "Ref.h"
 #include "Repo.h"
+#include "Tree.h"
 
 #include <QStringList>
 
@@ -30,15 +32,9 @@ using namespace Git;
 
 
 
-Commit::Commit(const QString &id, QObject *parent)
-	: RawObject(id, parent)
-	, d(new CommitPrivate)
-{
-}
-
-Commit::Commit(const QString& id, Repo &repo)
+Commit::Commit(const Id& id, Repo &repo)
 	: RawObject(id, repo)
-	, d(new CommitPrivate)
+	, d(new CommitPrivate(*RawObject::d))
 {
 }
 
@@ -66,13 +62,13 @@ QStringList Commit::childrenOf(const Commit &commit, const QStringList &refs)
 
 	QStringList commits;
 	commits << refs;
-	commits << QString("^%1^@").arg(commit.id());
+	commits << QString("^%1^@").arg(commit.id().toSha1String());
 
 	runner.revList(opts, commits);
 
 	QStringList revList = runner.getResult().split("\n");
 	revList.removeLast();
-	int revIndexForCommit = revList.indexOf(QRegExp(QString("^%1 .*$").arg(commit.id())));
+	int revIndexForCommit = revList.indexOf(QRegExp(QString("^%1 .*$").arg(commit.id().toSha1String())));
 	if (revIndexForCommit != -1) {
 		const QString &revLineForCommit = revList[revIndexForCommit];
 
@@ -86,20 +82,20 @@ CommitList Commit::childrenOn(const QStringList &refs) const
 {
 	QStringList actualRefs(refs);
 	if (actualRefs.isEmpty()) {
-		actualRefs << repo().head()->name();
+		actualRefs << repo().currentHead().name();
 	}
 
 	// used for caching the result
 	static QHash<QString, CommitList> childrenByRefs;
 
-	QString refKey = id() + ": " + actualRefs.join(" ");
+	QString refKey = id().toSha1String() + ": " + actualRefs.join(" ");
 
 	if (!childrenByRefs.contains(refKey)) {
 		QStringList childrenIds = childrenOf(*this, actualRefs);
 
 		CommitList children;
 		foreach (const QString &id, childrenIds) {
-			children << new Commit(id, repo());
+			children << new Commit(Id(id, repo()), repo());
 		}
 
 		childrenByRefs[refKey] = children;
@@ -124,45 +120,43 @@ const QString Commit::diff() const
 {
 	GitRunner runner;
 	runner.setDirectory(repo().workingDir());
-	runner.commitDiff(id());
+	runner.commitDiff(id().toSha1String());
 	return runner.getResult();
 }
 
 void Commit::fillFromString(Commit *commit, const QString &raw)
 {
 	// if commit has already been filled
-	if (commit->d->tree || !commit->d->message.isEmpty()) {
+	if (commit->d->treeId.exists() || !commit->d->message.isEmpty()) {
 		return;
 	}
 
-	kDebug() << "fill commit" << commit->id();
+	kDebug() << "fill commit" << commit->id().toString();
 
 	QStringList lines = raw.split("\n");
 
-	Tree *tree = 0;
+	Id treeId;
 	if (!lines.isEmpty() && lines.first().startsWith("tree ")) {
-		QString treeId = lines.takeFirst().mid(qstrlen("tree "), -1);
-		tree = commit->repo().tree(treeId);
+		QString treeIdString = lines.takeFirst().mid(qstrlen("tree "), -1);
+		treeId = commit->repo().tree(treeIdString)->id();
 	}
-	commit->d->tree = tree;
+	commit->d->treeId = treeId;
 
-	CommitList parents;
+	QList<Id> parentIds;
 	while (!lines.isEmpty() && lines.first().startsWith("parent ")) {
-		QString parentId = lines.takeFirst().mid(qstrlen("parent "), -1);
-		parents << commit->repo().commit(parentId);
+		QString parentIdString = lines.takeFirst().mid(qstrlen("parent "), -1);
+		parentIds << commit->repo().commit(parentIdString)->id();
 	}
-	commit->d->parents = parents;
+	commit->d->parentIds = parentIds;
 
 	QRegExp actorRegExp("^(.*) (\\d+) ([+-]\\d+)$");
 
 	QString author;
 	KDateTime authoredAt;
 	if (!lines.isEmpty() && lines.first().startsWith("author ")) {
-		QString zoneOffset;
-
 		foreach (const QString part, lines.takeFirst().mid(qstrlen("author "), -1).split(" ")) {
 			if (part.contains(QRegExp("^[+-]\\d{4}$"))) {
-				zoneOffset = part;
+				authoredAt.setTimeSpec(KDateTime::Spec(KDateTime::OffsetFromUTC, parseZoneOffset(part)));
 			} else if (part.contains(QRegExp("^\\d{9,11}$"))) {
 				authoredAt.setTime_t(part.toLong()); // UTC time
 			} else {
@@ -172,8 +166,6 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 				author += part;
 			}
 		}
-
-		/** @todo add zone offset */
 	}
 	commit->d->author = author;
 	commit->d->authoredAt = authoredAt;
@@ -181,11 +173,9 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 	QString committer;
 	KDateTime committedAt;
 	if (!lines.isEmpty() && lines.first().startsWith("committer ")) {
-		QString zoneOffset;
-
 		foreach (const QString part, lines.takeFirst().mid(qstrlen("committer "), -1).split(" ")) {
 			if (part.contains(QRegExp("^[+-]\\d{4}$"))) {
-				zoneOffset = part;
+				committedAt.setTimeSpec(KDateTime::Spec(KDateTime::OffsetFromUTC, parseZoneOffset(part)));
 			} else if (part.contains(QRegExp("^\\d{9,11}$"))) {
 				committedAt.setTime_t(part.toLong()); // UTC time
 			} else {
@@ -195,8 +185,6 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 				committer += part;
 			}
 		}
-
-		/** @todo add zone offset */
 	}
 	commit->d->committer = committer;
 	commit->d->committedAt = committedAt;
@@ -281,7 +269,43 @@ const QString& Commit::message()
 const CommitList Commit::parents()
 {
 	fillFromString(this, data());
-	return d->parents;
+
+	CommitList commits;
+	foreach (const Id &id, d->parentIds) {
+		commits << qobject_cast<Commit*>(id.object());
+	}
+
+	return commits;
+}
+
+int Commit::parseZoneOffset(const QString &zoneOffsetString)
+{
+	int zoneOffsetSeconds = 0;
+	int hours = 0;
+	int minutes = 0;
+
+	// first  2 digits == hours
+	hours = zoneOffsetString.mid(1,2).toInt();
+
+	if (zoneOffsetString.size() == 5) { // assumes +/-xxxx format
+		// second 2 digits == minutes
+		minutes = zoneOffsetString.mid(3,2).toInt();
+	} else if (zoneOffsetString.size() == 6) { // assumes +/-xx:xx format
+		Q_ASSERT(zoneOffsetString.mid(3,1) == ":");
+		// second 2 digits == minutes
+		minutes = zoneOffsetString.mid(4,2).toInt();
+	} else if (zoneOffsetString.size() == 3) { // assumes +/-xx format
+		// nothing to do
+	} else {
+		kDebug() << "Error parsing zone offset" << zoneOffsetString;
+		return 0;
+	}
+
+	zoneOffsetSeconds += 3600*hours;
+	zoneOffsetSeconds +=   60*minutes;
+	zoneOffsetSeconds *= zoneOffsetString.startsWith('+') ? 1 : -1; // adjust to +/- sign
+
+	return zoneOffsetSeconds;
 }
 
 const QString& Commit::summary()
@@ -293,7 +317,8 @@ const QString& Commit::summary()
 const Tree* Commit::tree()
 {
 	fillFromString(this, data());
-	return d->tree;
+
+	return qobject_cast<Tree*>(d->treeId.object());
 }
 
 #include "Commit.moc"

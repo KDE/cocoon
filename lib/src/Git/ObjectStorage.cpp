@@ -17,6 +17,7 @@
 */
 
 #include "ObjectStorage.h"
+#include "ObjectStorage_p.h"
 
 #include "RawObject.h"
 
@@ -41,6 +42,10 @@ ObjectStorage::ObjectStorage(const ObjectStorage &other)
 {
 }
 
+ObjectStorage::~ObjectStorage()
+{
+}
+
 
 
 
@@ -48,11 +53,14 @@ ObjectStorage::ObjectStorage(const ObjectStorage &other)
 const QString ObjectStorage::actualIdFor(const QString &shortId)
 {
 	if(shortId.size() < 40) {
-		foreach(const QString &idFromList, allIds()) {
-			if (idFromList.startsWith(shortId)) {
-				return idFromList;
+		/** @todo make the search more intelligent. allIds() should return a sorted list. */
+		foreach(const Id &idFromList, allIds()) {
+			if (idFromList.toSha1String().startsWith(shortId)) {
+				return idFromList.toSha1String();
 			}
 		}
+
+		return QString();
 	}
 
 	Q_ASSERT(shortId.size() == 40);
@@ -64,7 +72,7 @@ QList<RawObject*> ObjectStorage::allObjects()
 {
 	QList<RawObject*> objects;
 
-	foreach (const QString &id, allIds()) {
+	foreach (const Id &id, allIds()) {
 		objects << objectFor(id);
 	}
 
@@ -84,9 +92,23 @@ QList<RawObject*> ObjectStorage::allObjectsByType(const ObjectType type)
 	return objects;
 }
 
+bool ObjectStorage::contains(const Id &id)
+{
+	return allIds().contains(id);
+}
+
 bool ObjectStorage::contains(const QString &id)
 {
-	return allIds().contains(actualIdFor(id));
+	QString actualId = actualIdFor(id);
+
+	/** @todo make the search more intelligent. allIds() should return a sorted list. */
+	foreach (const Id &idInList, allIds()) {
+		if (idInList == actualId) {
+			return true;
+		}
+	}
+
+	return false;
 }
 
 const QByteArray ObjectStorage::inflate(QByteArray deflatedData)

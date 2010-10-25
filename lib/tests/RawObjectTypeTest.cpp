@@ -21,6 +21,7 @@
 #include "Git/Commit.h"
 #include "Git/LooseStorage.h"
 #include "Git/RawObject.h"
+#include "Git/RawObject_p.h"
 
 
 
@@ -31,10 +32,17 @@ class RawObjectTypeTest : public GitTestBase
 	Git::RawObject *object;
 
 	private slots:
+		void initTestCase() {
+			GitTestBase::initTestCase();
+
+			cloneFrom("RawObjectTestRepo");
+		}
+
 		void init() {
 			GitTestBase::init();
 
-			object = new Git::RawObject("1234567", 0);
+			Git::Id id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *repo);
+			object = new Git::RawObject(id, *repo);
 		}
 
 		void cleanup() {

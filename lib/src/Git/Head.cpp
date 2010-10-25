@@ -24,26 +24,24 @@ using namespace Git;
 
 
 
-Head::Head(const Head &other)
+Head::Head(const Ref &other)
 	: Ref(other)
 {
 }
 
 Head::Head(Repo &repo)
-	: Ref("heads", repo)
+	: Ref(QString(), "heads", QString(), repo)
 {
 }
 
 Head::Head(const QString &name, Repo &repo)
-	: Ref(name, "heads", repo)
+	: Ref(QString(), "heads", name, repo)
 {
 }
 
-
-
-Ref* Head::newInstance(const QString &name, Repo &repo) const
+Head::Head(const QString &remote, const QString &name, Repo &repo)
+	: Ref(remote, "heads", name, repo)
 {
-	return new Head(name, repo);
 }
 
 

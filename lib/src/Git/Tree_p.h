@@ -19,7 +19,7 @@
 #ifndef TREE_P_H
 #define TREE_P_H
 
-#include <QSharedData>
+#include "RawObject_p.h"
 
 #include <QHash>
 
@@ -31,20 +31,27 @@ class Tree;
 
 
 
-class TreePrivate : public QSharedData {
+class TreePrivate : public RawObjectPrivate {
 public:
 	TreePrivate()
-		: QSharedData()
+		: RawObjectPrivate()
+		, entries()
+		, entryModes()
+		, entryNames()
+	{}
+	TreePrivate(const RawObjectPrivate &other)
+		: RawObjectPrivate(other)
 		, entries()
 		, entryModes()
 		, entryNames()
 	{}
 	TreePrivate(const TreePrivate &other)
-		: QSharedData(other)
+		: RawObjectPrivate(other)
 		, entries(other.entries)
 		, entryModes(other.entryModes)
 		, entryNames(other.entryNames)
 	{}
+	~TreePrivate() {}
 
 	QList<RawObject*>       entries;
 	QHash<QString, QString> entryModes;

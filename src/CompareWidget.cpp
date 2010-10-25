@@ -30,8 +30,8 @@
 
 CompareWidget::CompareWidget(QWidget *parent)
 	: QWidget(parent)
-	, m_commitA(0)
-	, m_commitB(0)
+	, m_commitAId()
+	, m_commitBId()
 	, m_repo(0)
 	, ui(new Ui::CompareWidget)
 {
@@ -66,23 +66,23 @@ void CompareWidget::loadModels()
 
 void CompareWidget::on_branchAComboBox_currentIndexChanged(const QString &branchName)
 {
-	m_historyAModel->setBranch(m_repo->head(branchName)->name());
+	m_historyAModel->setBranch(m_repo->ref(branchName).name());
 }
 
 void CompareWidget::on_branchBComboBox_currentIndexChanged(const QString &branchName)
 {
-	m_historyBModel->setBranch(m_repo->head(branchName)->name());
+	m_historyBModel->setBranch(m_repo->ref(branchName).name());
 }
 
 void CompareWidget::on_historyAView_clicked(const QModelIndex &index)
 {
-	m_commitA = m_historyAModel->mapToCommit(index);
+	m_commitAId = m_historyAModel->mapToCommit(index)->id();
 	updateComparison();
 }
 
 void CompareWidget::on_historyBView_clicked(const QModelIndex &index)
 {
-	m_commitB = m_historyBModel->mapToCommit(index);
+	m_commitBId = m_historyBModel->mapToCommit(index)->id();
 	updateComparison();
 }
 
@@ -94,7 +94,7 @@ void CompareWidget::setRepository(Git::Repo *repo)
 
 void CompareWidget::showCurrentBranch()
 {
-	int currentBranchIndex = ui->branchAComboBox->findText(m_repo->head()->name());
+	int currentBranchIndex = ui->branchAComboBox->findText(m_repo->currentHead().name());
 	ui->branchAComboBox->setCurrentIndex(currentBranchIndex);
 	ui->branchBComboBox->setCurrentIndex(currentBranchIndex);
 	updateComparison();
@@ -102,14 +102,17 @@ void CompareWidget::showCurrentBranch()
 
 void CompareWidget::updateComparison()
 {
-	if (!m_commitA) {
-		m_commitA = m_repo->commits(m_repo->head()->name()).first();
+	if (!m_commitAId.isValid()) {
+		m_commitAId = m_repo->commits(m_repo->currentHead().name()).first()->id();
 	}
-	if (!m_commitB) {
-		m_commitB = m_repo->commits(m_repo->head()->name()).first();
+	if (!m_commitBId.isValid()) {
+		m_commitBId = m_repo->commits(m_repo->currentHead().name()).first()->id();
 	}
 
-	ui->diffWidget->setDiff(m_repo->diff(*m_commitA, *m_commitB));
+	Git::Commit *commitA = qobject_cast<Git::Commit*>(m_commitAId.object());
+	Git::Commit *commitB = qobject_cast<Git::Commit*>(m_commitBId.object());
+
+	ui->diffWidget->setDiff(m_repo->diff(*commitA, *commitB));
 }
 
 #include "CompareWidget.moc"

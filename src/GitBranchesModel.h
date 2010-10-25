@@ -21,10 +21,11 @@
 
 #include <QAbstractTableModel>
 
+#include "Git/Ref.h"
+
 #include <QStringList>
 
 namespace Git {
-	class Ref;
 	class Repo;
 }
 
@@ -50,7 +51,7 @@ class GitBranchesModel : public QAbstractTableModel
 		void loadBranches();
 
 	private:
-		QList<Git::Ref*> m_branches;
+		QList<Git::Ref> m_branches;
 		Git::Repo &m_repo;
 };
 

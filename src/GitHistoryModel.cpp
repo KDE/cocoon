@@ -30,7 +30,7 @@
 
 GitHistoryModel::GitHistoryModel(Git::Repo &repo, QObject *parent)
 	: QAbstractTableModel(parent)
-	, m_branch(repo.head()->name())
+	, m_branch(repo.currentHead().name())
 	, m_commits(Git::CommitList())
 	, m_repo(repo)
 {

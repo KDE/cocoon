@@ -17,6 +17,7 @@
 */
 
 #include "RawObject.h"
+#include "RawObject_p.h"
 
 #include "Blob.h"
 #include "Commit.h"
@@ -32,15 +33,7 @@ using namespace Git;
 
 
 
-RawObject::RawObject(const QString &id, QObject *parent)
-	: QObject(parent)
-	, d(new RawObjectPrivate)
-{
-	d->id = id;
-	kWarning() << "creating object without storage:" << id;
-}
-
-RawObject::RawObject(const QString &id, Repo &repo)
+RawObject::RawObject(const Id &id, Repo &repo)
 	: QObject((QObject*)&repo)
 	, d(new RawObjectPrivate)
 {
@@ -49,12 +42,16 @@ RawObject::RawObject(const QString &id, Repo &repo)
 	populateHeader();
 }
 
+RawObject::~RawObject()
+{
+}
+
 
 
 const QByteArray& RawObject::data()
 {
 	if (d->data.isNull()) {
-		d->data = d->repo->storageFor(d->id)->objectDataFor(d->id);
+		d->data = d->id.storage().objectDataFor(d->id);
 	}
 
 	return d->data;
@@ -93,7 +90,7 @@ ObjectType RawObject::extractObjectTypeFrom(const QString &header)
 	return typeFromTypeName(header.left(header.indexOf(' ')));
 }
 
-const QString& RawObject::id() const
+const Id& RawObject::id() const
 {
 	return d->id;
 }
@@ -128,33 +125,36 @@ bool RawObject::isValidHeader(const QString &possibleHeader)
 	return possibleHeader.contains(QRegExp("^(blob|commit|tag|tree) \\d+$"));
 }
 
-RawObject* RawObject::newInstance(const QString &id, Repo &repo)
+RawObject* RawObject::newInstance(const Id &id, Repo &repo)
 {
-	ObjectStorage *storage = repo.storageFor(id);
-	QString actualId = storage->actualIdFor(id);
-	ObjectType type = storage->objectTypeFor(actualId);
+	Q_ASSERT(id.exists());
+
+	ObjectStorage &storage = id.storage();
+	ObjectType type = storage.objectTypeFor(id);
 
 	switch(type) {
 	case OBJ_BLOB:
-		return new Blob(actualId, repo);
+		return new Blob(id, repo);
 	case OBJ_COMMIT:
-		return new Commit(actualId, repo);
+		return new Commit(id, repo);
 	case OBJ_TREE:
-		return new Tree(actualId, repo);
+		return new Tree(id, repo);
 	default:
 		// as long as all types are not yet implemented
-		return new RawObject(actualId, repo);
+		return new RawObject(id, repo);
 	}
 }
 
 void RawObject::populateHeader()
 {
 	Q_ASSERT(d->repo);
-	ObjectStorage *store = d->repo->storageFor(id());
+	Q_ASSERT(id().exists());
 
-//	d->m_data = store->objectDataFor(id());
-	d->dataSize = store->objectSizeFor(id());
-	d->type = store->objectTypeFor(id());
+	ObjectStorage &store = id().storage();
+
+//	d->m_data = store.objectDataFor(id());
+	d->dataSize = store.objectSizeFor(id());
+	d->type     = store.objectTypeFor(id());
 }
 
 Repo& RawObject::repo() const

@@ -25,7 +25,7 @@
 
 CommitInfoWidget::CommitInfoWidget(QWidget *parent)
 	: QWidget(parent)
-	, m_commit(0)
+	, m_commitId()
 	, ui(new Ui::CommitInfoWidget)
 {
 	ui->setupUi(this);
@@ -46,20 +46,21 @@ void CommitInfoWidget::clear()
 
 void CommitInfoWidget::updateView()
 {
-	if (!m_commit) {
+	Git::Commit *commit = qobject_cast<Git::Commit*>(m_commitId.object());
+	if (!commit) {
 		clear();
 		return;
 	}
 
-	ui->idLabel->setText(m_commit->id());
-	ui->authorLabel->setText(i18n("%1 %2", m_commit->author(), m_commit->authoredAt().toString()));
-	ui->messageLabel->setText(m_commit->message());
-	ui->diffView->setDiff(m_commit->diff());
+	ui->idLabel->setText(m_commitId.toSha1String());
+	ui->authorLabel->setText(i18n("%1 %2", commit->author(), commit->authoredAt().toString()));
+	ui->messageLabel->setText(commit->message());
+	ui->diffView->setDiff(commit->diff());
 }
 
 void CommitInfoWidget::setCommit(Git::Commit *commit)
 {
-	m_commit = commit;
+	m_commitId = commit->id();
 	updateView();
 }
 

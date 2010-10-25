@@ -21,7 +21,7 @@
 
 #include "ObjectStorage.h"
 
-#include "PackedStorage_p.h"
+class QFile;
 
 class PackedStorageTest;
 class PackedStorageDeltifiedExtractionTest;
@@ -30,6 +30,7 @@ class PackedStorageNormalExtractionTest;
 namespace Git {
 
 class PackedStorageObject;
+class PackedStoragePrivate;
 
 
 
@@ -42,31 +43,31 @@ class KDE_EXPORT PackedStorage : public ObjectStorage
 		PackedStorage(const PackedStorage &other);
 		virtual ~PackedStorage();
 
-		const QStringList allIds();
-		const QByteArray objectDataFor(const QString &id);
-		RawObject*       objectFor(const QString &id);
-		int              objectSizeFor(const QString &id);
-		ObjectType       objectTypeFor(const QString &id);
+		const QList<Id>  allIds();
+		const QByteArray objectDataFor(const Id &id);
+		RawObject*       objectFor(const Id &id);
+		int              objectSizeFor(const Id &id);
+		ObjectType       objectTypeFor(const Id &id);
 		int              size();
 
 	// static
 		static const QStringList allNamesIn(const Repo &repo);
 
 	private:
-		const QStringList allIds_v1();
-		const QStringList allIds_v2();
-		const QString idForObjectAt(quint32 offset);
-		const QString idIn(quint32 slot);
+		const QList<Id> allIds_v1();
+		const QList<Id> allIds_v2();
+		const Id idForObjectAt(quint32 offset);
+		const Id idIn(quint32 slot);
 		void initIndex();
 		void initIndexOffsets();
 		void initIndexVersion();
 		void initIndexVersion_v1();
 		void initIndexVersion_v2();
-		quint32 dataOffsetFor(const QString &id);
+		quint32 dataOffsetFor(const Id &id);
 		void initPack();
 		quint32 offsetIn(quint32 slot);
 		QFile& packFile();
-		PackedStorageObject* packObjectFor(const QString &id);
+		PackedStorageObject* packObjectFor(const Id &id);
 		const QByteArray readIndexFrom(int offset, int length = -1);
 
 	private:
