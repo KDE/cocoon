@@ -35,6 +35,14 @@ class GitTestBase : public QObject
 	Q_OBJECT
 
 	protected:
+		/**
+		 * @brief Copies a prepared test reporitory to #workingDir.
+		 *
+		 * You can set the COCOON_GIT_TEST_REPOS_PATH environment variable to point to the directory with the test repos.
+		 * Call this once before all the test functions or before each test function depending on whether the repo gets modified in a test.
+		 *
+		 * @see initTestCase(), init()
+		 */
 		void cloneFrom(const QString &name);
 		QString newTempDirName();
 		void deleteFile(const QString &file);
@@ -43,9 +51,35 @@ class GitTestBase : public QObject
 		void writeToFile(const QString &filePath, const QByteArray &content);
 
 	protected slots:
+		/**
+		 * @brief Will be called before the first testfunction is executed
+		 *
+		 * This will reset #repo and set #workingDir to a new random temporary directory.
+		 * It will note copy the repository, you will have to do that on your own.
+		 *
+		 * @see cloneFrom()
+		 */
 		void initTestCase();
+
+		/**
+		 * @brief Will be called after the last testfunction was executed
+		 *
+		 * It will delete the temporary directory.
+		 */
 		void cleanupTestCase();
+
+		/**
+		 * @brief Will be called before each testfunction is executed
+		 *
+		 * This will create a new Git::Repo object accessible through #repo.
+		 */
 		void init();
+
+		/**
+		 * @brief Will be called after every testfunction
+		 *
+		 * This will delete the Git::Repo in #repo and reset it.
+		 */
 		void cleanup();
 
 	protected:
