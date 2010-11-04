@@ -58,6 +58,16 @@ class KDE_EXPORT Commit : public RawObject
 	Q_OBJECT
 
 	public:
+	/**
+	 * @brief Constructs a Git commit object.
+	 *
+	 * To speed up construction the commit will not be fully loaded until the first attribute access.
+	 *
+	 * @param id The commit's id.
+	 * @param repo The repo the commit is in.
+	 *
+	 * @see fillFromString()
+	 */
 		explicit Commit(const Id& id, Repo &repo);
 
 		const QString&     author();
@@ -120,6 +130,8 @@ class KDE_EXPORT Commit : public RawObject
 		 *
 		 * @param commit The commit to be populated.
 		 * @param raw The raw commit data.
+		 *
+		 * @see data()
 		 */
 		static void fillFromString(Commit *commit, const QString &raw);
 
