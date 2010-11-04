@@ -85,7 +85,7 @@ int Id::compare(const Id &other) const
 
 bool Id::exists() const
 {
-	return d->storage && d->storage->contains(*this);
+	return isValid() && d->storage && d->storage->contains(*this);
 }
 
 bool Id::isValid() const
