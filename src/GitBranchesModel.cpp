@@ -93,8 +93,9 @@ void GitBranchesModel::loadBranches()
 
 void GitBranchesModel::reset()
 {
+	beginResetModel();
 	loadBranches();
-	QAbstractItemModel::reset();
+	endResetModel();
 }
 
 int GitBranchesModel::rowCount(const QModelIndex &parent) const

@@ -128,8 +128,9 @@ Git::Commit* GitHistoryModel::mapToCommit(const QModelIndex &index) const
 
 void GitHistoryModel::reset()
 {
+	beginResetModel();
 	loadCommits();
-	QAbstractItemModel::reset();
+	endResetModel();
 }
 
 int GitHistoryModel::rowCount(const QModelIndex &parent) const
