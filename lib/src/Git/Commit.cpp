@@ -127,7 +127,7 @@ const QString Commit::diff() const
 void Commit::fillFromString(Commit *commit, const QString &raw)
 {
 	// if commit has already been filled
-	if (commit->d->treeId.exists() || !commit->d->message.isEmpty()) {
+	if (commit->d->treeId.isValid() || !commit->d->message.isEmpty()) {
 		return;
 	}
 
