@@ -16,6 +16,12 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * @file
+ * @author Riyad Preukschas <riyad@informatik.uni-bremen.de>
+ * @brief The base for all Git objects.
+ */
+
 #ifndef RAWOBJECT_H
 #define RAWOBJECT_H
 
@@ -29,6 +35,7 @@
 
 
 
+class RawObjectInstantiationTest;
 class RawObjectTest;
 class RawObjectTypeTest;
 
@@ -51,24 +58,127 @@ typedef enum {
 
 
 
+/**
+ * @brief The base for all Git objects.
+ */
 class KDE_EXPORT RawObject : public QObject
 {
 	Q_OBJECT
 
 	protected:
+		/**
+		 * @brief Constructs a basic Git object.
+		 *
+		 * This constructor should only be called from derived classes.
+		 * If you need a general way to instantiate a Git object use newInstance().
+		 *
+		 * @see newInstance()
+		 */
 		explicit RawObject(const Id& id, Repo &repo);
 
 	public:
 		virtual ~RawObject();
 
+		/**
+		 * @brief Returns the object's raw data.
+		 *
+		 * @return The object's raw data.
+		 *
+		 * @see ObjectStorage::objectDataFor()
+		 *
+		 * @todo remove caching
+		 */
 		const QByteArray& data();
-		const Id&         id() const;
-		int               size() const;
-		ObjectType        type() const;
 
+		/**
+		 * @brief Returns the object's id.
+		 *
+		 * @return The object's id.
+		 */
+		const Id& id() const;
+
+		/**
+		 * @brief Returns the object's data size.
+		 *
+		 * @return The object's data size.
+		 *
+		 * @see data()
+		 */
+		int size() const;
+
+		/**
+		 * @brief Returns the object's Git object type.
+		 *
+		 * An object can be a
+		 * - Blob
+		 * - Commit
+		 * - Tag
+		 * - Tree
+		 *
+		 * @return The object's type.
+		 *
+		 * @see isBlob(), isCommit(), isTag(), isTree()
+		 */
+		ObjectType type() const;
+
+		/**
+		 * @brief Returns whether this object is a blob.
+		 *
+		 * @return true if the object is a blob, false otherwise
+		 *
+		 * This is a convenience function.
+		 * It is equvalent to
+		 * @code
+		 *   obj.type() == OBJ_BLOB
+		 * @endcode
+		 *
+		 * @see Blob
+		 */
 		bool isBlob() const;
+
+		/**
+		 * @brief Returns whether this object is a commit.
+		 *
+		 * @return true if the object is a commit, false otherwise
+		 *
+		 * This is a convenience function.
+		 * It is equvalent to
+		 * @code
+		 *   obj.type() == OBJ_COMMIT
+		 * @endcode
+		 *
+		 * @see Commit
+		 */
 		bool isCommit() const;
+
+		/**
+		 * @brief Returns whether this object is a tag.
+		 *
+		 * @return true if the object is a tag, false otherwise
+		 *
+		 * This is a convenience function.
+		 * It is equvalent to
+		 * @code
+		 *   obj.type() == OBJ_TAG
+		 * @endcode
+		 *
+		 * @see Tag
+		 */
 		bool isTag() const;
+
+		/**
+		 * @brief Returns whether this object is a tree.
+		 *
+		 * @return true if the object is a tree, false otherwise
+		 *
+		 * This is a convenience function.
+		 * It is equvalent to
+		 * @code
+		 *   obj.type() == OBJ_TREE
+		 * @endcode
+		 *
+		 * @see Tree
+		 */
 		bool isTree() const;
 
 	// static
