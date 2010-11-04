@@ -69,7 +69,7 @@ using namespace Git;
 
 PackedStorage::PackedStorage(const QString &name, Repo &repo)
 	: ObjectStorage(repo)
-	, d(new PackedStoragePrivate)
+	, d(new PackedStoragePrivate(*ObjectStorage::d))
 {
 	d->name = name;
 	d->indexFile.setFileName(QString("%1/objects/pack/%2.idx").arg(repo.gitDir()).arg(d->name));

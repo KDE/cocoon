@@ -33,7 +33,7 @@ using namespace Git;
 
 LooseStorage::LooseStorage(Repo &repo)
 	: ObjectStorage(repo)
-	, d(new LooseStoragePrivate)
+	, d(new LooseStoragePrivate(*ObjectStorage::d))
 {
 	d->objectsDir = QDir(repo.gitDir() + "/objects");
 }
