@@ -32,8 +32,9 @@ using namespace Git;
 
 ObjectStorage::ObjectStorage(Repo &repo)
 	: QObject((QObject*)&repo)
+	, d(new ObjectStoragePrivate)
 {
-	d = new ObjectStoragePrivate(repo);
+	d->repo = &repo;
 }
 
 ObjectStorage::ObjectStorage(const ObjectStorage &other)
@@ -170,7 +171,7 @@ const QByteArray ObjectStorage::inflate(QByteArray deflatedData)
 
 Repo& ObjectStorage::repo() const
 {
-	return d->repo;
+	return *d->repo;
 }
 
 

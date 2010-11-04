@@ -27,12 +27,13 @@ class Repo;
 
 class ObjectStoragePrivate : public QSharedData {
 	public:
-		ObjectStoragePrivate(Repo &r)
+		ObjectStoragePrivate()
 			: QSharedData()
-			, repo(r)
+			, repo(0)
 		{}
+		~ObjectStoragePrivate() {}
 
-		Repo &repo;
+		Repo *repo;
 };
 
 };
