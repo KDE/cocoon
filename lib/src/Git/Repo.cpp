@@ -59,11 +59,11 @@ Repo::~Repo()
 
 
 
-Blob* Repo::blob(const QString &id)
+Blob* Repo::blob(const Id &id)
 {
-	RawObject *obj = object(id);
+	RawObject *obj = id.object();
 
-	return obj && obj->isBlob() ? static_cast<Blob*>(obj) : 0;
+	return obj && obj->isBlob() ? qobject_cast<Blob*>(obj) : 0;
 }
 
 void Repo::clone(const QString &fromRepo, const QString &toDirectory, const QStringList &options)
@@ -94,11 +94,11 @@ void Repo::commitIndex(const QString &message, const QStringList &options)
 	emit historyChanged();
 }
 
-Commit* Repo::commit(const QString &id)
+Commit* Repo::commit(const Id &id)
 {
-	RawObject *obj = object(id);
+	RawObject *obj = id.object();
 
-	return obj && obj->isCommit() ? static_cast<Commit*>(obj) : 0;
+	return obj && obj->isCommit() ? qobject_cast<Commit*>(obj) : 0;
 }
 
 CommitList Repo::commits(const QString &branch)
@@ -193,10 +193,9 @@ Id Repo::idFor(const QString &idString) {
 	return Id(idString, *this);
 }
 
-RawObject* Repo::object(const QString &id)
+RawObject* Repo::object(const Id &id)
 {
-	ObjectStorage *storage = storageFor(id);
-	return storage ? storage->objectFor(Id(id, *storage)) : 0;
+	return id.object();
 }
 
 const Ref& Repo::ref(const QString &name)
@@ -322,11 +321,11 @@ const QList<ObjectStorage*> Repo::storages()
 	return d->storages;
 }
 
-Tree* Repo::tree(const QString &id)
+Tree* Repo::tree(const Id &id)
 {
-	RawObject *obj = object(id);
+	RawObject *obj = id.object();
 
-	return obj && obj->isTree() ? static_cast<Tree*>(obj) : 0;
+	return obj && obj->isTree() ? qobject_cast<Tree*>(obj) : 0;
 }
 
 void Repo::unstageFiles(const QStringList &paths)

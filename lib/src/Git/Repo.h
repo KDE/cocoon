@@ -41,6 +41,7 @@ namespace Git {
 class Blob;
 class Commit;
 typedef QList<Commit*>  CommitList;
+class Id;
 class ObjectStorage;
 class RawObject;
 class Ref;
@@ -71,10 +72,8 @@ class KDE_EXPORT Repo : public QObject
 		Repo(const Repo &other);
 		virtual ~Repo();
 
-		Blob* blob(const QString &id);
-		Commit* commit(const QString &id);
-		RawObject* object(const QString &id);
-		Tree* tree(const QString &id);
+		Blob* blob(const Id &id);
+		Commit* commit(const Id &id);
 
 		/**
 		 * @brief Returns the proper Git::Id object for this string.
@@ -88,6 +87,12 @@ class KDE_EXPORT Repo : public QObject
 		 * @endcode
 		 */
 		Id idFor(const QString &idString);
+
+		/**
+		 * @deprecated Use Id::object() intead.
+		 */
+		RawObject* object(const Id &id);
+		Tree* tree(const Id &id);
 
 		void commitIndex(const QString &message, const QStringList &options = QStringList());
 		CommitList commits(const QString &branch = QString("HEAD"));
