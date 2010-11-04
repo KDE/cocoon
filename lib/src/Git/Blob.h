@@ -16,6 +16,12 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * @file
+ * @author Riyad Preukschas <riyad@informatik.uni-bremen.de>
+ * @brief A Git blob object.
+ */
+
 #ifndef BLOB_H
 #define BLOB_H
 
@@ -29,11 +35,20 @@ namespace Git {
 
 
 
+/**
+ * @brief A Git blobl object.
+ */
 class KDE_EXPORT Blob : public RawObject
 {
 	Q_OBJECT
 
 	public:
+		/**
+		 * @brief Constructs a Git blob object.
+		 *
+		 * @param id The blob's id.
+		 * @param repo The repo the blob is in.
+		 */
 		Blob(const Id& id, Repo &repo);
 
 	friend class ::BlobTest;

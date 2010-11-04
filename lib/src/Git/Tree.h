@@ -16,6 +16,12 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * @file
+ * @author Riyad Preukschas <riyad@informatik.uni-bremen.de>
+ * @brief A Git tree object.
+ */
+
 #ifndef TREE_H
 #define TREE_H
 
@@ -36,6 +42,9 @@ class TreePrivate;
 
 
 
+/**
+ * @brief A Git tree object.
+ */
 class KDE_EXPORT Tree : public RawObject
 {
 	Q_OBJECT

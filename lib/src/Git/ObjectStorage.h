@@ -16,6 +16,12 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * @file
+ * @author Riyad Preukschas <riyad@informatik.uni-bremen.de>
+ * @short The base for Git object storages.
+ */
+
 #ifndef OBJECTSTORAGE_H
 #define OBJECTSTORAGE_H
 
@@ -35,6 +41,10 @@ class RawObject;
 
 
 
+/**
+ * @short The base for Git object storages.
+ * @see Git::LooseStorage, Git::PackedStorage
+ */
 class KDE_EXPORT ObjectStorage : public QObject
 {
 	Q_OBJECT
@@ -52,6 +62,10 @@ class KDE_EXPORT ObjectStorage : public QObject
 		virtual QList<RawObject*> allObjectsByType(const ObjectType type);
 		virtual bool contains(const Id &id);
 		virtual bool contains(const QString &id);
+
+		/**
+		 * @brief Returns the object's raw data.
+		 */
 		virtual const QByteArray objectDataFor(const Id &id) = 0;
 		virtual RawObject*       objectFor(const Id &id) = 0;
 		virtual int              objectSizeFor(const Id &id) = 0;
