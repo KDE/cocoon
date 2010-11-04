@@ -65,7 +65,7 @@ class KDE_EXPORT Tree : public RawObject
 		const QString nameFor(const QString &id);
 
 	private:
-		QSharedDataPointer<TreePrivate> d;
+		QExplicitlySharedDataPointer<TreePrivate> d;
 
 	friend class ::TreeTest;
 };

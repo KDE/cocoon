@@ -84,7 +84,7 @@ class KDE_EXPORT RawObject : public QObject
 		Repo& repo() const;
 
 	protected:
-		QSharedDataPointer<RawObjectPrivate> d;
+		QExplicitlySharedDataPointer<RawObjectPrivate> d;
 
 	friend class ::RawObjectTest;
 	friend class ::RawObjectTypeTest;

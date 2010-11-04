@@ -71,7 +71,7 @@ class KDE_EXPORT Ref : public QObject
 		void populate();
 
 	private:
-		QSharedDataPointer<RefPrivate> d;
+		QExplicitlySharedDataPointer<RefPrivate> d;
 
 	friend class ::HeadTest;
 };

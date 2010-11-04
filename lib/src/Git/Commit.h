@@ -141,7 +141,7 @@ class KDE_EXPORT Commit : public RawObject
 		static int parseZoneOffset(const QString &zoneOffsetString);
 
 	private:
-		QSharedDataPointer<CommitPrivate> d;
+		QExplicitlySharedDataPointer<CommitPrivate> d;
 
 	friend class ::CommitListingTest;
 	friend class ::CommitMergeDetectionTest;
