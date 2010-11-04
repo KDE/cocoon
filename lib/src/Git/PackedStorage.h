@@ -71,7 +71,7 @@ class KDE_EXPORT PackedStorage : public ObjectStorage
 		const QByteArray readIndexFrom(int offset, int length = -1);
 
 	private:
-		QSharedDataPointer<PackedStoragePrivate> d;
+		QExplicitlySharedDataPointer<PackedStoragePrivate> d;
 
 	friend class PackedStorageObject;
 

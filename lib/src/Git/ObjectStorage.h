@@ -61,8 +61,8 @@ class KDE_EXPORT ObjectStorage : public QObject
 	// static
 		static const QByteArray inflate(const QByteArray deflated);
 
-	private:
-		QSharedDataPointer<ObjectStoragePrivate> d;
+	protected:
+		QExplicitlySharedDataPointer<ObjectStoragePrivate> d;
 };
 
 }

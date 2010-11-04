@@ -54,7 +54,7 @@ class KDE_EXPORT LooseStorage : public ObjectStorage
 		const QString sourceFor(const Id &id);
 
 	private:
-		QSharedDataPointer<LooseStoragePrivate> d;
+		QExplicitlySharedDataPointer<LooseStoragePrivate> d;
 
 	friend class ::LooseStorageTest;
 	friend class ::LooseStorageCachingTest;
