@@ -19,6 +19,12 @@
 #ifndef REPO_H
 #define REPO_H
 
+/**
+ * @file
+ * @author Riyad Preukschas <riyad@informatik.uni-bremen.de>
+ * @brief A Git repository.
+ */
+
 #include <QObject>
 
 #include <kdemacros.h>
@@ -53,6 +59,9 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(RepoOptions)
 
 
 
+/**
+ * @brief A Git repository.
+ */
 class KDE_EXPORT Repo : public QObject
 {
 	Q_OBJECT
@@ -101,6 +110,12 @@ class KDE_EXPORT Repo : public QObject
 		void headsChanged();
 //		void headChanged(const QString&);
 		void historyChanged();
+
+		/**
+		 * @brief This is emitted when something changes the index.
+		 *
+		 * Actions that change the index are for example stage, unstage, commit, stash, etc.
+		 */
 		void indexChanged();
 
 	private:
