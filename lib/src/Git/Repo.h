@@ -76,6 +76,19 @@ class KDE_EXPORT Repo : public QObject
 		RawObject* object(const QString &id);
 		Tree* tree(const QString &id);
 
+		/**
+		 * @brief Returns the proper Git::Id object for this string.
+		 *
+		 * This is a shorthand for Id(idString, repo) and should make your code more readable.
+		 * @code
+		 *   // instead of
+		 *   Id("1234567", repo);
+		 *   // you can now write
+		 *   repo.idFor("1234567");
+		 * @endcode
+		 */
+		Id idFor(const QString &idString);
+
 		void commitIndex(const QString &message, const QStringList &options = QStringList());
 		CommitList commits(const QString &branch = QString("HEAD"));
 		const Ref& currentHead();

@@ -189,6 +189,10 @@ QList<Ref> Repo::heads()
 	return refs;
 }
 
+Id Repo::idFor(const QString &idString) {
+	return Id(idString, *this);
+}
+
 RawObject* Repo::object(const QString &id)
 {
 	ObjectStorage *storage = storageFor(id);
