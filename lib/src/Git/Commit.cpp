@@ -138,14 +138,14 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 	Id treeId;
 	if (!lines.isEmpty() && lines.first().startsWith("tree ")) {
 		QString treeIdString = lines.takeFirst().mid(qstrlen("tree "), -1);
-		treeId = commit->repo().tree(treeIdString)->id();
+		treeId = Id(treeIdString, commit->repo());
 	}
 	commit->d->treeId = treeId;
 
 	QList<Id> parentIds;
 	while (!lines.isEmpty() && lines.first().startsWith("parent ")) {
 		QString parentIdString = lines.takeFirst().mid(qstrlen("parent "), -1);
-		parentIds << commit->repo().commit(parentIdString)->id();
+		parentIds << Id(parentIdString, commit->repo());
 	}
 	commit->d->parentIds = parentIds;
 

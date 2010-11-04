@@ -103,7 +103,7 @@ void Tree::fillFromString(Tree *tree, const QByteArray &raw)
 		QString id = raw.mid(pos, 20).toHex();
 		pos += 20; // skip the id
 
-		RawObject* entry = tree->repo().object(id);
+		RawObject* entry = tree->repo().object(tree->repo().idFor(id));
 		tree->d->entries << entry;
 		tree->d->entryModes[id] = mode;
 		tree->d->entryNames[id] = name;

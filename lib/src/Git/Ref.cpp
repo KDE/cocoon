@@ -76,7 +76,7 @@ const QString& Ref::name() const
 
 Commit* Ref::commit() const
 {
-	return d->repo->commit(d->commitId.toSha1String());
+	return d->repo->commit(d->commitId);
 }
 
 bool Ref::exists(const QString &name, const Repo &repo)
