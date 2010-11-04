@@ -89,8 +89,8 @@ void GitTestBase::init()
 
 void GitTestBase::cleanup()
 {
-	repo->reset();
 	delete repo;
+	repo = 0;
 }
 
 #include "GitTestBase.moc"
