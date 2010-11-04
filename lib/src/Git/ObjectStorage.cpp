@@ -94,7 +94,7 @@ QList<RawObject*> ObjectStorage::allObjectsByType(const ObjectType type)
 
 bool ObjectStorage::contains(const Id &id)
 {
-	return allIds().contains(id);
+	return id.isValid() ? allIds().contains(id) : false;
 }
 
 bool ObjectStorage::contains(const QString &id)
