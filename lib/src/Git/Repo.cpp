@@ -197,7 +197,7 @@ RawObject* Repo::object(const QString &id)
 
 const Ref& Repo::ref(const QString &name)
 {
-	if (name == "HEAD") {
+	if (name.isEmpty() || name == "HEAD") {
 		return currentHead();
 	}
 
