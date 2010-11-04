@@ -19,7 +19,7 @@
 /**
  * @file
  * @author Riyad Preukschas <riyad@informatik.uni-bremen.de>
- * @short A Git object's id.
+ * @brief A Git object's id.
  */
 
 #ifndef ID_H
@@ -45,7 +45,7 @@ class Repo;
 
 
 /**
- * @short A Git object's id.
+ * @brief A Git object's id.
  *
  * An object's id is a SHA1 hash of its content.
  * It is also used to uniquely identify the object in the repository.
@@ -59,6 +59,8 @@ class Repo;
  *   Id("1234567", repo)->toSha1String();
  *   // will return "1234567890123456789012345678901234567890"
  * @endcode
+ *
+ * @see Repo::idFor()
  */
 class KDE_EXPORT Id : public QObject
 {
@@ -66,7 +68,7 @@ class KDE_EXPORT Id : public QObject
 
 	public:
 		/**
-		 * @short Constructs an invalid Id.
+		 * @brief Constructs an invalid Id.
 		 *
 		 * It does not exist and has no SHA1.
 		 * It is intended for indicating an error when retuning ids.
@@ -76,12 +78,12 @@ class KDE_EXPORT Id : public QObject
 		explicit Id();
 
 		/**
-		 * @short Copy constructor.
+		 * @brief Copy constructor.
 		 */
 		Id(const Id &other);
 
 		/**
-		 * @short Constructs an object id.
+		 * @brief Constructs an object id.
 		 *
 		 * It will try to locate the storage the object is stored in.
 		 * If necessary it will find the full id of the object.
@@ -97,13 +99,17 @@ class KDE_EXPORT Id : public QObject
 		bool isIn(const ObjectStorage &storage) const;
 
 		/**
-		 * @short Checks whether the id is valid.
+		 * @brief Checks whether the id is valid.
 		 *
 		 * The id is invalid when it was constructed using the default constructor or when the object could not be found in the repo or was moved from the storage it was in once.
 		 *
 		 * @return true in case the id is valid, false otherwise
 		 */
 		bool isValid() const;
+
+		/**
+		 * @brief Returns the object represented by the id.
+		 */
 		RawObject* object() const;
 		ObjectStorage& storage() const;
 		const QByteArray toBinarySha1() const;
