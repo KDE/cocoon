@@ -66,7 +66,7 @@ void GitTestBase::initTestCase()
 {
 	repo = 0;
 
-	srand(time(0));
+	qsrand(time(0));
 
 	workingDir = newTempDirName();
 	qDebug() << "Test directory is" << workingDir;
@@ -79,7 +79,7 @@ void GitTestBase::cleanupTestCase()
 
 QString GitTestBase::newTempDirName()
 {
-	return QDir::temp().filePath("git_test_%1_%2").arg(QDateTime::currentDateTime().toTime_t()).arg(rand());
+	return QDir::temp().filePath("git_test_%1_%2").arg(QDateTime::currentDateTime().toTime_t()).arg(qrand());
 }
 
 void GitTestBase::init()
