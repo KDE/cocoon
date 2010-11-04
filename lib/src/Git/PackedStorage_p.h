@@ -19,6 +19,8 @@
 #ifndef PACKEDSTORAGE_P_H
 #define PACKEDSTORAGE_P_H
 
+#include "ObjectStorage_p.h"
+
 #include <QFile>
 #include <QHash>
 
@@ -28,10 +30,24 @@ class PackedStorageObject;
 class RawObject;
 
 
-class PackedStoragePrivate : public QSharedData {
+class PackedStoragePrivate : public ObjectStoragePrivate {
 public:
 	PackedStoragePrivate()
-		: QSharedData()
+		: ObjectStoragePrivate()
+		, idAt()
+		, indexDataOffsets()
+		, indexFile()
+		, indexVersion(0)
+		, name()
+		, objectData()
+		, objects()
+		, offsetFor()
+		, packFile()
+		, packObjects()
+		, size(0)
+	{}
+	PackedStoragePrivate(const ObjectStoragePrivate &other)
+		: ObjectStoragePrivate(other)
 		, idAt()
 		, indexDataOffsets()
 		, indexFile()
@@ -45,7 +61,7 @@ public:
 		, size(0)
 	{}
 	PackedStoragePrivate(const PackedStoragePrivate &other)
-		: QSharedData(other)
+		: ObjectStoragePrivate(other)
 		, idAt(other.idAt)
 		, indexDataOffsets(other.indexDataOffsets)
 		, indexFile(other.indexFile.fileName())
@@ -58,6 +74,7 @@ public:
 		, packObjects(other.packObjects)
 		, size(other.size)
 	{}
+	~PackedStoragePrivate() {}
 
 	QHash<quint32, Id> idAt;
 	QList<Id> ids;

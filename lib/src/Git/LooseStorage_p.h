@@ -19,7 +19,7 @@
 #ifndef LOOSESTORAGE_P_H
 #define LOOSESTORAGE_P_H
 
-#include "RawObject.h"
+#include "ObjectStorage_p.h"
 
 #include <QDir>
 #include <QHash>
@@ -27,10 +27,19 @@
 namespace Git {
 
 
-class LooseStoragePrivate : public QSharedData {
+class LooseStoragePrivate : public ObjectStoragePrivate {
 public:
 	LooseStoragePrivate()
-		: QSharedData()
+		: ObjectStoragePrivate()
+		, ids()
+		, objectData()
+		, objects()
+		, objectsDir()
+		, objectSizes()
+		, objectTypes()
+	{}
+	LooseStoragePrivate(const ObjectStoragePrivate &other)
+		: ObjectStoragePrivate(other)
 		, ids()
 		, objectData()
 		, objects()
@@ -39,7 +48,7 @@ public:
 		, objectTypes()
 	{}
 	LooseStoragePrivate(const LooseStoragePrivate &other)
-		: QSharedData(other)
+		: ObjectStoragePrivate(other)
 		, ids(other.ids)
 		, objectData(other.objectData)
 		, objects(other.objects)
@@ -47,6 +56,7 @@ public:
 		, objectSizes(other.objectSizes)
 		, objectTypes(other.objectTypes)
 	{}
+	~LooseStoragePrivate() {}
 
 	QList<Id> ids;
 	QHash<Id, QByteArray> objectData;
