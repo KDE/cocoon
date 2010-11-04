@@ -99,6 +99,10 @@ bool ObjectStorage::contains(const Id &id)
 
 bool ObjectStorage::contains(const QString &id)
 {
+	if (id.isEmpty())  {
+		return false;
+	}
+
 	QString actualId = actualIdFor(id);
 
 	/** @todo make the search more intelligent. allIds() should return a sorted list. */
