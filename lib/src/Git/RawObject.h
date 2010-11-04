@@ -55,8 +55,10 @@ class KDE_EXPORT RawObject : public QObject
 {
 	Q_OBJECT
 
-	public:
+	protected:
 		explicit RawObject(const Id& id, Repo &repo);
+
+	public:
 		virtual ~RawObject();
 
 		const QByteArray& data();
@@ -86,6 +88,7 @@ class KDE_EXPORT RawObject : public QObject
 	protected:
 		QExplicitlySharedDataPointer<RawObjectPrivate> d;
 
+	friend class ::RawObjectInstantiationTest;
 	friend class ::RawObjectTest;
 	friend class ::RawObjectTypeTest;
 };
