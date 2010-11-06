@@ -4,4 +4,5 @@ build
 qtcreator-build
 
 # generated documentation
-doc
+doc/html
+doc/qch
