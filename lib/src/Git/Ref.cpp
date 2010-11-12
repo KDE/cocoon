@@ -155,7 +155,7 @@ void Ref::populate()
 	//kDebug() << "reading head:" << refFile.fileName();
 	//kDebug() << "head content:" << commitId;
 
-	d->commitId = Id(commitId, *d->repo);
+	d->commitId = d->repo->idFor(commitId);
 
 	refFile.close();
 }
