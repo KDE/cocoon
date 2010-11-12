@@ -85,10 +85,8 @@ class KDE_EXPORT RawObject : public QObject
 		 * @return The object's raw data.
 		 *
 		 * @see ObjectStorage::objectDataFor()
-		 *
-		 * @todo remove caching
 		 */
-		const QByteArray& data();
+		const QByteArray data();
 
 		/**
 		 * @brief Returns the object's id.

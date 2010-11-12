@@ -48,13 +48,9 @@ RawObject::~RawObject()
 
 
 
-const QByteArray& RawObject::data()
+const QByteArray RawObject::data()
 {
-	if (d->data.isNull()) {
-		d->data = d->id.storage().objectDataFor(d->id);
-	}
-
-	return d->data;
+	return d->id.storage().objectDataFor(d->id);
 }
 
 const QString RawObject::extractHeaderForm(const QByteArray &rawData)
@@ -152,7 +148,6 @@ void RawObject::populateHeader()
 
 	ObjectStorage &store = id().storage();
 
-//	d->m_data = store.objectDataFor(id());
 	d->dataSize = store.objectSizeFor(id());
 	d->type     = store.objectTypeFor(id());
 }

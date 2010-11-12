@@ -37,7 +37,6 @@ class RawObjectPrivate : public QSharedData {
 public:
 	RawObjectPrivate()
 		: QSharedData()
-		, data()
 		, dataSize(-1)
 		, id()
 		, repo(0)
@@ -45,7 +44,6 @@ public:
 	{}
 	RawObjectPrivate(const RawObjectPrivate &other)
 		: QSharedData(other)
-		, data(other.data)
 		, dataSize(other.dataSize)
 		, id(other.id)
 		, repo(other.repo)
@@ -53,7 +51,6 @@ public:
 	{}
 	~RawObjectPrivate() {}
 
-	QByteArray  data;
 	int         dataSize;
 	Id          id;
 	Repo       *repo;
