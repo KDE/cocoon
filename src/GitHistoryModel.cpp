@@ -66,13 +66,13 @@ QVariant GitHistoryModel::data(const QModelIndex &index, int role) const
 
 	QString data;
 	switch (index.column()) {
-	case 0:
+	case 0: // date
 		data = commit->authoredAt().toString();
 		break;
-	case 1:
+	case 1: // author
 		data = commit->author();
 		break;
-	case 2:
+	case 2: // summary
 		data = commit->summary();
 		break;
 	}
