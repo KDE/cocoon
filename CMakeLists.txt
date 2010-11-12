@@ -29,11 +29,6 @@ if(BUILD_TESTS)
 	add_definitions(-DCMAKE_BUILD_TYPE=debug)
 endif(BUILD_TESTS)
 
-###### Documentation ######
-if(BUILD_DOC)
-	add_subdirectory( doc )
-endif()
-
 ######### Library #########
 if(BUILD_LIB)
 	add_subdirectory( lib )
@@ -43,6 +38,11 @@ endif()
 if(BUILD_GUI)
 	add_subdirectory( src )
 	add_subdirectory( icons )
+endif()
+
+###### Documentation ######
+if(BUILD_DOC)
+	add_subdirectory( doc )
 endif()
 
 message(STATUS)
