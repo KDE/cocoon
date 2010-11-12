@@ -170,6 +170,11 @@ const QString& Ref::remote() const
 	return d->remote;
 }
 
+Repo& Ref::repo() const
+{
+	return *d->repo;
+}
+
 
 
 #include "Ref.moc"

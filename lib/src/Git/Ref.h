@@ -69,6 +69,7 @@ class KDE_EXPORT Ref : public QObject
 
 	protected:
 		void populate();
+		Repo& repo() const;
 
 	private:
 		QExplicitlySharedDataPointer<RefPrivate> d;
