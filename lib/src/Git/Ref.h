@@ -16,6 +16,12 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * @file
+ * @author Riyad Preukschas <riyad@informatik.uni-bremen.de>
+ * @brief The base for all Git refs as found in a repo's refs/ directory.
+ */
+
 #ifndef REF_H
 #define REF_H
 
@@ -40,6 +46,9 @@ class Repo;
 
 
 
+/**
+ * @brief The base for all Git refs as found in a repo's refs/ directory.
+ */
 class KDE_EXPORT Ref : public QObject
 {
 	Q_OBJECT
@@ -64,6 +73,28 @@ class KDE_EXPORT Ref : public QObject
 
 	public: //static
 		static bool exists(const QString &name, const Repo &repo);
+
+		/**
+		 * @brief Looks up a refs full name in a given repo.
+		 *
+		 * It will look in the repo's git directory for refs with that name.
+		 *
+		 * Examples:
+		 * @code
+		 *   Ref::fullNameFor("master", repo);
+		 *   // will return "refs/heads/master"
+		 *   Ref::fullNameFor("release-1.5", repo);
+		 *   // will return "refs/tags/release-1.5"
+		 *   Ref::fullNameFor("origin/feature-x", repo);
+		 *   // will return "refs/remotes/origin/feature-x"
+		 * @endcode
+		 *
+		 * @param name The short name of the ref.
+		 * @param repo The repo to look in.
+		 * @return The full ref path.
+		 *
+		 * @see http://www.kernel.org/pub/software/scm/git/docs/git-rev-parse.html#_specifying_revisions
+		 */
 		static QString fullNameFor(const QString &name, const Repo &repo);
 		static Ref newInstance(const QString &remote, const QString &prefix, const QString &name, Repo &repo);
 

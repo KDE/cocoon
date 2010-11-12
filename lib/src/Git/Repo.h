@@ -76,9 +76,9 @@ class KDE_EXPORT Repo : public QObject
 		Commit* commit(const Id &id);
 
 		/**
-		 * @brief Returns the proper Git::Id object for this string.
+		 * @brief Returns the proper @link Git::Id Id @endlink object for a given string.
 		 *
-		 * This is a shorthand for Id(idString, repo) and should make your code more readable.
+		 * This is a shorthand for @link Git::Id::Id(const QString&, Repo&) Id(QString&, Repo&) @endlink and should make your code more readable.
 		 * @code
 		 *   // instead of
 		 *   Id("1234567", repo);

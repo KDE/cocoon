@@ -99,7 +99,7 @@ const QString Ref::fullName() const
 
 QString Ref::fullNameFor(const QString &name, const Repo &repo)
 {
-	// see: http://www.kernel.org/pub/software/scm/git/docs/git-rev-parse.html
+	// see: http://www.kernel.org/pub/software/scm/git/docs/git-rev-parse.html#_specifying_revisions
 	QStringList searchPaths;
 	searchPaths << "%1" << "refs/%1" << "refs/tags/%1" << "refs/heads/%1" << "refs/remotes/%1" << "refs/remotes/%1/HEAD";
 
