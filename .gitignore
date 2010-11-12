@@ -2,7 +2,3 @@
 # build directories
 build
 qtcreator-build
-
-# generated documentation
-doc/html
-doc/qch
