@@ -55,6 +55,10 @@ class KDE_EXPORT Ref : public QObject
 
 	public:
 		explicit Ref();
+
+		/**
+		 * @brief Copy constructor.
+		 */
 		Ref(const Ref &other);
 		explicit Ref(const QString &remote, const QString &prefix, const QString &name, Repo &repo);
 
@@ -68,6 +72,12 @@ class KDE_EXPORT Ref : public QObject
 
 		QList<Ref> all() const;
 
+		/**
+		 * @brief Assigns @a other to @a this.
+		 *
+		 * @param other The ref to be assigned from.
+		 * @return @a this.
+		 */
 		Ref& operator=(const Ref &other);
 		bool operator==(const Ref &other) const;
 
