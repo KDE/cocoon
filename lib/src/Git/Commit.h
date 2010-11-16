@@ -127,6 +127,14 @@ class KDE_EXPORT Commit : public RawObject
 		bool isMerge();
 
 		/**
+		 * @brief Assigns @a other to @a this.
+		 *
+		 * @param other The commit to be assigned from.
+		 * @return @a this.
+		 */
+		Commit& operator=(const Commit &other);
+
+		/**
 		 * @brief Returns a list of the commit's parents.
 		 *
 		 * @see isMerge()

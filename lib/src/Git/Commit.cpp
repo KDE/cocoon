@@ -271,6 +271,15 @@ const QString& Commit::message()
 	return d->message;
 }
 
+Commit& Commit::operator=(const Commit &other)
+{
+	setParent(other.parent());
+
+	d = other.d;
+
+	return *this;
+}
+
 const QList<Commit*> Commit::parents()
 {
 	fillFromString(this, data());
