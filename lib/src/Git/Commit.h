@@ -70,6 +70,13 @@ class KDE_EXPORT Commit : public RawObject
 	 */
 		explicit Commit(const Id& id, Repo &repo);
 
+		/**
+		 * @brief Copy constructor.
+		 */
+		Commit(const Commit &other);
+
+
+
 		const QString&     author();
 		const KDateTime&   authoredAt();
 		const QString&     committer();

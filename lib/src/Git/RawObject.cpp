@@ -42,6 +42,12 @@ RawObject::RawObject(const Id &id, Repo &repo)
 	populateHeader();
 }
 
+RawObject::RawObject(const RawObject &other)
+	: QObject(other.parent())
+	, d(other.d)
+{
+}
+
 RawObject::~RawObject()
 {
 }

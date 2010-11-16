@@ -38,6 +38,11 @@ Commit::Commit(const Id& id, Repo &repo)
 {
 }
 
+Commit::Commit(const Commit &other)
+	: RawObject(other)
+{
+}
+
 
 
 const QString& Commit::author()
