@@ -79,11 +79,31 @@ class KDE_EXPORT Commit : public RawObject
 		const KDateTime&   authoredAt();
 		const QString&     committer();
 		const KDateTime&   committedAt();
-		const QString      diff() const;
 
 		/**
-		 * Has this commit been branched off of on the given branches?
+		 * @brief Returns the diff to the parent commit.
+		 *
+		 * @return The diff output.
+		 *
+		 * @note It will only  rpoduce the diff to the first parent.
+		 *
+		 * @todo Does fail on the first commit.
+		 */
+		const QString diff() const;
+
+		/**
+		 * @brief Find the children of this commit on the given branches.
+		 *
+		 * @param refs The branches (ids or names) to be checked for children.
+		 *             If it is empty the current head is assumed.
+		 * @return The list of child commits.
+		 *
+		 * @see
+		 */
 		QList<Commit*> childrenOn(const QStringList &refs) const;
+
+		/**
+		 * @brief Has this commit been branched off of on the given branches?
 		 *
 		 * It has been if it has multiple children.
 		 *
@@ -96,25 +116,47 @@ class KDE_EXPORT Commit : public RawObject
 		bool hasBranchedOn(const QStringList &refs) const;
 
 		/**
-		 * Find the children of this commit on the given branches.
+		 * @brief Is this a merge commit?
 		 *
-		 * @param refs The branches (ids or names) to be checked for children.
-		 *             If it is empty the current head is assumed.
-		 * @return The list of child commits.
+		 * It is if it has multiple parents.
 		 *
-		 * @see
-		const QList<Commit*> parents();
+		 * @return true if the commit has multiple parents, false otherwise.
+		 *
+		 * @see parents()
 		 */
+		bool isMerge();
 
 		/**
-		 * Is this a merge commit? It is if it has multiple parents.
+		 * @brief Returns a list of the commit's parents.
 		 *
-		 * @return true if so, false otherwise.
+		 * @see isMerge()
 		 */
-		bool               isMerge();
-		const QString&     message();
-		const QString&     summary();
-		const Tree*        tree();
+		const QList<Commit*> parents();
+
+		/**
+		 * @brief Returns the commit message.
+		 *
+		 * @return The commit message.
+		 *
+		 * @see summary()
+		 */
+		const QString& message();
+
+		/**
+		 * @brief Returns the first line of the commit message.
+		 *
+		 * @return The first line of the commit message.
+		 *
+		 * @see message()
+		 */
+		const QString& summary();
+
+		/**
+		 * @brief Returns the commit's tree.
+		 *
+		 * @return The tree.
+		 */
+		const Tree* tree();
 
 	// static
 		static QList<Commit*> allReachableFrom(const Ref &branch);
@@ -122,7 +164,7 @@ class KDE_EXPORT Commit : public RawObject
 	private:
 	// static
 		/**
-		 * Finds the children of commit starting from the given list of refs.
+		 * @brief Finds the children of commit starting from the given list of refs.
 		 *
 		 * @param commit The commit to find the children of.
 		 * @param refs Refs (ids or names) to start looking for them.
@@ -131,7 +173,7 @@ class KDE_EXPORT Commit : public RawObject
 		static QStringList childrenOf(const Commit &commit, const QStringList &refs);
 
 		/**
-		 * Populates the given commit with the data extracted from the raw data.
+		 * @brief Populates the given commit with the data extracted from the raw data.
 		 *
 		 * @param commit The commit to be populated.
 		 * @param raw The raw commit data.
