@@ -135,6 +135,8 @@ Ref Ref::newInstance(const QString &remote, const QString &prefix, const QString
 
 Ref& Ref::operator=(const Ref &other)
 {
+	setParent(other.parent());
+
 	d = other.d;
 
 	return *this;
