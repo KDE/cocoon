@@ -55,7 +55,7 @@ class GitHistoryModel : public QAbstractTableModel
 
 	private:
 		QString m_branch;
-		Git::CommitList m_commits;
+		QList<Git::Commit*> m_commits;
 		Git::Repo &m_repo;
 };
 
