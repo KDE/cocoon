@@ -63,7 +63,7 @@ class KDE_EXPORT Ref : public QObject
 		explicit Ref(const QString &remote, const QString &prefix, const QString &name, Repo &repo);
 
 		Commit* commit() const;
-		const QString  fullName() const;
+		const QString fullName() const;
 		bool isRemote() const;
 		bool isValid() const;
 		const QString& name() const;

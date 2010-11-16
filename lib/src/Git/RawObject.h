@@ -84,6 +84,8 @@ class KDE_EXPORT RawObject : public QObject
 	public:
 		virtual ~RawObject();
 
+
+
 		/**
 		 * @brief Returns the object's raw data.
 		 *

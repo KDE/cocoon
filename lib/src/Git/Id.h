@@ -186,8 +186,8 @@ class KDE_EXPORT Id : public QObject
 		 *
 		 * @param other The id to be compared to.
 		 * @return true if both SHA1s are equal, false otherwise
- *
- * @note This is needed for Id to be used as key in QHash.
+		 *
+		 * @note This is needed for Id to be used as key in QHash.
 		 */
 		bool operator==(const Id &other) const;
 
