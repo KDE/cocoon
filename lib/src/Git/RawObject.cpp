@@ -147,6 +147,11 @@ RawObject* RawObject::newInstance(const Id &id, Repo &repo)
 	}
 }
 
+bool RawObject::operator==(const RawObject &other) const
+{
+	return id() == other.id();
+}
+
 void RawObject::populateHeader()
 {
 	Q_ASSERT(d->repo);

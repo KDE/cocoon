@@ -184,6 +184,14 @@ class KDE_EXPORT RawObject : public QObject
 		 */
 		bool isTree() const;
 
+		/**
+		 * @brief Checks whether two Git objects are the same.
+		 *
+		 * @param other The object to compare to.
+		 * @return true if both objects have the same id, false otherwise.
+		 */
+		bool operator==(const RawObject &other) const;
+
 	// static
 		static const QString extractHeaderForm(const QByteArray &rawData);
 		static int extractObjectSizeFrom(const QString &header);
