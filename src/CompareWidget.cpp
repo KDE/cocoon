@@ -76,13 +76,13 @@ void CompareWidget::on_branchBComboBox_currentIndexChanged(const QString &branch
 
 void CompareWidget::on_historyAView_clicked(const QModelIndex &index)
 {
-	m_commitAId = m_historyAModel->mapToCommit(index)->id();
+	m_commitAId = m_historyAModel->mapToCommit(index).id();
 	updateComparison();
 }
 
 void CompareWidget::on_historyBView_clicked(const QModelIndex &index)
 {
-	m_commitBId = m_historyBModel->mapToCommit(index)->id();
+	m_commitBId = m_historyBModel->mapToCommit(index).id();
 	updateComparison();
 }
 
@@ -103,10 +103,10 @@ void CompareWidget::showCurrentBranch()
 void CompareWidget::updateComparison()
 {
 	if (!m_commitAId.isValid()) {
-		m_commitAId = m_repo->commits(m_repo->currentHead().name()).first()->id();
+		m_commitAId = m_repo->commits(m_repo->currentHead().name()).first().id();
 	}
 	if (!m_commitBId.isValid()) {
-		m_commitBId = m_repo->commits(m_repo->currentHead().name()).first()->id();
+		m_commitBId = m_repo->commits(m_repo->currentHead().name()).first().id();
 	}
 
 	Git::Commit *commitA = qobject_cast<Git::Commit*>(m_commitAId.object());

@@ -31,7 +31,7 @@
 GitHistoryModel::GitHistoryModel(Git::Repo &repo, QObject *parent)
 	: QAbstractTableModel(parent)
 	, m_branch(repo.currentHead().name())
-	, m_commits(Git::CommitList())
+	, m_commits()
 	, m_repo(repo)
 {
 	connect(&m_repo, SIGNAL(historyChanged()), this, SLOT(reset()));
@@ -62,18 +62,18 @@ QVariant GitHistoryModel::data(const QModelIndex &index, int role) const
 		return QVariant();
 	}
 
-	Git::Commit *commit = mapToCommit(index);
+	Git::Commit commit = mapToCommit(index);
 
 	QString data;
 	switch (index.column()) {
 	case 0: // date
-		data = commit->authoredAt().toString();
+		data = commit.authoredAt().toString();
 		break;
 	case 1: // author
-		data = commit->author();
+		data = commit.author();
 		break;
 	case 2: // summary
-		data = commit->summary();
+		data = commit.summary();
 		break;
 	}
 
@@ -82,9 +82,9 @@ QVariant GitHistoryModel::data(const QModelIndex &index, int role) const
 		return QVariant(data);
 	case Qt::DecorationRole: // Icon
 		if (index.column() == 2) { // in summary column
-			if (commit->isMerge()) {
+			if (commit.isMerge()) {
 				return QVariant(KIcon("git-merge"));
-			} else if(commit->hasBranchedOn(QStringList() << m_branch)) {
+			} else if(commit.hasBranchedOn(QStringList() << m_branch)) {
 				return QVariant(KIcon("git-branch"));
 			} else {
 				return QVariant(KIcon("git-commit"));
@@ -117,10 +117,10 @@ void GitHistoryModel::loadCommits()
 	/** @todo change to m_repo.commits(m_branch, Git::NoLimit); */
 }
 
-Git::Commit* GitHistoryModel::mapToCommit(const QModelIndex &index) const
+Git::Commit GitHistoryModel::mapToCommit(const QModelIndex &index) const
 {
 	if (!index.isValid()) {
-		return 0;
+		return Git::Commit();
 	}
 
 	return m_commits[index.row()];

@@ -41,7 +41,7 @@ class CommitInfoWidget : public QWidget
 		explicit CommitInfoWidget(QWidget *parent = 0);
 		~CommitInfoWidget();
 
-		void setCommit(Git::Commit *commit);
+		void setCommit(const Git::Commit &commit);
 
 	public slots:
 		void clear();

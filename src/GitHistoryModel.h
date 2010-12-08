@@ -41,7 +41,7 @@ class GitHistoryModel : public QAbstractTableModel
 		const QString& columnName(int column) const;
 		QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 		QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-		Git::Commit* mapToCommit(const QModelIndex &index) const;
+		Git::Commit mapToCommit(const QModelIndex &index) const;
 		int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
 	public slots:
@@ -55,7 +55,7 @@ class GitHistoryModel : public QAbstractTableModel
 
 	private:
 		QString m_branch;
-		QList<Git::Commit*> m_commits;
+		QList<Git::Commit> m_commits;
 		Git::Repo &m_repo;
 };
 

@@ -58,9 +58,9 @@ void CommitInfoWidget::updateView()
 	ui->diffView->setDiff(commit->diff());
 }
 
-void CommitInfoWidget::setCommit(Git::Commit *commit)
+void CommitInfoWidget::setCommit(const Git::Commit &commit)
 {
-	m_commitId = commit->id();
+	m_commitId = commit.id();
 	updateView();
 }
 
