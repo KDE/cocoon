@@ -18,13 +18,44 @@
 
 #include "Blob.h"
 
+#include "RawObject_p.h"
+
 using namespace Git;
 
 
 
+Blob::Blob()
+	: RawObject()
+{
+}
+
 Blob::Blob(const Id& id, Repo &repo)
 	: RawObject(id, repo)
 {
+}
+
+Blob::Blob(const Blob &other)
+	: RawObject(other)
+{
+}
+
+Blob::Blob(const RawObject &other)
+	: RawObject(other)
+{
+	Q_ASSERT(other.isBlob());
+}
+
+Blob::~Blob()
+{
+}
+
+
+
+Blob& Blob::operator=(const Blob &other)
+{
+	RawObject::operator=(other);
+
+	return *this;
 }
 
 #include "Blob.moc"

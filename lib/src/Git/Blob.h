@@ -44,12 +44,45 @@ class KDE_EXPORT Blob : public RawObject
 
 	public:
 		/**
+		 * @brief Constructs an invalid Blob.
+		 *
+		 * It does not exist and has no SHA1.
+		 * It is intended for indicating an error when returning objects.
+		 *
+		 * @sa isValid()
+		 */
+		explicit Blob();
+
+		/**
 		 * @brief Constructs a Git blob object.
 		 *
 		 * @param id The blob's id.
 		 * @param repo The repo the blob is in.
 		 */
-		Blob(const Id& id, Repo &repo);
+		explicit Blob(const Id& id, Repo &repo);
+
+		/**
+		 * @brief Copy constructor.
+		 */
+		Blob(const Blob &other);
+
+		/**
+		 * @brief Base class copy constructor.
+		 */
+		Blob(const RawObject &other);
+
+	public:
+		virtual ~Blob();
+
+
+
+		/**
+		 * @brief Assigns @a other to @a this.
+		 *
+		 * @param other The blob to be assigned from.
+		 * @return @a this.
+		 */
+		Blob& operator=(const Blob &id);
 
 	friend class ::BlobTest;
 };
