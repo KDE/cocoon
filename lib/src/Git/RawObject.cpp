@@ -122,6 +122,11 @@ bool RawObject::isTree() const
 	return type() == OBJ_TREE;
 }
 
+bool RawObject::isValid() const
+{
+	return d->id.isValid();
+}
+
 bool RawObject::isValidHeader(const QString &possibleHeader)
 {
 	return possibleHeader.contains(QRegExp("^(blob|commit|tag|tree) \\d+$"));

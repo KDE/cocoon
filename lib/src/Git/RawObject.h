@@ -187,6 +187,16 @@ class KDE_EXPORT RawObject : public QObject
 		bool isTree() const;
 
 		/**
+		 * @brief Checks whether this Git object is valid.
+		 *
+		 * The Git object is invalid when it was constructed using the default constructor.
+		 *
+		 * @return true in case the Git object is valid, false otherwise
+		 *
+		 * @see RawObject()
+		 */
+		bool isValid() const;
+
 		 * @brief Checks whether two Git objects are the same.
 		 *
 		 * @param other The object to compare to.
