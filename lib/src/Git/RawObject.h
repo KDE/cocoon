@@ -207,6 +207,15 @@ class KDE_EXPORT RawObject : public QObject
 		 */
 		bool isValid() const;
 
+		/**
+		 * @brief Assigns @a other to @a this.
+		 *
+		 * @param other The Git object to be assigned from.
+		 * @return @a this.
+		 */
+		RawObject& operator=(const RawObject &other);
+
+		/**
 		 * @brief Checks whether two Git objects are the same.
 		 *
 		 * @param other The object to compare to.

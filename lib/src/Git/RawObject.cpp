@@ -158,6 +158,15 @@ RawObject* RawObject::newInstance(const Id &id, Repo &repo)
 	}
 }
 
+RawObject& RawObject::operator=(const RawObject &other)
+{
+	setParent(other.parent());
+
+	d = other.d;
+
+	return *this;
+}
+
 bool RawObject::operator==(const RawObject &other) const
 {
 	return id() == other.id();
