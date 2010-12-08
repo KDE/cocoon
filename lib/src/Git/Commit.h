@@ -56,22 +56,34 @@ class KDE_EXPORT Commit : public RawObject
 	Q_OBJECT
 
 	public:
-	/**
-	 * @brief Constructs a Git commit object.
-	 *
-	 * To speed up construction the commit will not be fully loaded until the first attribute access.
-	 *
-	 * @param id The commit's id.
-	 * @param repo The repo the commit is in.
-	 *
-	 * @see fillFromString()
-	 */
+		/**
+		 * @brief Constructs an invalid Commit.
+		 *
+		 * It does not exist and has no SHA1.
+		 * It is intended for indicating an error when returning objects.
+		 *
+		 * @sa isValid()
+		 */
+		explicit Commit();
+
+		/**
+		 * @brief Constructs a Git commit object.
+		 *
+		 * To speed up construction the commit will not be fully loaded until the first attribute access.
+		 *
+		 * @param id The commit's id.
+		 * @param repo The repo the commit is in.
+		 *
+		 * @see fillFromString()
+		 */
 		explicit Commit(const Id& id, Repo &repo);
 
 		/**
 		 * @brief Copy constructor.
 		 */
 		Commit(const Commit &other);
+
+		virtual ~Commit();
 
 
 

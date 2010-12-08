@@ -32,6 +32,11 @@ using namespace Git;
 
 
 
+Commit::Commit()
+	: RawObject()
+{
+}
+
 Commit::Commit(const Id& id, Repo &repo)
 	: RawObject(id, repo)
 	, d(new CommitPrivate(*RawObject::d))
@@ -40,6 +45,10 @@ Commit::Commit(const Id& id, Repo &repo)
 
 Commit::Commit(const Commit &other)
 	: RawObject(other)
+{
+}
+
+Commit::~Commit()
 {
 }
 
