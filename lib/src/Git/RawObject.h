@@ -76,12 +76,12 @@ class KDE_EXPORT RawObject : public QObject
 		 */
 		explicit RawObject(const Id& id, Repo &repo);
 
+	public:
 		/**
 		 * @brief Copy constructor.
 		 */
 		RawObject(const RawObject &other);
 
-	public:
 		virtual ~RawObject();
 
 
