@@ -69,7 +69,7 @@ class RepoCommitIndexTest : public GitTestBase
 			repo->stageFiles(QStringList() << pathTo("some_file.txt"));
 			repo->commitIndex("Added some_file.txt");
 
-			QCOMPARE(repo->commits()[0]->message(), QLatin1String("Added some_file.txt"));
+			QCOMPARE(repo->commits()[0].message(), QLatin1String("Added some_file.txt"));
 		}
 };
 

@@ -38,12 +38,12 @@ class RepoCommitsCachingTest : public GitTestBase
 		void testCommitsCachingSame() {
 			QVERIFY(repo->d->commits.isEmpty());
 
-			Git::CommitList commits1 = repo->commits();
+			QList<Git::Commit> commits1 = repo->commits();
 			QCOMPARE(commits1.size(), 4);
 			QCOMPARE(repo->d->commits.size(), 1);
 			QVERIFY(repo->d->commits.contains("refs/heads/master"));
 
-			Git::CommitList commits2 = repo->commits();
+			QList<Git::Commit> commits2 = repo->commits();
 			QCOMPARE(commits2.size(), 4);
 			QCOMPARE(repo->d->commits.size(), 1);
 			QVERIFY(repo->d->commits.contains("refs/heads/master"));
@@ -54,12 +54,12 @@ class RepoCommitsCachingTest : public GitTestBase
 		void testCommitsCachingDifferent() {
 			QVERIFY(repo->d->commits.isEmpty());
 
-			Git::CommitList commits1 = repo->commits("master");
+			QList<Git::Commit> commits1 = repo->commits("master");
 			QCOMPARE(commits1.size(), 4);
 			QCOMPARE(repo->d->commits.size(), 1);
 			QVERIFY(repo->d->commits.contains("refs/heads/master"));
 
-			Git::CommitList commits2 = repo->commits("branch");
+			QList<Git::Commit> commits2 = repo->commits("branch");
 			QCOMPARE(commits2.size(), 2);
 			QCOMPARE(repo->d->commits.size(), 2);
 			QVERIFY(repo->d->commits.contains("refs/heads/branch"));

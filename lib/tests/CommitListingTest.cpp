@@ -52,25 +52,25 @@ class CommitListingTest : public GitTestBase
 
 
 		void shouldHaveCorrectNumberOfCommitsOnMaster() {
-			Git::CommitList commits = Git::Commit::allReachableFrom(Git::Head("master", *repo));
+			QList<Git::Commit> commits = Git::Commit::allReachableFrom(Git::Head("master", *repo));
 			QCOMPARE(commits.size(), 4);
 		}
 
 		void shouldHaveCorrectNumberOfCommitsOnBranch() {
-			Git::CommitList commits = Git::Commit::allReachableFrom(Git::Head("branch", *repo));
+			QList<Git::Commit> commits = Git::Commit::allReachableFrom(Git::Head("branch", *repo));
 			QCOMPARE(commits.size(), 2);
 		}
 
 		void firstCommitInListShouldBeTheRefCommit() {
 			Git::Commit* headCommit = repo->currentHead().commit();
-			Git::Commit* listCommit = Git::Commit::allReachableFrom(repo->currentHead())[0];
+			Git::Commit  listCommit = Git::Commit::allReachableFrom(repo->currentHead())[0];
 
-			foreach (Git::Commit *commit, Git::Commit::allReachableFrom(repo->currentHead())) {
-				qDebug() << commit->committedAt().toString() << commit->id().toString() << commit->summary();
+			foreach (Git::Commit commit, Git::Commit::allReachableFrom(repo->currentHead())) {
+				qDebug() << commit.committedAt().toString() << commit.id().toString() << commit.summary();
 			}
 
-			QCOMPARE(listCommit->id(), headCommit->id());
-			QCOMPARE(listCommit, headCommit);
+			QCOMPARE(listCommit.id(), headCommit->id());
+//			QCOMPARE(listCommit, headCommit);
 		}
 };
 

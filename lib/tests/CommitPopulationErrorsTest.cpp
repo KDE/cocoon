@@ -64,9 +64,9 @@ class CommitPopulationErrorsTest : public GitTestBase
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
-			QVERIFY(commit->tree() == 0);
+			QVERIFY(commit->tree().isValid());
 
-			//QCOMPARE(commit->tree()->id().toSha1String(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
+			//QCOMPARE(commit->tree().id().toSha1String(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
 			QCOMPARE(commit->parents().size(), 1);
 			QCOMPARE(commit->author(), QLatin1String("Me"));
 			QCOMPARE(commit->committer(), QLatin1String("You"));
@@ -86,7 +86,7 @@ class CommitPopulationErrorsTest : public GitTestBase
 
 			QCOMPARE(commit->author(), QString());
 
-			QCOMPARE(commit->tree()->id().toSha1String(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
+			QCOMPARE(commit->tree().id().toSha1String(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
 			QCOMPARE(commit->parents().size(), 1);
 			//QCOMPARE(commit->author(), QLatin1String("Me"));
 			QCOMPARE(commit->committer(), QLatin1String("You"));
@@ -106,7 +106,7 @@ class CommitPopulationErrorsTest : public GitTestBase
 
 			QCOMPARE(commit->authoredAt().toString(), KDateTime().toString());
 
-			QCOMPARE(commit->tree()->id().toSha1String(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
+			QCOMPARE(commit->tree().id().toSha1String(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
 			QCOMPARE(commit->parents().size(), 1);
 			QCOMPARE(commit->author(), QLatin1String("Me"));
 			QCOMPARE(commit->committer(), QLatin1String("You"));
@@ -126,7 +126,7 @@ class CommitPopulationErrorsTest : public GitTestBase
 
 			QCOMPARE(commit->committer(), QString());
 
-			QCOMPARE(commit->tree()->id().toSha1String(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
+			QCOMPARE(commit->tree().id().toSha1String(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
 			QCOMPARE(commit->parents().size(), 1);
 			QCOMPARE(commit->author(), QLatin1String("Me"));
 			//QCOMPARE(commit->committer(), QLatin1String("You"));
@@ -146,7 +146,7 @@ class CommitPopulationErrorsTest : public GitTestBase
 
 			QCOMPARE(commit->committedAt().toString(), KDateTime().toString());
 
-			QCOMPARE(commit->tree()->id().toSha1String(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
+			QCOMPARE(commit->tree().id().toSha1String(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
 			QCOMPARE(commit->parents().size(), 1);
 			QCOMPARE(commit->author(), QLatin1String("Me"));
 			QCOMPARE(commit->committer(), QLatin1String("You"));
@@ -166,9 +166,9 @@ class CommitPopulationErrorsTest : public GitTestBase
 
 			QCOMPARE(commit->authoredAt().toString(), KDateTime().toString());
 
-			QCOMPARE(commit->tree()->id().toSha1String(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
+			QCOMPARE(commit->tree().id().toSha1String(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
 			QCOMPARE(commit->parents().size(), 1);
-			QCOMPARE(commit->parents()[0]->id().toSha1String(), QLatin1String("abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d"));
+			QCOMPARE(commit->parents()[0].id().toSha1String(), QLatin1String("abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d"));
 			QCOMPARE(commit->author(), QLatin1String("Me"));
 			QCOMPARE(commit->committer(), QString());
 			QCOMPARE(commit->message(), QString());

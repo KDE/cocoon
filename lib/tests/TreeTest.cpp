@@ -86,8 +86,8 @@ class TreeTest : public GitTestBase
 			entryIds << "a907ec3f431eeb6b1c75799a7e4ba73ca6dc627a"; // file1
 			entryIds << "eb697c0d58b8e5fce1855b606a665c4a2ad3a1c7"; // file2
 
-			foreach(Git::RawObject *entry, tree->entries()) {
-				QVERIFY(entryIds.contains(entry->id().toSha1String()));
+			foreach(const Git::RawObject entry, tree->entries()) {
+				QVERIFY(entryIds.contains(entry.id().toSha1String()));
 			}
 		}
 
@@ -105,10 +105,10 @@ class TreeTest : public GitTestBase
 			QFETCH(QString, entryName);
 			QFETCH(QString, entryId);
 
-			QMap<QString, Git::RawObject*> entries = tree->entriesByName();
-			QCOMPARE(entries[entryName]->id().toSha1String(), entryId);
+			QMap<QString, Git::RawObject> entries = tree->entriesByName();
+			QCOMPARE(entries[entryName].id().toSha1String(), entryId);
 
-			QCOMPARE(entries["none_existent"], (Git::RawObject*)0);
+			QVERIFY(!entries["none_existent"].isValid());
 		}
 
 		void shouldHaveCorrectNumberOfTrees() {

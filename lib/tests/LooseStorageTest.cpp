@@ -81,14 +81,14 @@ class LooseStorageTest : public GitTestBase
 		}
 
 		void objectTypeShouldBeCorrect() {
-			Git::Id id = repo->commits()[0]->id();
+			Git::Id id = repo->commits()[0].id();
 			Git::ObjectType type = storage->objectTypeFor(id);
 
 			QCOMPARE(type, Git::OBJ_COMMIT);
 		}
 
 		void objectSizeShouldBeCorrect() {
-			Git::Id id = repo->commits()[0]->id();
+			Git::Id id = repo->commits()[0].id();
 			int size = storage->objectSizeFor(id);
 
 			QCOMPARE(size, 212);
