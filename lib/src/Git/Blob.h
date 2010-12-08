@@ -49,7 +49,7 @@ class KDE_EXPORT Blob : public RawObject
 		 * It does not exist and has no SHA1.
 		 * It is intended for indicating an error when returning objects.
 		 *
-		 * @sa isValid()
+		 * @see isValid()
 		 */
 		explicit Blob();
 
@@ -83,6 +83,9 @@ class KDE_EXPORT Blob : public RawObject
 		 * @return @a this.
 		 */
 		Blob& operator=(const Blob &id);
+
+	private:
+		QExplicitlySharedDataPointer<RawObjectPrivate> d;
 
 	friend class ::BlobTest;
 };
