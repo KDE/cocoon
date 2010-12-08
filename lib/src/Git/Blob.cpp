@@ -26,21 +26,25 @@ using namespace Git;
 
 Blob::Blob()
 	: RawObject()
+	, d(RawObject::d)
 {
 }
 
 Blob::Blob(const Id& id, Repo &repo)
 	: RawObject(id, repo)
+	, d(RawObject::d)
 {
 }
 
 Blob::Blob(const Blob &other)
 	: RawObject(other)
+	, d(RawObject::d)
 {
 }
 
 Blob::Blob(const RawObject &other)
 	: RawObject(other)
+	, d(RawObject::d)
 {
 	Q_ASSERT(other.isBlob());
 }

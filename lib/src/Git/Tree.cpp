@@ -31,6 +31,7 @@ using namespace Git;
 
 Tree::Tree()
 	: RawObject()
+	, d(new TreePrivate(*RawObject::d))
 {
 }
 
@@ -42,11 +43,13 @@ Tree::Tree(const Id& id, Repo &repo)
 
 Tree::Tree(const Tree &other)
 	: RawObject(other)
+	, d(new TreePrivate(*RawObject::d))
 {
 }
 
 Tree::Tree(const RawObject &other)
 	: RawObject(other)
+	, d(new TreePrivate(*RawObject::d))
 {
 	Q_ASSERT(other.isTree());
 }
