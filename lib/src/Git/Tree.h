@@ -27,6 +27,8 @@
 
 #include "RawObject.h"
 
+#include "Blob.h"
+
 #include <QHash>
 #include <QMap>
 
@@ -36,7 +38,6 @@ class TreeTest;
 
 namespace Git {
 
-class Blob;
 class RawObject;
 class TreePrivate;
 
@@ -50,15 +51,55 @@ class KDE_EXPORT Tree : public RawObject
 	Q_OBJECT
 
 	public:
+		/**
+		 * @brief Constructs an invalid Tree.
+		 *
+		 * It does not exist and has no SHA1.
+		 * It is intended for indicating an error when returning objects.
+		 *
+		 * @sa isValid()
+		 */
+		explicit Tree();
+
+		/**
+		 * @brief Constructs a Git tree object.
+		 *
+		 * To speed up construction the tree will not be fully loaded until the first attribute access.
+		 *
+		 * @param id The tree's id.
+		 * @param repo The repo the tree is in.
+		 *
+		 * @see fillFromString()
+		 */
 		explicit Tree(const Id& id, Repo &repo);
 
-		const QList<Blob*> blobs();
-		const QMap<QString, Blob*> blobsByName();
-		const QList<RawObject*> entries();
-		const QMap<QString, RawObject*> entriesByName();
+		/**
+		 * @brief Copy constructor.
+		 */
+		Tree(const Tree &other);
+
+		/**
+		 * @brief Base class copy constructor.
+		 */
+		Tree(const RawObject &other);
+
+		virtual ~Tree();
+
+		const QList<Blob> blobs();
+		const QMap<QString, Blob> blobsByName();
+		const QList<RawObject> entries();
+		const QMap<QString, RawObject> entriesByName();
 		const QString nameFor(const RawObject &object);
-		const QList<Tree*> trees();
-		const QMap<QString, Tree*> treesByName();
+
+		/**
+		 * @brief Assigns @a other to @a this.
+		 *
+		 * @param other The tree to be assigned from.
+		 * @return @a this.
+		 */
+		Tree& operator=(const Tree &other);
+		const QList<Tree> trees();
+		const QMap<QString, Tree> treesByName();
 
 	private:
 		// static

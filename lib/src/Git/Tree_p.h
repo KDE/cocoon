@@ -53,7 +53,7 @@ public:
 	{}
 	~TreePrivate() {}
 
-	QList<RawObject*>       entries;
+	QList<RawObject>        entries;
 	QHash<QString, QString> entryModes;
 	QHash<QString, QString> entryNames;
 };

@@ -29,49 +29,72 @@ using namespace Git;
 
 
 
+Tree::Tree()
+	: RawObject()
+{
+}
+
 Tree::Tree(const Id& id, Repo &repo)
 	: RawObject(id, repo)
 	, d(new TreePrivate(*RawObject::d))
 {
 }
 
-const QList<Blob*> Tree::blobs()
+Tree::Tree(const Tree &other)
+	: RawObject(other)
 {
-	QList<Blob*> result;
+}
 
-	foreach(const RawObject *entry, entries()) {
-		if(entry->isBlob()) {
-			result << (Blob*)entry;
+Tree::Tree(const RawObject &other)
+	: RawObject(other)
+{
+	Q_ASSERT(other.isTree());
+}
+
+Tree::~Tree()
+{
+}
+
+
+
+const QList<Blob> Tree::blobs()
+{
+	QList<Blob> result;
+
+	foreach (const RawObject &entry, entries()) {
+		if(entry.isBlob()) {
+			result << entry;
 		}
 	}
 
 	return result;
 }
 
-const QMap<QString, Blob*> Tree::blobsByName()
+const QMap<QString, Blob> Tree::blobsByName()
 {
-	QMap<QString, Blob*> result;
+	QMap<QString, Blob> result;
 
-	foreach(Blob *entry, blobs()) {
-		result[nameFor(*entry)] = entry;
+	foreach (const Blob &entry, blobs()) {
+		result[nameFor(entry)] = entry;
 	}
 
 	return result;
 }
 
-const QList<RawObject*> Tree::entries()
+const QList<RawObject> Tree::entries()
 {
 	fillFromString(this, data());
 	return d->entries;
 }
 
-const QMap<QString, RawObject*> Tree::entriesByName()
+const QMap<QString, RawObject> Tree::entriesByName()
 {
-	QMap<QString, RawObject*> result;
+	QMap<QString, RawObject> result;
 
-	foreach(RawObject *entry, entries()) {
-		result[nameFor(*entry)] = entry;
+	foreach (const RawObject &entry, entries()) {
+		result[nameFor(entry)] = entry;
 	}
+
 
 	return result;
 }
@@ -104,7 +127,7 @@ void Tree::fillFromString(Tree *tree, const QByteArray &raw)
 		pos += 20; // skip the id
 
 		RawObject* entry = tree->repo().object(tree->repo().idFor(id));
-		tree->d->entries << entry;
+		tree->d->entries << *entry;
 		tree->d->entryModes[id] = mode;
 		tree->d->entryNames[id] = name;
 	}
@@ -122,25 +145,32 @@ const QString Tree::nameFor(const RawObject &object)
 	return nameFor(object.id().toSha1String());
 }
 
-const QList<Tree*> Tree::trees()
+const QList<Tree> Tree::trees()
 {
-	QList<Tree*> result;
+	QList<Tree> result;
 
-	foreach(RawObject *entry, entries()) {
-		if(entry->isTree()) {
-			result << (Tree*)entry;
+	foreach (const RawObject &entry, entries()) {
+		if (entry.isTree()) {
+			result << entry;
 		}
 	}
 
 	return result;
 }
 
-const QMap<QString, Tree*> Tree::treesByName()
+Tree& Tree::operator=(const Tree &other)
 {
-	QMap<QString, Tree*> result;
+	RawObject::operator=(other);
 
-	foreach(Tree *entry, trees()) {
-		result[nameFor(*entry)] = entry;
+	return *this;
+}
+
+const QMap<QString, Tree> Tree::treesByName()
+{
+	QMap<QString, Tree> result;
+
+	foreach(const Tree entry, trees()) {
+		result[nameFor(entry)] = entry;
 	}
 
 	return result;
