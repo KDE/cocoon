@@ -92,7 +92,7 @@ QStringList Commit::childrenOf(const Commit &commit, const QStringList &refs)
 	}
 }
 
-QList<Commit*> Commit::childrenOn(const QStringList &refs) const
+QList<Commit> Commit::childrenOn(const QStringList &refs) const
 {
 	QStringList actualRefs(refs);
 	if (actualRefs.isEmpty()) {
@@ -100,16 +100,16 @@ QList<Commit*> Commit::childrenOn(const QStringList &refs) const
 	}
 
 	// used for caching the result
-	static QHash<QString, QList<Commit*> > childrenByRefs;
+	static QHash<QString, QList<Commit> > childrenByRefs;
 
 	QString refKey = id().toSha1String() + ": " + actualRefs.join(" ");
 
 	if (!childrenByRefs.contains(refKey)) {
 		QStringList childrenIds = childrenOf(*this, actualRefs);
 
-		QList<Commit*> children;
+		QList<Commit> children;
 		foreach (const QString &id, childrenIds) {
-			children << repo().commit(repo().idFor(id));
+			children << *repo().commit(repo().idFor(id));
 		}
 
 		childrenByRefs[refKey] = children;
@@ -225,21 +225,21 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 	}
 }
 
-QList<Commit*> Commit::allReachableFrom(const Ref &ref)
+QList<Commit> Commit::allReachableFrom(const Ref &ref)
 {
-	QList<Commit*> commits;
+	QList<Commit> commits;
 
-	QList<Commit*> fringe;
-	fringe << ref.commit();
+	QList<Commit> fringe;
+	fringe << *ref.commit();
 
 	while (!fringe.isEmpty()) {
 		// find next commit in list
-		Commit *commit = latestIn(fringe);
+		Commit commit = latestIn(fringe);
 
 		// add parents to fringe
-		foreach (Commit *parent, commit->parents()) {
+		foreach (Commit parent, commit.parents()) {
 			if (!fringe.contains(parent)) {
-				fringe << commit->parents();
+				fringe << commit.parents();
 			}
 		}
 
@@ -262,11 +262,11 @@ bool Commit::isMerge()
 	return parents().size() > 1;
 }
 
-Commit* Commit::latestIn(const QList<Commit*> &commits)
+Commit Commit::latestIn(const QList<Commit> &commits)
 {
-	Commit *latest = commits.first();
-	foreach (Commit *commit, commits) {
-		if (commit->committedAt() > latest->committedAt()) {
+	Commit latest = commits.first();
+	foreach (Commit commit, commits) {
+		if (commit.committedAt() > latest.committedAt()) {
 			latest = commit;
 		}
 	}
@@ -282,20 +282,18 @@ const QString& Commit::message()
 
 Commit& Commit::operator=(const Commit &other)
 {
-	setParent(other.parent());
-
-	d = other.d;
+	RawObject::operator=(other);
 
 	return *this;
 }
 
-const QList<Commit*> Commit::parents()
+const QList<Commit> Commit::parents()
 {
 	fillFromString(this, data());
 
-	QList<Commit*> commits;
+	QList<Commit> commits;
 	foreach (const Id &id, d->parentIds) {
-		commits << qobject_cast<Commit*>(id.object());
+		commits << *qobject_cast<Commit*>(id.object());
 	}
 
 	return commits;
@@ -337,11 +335,11 @@ const QString& Commit::summary()
 	return d->summary;
 }
 
-const Tree* Commit::tree()
+const Tree Commit::tree()
 {
 	fillFromString(this, data());
 
-	return qobject_cast<Tree*>(d->treeId.object());
+	return *qobject_cast<Tree*>(d->treeId.object());
 }
 
 #include "Commit.moc"

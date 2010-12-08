@@ -112,7 +112,7 @@ class KDE_EXPORT Commit : public RawObject
 		 *
 		 * @see
 		 */
-		QList<Commit*> childrenOn(const QStringList &refs) const;
+		QList<Commit> childrenOn(const QStringList &refs) const;
 
 		/**
 		 * @brief Has this commit been branched off of on the given branches?
@@ -151,7 +151,7 @@ class KDE_EXPORT Commit : public RawObject
 		 *
 		 * @see isMerge()
 		 */
-		const QList<Commit*> parents();
+		const QList<Commit> parents();
 
 		/**
 		 * @brief Returns the commit message.
@@ -176,10 +176,10 @@ class KDE_EXPORT Commit : public RawObject
 		 *
 		 * @return The tree.
 		 */
-		const Tree* tree();
+		const Tree tree();
 
 	// static
-		static QList<Commit*> allReachableFrom(const Ref &branch);
+		static QList<Commit> allReachableFrom(const Ref &branch);
 
 	private:
 	// static
@@ -202,7 +202,7 @@ class KDE_EXPORT Commit : public RawObject
 		 */
 		static void fillFromString(Commit *commit, const QString &raw);
 
-		static Commit* latestIn(const QList<Commit*> &commits);
+		static Commit latestIn(const QList<Commit> &commits);
 
 		/**
 		 * @short Parses zone offsets from string and returns the offset in seconds.
