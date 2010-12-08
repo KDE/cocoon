@@ -71,7 +71,7 @@ class KDE_EXPORT Id : public QObject
 		 * @brief Constructs an invalid Id.
 		 *
 		 * It does not exist and has no SHA1.
-		 * It is intended for indicating an error when retuning ids.
+		 * It is intended for indicating an error when returning ids.
 		 *
 		 * @sa isValid()
 		 */
@@ -177,7 +177,7 @@ class KDE_EXPORT Id : public QObject
 		 * @param other The id to be assigned from.
 		 * @return @a this.
 		 */
-		Id&  operator=(const Id &id);
+		Id& operator=(const Id &id);
 
 		/**
 		 * @brief Compares two ids for equality.
