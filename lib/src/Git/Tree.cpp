@@ -165,6 +165,8 @@ Tree& Tree::operator=(const Tree &other)
 {
 	RawObject::operator=(other);
 
+	d = other.d;
+
 	return *this;
 }
 

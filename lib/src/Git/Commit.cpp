@@ -286,6 +286,8 @@ Commit& Commit::operator=(const Commit &other)
 {
 	RawObject::operator=(other);
 
+	d = other.d;
+
 	return *this;
 }
 

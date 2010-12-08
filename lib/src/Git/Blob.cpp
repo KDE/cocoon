@@ -59,6 +59,8 @@ Blob& Blob::operator=(const Blob &other)
 {
 	RawObject::operator=(other);
 
+	d = other.d;
+
 	return *this;
 }
 
