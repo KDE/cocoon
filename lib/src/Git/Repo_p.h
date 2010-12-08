@@ -51,7 +51,7 @@ public:
 	{}
 	~RepoPrivate() {}
 
-	QHash<QString, CommitList> commits;
+	QHash<QString, QList<Commit> > commits;
 	QString gitDir;
 	QHash<QString, Ref> refs;
 	LooseStorage *looseStorage;

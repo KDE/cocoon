@@ -40,7 +40,6 @@ namespace Git {
 
 class Blob;
 class Commit;
-typedef QList<Commit*>  CommitList;
 class Id;
 class ObjectStorage;
 class RawObject;
@@ -95,7 +94,7 @@ class KDE_EXPORT Repo : public QObject
 		Tree* tree(const Id &id);
 
 		void commitIndex(const QString &message, const QStringList &options = QStringList());
-		CommitList commits(const QString &branch = QString("HEAD"));
+		QList<Commit> commits(const QString &branch = QString("HEAD"));
 		const Ref& currentHead();
 		QString diff(const Commit &a, const Commit &b) const;
 		QList<Ref> heads();

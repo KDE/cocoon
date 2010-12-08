@@ -101,7 +101,7 @@ Commit* Repo::commit(const Id &id)
 	return obj && obj->isCommit() ? qobject_cast<Commit*>(obj) : 0;
 }
 
-CommitList Repo::commits(const QString &branch)
+QList<Commit> Repo::commits(const QString &branch)
 {
 	Ref branchRef = ref(branch);
 	if (!d->commits.contains(branchRef.fullName())) {
@@ -336,7 +336,7 @@ void Repo::unstageFiles(const QStringList &paths)
 /*
 			commits = heads.inject(0) { |sum, head| sum + commit_count(head.commit.to_s) }
 */
-	CommitList cs = commits();
+	QList<Commit> cs = commits();
 	if (cs.isEmpty()) {
 		runner.rm(paths, QStringList() << "--cached");
 	} else {
