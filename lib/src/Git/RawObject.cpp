@@ -33,6 +33,12 @@ using namespace Git;
 
 
 
+RawObject::RawObject()
+	: QObject()
+	, d(new RawObjectPrivate)
+{
+}
+
 RawObject::RawObject(const Id &id, Repo &repo)
 	: QObject((QObject*)&repo)
 	, d(new RawObjectPrivate)

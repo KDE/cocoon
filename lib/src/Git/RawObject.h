@@ -78,6 +78,16 @@ class KDE_EXPORT RawObject : public QObject
 
 	public:
 		/**
+		 * @brief Constructs an invalid Git object.
+		 *
+		 * It does not exist and has no SHA1.
+		 * It is intended for indicating an error when returning objects.
+		 *
+		 * @sa isValid()
+		 */
+		explicit RawObject();
+
+		/**
 		 * @brief Copy constructor.
 		 */
 		RawObject(const RawObject &other);
