@@ -69,7 +69,7 @@ class KDE_EXPORT Blob : public RawObject
 		/**
 		 * @brief Base class copy constructor.
 		 */
-		Blob(const RawObject &other);
+		explicit Blob(const RawObject &other);
 
 	public:
 		virtual ~Blob();

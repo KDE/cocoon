@@ -81,7 +81,7 @@ class KDE_EXPORT Tree : public RawObject
 		/**
 		 * @brief Base class copy constructor.
 		 */
-		Tree(const RawObject &other);
+		explicit Tree(const RawObject &other);
 
 		virtual ~Tree();
 

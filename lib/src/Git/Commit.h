@@ -83,6 +83,11 @@ class KDE_EXPORT Commit : public RawObject
 		 */
 		Commit(const Commit &other);
 
+		/**
+		 * @brief Base class copy constructor.
+		 */
+		explicit Commit(const RawObject &other);
+
 		virtual ~Commit();
 
 
