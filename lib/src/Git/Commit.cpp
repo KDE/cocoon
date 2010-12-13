@@ -50,6 +50,13 @@ Commit::Commit(const Commit &other)
 {
 }
 
+Commit::Commit(const RawObject &other)
+	: RawObject(other)
+	, d(RawObject::d)
+{
+	Q_ASSERT(other.isCommit());
+}
+
 Commit::~Commit()
 {
 }
@@ -111,7 +118,7 @@ QList<Commit> Commit::childrenOn(const QStringList &refs) const
 
 		QList<Commit> children;
 		foreach (const QString &id, childrenIds) {
-			children << *repo().commit(repo().idFor(id));
+			children << repo().commit(repo().idFor(id));
 		}
 
 		childrenByRefs[refKey] = children;
@@ -232,7 +239,7 @@ QList<Commit> Commit::allReachableFrom(const Ref &ref)
 	QList<Commit> commits;
 
 	QList<Commit> fringe;
-	fringe << *ref.commit();
+	fringe << ref.commit();
 
 	while (!fringe.isEmpty()) {
 		// find next commit in list
@@ -297,7 +304,7 @@ const QList<Commit> Commit::parents()
 
 	QList<Commit> commits;
 	foreach (const Id &id, d->parentIds) {
-		commits << *qobject_cast<Commit*>(id.object());
+		commits << Commit(id.object());
 	}
 
 	return commits;
@@ -343,7 +350,7 @@ const Tree Commit::tree()
 {
 	fillFromString(this, data());
 
-	return *qobject_cast<Tree*>(d->treeId.object());
+	return Tree(d->treeId.object());
 }
 
 #include "Commit.moc"
