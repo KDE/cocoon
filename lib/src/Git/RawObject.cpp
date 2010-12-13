@@ -103,6 +103,12 @@ const Id& RawObject::id() const
 	return d->id;
 }
 
+RawObject& RawObject::invalid()
+{
+	static RawObject invalid;
+	return invalid;
+}
+
 bool RawObject::isBlob() const
 {
 	return type() == OBJ_BLOB;

@@ -72,7 +72,7 @@ class KDE_EXPORT RawObject : public QObject
 		 * This constructor should only be called from derived classes.
 		 * If you need a general way to instantiate a Git object use newInstance().
 		 *
-		 * @see newInstance()
+		 * @see newInstance(), invalid()
 		 */
 		explicit RawObject(const Id& id, Repo &repo);
 
@@ -202,7 +202,7 @@ class KDE_EXPORT RawObject : public QObject
 		 *
 		 * @return true in case the Git object is valid, false otherwise
 		 *
-		 * @see RawObject()
+		 * @see RawObject(), invalid()
 		 */
 		bool isValid() const;
 
@@ -222,10 +222,46 @@ class KDE_EXPORT RawObject : public QObject
 		 */
 		bool operator==(const RawObject &other) const;
 
+		/**
+		 * Converts this Git object to a Blob.
+		 *
+		 * @return This Git object as a Blob or an invalid Blob.
+		 *
+		 * @see isBlob(), isValid()
+		 */
+		Blob toBlob() const;
+
+		/**
+		 * Converts this Git object to a Commit.
+		 *
+		 * @return This Git object as a Commit or an invalid Commit.
+		 *
+		 * @see isCommit(), isValid()
+		 */
+		Commit toCommit() const;
+
+		/**
+		 * Converts this Git object to a Tree.
+		 *
+		 * @return This Git object as a Tree or an invalid Tree.
+		 *
+		 * @see isTree(), isValid()
+		 */
+		Tree toTree() const;
+
 	// static
 		static const QString extractHeaderForm(const QByteArray &rawData);
 		static int extractObjectSizeFrom(const QString &header);
 		static ObjectType extractObjectTypeFrom(const QString &header);
+
+		/**
+		 * Returns an invalid RawObject.
+		 *
+		 * @return An invalid RawObject
+		 *
+		 * @see isValid()
+		 */
+		static RawObject& invalid();
 		static bool isOnlyHeader(const QByteArray &rawData);
 		static bool isValidHeader(const QString &possibleHeader);
 		static RawObject* newInstance(const Id& id, Repo &repo);
