@@ -65,7 +65,7 @@ class KDE_EXPORT RawObject : public QObject
 {
 	Q_OBJECT
 
-	protected:
+	public:
 		/**
 		 * @brief Constructs a basic Git object.
 		 *
@@ -76,7 +76,6 @@ class KDE_EXPORT RawObject : public QObject
 		 */
 		explicit RawObject(const Id& id, Repo &repo);
 
-	public:
 		/**
 		 * @brief Constructs an invalid Git object.
 		 *
