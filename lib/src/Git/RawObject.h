@@ -267,6 +267,10 @@ class KDE_EXPORT RawObject : public QObject
 		static RawObject& invalid();
 		static bool isOnlyHeader(const QByteArray &rawData);
 		static bool isValidHeader(const QString &possibleHeader);
+
+		/**
+		 * @deprecated
+		 */
 		static RawObject* newInstance(const Id& id, Repo &repo);
 		static ObjectType typeFromTypeName(const QString& name);
 		static const QString typeNameFromType(const ObjectType type);
