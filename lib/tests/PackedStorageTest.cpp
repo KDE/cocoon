@@ -103,11 +103,11 @@ class PackedStorageTest : public GitTestBase
 		}
 
 		void shouldFindObjectByFullId() {
-			QCOMPARE(storage->objectFor(Git::Id("b7566b7883e0dd74baba8cb194ed5dacaed5bb62", *storage))->id().toSha1String(), QLatin1String("b7566b7883e0dd74baba8cb194ed5dacaed5bb62"));
+			QCOMPARE(storage->objectFor(Git::Id("b7566b7883e0dd74baba8cb194ed5dacaed5bb62", *storage)).id().toSha1String(), QLatin1String("b7566b7883e0dd74baba8cb194ed5dacaed5bb62"));
 		}
 
 		void shouldFindObjectByShordId() {
-			QCOMPARE(storage->objectFor(Git::Id("b7566b7", *storage))->id().toSha1String(), QLatin1String("b7566b7883e0dd74baba8cb194ed5dacaed5bb62"));
+			QCOMPARE(storage->objectFor(Git::Id("b7566b7", *storage)).id().toSha1String(), QLatin1String("b7566b7883e0dd74baba8cb194ed5dacaed5bb62"));
 		}
 
 		void shoudlCacheIdsBetweenQueries() {

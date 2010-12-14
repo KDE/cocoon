@@ -68,8 +68,8 @@ class LooseStorageCachingTest : public GitTestBase
 
 		void shouldCacheObjectsBetweenQueries() {
 			Git::Id id = repo->commits()[0].id();
-			Git::RawObject* pObject1 = storage->objectFor(id);
-			Git::RawObject* pObject2 = storage->objectFor(id);
+			Git::RawObject &pObject1 = storage->objectFor(id);
+			Git::RawObject &pObject2 = storage->objectFor(id);
 
 			QVERIFY(pObject1 == pObject2);
 		}

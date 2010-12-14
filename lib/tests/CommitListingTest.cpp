@@ -62,7 +62,7 @@ class CommitListingTest : public GitTestBase
 		}
 
 		void firstCommitInListShouldBeTheRefCommit() {
-			Git::Commit headCommit = *repo->currentHead().commit();
+			Git::Commit headCommit = repo->currentHead().commit();
 			Git::Commit listCommit = Git::Commit::allReachableFrom(repo->currentHead())[0];
 
 			foreach (Git::Commit commit, Git::Commit::allReachableFrom(repo->currentHead())) {

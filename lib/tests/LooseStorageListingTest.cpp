@@ -56,37 +56,37 @@ class LooseStorageListingTest : public GitTestBase
 		}
 
 		void shouldFindAllBlobs() {
-			QList<Git::RawObject*> objects = storage->allObjectsByType(Git::OBJ_BLOB);
+			QList<Git::RawObject> objects = storage->allObjectsByType(Git::OBJ_BLOB);
 			QCOMPARE(objects.size(), 2);
-			foreach (const Git::RawObject *object, objects) {
-				QCOMPARE(object->type(), Git::OBJ_BLOB);
+			foreach (const Git::RawObject &object, objects) {
+				QCOMPARE(object.type(), Git::OBJ_BLOB);
 			}
 		}
 
 		void shouldFindAllCommits() {
-			QList<Git::RawObject*> objects = storage->allObjectsByType(Git::OBJ_COMMIT);
+			QList<Git::RawObject> objects = storage->allObjectsByType(Git::OBJ_COMMIT);
 			QCOMPARE(objects.size(), 4);
-			foreach (const Git::RawObject *object, objects) {
-				QCOMPARE(object->type(), Git::OBJ_COMMIT);
+			foreach (const Git::RawObject &object, objects) {
+				QCOMPARE(object.type(), Git::OBJ_COMMIT);
 			}
 		}
 
 		void shouldFindAllTag() {
-			QList<Git::RawObject*> objects = storage->allObjectsByType(Git::OBJ_TAG);
+			QList<Git::RawObject> objects = storage->allObjectsByType(Git::OBJ_TAG);
 			QCOMPARE(objects.size(), 0);
 		}
 
 		void shouldFindAllTrees() {
-			QList<Git::RawObject*> objects = storage->allObjectsByType(Git::OBJ_TREE);
+			QList<Git::RawObject> objects = storage->allObjectsByType(Git::OBJ_TREE);
 			QCOMPARE(objects.size(), 4);
-			foreach (const Git::RawObject *object, objects) {
-				QCOMPARE(object->type(), Git::OBJ_TREE);
+			foreach (const Git::RawObject &object, objects) {
+				QCOMPARE(object.type(), Git::OBJ_TREE);
 			}
 		}
 
 		void shouldUseChachedObjects() {
-			QList<Git::RawObject*> objects1 = storage->allObjects();
-			QList<Git::RawObject*> objects2 = storage->allObjects();
+			QList<Git::RawObject> objects1 = storage->allObjects();
+			QList<Git::RawObject> objects2 = storage->allObjects();
 
 			QCOMPARE(objects2, objects1);
 		}
