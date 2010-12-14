@@ -74,9 +74,9 @@ const QString& Ref::name() const
 	return d->name;
 }
 
-Commit* Ref::commit() const
+Commit Ref::commit() const
 {
-	return d->repo->commit(d->commitId);
+	return d->commitId.object().toCommit();
 }
 
 bool Ref::exists(const QString &name, const Repo &repo)
