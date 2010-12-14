@@ -64,7 +64,7 @@ class CommitPopulationErrorsTest : public GitTestBase
 			rawData << "";
 			Git::Commit::fillFromString(commit, rawData.join("\n"));
 
-			QVERIFY(commit->tree().isValid());
+			QVERIFY(!commit->tree().isValid());
 
 			//QCOMPARE(commit->tree().id().toSha1String(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
 			QCOMPARE(commit->parents().size(), 1);
