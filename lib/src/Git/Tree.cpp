@@ -43,13 +43,13 @@ Tree::Tree(const Id& id, Repo &repo)
 
 Tree::Tree(const Tree &other)
 	: RawObject(other)
-	, d(new TreePrivate(*RawObject::d))
+	, d(other.d)
 {
 }
 
 Tree::Tree(const RawObject &other)
 	: RawObject(other)
-	, d(new TreePrivate(*RawObject::d))
+	, d(new TreePrivate(*other.d))
 {
 	Q_ASSERT(other.isTree());
 }
