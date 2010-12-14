@@ -41,9 +41,12 @@ class RawObjectTypeTest;
 
 namespace Git {
 
+class Blob;
+class Commit;
 class ObjectStorage;
 class RawObjectPrivate;
 class Repo;
+class Tree;
 
 typedef enum {
 	OBJ_NONE = 0,

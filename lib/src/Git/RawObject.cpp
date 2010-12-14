@@ -199,6 +199,21 @@ int RawObject::size() const
 	return d->dataSize;
 }
 
+Blob RawObject::toBlob() const
+{
+	return isBlob() ? Blob(*this) : Blob();
+}
+
+Commit RawObject::toCommit() const
+{
+	return isCommit() ? Commit(*this) : Commit();
+}
+
+Tree RawObject::toTree() const
+{
+	return isTree() ? Tree(*this) : Tree();
+}
+
 ObjectType RawObject::type() const
 {
 	return d->type;
