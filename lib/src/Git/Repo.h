@@ -27,6 +27,8 @@
 
 #include <QObject>
 
+#include "Commit.h"
+
 #include <kdemacros.h>
 
 #include <QSharedDataPointer>
@@ -71,8 +73,8 @@ class KDE_EXPORT Repo : public QObject
 		Repo(const Repo &other);
 		virtual ~Repo();
 
-		Blob* blob(const Id &id);
-		Commit* commit(const Id &id);
+		Blob blob(const Id &id);
+		Commit commit(const Id &id);
 
 		/**
 		 * @brief Returns the proper @link Git::Id Id @endlink object for a given string.
@@ -90,8 +92,8 @@ class KDE_EXPORT Repo : public QObject
 		/**
 		 * @deprecated Use Id::object() intead.
 		 */
-		RawObject* object(const Id &id);
-		Tree* tree(const Id &id);
+		RawObject& object(const Id &id);
+		Tree tree(const Id &id);
 
 		void commitIndex(const QString &message, const QStringList &options = QStringList());
 		QList<Commit> commits(const QString &branch = QString("HEAD"));
