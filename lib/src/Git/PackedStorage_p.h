@@ -83,7 +83,7 @@ public:
 	quint32 indexVersion;
 	QString name;
 	QHash<Id, QByteArray> objectData;
-	QHash<Id, RawObject*> objects;
+	QHash<Id, RawObject> objects;
 	QHash<Id, quint32> offsetFor;
 	QFile packFile;
 	QHash<Id, PackedStorageObject*> packObjects;

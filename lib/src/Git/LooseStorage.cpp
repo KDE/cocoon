@@ -46,12 +46,6 @@ LooseStorage::LooseStorage(const LooseStorage &other)
 
 LooseStorage::~LooseStorage()
 {
-	if (!d->objects.isEmpty()) {
-		foreach (RawObject *object, d->objects) {
-			delete object;
-		}
-	}
-	d->objects.clear();
 }
 
 
@@ -98,11 +92,11 @@ const QByteArray LooseStorage::objectDataFor(const Id &id)
 	return d->objectData[id];
 }
 
-RawObject* LooseStorage::objectFor(const Id &id)
+RawObject& LooseStorage::objectFor(const Id &id)
 {
 	if (!d->objects.contains(id)) {
 		kDebug() << "load object" << id.toString();
-		d->objects[id] = RawObject::newInstance(id, repo());
+		d->objects[id] = RawObject(id, repo());
 	}
 
 	return d->objects[id];

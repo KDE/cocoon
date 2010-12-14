@@ -60,7 +60,7 @@ public:
 
 	QList<Id> ids;
 	QHash<Id, QByteArray> objectData;
-	QHash<Id, RawObject*> objects;
+	QHash<Id, RawObject> objects;
 	QDir objectsDir;
 	QHash<Id, int>        objectSizes;
 	QHash<Id, ObjectType> objectTypes;

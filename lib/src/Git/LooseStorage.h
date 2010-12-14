@@ -41,7 +41,7 @@ class KDE_EXPORT LooseStorage : public ObjectStorage
 
 		const QList<Id> allIds();
 		const QByteArray objectDataFor(const Id &id);
-		RawObject*       objectFor(const Id &id);
+		RawObject&       objectFor(const Id &id);
 		int              objectSizeFor(const Id &id);
 		ObjectType       objectTypeFor(const Id &id);
 

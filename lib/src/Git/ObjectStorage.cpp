@@ -69,9 +69,9 @@ const QString ObjectStorage::actualIdFor(const QString &shortId)
 	return shortId;
 }
 
-QList<RawObject*> ObjectStorage::allObjects()
+QList<RawObject> ObjectStorage::allObjects()
 {
-	QList<RawObject*> objects;
+	QList<RawObject> objects;
 
 	foreach (const Id &id, allIds()) {
 		objects << objectFor(id);
@@ -80,12 +80,12 @@ QList<RawObject*> ObjectStorage::allObjects()
 	return objects;
 }
 
-QList<RawObject*> ObjectStorage::allObjectsByType(const ObjectType type)
+QList<RawObject> ObjectStorage::allObjectsByType(const ObjectType type)
 {
-	QList<RawObject*> objects;
+	QList<RawObject> objects;
 
-	foreach (RawObject *object, allObjects()) {
-		if (object->type() == type) {
+	foreach (const RawObject &object, allObjects()) {
+		if (object.type() == type) {
 			objects << object;
 		}
 	}

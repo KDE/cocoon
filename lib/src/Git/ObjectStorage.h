@@ -58,8 +58,8 @@ class KDE_EXPORT ObjectStorage : public QObject
 
 		const QString actualIdFor(const QString &shortId);
 		virtual const QList<Id> allIds() = 0;
-		virtual QList<RawObject*> allObjects();
-		virtual QList<RawObject*> allObjectsByType(const ObjectType type);
+		virtual QList<RawObject> allObjects();
+		virtual QList<RawObject> allObjectsByType(const ObjectType type);
 		virtual bool contains(const Id &id);
 		virtual bool contains(const QString &id);
 
@@ -67,7 +67,7 @@ class KDE_EXPORT ObjectStorage : public QObject
 		 * @brief Returns the object's raw data.
 		 */
 		virtual const QByteArray objectDataFor(const Id &id) = 0;
-		virtual RawObject*       objectFor(const Id &id) = 0;
+		virtual RawObject&       objectFor(const Id &id) = 0;
 		virtual int              objectSizeFor(const Id &id) = 0;
 		virtual ObjectType       objectTypeFor(const Id &id) = 0;
 

@@ -87,11 +87,6 @@ PackedStorage::PackedStorage(const PackedStorage &other)
 
 PackedStorage::~PackedStorage()
 {
-	if (!d->objects.isEmpty()) {
-		foreach (RawObject *object, d->objects) {
-			delete object;
-		}
-	}
 	d->objects.clear();
 
 	if (!d->packObjects.isEmpty()) {
@@ -321,11 +316,11 @@ PackedStorageObject* PackedStorage::packObjectFor(const Id &id)
 	return d->packObjects[id];
 }
 
-RawObject* PackedStorage::objectFor(const Id &id)
+RawObject& PackedStorage::objectFor(const Id &id)
 {
 	if (!d->objects.contains(id)) {
 		kDebug() << "loading object" << id.toString() << "in" << d->name;
-		d->objects[id] = RawObject::newInstance(id, repo());
+		d->objects[id] = RawObject(id, repo());
 	}
 
 	return d->objects[id];
