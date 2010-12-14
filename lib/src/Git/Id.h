@@ -110,7 +110,7 @@ class KDE_EXPORT Id : public QObject
 		/**
 		 * @brief Returns the object represented by the id.
 		 */
-		RawObject* object() const;
+		RawObject& object() const;
 
 		/**
 		 * @brief Returns the storage the object with this id is stored in.

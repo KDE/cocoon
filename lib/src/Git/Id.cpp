@@ -94,10 +94,10 @@ bool Id::isValid() const
 	return !d->sha1.isEmpty();
 }
 
-RawObject* Id::object() const
+RawObject& Id::object() const
 {
 	if (!d->storage) {
-		return 0;
+		return RawObject::invalid();
 	}
 
 	return d->storage->objectFor(*this);
