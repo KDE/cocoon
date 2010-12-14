@@ -350,7 +350,7 @@ const Tree Commit::tree()
 {
 	fillFromString(this, data());
 
-	return Tree(d->treeId.object());
+	return d->treeId.object().toTree();
 }
 
 #include "Commit.moc"
