@@ -109,10 +109,10 @@ void CompareWidget::updateComparison()
 		m_commitBId = m_repo->commits(m_repo->currentHead().name()).first().id();
 	}
 
-	Git::Commit *commitA = qobject_cast<Git::Commit*>(m_commitAId.object());
-	Git::Commit *commitB = qobject_cast<Git::Commit*>(m_commitBId.object());
+	Git::Commit commitA = m_commitAId.object().toCommit();
+	Git::Commit commitB = m_commitBId.object().toCommit();
 
-	ui->diffWidget->setDiff(m_repo->diff(*commitA, *commitB));
+	ui->diffWidget->setDiff(m_repo->diff(commitA, commitB));
 }
 
 #include "CompareWidget.moc"

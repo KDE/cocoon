@@ -46,16 +46,16 @@ void CommitInfoWidget::clear()
 
 void CommitInfoWidget::updateView()
 {
-	Git::Commit *commit = qobject_cast<Git::Commit*>(m_commitId.object());
-	if (!commit) {
+	Git::Commit commit = m_commitId.object().toCommit();
+	if (!commit.isValid()) {
 		clear();
 		return;
 	}
 
 	ui->idLabel->setText(m_commitId.toSha1String());
-	ui->authorLabel->setText(i18n("%1 %2", commit->author(), commit->authoredAt().toString()));
-	ui->messageLabel->setText(commit->message());
-	ui->diffView->setDiff(commit->diff());
+	ui->authorLabel->setText(i18n("%1 %2", commit.author(), commit.authoredAt().toString()));
+	ui->messageLabel->setText(commit.message());
+	ui->diffView->setDiff(commit.diff());
 }
 
 void CommitInfoWidget::setCommit(const Git::Commit &commit)
