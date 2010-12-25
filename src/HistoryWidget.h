@@ -48,6 +48,7 @@ class HistoryWidget : public QWidget
 		void setRepository(Git::Repo *repo);
 
 	private:
+		void clear();
 		void loadModels();
 		void showCurrentBranch();
 

@@ -40,6 +40,21 @@ HistoryWidget::~HistoryWidget()
 	delete ui;
 }
 
+
+
+void HistoryWidget::clear()
+{
+	delete m_branchesModel;
+	m_branchesModel = 0;
+
+	delete m_historyModel;
+	m_historyModel = 0;
+
+	ui->branchComboBox->setModel(0);
+	ui->historyView->setModel(0);
+	ui->commitWidget->clear();
+}
+
 void HistoryWidget::loadModels()
 {
 	m_branchesModel = new GitBranchesModel(*m_repo, this);
@@ -67,6 +82,7 @@ void HistoryWidget::on_historyView_clicked(const QModelIndex &index)
 
 void HistoryWidget::setRepository(Git::Repo *repo)
 {
+	clear();
 	m_repo = repo;
 	loadModels();
 }
