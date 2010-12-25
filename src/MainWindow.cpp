@@ -82,9 +82,11 @@ void MainWindow::reload()
 {
 	m_repo->reset();
 
-//	ui->historyWidget->reload();
-	ui->stageWidget->reload();
+	emit repositoryChanged(m_repo);
+
 //	ui->compareWidget->reload();
+//	ui->historyWidget->reload();
+//	ui->stageWidget->reload();
 }
 
 void MainWindow::setRepository(const QString &repoPath)
