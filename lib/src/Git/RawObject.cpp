@@ -62,7 +62,11 @@ RawObject::~RawObject()
 
 const QByteArray RawObject::data()
 {
-	return d->id.storage().objectDataFor(d->id);
+	if (!isValid()) {
+		return QByteArray();
+	}
+
+	return id().storage().objectDataFor(d->id);
 }
 
 const QString RawObject::extractHeaderForm(const QByteArray &rawData)
@@ -180,8 +184,11 @@ bool RawObject::operator==(const RawObject &other) const
 
 void RawObject::populateHeader()
 {
-	Q_ASSERT(d->repo);
-	Q_ASSERT(id().exists());
+	Q_ASSERT(id().isValid());
+
+	if (!isValid()) {
+		return;
+	}
 
 	ObjectStorage &store = id().storage();
 
