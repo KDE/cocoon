@@ -28,13 +28,13 @@ class CommitPopulationErrorsTest : public GitTestBase
 {
 	Q_OBJECT
 
-	Git::Commit *commit;
+	Git::Commit commit;
 
 	private slots:
 		void initTestCase() {
 			GitTestBase::initTestCase();
 
-			commit = 0;
+			commit = Git::Commit();
 
 			cloneFrom("CommitPopulationTestRepo");
 		}
@@ -43,11 +43,11 @@ class CommitPopulationErrorsTest : public GitTestBase
 			GitTestBase::init();
 
 			Git::Id id("b462958a492e9abaaa3bd2725639932b5fd551d9", *repo);
-			commit = new Git::Commit(id, *repo);
+			commit = Git::Commit(id, *repo);
 		}
 
 		void cleanup() {
-			delete commit;
+			commit = Git::Commit();
 			GitTestBase::cleanup();
 		}
 
@@ -62,15 +62,15 @@ class CommitPopulationErrorsTest : public GitTestBase
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
-			Git::Commit::fillFromString(commit, rawData.join("\n"));
+			Git::Commit::fillFromString(&commit, rawData.join("\n"));
 
-			QVERIFY(!commit->tree().isValid());
+			QVERIFY(!commit.tree().isValid());
 
-			//QCOMPARE(commit->tree().id().toSha1String(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
-			QCOMPARE(commit->parents().size(), 1);
-			QCOMPARE(commit->author(), QLatin1String("Me"));
-			QCOMPARE(commit->committer(), QLatin1String("You"));
-			QCOMPARE(commit->message(), QLatin1String("Some message."));
+			//QCOMPARE(commit.tree().id().toSha1String(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
+			QCOMPARE(commit.parents().size(), 1);
+			QCOMPARE(commit.author(), QLatin1String("Me"));
+			QCOMPARE(commit.committer(), QLatin1String("You"));
+			QCOMPARE(commit.message(), QLatin1String("Some message."));
 		}
 
 		void shouldHandleAuthoredTimeWithMissingAuthor() {
@@ -82,15 +82,15 @@ class CommitPopulationErrorsTest : public GitTestBase
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
-			Git::Commit::fillFromString(commit, rawData.join("\n"));
+			Git::Commit::fillFromString(&commit, rawData.join("\n"));
 
-			QCOMPARE(commit->author(), QString());
+			QCOMPARE(commit.author(), QString());
 
-			QCOMPARE(commit->tree().id().toSha1String(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
-			QCOMPARE(commit->parents().size(), 1);
-			//QCOMPARE(commit->author(), QLatin1String("Me"));
-			QCOMPARE(commit->committer(), QLatin1String("You"));
-			QCOMPARE(commit->message(), QLatin1String("Some message."));
+			QCOMPARE(commit.tree().id().toSha1String(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
+			QCOMPARE(commit.parents().size(), 1);
+			//QCOMPARE(commit.author(), QLatin1String("Me"));
+			QCOMPARE(commit.committer(), QLatin1String("You"));
+			QCOMPARE(commit.message(), QLatin1String("Some message."));
 		}
 
 		void shouldHandleAuthorWithMissingAuthoredTime() {
@@ -102,15 +102,15 @@ class CommitPopulationErrorsTest : public GitTestBase
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
-			Git::Commit::fillFromString(commit, rawData.join("\n"));
+			Git::Commit::fillFromString(&commit, rawData.join("\n"));
 
-			QCOMPARE(commit->authoredAt().toString(), KDateTime().toString());
+			QCOMPARE(commit.authoredAt().toString(), KDateTime().toString());
 
-			QCOMPARE(commit->tree().id().toSha1String(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
-			QCOMPARE(commit->parents().size(), 1);
-			QCOMPARE(commit->author(), QLatin1String("Me"));
-			QCOMPARE(commit->committer(), QLatin1String("You"));
-			QCOMPARE(commit->message(), QLatin1String("Some message."));
+			QCOMPARE(commit.tree().id().toSha1String(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
+			QCOMPARE(commit.parents().size(), 1);
+			QCOMPARE(commit.author(), QLatin1String("Me"));
+			QCOMPARE(commit.committer(), QLatin1String("You"));
+			QCOMPARE(commit.message(), QLatin1String("Some message."));
 		}
 
 		void shouldHandleCommitedTimeWithMissingCommitter() {
@@ -122,15 +122,15 @@ class CommitPopulationErrorsTest : public GitTestBase
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
-			Git::Commit::fillFromString(commit, rawData.join("\n"));
+			Git::Commit::fillFromString(&commit, rawData.join("\n"));
 
-			QCOMPARE(commit->committer(), QString());
+			QCOMPARE(commit.committer(), QString());
 
-			QCOMPARE(commit->tree().id().toSha1String(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
-			QCOMPARE(commit->parents().size(), 1);
-			QCOMPARE(commit->author(), QLatin1String("Me"));
-			//QCOMPARE(commit->committer(), QLatin1String("You"));
-			QCOMPARE(commit->message(), QLatin1String("Some message."));
+			QCOMPARE(commit.tree().id().toSha1String(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
+			QCOMPARE(commit.parents().size(), 1);
+			QCOMPARE(commit.author(), QLatin1String("Me"));
+			//QCOMPARE(commit.committer(), QLatin1String("You"));
+			QCOMPARE(commit.message(), QLatin1String("Some message."));
 		}
 
 		void shouldHandleCommitterWithMissingCommitedTime() {
@@ -142,15 +142,15 @@ class CommitPopulationErrorsTest : public GitTestBase
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
-			Git::Commit::fillFromString(commit, rawData.join("\n"));
+			Git::Commit::fillFromString(&commit, rawData.join("\n"));
 
-			QCOMPARE(commit->committedAt().toString(), KDateTime().toString());
+			QCOMPARE(commit.committedAt().toString(), KDateTime().toString());
 
-			QCOMPARE(commit->tree().id().toSha1String(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
-			QCOMPARE(commit->parents().size(), 1);
-			QCOMPARE(commit->author(), QLatin1String("Me"));
-			QCOMPARE(commit->committer(), QLatin1String("You"));
-			QCOMPARE(commit->message(), QLatin1String("Some message."));
+			QCOMPARE(commit.tree().id().toSha1String(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
+			QCOMPARE(commit.parents().size(), 1);
+			QCOMPARE(commit.author(), QLatin1String("Me"));
+			QCOMPARE(commit.committer(), QLatin1String("You"));
+			QCOMPARE(commit.message(), QLatin1String("Some message."));
 		}
 
 		void shouldHandleCutOffData() {
@@ -162,16 +162,16 @@ class CommitPopulationErrorsTest : public GitTestBase
 			//rawData << "";
 			//rawData << "Some message.";
 			//rawData << "";
-			Git::Commit::fillFromString(commit, rawData.join("\n"));
+			Git::Commit::fillFromString(&commit, rawData.join("\n"));
 
-			QCOMPARE(commit->authoredAt().toString(), KDateTime().toString());
+			QCOMPARE(commit.authoredAt().toString(), KDateTime().toString());
 
-			QCOMPARE(commit->tree().id().toSha1String(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
-			QCOMPARE(commit->parents().size(), 1);
-			QCOMPARE(commit->parents()[0].id().toSha1String(), QLatin1String("abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d"));
-			QCOMPARE(commit->author(), QLatin1String("Me"));
-			QCOMPARE(commit->committer(), QString());
-			QCOMPARE(commit->message(), QString());
+			QCOMPARE(commit.tree().id().toSha1String(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
+			QCOMPARE(commit.parents().size(), 1);
+			QCOMPARE(commit.parents()[0].id().toSha1String(), QLatin1String("abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d"));
+			QCOMPARE(commit.author(), QLatin1String("Me"));
+			QCOMPARE(commit.committer(), QString());
+			QCOMPARE(commit.message(), QString());
 		}
 };
 
