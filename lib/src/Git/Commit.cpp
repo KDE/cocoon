@@ -303,8 +303,13 @@ const QList<Commit> Commit::parents()
 	fillFromString(this, data());
 
 	QList<Commit> commits;
+
+	if (!isValid()) {
+		return commits;
+	}
+
 	foreach (const Id &id, d->parentIds) {
-		commits << Commit(id.object());
+		commits << id.object().toCommit();
 	}
 
 	return commits;
