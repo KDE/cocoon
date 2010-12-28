@@ -184,6 +184,16 @@ class KDE_EXPORT Commit : public RawObject
 		const Tree tree();
 
 	// static
+		/**
+		 * @brief Returns a list of commits that are reachable from the given ref.
+		 *
+		 * The commits are listed starting from the commit pointed to by @a branch and sorted by date.
+		 *
+		 * @param branch The ref to start from.
+		 * @return Returns all reachable Commits sorted by date.
+		 *
+		 * @see latestIn()
+		 */
 		static QList<Commit> allReachableFrom(const Ref &branch);
 
 	private:
@@ -207,6 +217,14 @@ class KDE_EXPORT Commit : public RawObject
 		 */
 		static void fillFromString(Commit *commit, const QString &raw);
 
+		/**
+		 * @brief Selects the latest Commit form a list of Commits.
+		 *
+		 * @param commits The list of commits.
+		 * @return The latest commit.
+		 *
+		 * @see Commit::committedAt()
+		 */
 		static Commit latestIn(const QList<Commit> &commits);
 
 		/**
