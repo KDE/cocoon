@@ -62,12 +62,60 @@ class KDE_EXPORT Ref : public QObject
 		Ref(const Ref &other);
 		explicit Ref(const QString &remote, const QString &prefix, const QString &name, Repo &repo);
 
+		/**
+		 * @brief Retruns the commit the ref points to.
+		 *
+		 * @return The commit.
+		 */
 		Commit commit() const;
 		const QString fullName() const;
 		bool isRemote() const;
+
+		/**
+		 * @brief Checks whether the ref is valid.
+		 *
+		 * The ref is invalid when it was constructed using the default constructor.
+		 *
+		 * @return true in case the ref is valid, false otherwise
+		 *
+		 * @see Ref()
+		 */
 		bool isValid() const;
+
+		/**
+		 * @brief The name of the ref.
+		 *
+		 * It will return:
+		 * - "master" for "refs/heads/master"
+		 * - "release-1.5" for "refs/tags/release-1.5"
+		 * - "feature-x" for "refs/remotes/origin/feature-x"
+		 *
+		 * @return The name of the ref.
+		 */
 		const QString& name() const;
+
+		/**
+		 * @brief The prefix of the ref.
+		 *
+		 * It will return:
+		 * - "heads" for "refs/heads/master"
+		 * - "tags" for "refs/tags/release-1.5"
+		 * - "origin" for "refs/remotes/origin/feature-x"
+		 *
+		 * @return The prefix of the ref.
+		 */
 		const QString& prefix() const;
+
+		/**
+		 * @brief The remote of the ref.
+		 *
+		 * It will return:
+		 * - "" for "refs/heads/master"
+		 * - "" for "refs/tags/release-1.5"
+		 * - "remotes" for "refs/remotes/origin/feature-x"
+		 *
+		 * @return The remote of the ref.
+		 */
 		const QString& remote() const;
 
 		QList<Ref> all() const;
@@ -79,6 +127,15 @@ class KDE_EXPORT Ref : public QObject
 		 * @return @a this.
 		 */
 		Ref& operator=(const Ref &other);
+
+		/**
+		 * @brief Compares two refs for equality.
+		 *
+		 * The comparison is based on the ref's prefix and name.
+		 *
+		 * @param other The ref to be compared to.
+		 * @return true if both prefixes and names are equal, false otherwise
+		 */
 		bool operator==(const Ref &other) const;
 
 	public: //static
@@ -106,6 +163,10 @@ class KDE_EXPORT Ref : public QObject
 		 * @see http://www.kernel.org/pub/software/scm/git/docs/git-rev-parse.html#_specifying_revisions
 		 */
 		static QString fullNameFor(const QString &name, const Repo &repo);
+
+		/**
+		 * @deprecated
+		 */
 		static Ref newInstance(const QString &remote, const QString &prefix, const QString &name, Repo &repo);
 
 	protected:
