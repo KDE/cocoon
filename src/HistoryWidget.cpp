@@ -52,7 +52,7 @@ void HistoryWidget::clear()
 	delete m_historyModel;
 	m_historyModel = 0;
 
-	ui->branchComboBox->setModel(0);
+	ui->branchComboBox->clear();
 	ui->historyView->setModel(0);
 	ui->commitWidget->clear();
 }
