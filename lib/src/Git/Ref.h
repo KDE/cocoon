@@ -63,7 +63,7 @@ class KDE_EXPORT Ref : public QObject
 		explicit Ref(const QString &remote, const QString &prefix, const QString &name, Repo &repo);
 
 		/**
-		 * @brief Retruns the commit the ref points to.
+		 * @brief Returns the commit the ref points to.
 		 *
 		 * @return The commit.
 		 */
