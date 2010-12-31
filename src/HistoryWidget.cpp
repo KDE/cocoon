@@ -29,9 +29,9 @@
 
 HistoryWidget::HistoryWidget(QWidget *parent)
 	: QWidget(parent)
-	, m_repo(0)
 	, m_branchesModel(0)
 	, m_historyModel(0)
+	, m_repo(0)
 	, ui(new Ui::HistoryWidget)
 {
 	ui->setupUi(this);
