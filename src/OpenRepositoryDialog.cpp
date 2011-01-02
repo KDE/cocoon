@@ -74,7 +74,7 @@ void OpenRepositoryDialog::addRepository(const QString &repoPath)
 			item->setForeground(QBrush(Qt::red));
 			if (QDir(repoPath).exists()) {
 				item->setIcon(KIcon("folder"));
-				item->setToolTip("This directory does not contain a repository.");
+				item->setToolTip(i18n("This directory does not contain a repository."));
 			} else {
 				QPixmap iconPix = KIcon("folder").pixmap(16);
 				QPainter painter(&iconPix);
@@ -83,7 +83,7 @@ void OpenRepositoryDialog::addRepository(const QString &repoPath)
 				painter.drawPixmap(0, iconPix.height() - emblemPix.height(), emblemPix);
 
 				item->setIcon(iconPix);
-				item->setToolTip("This directory does not exist anymore.");
+				item->setToolTip(i18n("This directory does not exist anymore."));
 			}
 		}
 		repoList->addItem(item);
@@ -104,10 +104,10 @@ void OpenRepositoryDialog::createActions()
 	QPushButton *quitButton = ui->quitButton;
 	if (parent()) {
 		quitButton->setIcon(KIcon("dialog-close"));
-		quitButton->setText("Cancel");
+		quitButton->setText(i18n("Cancel"));
 	} else {
 		quitButton->setIcon(KIcon("application-exit"));
-		quitButton->setText("Exit");
+		quitButton->setText(i18n("Exit"));
 	}
 }
 
