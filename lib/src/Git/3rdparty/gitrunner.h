@@ -110,7 +110,7 @@ public:
 		 * @note Since the main thread is blocked until the command is executed, this
 		 * method is useful when there are more threads running in the same app.
 		 */
-		bool isRunning();
+		bool isRunning() const;
 
 		/**
 		 * Sets the working directory for our class.

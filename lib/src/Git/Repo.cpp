@@ -250,10 +250,8 @@ void Repo::resetRefs()
 void Repo::resetStatus()
 {
 	/** @todo make Status smarter to detect only changed files */
-	if (d->status) {
-		delete d->status;
-		d->status = 0;
-	}
+	delete d->status;
+	d->status = 0;
 }
 
 void Repo::resetLooseStorage()

@@ -174,7 +174,7 @@ const QMap<QString, Tree> Tree::treesByName()
 {
 	QMap<QString, Tree> result;
 
-	foreach(const Tree entry, trees()) {
+	foreach(const Tree& entry, trees()) {
 		result[nameFor(entry)] = entry;
 	}
 

@@ -27,8 +27,7 @@ DvcsJob::DvcsJob()
 
 DvcsJob::~DvcsJob()
 {
-    if (m_process)
-        delete m_process;
+    delete m_process;
     m_process = 0;
 }
 

@@ -43,9 +43,7 @@ GitRunner::~GitRunner()
 //	if( m_job ) {
 //				delete m_job;
 //	}
-	if (m_lastRepoRoot) {
-		delete m_lastRepoRoot;
-	}
+	delete m_lastRepoRoot;
 }
 
 void GitRunner::initJob(DvcsJob &job)
@@ -77,7 +75,7 @@ void GitRunner::setDirectory(const KUrl &dir)
 	m_lastRepoRoot = new KUrl(dir);
 }
 
-bool GitRunner::isRunning()
+bool GitRunner::isRunning() const
 {
 	return m_isRunning;
 }
