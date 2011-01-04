@@ -59,22 +59,16 @@ class LooseStorageTest : public GitTestBase
 			QCOMPARE(storage->d->objectsDir.path(), QString("%1/objects").arg(repo->gitDir()));
 		}
 
-		void testSourceForFullIdIsCorrect() {
-			QString sourcePath = storage->sourceFor(Git::Id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *storage));
+		void testSourceForIdIsCorrect() {
+			Git::Id id = Git::Id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *storage);
+			QString sourcePath = storage->sourceFor(id);
 
 			QCOMPARE(sourcePath, QString("%1/objects/c5/6dada2cf4f67b35ed0019ddd4651a8c8a337e8").arg(repo->gitDir()));
 		}
 
-		void testSourceForShortIdIsCorrect() {
-			QString id = "c56dada2cf4f67b35ed0019ddd4651a8c8a337e8";
-			QString sourcePath = storage->sourceFor(Git::Id(id.left(7), *storage));
-
-			QCOMPARE(sourcePath, QString("%1/objects/%2/%3").arg(repo->gitDir()).arg(id.left(2)).arg(id.mid(2)));
-		}
-
 		void testInflationIsWorking() {
-			QString id = "c56dada2cf4f67b35ed0019ddd4651a8c8a337e8";
-			QByteArray rawData = storage->rawDataFor(Git::Id(id, *storage));
+			Git::Id id = Git::Id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *storage);
+			QByteArray rawData = storage->rawDataFor(id);
 
 			QCOMPARE(QTest::toHexRepresentation(rawData, 16), QTest::toHexRepresentation("commit 212\0tree ", 16));
 			QCOMPARE(rawData.size(), QString("commit 212").length() + 1 + 212);
