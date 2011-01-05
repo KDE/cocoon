@@ -72,11 +72,7 @@ PackedStorage::PackedStorage(const QString &name, Repo &repo)
 	, d(new PackedStoragePrivate(*ObjectStorage::d))
 {
 	d->name = name;
-	d->indexFile.setFileName(QString("%1/objects/pack/%2.idx").arg(repo.gitDir()).arg(d->name));
-	d->packFile.setFileName(QString("%1/objects/pack/%2.pack").arg(repo.gitDir()).arg(d->name));
-
-	initIndex();
-	initPack();
+	reset();
 }
 
 PackedStorage::PackedStorage(const PackedStorage &other)
