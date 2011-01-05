@@ -334,6 +334,26 @@ const QByteArray PackedStorage::readIndexFrom(int offset, int length)
 	return d->indexFile.read(length);
 }
 
+void PackedStorage::reset()
+{
+	foreach (PackedStorageObject *object, d->packObjects) {
+		delete object;
+	}
+	d->packObjects.clear();
+
+	Repo *r = d->repo;
+	QString n = d->name;
+	d = new PackedStoragePrivate();
+
+	d->repo = r;
+	d->name = n;
+	d->indexFile.setFileName(QString("%1/objects/pack/%2.idx").arg(repo().gitDir()).arg(d->name));
+	d->packFile.setFileName(QString("%1/objects/pack/%2.pack").arg(repo().gitDir()).arg(d->name));
+
+	initIndex();
+	initPack();
+}
+
 int PackedStorage::size()
 {
 	return d->size;

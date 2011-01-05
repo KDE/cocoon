@@ -53,6 +53,9 @@ class KDE_EXPORT PackedStorage : public ObjectStorage
 	// static
 		static const QStringList allNamesIn(const Repo &repo);
 
+	public slots:
+		void reset();
+
 	private:
 		const QList<Id> allIds_v1();
 		const QList<Id> allIds_v2();
