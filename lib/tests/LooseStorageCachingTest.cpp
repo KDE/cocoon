@@ -20,6 +20,7 @@
 
 #include "Git/Commit.h"
 #include "Git/LooseStorage.h"
+#include "Git/LooseStorage_p.h"
 
 
 
@@ -52,16 +53,16 @@ class LooseStorageCachingTest : public GitTestBase
 
 		void shouldNotCacheRawDataBetweenQueries() {
 			Git::Id id = repo->commits()[0].id();
-			const char* pData1 = storage->rawDataFor(id).data();
-			const char* pData2 = storage->rawDataFor(id).data();
+			const char* pData1 = storage->rawDataFor(id).constData();
+			const char* pData2 = storage->rawDataFor(id).constData();
 
 			QVERIFY(pData1 != pData2);
 		}
 
 		void shouldCacheObjectDataBetweenQueries() {
 			Git::Id id = repo->commits()[0].id();
-			const char* pData1 = storage->objectDataFor(id).data();
-			const char* pData2 = storage->objectDataFor(id).data();
+			const char* pData1 = storage->objectDataFor(id).constData();
+			const char* pData2 = storage->objectDataFor(id).constData();
 
 			QVERIFY(pData1 == pData2);
 		}
@@ -82,23 +83,45 @@ class LooseStorageCachingTest : public GitTestBase
 		}
 
 		void resetShouldClearIds() {
+			const Git::Id *pOldId = &storage->allIds()[0];
+			storage->reset();
+			const Git::Id *pNewId = &storage->allIds()[0];
 
+			QVERIFY(pOldId != pNewId);
 		}
 
 		void resetShouldClearObjects() {
+			Git::Id id = Git::Id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *storage);
+			Git::RawObject *pOldObject = &storage->objectFor(id);
+			storage->reset();
+			Git::RawObject *pNewObject = &storage->objectFor(id);
 
+			QVERIFY(pNewObject != pOldObject);
 		}
 
 		void resetShouldClearObjectData() {
+			Git::Id id = Git::Id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *storage);
+			const char* oldData = storage->objectDataFor(id).constData();
+			storage->reset();
+			const char* newData = storage->objectDataFor(id).constData();
 
+			QVERIFY(newData != oldData);
 		}
 
 		void resetShouldClearObjectSizes() {
+			Git::Id id = Git::Id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *storage);
+			storage->objectSizeFor(id); // load data
+			storage->reset();
 
+			QVERIFY(storage->d->objectSizes.isEmpty());
 		}
 
 		void resetShouldClearObjectTypes() {
+			Git::Id id = Git::Id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *storage);
+			storage->objectTypeFor(id); // load data
+			storage->reset();
 
+			QVERIFY(storage->d->objectTypes.isEmpty());
 		}
 
 		void repoHistoryChangeShouldTriggerReset() {
