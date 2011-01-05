@@ -39,9 +39,7 @@ public:
 		, indexFile()
 		, indexVersion(0)
 		, name()
-		, objectData()
 		, objects()
-		, offsetFor()
 		, packFile()
 		, packObjects()
 		, size(0)
@@ -53,9 +51,7 @@ public:
 		, indexFile()
 		, indexVersion(0)
 		, name()
-		, objectData()
 		, objects()
-		, offsetFor()
 		, packFile()
 		, packObjects()
 		, size(0)
@@ -67,9 +63,7 @@ public:
 		, indexFile(other.indexFile.fileName())
 		, indexVersion(other.indexVersion)
 		, name(other.name)
-		, objectData(other.objectData)
 		, objects(other.objects)
-		, offsetFor(other.offsetFor)
 		, packFile(other.packFile.fileName())
 		, packObjects(other.packObjects)
 		, size(other.size)
@@ -82,9 +76,7 @@ public:
 	QFile indexFile;
 	quint32 indexVersion;
 	QString name;
-	QHash<Id, QByteArray> objectData;
 	QHash<Id, RawObject> objects;
-	QHash<Id, quint32> offsetFor;
 	QFile packFile;
 	QHash<Id, PackedStorageObject*> packObjects;
 	quint32 size;

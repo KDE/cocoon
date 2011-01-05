@@ -230,7 +230,6 @@ void PackedStorage::initIndexOffsets()
 		quint32 offset = offsetIn(i);
 		const Id &id = idIn(i);
 		d->idAt[offset] = id;
-		d->offsetFor[id] = offset;
 	}
 }
 
