@@ -24,6 +24,7 @@
 class QFile;
 
 class PackedStorageTest;
+class PackedStorageCachingTest;
 class PackedStorageDeltifiedExtractionTest;
 class PackedStorageNormalExtractionTest;
 
@@ -79,6 +80,7 @@ class KDE_EXPORT PackedStorage : public ObjectStorage
 	friend class PackedStorageObject;
 
 	friend class ::PackedStorageTest;
+	friend class ::PackedStorageCachingTest;
 	friend class ::PackedStorageDeltifiedExtractionTest;
 	friend class ::PackedStorageNormalExtractionTest;
 };
