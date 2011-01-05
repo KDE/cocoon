@@ -35,7 +35,7 @@ LooseStorage::LooseStorage(Repo &repo)
 	: ObjectStorage(repo)
 	, d(new LooseStoragePrivate(*ObjectStorage::d))
 {
-	d->objectsDir = QDir(repo.gitDir() + "/objects");
+	reset();
 }
 
 LooseStorage::LooseStorage(const LooseStorage &other)
@@ -146,11 +146,6 @@ void LooseStorage::reset()
 	d = new LooseStoragePrivate();
 	d->repo = r;
 	d->objectsDir = QDir(d->repo->gitDir() + "/objects");
-//	d->ids.clear();
-//	d->objects.clear();
-//	d->objectData.clear();
-//	d->objectSizes.clear();
-//	d->objectTypes.clear();
 }
 
 const QString LooseStorage::sourceFor(const Id &id)
