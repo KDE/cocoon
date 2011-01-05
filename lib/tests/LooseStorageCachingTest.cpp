@@ -56,6 +56,7 @@ class LooseStorageCachingTest : public GitTestBase
 			const char* pData1 = storage->rawDataFor(id).constData();
 			const char* pData2 = storage->rawDataFor(id).constData();
 
+			// brittle
 			QVERIFY(pData1 != pData2);
 		}
 
@@ -96,6 +97,7 @@ class LooseStorageCachingTest : public GitTestBase
 			storage->reset();
 			Git::RawObject *pNewObject = &storage->objectFor(id);
 
+			// brittle
 			QVERIFY(pNewObject != pOldObject);
 		}
 
@@ -105,6 +107,7 @@ class LooseStorageCachingTest : public GitTestBase
 			storage->reset();
 			const char* newData = storage->objectDataFor(id).constData();
 
+			// brittle
 			QVERIFY(newData != oldData);
 		}
 

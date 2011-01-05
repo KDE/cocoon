@@ -90,6 +90,7 @@ class PackedStorageCachingTest : public GitTestBase
 			storage->reset();
 			const Git::Id *pNewId = &storage->allIds()[0];
 
+			// brittle
 			QVERIFY(pOldId != pNewId);
 		}
 
