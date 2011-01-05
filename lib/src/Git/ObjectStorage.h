@@ -63,6 +63,9 @@ class KDE_EXPORT ObjectStorage : public QObject
 		virtual bool contains(const Id &id);
 		virtual bool contains(const QString &id);
 
+	public slots:
+		void reset();
+
 		/**
 		 * @brief Returns the object's raw data.
 		 */

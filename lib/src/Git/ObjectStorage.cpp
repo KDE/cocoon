@@ -174,6 +174,10 @@ Repo& ObjectStorage::repo() const
 	return *d->repo;
 }
 
+void ObjectStorage::reset()
+{
+}
+
 
 
 #include "ObjectStorage.moc"
