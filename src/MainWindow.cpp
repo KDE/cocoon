@@ -99,9 +99,7 @@ void MainWindow::setRepository(const QString &repoPath)
 	emit repositoryChanged(m_repo);
 
 	// delete old repo after changes have propagated
-	if (old_repo) {
-		delete old_repo;
-	}
+	delete old_repo;
 }
 
 void MainWindow::setupActions()
