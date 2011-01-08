@@ -65,13 +65,15 @@ Commit::~Commit()
 
 const QString& Commit::author()
 {
-	fillFromString(this, data());
+	lazyLoad();
+
 	return d->author;
 }
 
 const KDateTime& Commit::authoredAt()
 {
-	fillFromString(this, data());
+	lazyLoad();
+
 	return d->authoredAt;
 }
 
@@ -129,13 +131,15 @@ QList<Commit> Commit::childrenOn(const QStringList &refs) const
 
 const QString& Commit::committer()
 {
-	fillFromString(this, data());
+	lazyLoad();
+
 	return d->committer;
 }
 
 const KDateTime& Commit::committedAt()
 {
-	fillFromString(this, data());
+	lazyLoad();
+
 	return d->committedAt;
 }
 
@@ -294,7 +298,8 @@ void Commit::lazyLoad()
 
 const QString& Commit::message()
 {
-	fillFromString(this, data());
+	lazyLoad();
+
 	return d->message;
 }
 
@@ -309,7 +314,7 @@ Commit& Commit::operator=(const Commit &other)
 
 const QList<Commit> Commit::parents()
 {
-	fillFromString(this, data());
+	lazyLoad();
 
 	QList<Commit> commits;
 
@@ -356,13 +361,14 @@ int Commit::parseZoneOffset(const QString &zoneOffsetString)
 
 const QString& Commit::summary()
 {
-	fillFromString(this, data());
+	lazyLoad();
+
 	return d->summary;
 }
 
 const Tree Commit::tree()
 {
-	fillFromString(this, data());
+	lazyLoad();
 
 	return d->treeId.object().toTree();
 }
