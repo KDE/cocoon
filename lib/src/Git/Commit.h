@@ -206,6 +206,13 @@ class KDE_EXPORT Commit : public RawObject
 		 */
 		void fillFromString(const QString &raw);
 
+		/**
+		 * @brief Will lazy load this commit's data and fill it in.
+		 *
+		 * @see fillFromString()
+		 */
+		void lazyLoad();
+
 	// static
 		/**
 		 * @brief Finds the children of commit starting from the given list of refs.

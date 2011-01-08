@@ -282,6 +282,16 @@ Commit Commit::latestIn(const QList<Commit> &commits)
 	return latest;
 }
 
+void Commit::lazyLoad()
+{
+	// if commit has already been filled
+	if (d->treeId.isValid() || !d->message.isEmpty()) {
+		return;
+	}
+
+	fillFromString(data());
+}
+
 const QString& Commit::message()
 {
 	fillFromString(this, data());
