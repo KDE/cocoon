@@ -197,6 +197,15 @@ class KDE_EXPORT Commit : public RawObject
 		static QList<Commit> allReachableFrom(const Ref &branch);
 
 	private:
+		/**
+		 * @brief Populates the commit with the data extracted from the raw data.
+		 *
+		 * @param raw The raw commit data.
+		 *
+		 * @see data()
+		 */
+		void fillFromString(const QString &raw);
+
 	// static
 		/**
 		 * @brief Finds the children of commit starting from the given list of refs.
@@ -206,16 +215,6 @@ class KDE_EXPORT Commit : public RawObject
 		 * @return The list of child commit ids.
 		 */
 		static QStringList childrenOf(const Commit &commit, const QStringList &refs);
-
-		/**
-		 * @brief Populates the given commit with the data extracted from the raw data.
-		 *
-		 * @param commit The commit to be populated.
-		 * @param raw The raw commit data.
-		 *
-		 * @see data()
-		 */
-		static void fillFromString(Commit *commit, const QString &raw);
 
 		/**
 		 * @brief Selects the latest Commit form a list of Commits.

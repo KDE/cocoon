@@ -147,30 +147,29 @@ const QString Commit::diff() const
 	return runner.getResult();
 }
 
-void Commit::fillFromString(Commit *commit, const QString &raw)
+void Commit::fillFromString(const QString &raw)
 {
-	// if commit has already been filled
-	if (commit->d->treeId.isValid() || !commit->d->message.isEmpty()) {
+	if (raw.isEmpty()) {
 		return;
 	}
 
-	kDebug() << "fill commit" << commit->id().toString();
+	kDebug() << "fill commit" << id().toString();
 
 	QStringList lines = raw.split("\n");
 
 	Id treeId;
 	if (!lines.isEmpty() && lines.first().startsWith("tree ")) {
 		QString treeIdString = lines.takeFirst().mid(qstrlen("tree "), -1);
-		treeId = Id(treeIdString, commit->repo());
+		treeId = Id(treeIdString, repo());
 	}
-	commit->d->treeId = treeId;
+	d->treeId = treeId;
 
 	QList<Id> parentIds;
 	while (!lines.isEmpty() && lines.first().startsWith("parent ")) {
 		QString parentIdString = lines.takeFirst().mid(qstrlen("parent "), -1);
-		parentIds << Id(parentIdString, commit->repo());
+		parentIds << Id(parentIdString, repo());
 	}
-	commit->d->parentIds = parentIds;
+	d->parentIds = parentIds;
 
 	QRegExp actorRegExp("^(.*) (\\d+) ([+-]\\d+)$");
 
@@ -190,8 +189,8 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 			}
 		}
 	}
-	commit->d->author = author;
-	commit->d->authoredAt = authoredAt;
+	d->author = author;
+	d->authoredAt = authoredAt;
 
 	QString committer;
 	KDateTime committedAt;
@@ -209,8 +208,8 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 			}
 		}
 	}
-	commit->d->committer = committer;
-	commit->d->committedAt = committedAt;
+	d->committer = committer;
+	d->committedAt = committedAt;
 
 	while (!lines.isEmpty() && lines.first().isEmpty()) {
 		lines.removeFirst();
@@ -226,8 +225,8 @@ void Commit::fillFromString(Commit *commit, const QString &raw)
 			message += "\n" + lines.takeFirst();
 		}
 	}
-	commit->d->message = message;
-	commit->d->summary = summary;
+	d->message = message;
+	d->summary = summary;
 
 	while (!lines.isEmpty() && lines.first().isEmpty())  {
 		lines.removeFirst();
