@@ -84,7 +84,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
-			Git::Commit::fillFromString(commit, rawData.join("\n"));
+			commit->fillFromString(rawData.join("\n"));
 
 			QCOMPARE(commit->tree().id().toSha1String(), QLatin1String("4b825dc642cb6eb9a060e54bf8d69288fbee4904"));
 		}
@@ -97,7 +97,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
-			Git::Commit::fillFromString(commit, rawData.join("\n"));
+			commit->fillFromString(rawData.join("\n"));
 
 			QCOMPARE(commit->parents().size(), 0);
 		}
@@ -111,7 +111,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
-			Git::Commit::fillFromString(commit, rawData.join("\n"));
+			commit->fillFromString(rawData.join("\n"));
 
 			QCOMPARE(commit->parents().size(), 1);
 			QCOMPARE(commit->parents().first().id().toSha1String(), QLatin1String("abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d"));
@@ -128,7 +128,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
-			Git::Commit::fillFromString(commit, rawData.join("\n"));
+			commit->fillFromString(rawData.join("\n"));
 
 			QCOMPARE(commit->parents().size(), 3);
 			QCOMPARE(commit->parents()[0].id().toSha1String(), QLatin1String("abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d"));
@@ -145,7 +145,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
-			Git::Commit::fillFromString(commit, rawData.join("\n"));
+			commit->fillFromString(rawData.join("\n"));
 
 			QCOMPARE(commit->author(), QLatin1String("Me"));
 		}
@@ -159,7 +159,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
-			Git::Commit::fillFromString(commit, rawData.join("\n"));
+			commit->fillFromString(rawData.join("\n"));
 
 			QCOMPARE(commit->author(), QLatin1String("Me <me@some.tld>"));
 		}
@@ -173,7 +173,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
-			Git::Commit::fillFromString(commit, rawData.join("\n"));
+			commit->fillFromString(rawData.join("\n"));
 
 			KDateTime authoredAt;
 			authoredAt.setTime_t(1234567890);
@@ -191,7 +191,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
-			Git::Commit::fillFromString(commit, rawData.join("\n"));
+			commit->fillFromString(rawData.join("\n"));
 
 			QCOMPARE(commit->committer(), QLatin1String("You"));
 		}
@@ -205,7 +205,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
-			Git::Commit::fillFromString(commit, rawData.join("\n"));
+			commit->fillFromString(rawData.join("\n"));
 
 			QCOMPARE(commit->committer(), QLatin1String("You <you@some.tld>"));
 		}
@@ -219,7 +219,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
-			Git::Commit::fillFromString(commit, rawData.join("\n"));
+			commit->fillFromString(rawData.join("\n"));
 
 			KDateTime committedAt;
 			committedAt.setTime_t(1234567890);
@@ -237,7 +237,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
-			Git::Commit::fillFromString(commit, rawData.join("\n"));
+			commit->fillFromString(rawData.join("\n"));
 
 			QCOMPARE(commit->message(), QLatin1String("Some message."));
 		}
@@ -251,7 +251,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
-			Git::Commit::fillFromString(commit, rawData.join("\n"));
+			commit->fillFromString(rawData.join("\n"));
 
 			QCOMPARE(commit->summary(), QLatin1String("Some message."));
 		}
@@ -267,7 +267,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "More message.";
 			rawData << "Even more message.";
 			rawData << "";
-			Git::Commit::fillFromString(commit, rawData.join("\n"));
+			commit->fillFromString(rawData.join("\n"));
 
 			QCOMPARE(commit->message(), QLatin1String("Some message.\nMore message.\nEven more message."));
 		}
@@ -283,7 +283,7 @@ class CommitPopulationTest : public GitTestBase
 			rawData << "More message.";
 			rawData << "Even more message.";
 			rawData << "";
-			Git::Commit::fillFromString(commit, rawData.join("\n"));
+			commit->fillFromString(rawData.join("\n"));
 
 			QCOMPARE(commit->summary(), QLatin1String("Some message."));
 		}

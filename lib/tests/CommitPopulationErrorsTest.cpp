@@ -62,7 +62,7 @@ class CommitPopulationErrorsTest : public GitTestBase
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
-			Git::Commit::fillFromString(&commit, rawData.join("\n"));
+			commit.fillFromString(rawData.join("\n"));
 
 			QVERIFY(!commit.tree().isValid());
 
@@ -82,7 +82,7 @@ class CommitPopulationErrorsTest : public GitTestBase
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
-			Git::Commit::fillFromString(&commit, rawData.join("\n"));
+			commit.fillFromString(rawData.join("\n"));
 
 			QCOMPARE(commit.author(), QString());
 
@@ -102,7 +102,7 @@ class CommitPopulationErrorsTest : public GitTestBase
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
-			Git::Commit::fillFromString(&commit, rawData.join("\n"));
+			commit.fillFromString(rawData.join("\n"));
 
 			QCOMPARE(commit.authoredAt().toString(), KDateTime().toString());
 
@@ -122,7 +122,7 @@ class CommitPopulationErrorsTest : public GitTestBase
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
-			Git::Commit::fillFromString(&commit, rawData.join("\n"));
+			commit.fillFromString(rawData.join("\n"));
 
 			QCOMPARE(commit.committer(), QString());
 
@@ -142,7 +142,7 @@ class CommitPopulationErrorsTest : public GitTestBase
 			rawData << "";
 			rawData << "Some message.";
 			rawData << "";
-			Git::Commit::fillFromString(&commit, rawData.join("\n"));
+			commit.fillFromString(rawData.join("\n"));
 
 			QCOMPARE(commit.committedAt().toString(), KDateTime().toString());
 
@@ -162,7 +162,7 @@ class CommitPopulationErrorsTest : public GitTestBase
 			//rawData << "";
 			//rawData << "Some message.";
 			//rawData << "";
-			Git::Commit::fillFromString(&commit, rawData.join("\n"));
+			commit.fillFromString(rawData.join("\n"));
 
 			QCOMPARE(commit.authoredAt().toString(), KDateTime().toString());
 
