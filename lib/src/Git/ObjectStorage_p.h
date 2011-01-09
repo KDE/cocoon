@@ -31,6 +31,10 @@ class ObjectStoragePrivate : public QSharedData {
 			: QSharedData()
 			, repo(0)
 		{}
+		ObjectStoragePrivate(const ObjectStoragePrivate &other)
+			: QSharedData()
+			, repo(other.repo)
+		{}
 		~ObjectStoragePrivate() {}
 
 		Repo *repo;
