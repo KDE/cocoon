@@ -210,6 +210,36 @@ class IdTest : public GitTestBase
 
 			QCOMPARE(qHash(id), (unsigned)0xc56dada2);
 		}
+
+		void invalidatedShouldBeInvalid() {
+			Git::Id id("c56dada", *storage);
+			id.invalidate();
+
+			QVERIFY(!id.isValid());
+		}
+
+		void invalidatedShouldHaveId() {
+			Git::Id id("c56dada", *storage);
+			id.invalidate();
+
+			QVERIFY(!id.d->sha1.isEmpty());
+		}
+
+		void invalidatedShouldNotHaveStorage() {
+			Git::Id id("c56dada", *storage);
+			id.invalidate();
+
+			QVERIFY(!id.d->storage);
+		}
+
+		void invalidatedShouldReassignStorage() {
+			Git::Id id("c56dada", *storage);
+			id.invalidate();
+			id.storage(); // reassigns storage
+
+			QCOMPARE(&id.storage(), storage);
+			QCOMPARE(id.d->storage, storage);
+		}
 };
 
 QTEST_KDEMAIN_CORE(IdTest);
