@@ -113,6 +113,13 @@ class KDE_EXPORT Id : public QObject
 		RawObject& object() const;
 
 		/**
+		 * @brief Retruns the id's repo.
+		 *
+		 * @return The id's repo.
+		 */
+		Repo& repo() const;
+
+		/**
 		 * @brief Returns the storage the object with this id is stored in.
 		 *
 		 * @return The object's storage.
