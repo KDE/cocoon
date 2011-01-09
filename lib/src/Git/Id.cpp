@@ -100,11 +100,11 @@ bool Id::isValid() const
 
 RawObject& Id::object() const
 {
-	if (!d->storage) {
+	if (!isValid()) {
 		return RawObject::invalid();
 	}
 
-	return d->storage->objectFor(*this);
+	return storage().objectFor(*this);
 }
 
 bool Id::operator<(const Id &other) const
