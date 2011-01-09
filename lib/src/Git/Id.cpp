@@ -42,6 +42,7 @@ Id::Id(const QString &sha1, Repo &repo)
 	: QObject()
 	, d(new IdPrivate)
 {
+	d->repo = &repo;
 	d->storage = repo.storageFor(sha1);
 
 	if(d->storage) {
@@ -60,6 +61,7 @@ Id::Id(const QString &sha1, ObjectStorage &storage)
 	: QObject()
 	, d(new IdPrivate)
 {
+	d->repo = &storage.repo();
 	d->storage = &storage;
 
 	if (sha1.size() == 40) {
