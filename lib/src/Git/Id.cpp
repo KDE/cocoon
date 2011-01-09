@@ -88,6 +88,11 @@ bool Id::exists() const
 	return isValid() && d->storage && d->storage->contains(*this);
 }
 
+void Id::invalidate()
+{
+	d->storage = 0;
+}
+
 bool Id::isValid() const
 {
 	// construction should imply d->storage && ...

@@ -95,7 +95,20 @@ class KDE_EXPORT Id : public QObject
 		explicit Id(const QString &sha1, ObjectStorage &storage);
 		virtual ~Id();
 
+
+
 		bool exists() const;
+
+		/**
+		 * @brief Invalidates the id.
+		 *
+		 * It will keep the id's SHA1 but will reset its storage.
+		 * This may be necessary after a repo reload.
+		 *
+		 * @see isValid(), storage()
+		 */
+		void invalidate();
+
 		bool isIn(const ObjectStorage &storage) const;
 
 		/**
