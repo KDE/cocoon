@@ -117,6 +117,8 @@ class KDE_EXPORT Id : public QObject
 		 * The id is invalid when it was constructed using the default constructor or when the object could not be found in the repo or was moved from the storage it was in once.
 		 *
 		 * @return true in case the id is valid, false otherwise
+		 *
+		 * @see invalidate()
 		 */
 		bool isValid() const;
 
@@ -135,7 +137,11 @@ class KDE_EXPORT Id : public QObject
 		/**
 		 * @brief Returns the storage the object with this id is stored in.
 		 *
+		 * This will reassign the storage if it has been invalidated before.
+		 *
 		 * @return The object's storage.
+		 *
+		 * @see invalidate()
 		 */
 		ObjectStorage& storage() const;
 
