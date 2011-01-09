@@ -176,6 +176,8 @@ Repo& ObjectStorage::repo() const
 
 void ObjectStorage::reset()
 {
+	invalidateIds();
+	invalidateObjects();
 }
 
 

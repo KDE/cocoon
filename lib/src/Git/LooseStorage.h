@@ -49,6 +49,8 @@ class KDE_EXPORT LooseStorage : public ObjectStorage
 		void reset();
 
 	protected:
+		void invalidateIds();
+		void invalidateObjects();
 		void loadHeaderDataFor(const Id &id);
 		const QByteArray rawDataFor(const Id &id, const qint64 maxRead = -1);
 		const QString sourceFor(const Id &id);

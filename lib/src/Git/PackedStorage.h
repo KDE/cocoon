@@ -57,6 +57,10 @@ class KDE_EXPORT PackedStorage : public ObjectStorage
 	public slots:
 		void reset();
 
+	protected:
+		void invalidateIds();
+		void invalidateObjects();
+
 	private:
 		const QList<Id> allIds_v1();
 		const QList<Id> allIds_v2();

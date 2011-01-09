@@ -83,6 +83,9 @@ PackedStorage::PackedStorage(const PackedStorage &other)
 
 PackedStorage::~PackedStorage()
 {
+	invalidateIds();
+	invalidateObjects();
+
 	d->objects.clear();
 
 	if (!d->packObjects.isEmpty()) {
@@ -265,6 +268,20 @@ void PackedStorage::initPack()
 	Q_UNUSED(ok);
 }
 
+void PackedStorage::invalidateIds()
+{
+	foreach (Id id, d->ids) {
+		id.invalidate();
+	}
+}
+
+void PackedStorage::invalidateObjects()
+{
+	foreach (RawObject object, d->objects) {
+		object.invalidate();
+	}
+}
+
 const QByteArray PackedStorage::objectDataFor(const Id &id)
 {
 	return packObjectFor(id)->finalData();
@@ -332,6 +349,8 @@ const QByteArray PackedStorage::readIndexFrom(int offset, int length)
 
 void PackedStorage::reset()
 {
+	ObjectStorage::reset();
+
 	foreach (PackedStorageObject *object, d->packObjects) {
 		delete object;
 	}

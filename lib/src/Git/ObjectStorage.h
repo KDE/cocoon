@@ -75,6 +75,9 @@ class KDE_EXPORT ObjectStorage : public QObject
 		virtual ObjectType       objectTypeFor(const Id &id) = 0;
 
 	protected:
+		virtual void invalidateIds() = 0;
+		virtual void invalidateObjects() = 0;
+
 	// static
 		static const QByteArray inflate(const QByteArray deflated);
 

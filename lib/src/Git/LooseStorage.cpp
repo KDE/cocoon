@@ -46,6 +46,8 @@ LooseStorage::LooseStorage(const LooseStorage &other)
 
 LooseStorage::~LooseStorage()
 {
+	invalidateIds();
+	invalidateObjects();
 }
 
 
@@ -65,6 +67,21 @@ const QList<Id> LooseStorage::allIds()
 	}
 
 	return d->ids;
+}
+
+void LooseStorage::invalidateIds()
+{
+
+	foreach (Id id, d->ids) {
+		id.invalidate();
+	}
+}
+
+void LooseStorage::invalidateObjects()
+{
+	foreach (RawObject object, d->objects) {
+		object.invalidate();
+	}
 }
 
 void LooseStorage::loadHeaderDataFor(const Id &id)
@@ -142,6 +159,8 @@ const QByteArray LooseStorage::rawDataFor(const Id &id, const qint64 maxRead)
 
 void LooseStorage::reset()
 {
+	ObjectStorage::reset();
+
 	Repo *r = d->repo;
 	d = new LooseStoragePrivate();
 	d->repo = r;
