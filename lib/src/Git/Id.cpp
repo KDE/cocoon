@@ -95,8 +95,7 @@ void Id::invalidate()
 
 bool Id::isValid() const
 {
-	// construction should imply d->storage && ...
-	return !d->sha1.isEmpty();
+	return d->storage && !d->sha1.isEmpty();
 }
 
 RawObject& Id::object() const
