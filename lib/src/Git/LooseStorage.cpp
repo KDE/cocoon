@@ -103,6 +103,10 @@ void LooseStorage::loadHeaderDataFor(const Id &id)
 
 const QByteArray LooseStorage::objectDataFor(const Id &id)
 {
+	if (!id.isValid()) {
+		return QByteArray();
+	}
+
 	if (!d->objectData.contains(id)) {
 		kDebug() << "Loading data for" << id.toString();
 
@@ -116,6 +120,10 @@ const QByteArray LooseStorage::objectDataFor(const Id &id)
 
 RawObject& LooseStorage::objectFor(const Id &id)
 {
+	if (!id.isValid()) {
+		return RawObject::invalid();
+	}
+
 	if (!d->objects.contains(id)) {
 		kDebug() << "load object" << id.toString();
 		d->objects[id] = RawObject::newInstance(id, repo());
@@ -126,6 +134,10 @@ RawObject& LooseStorage::objectFor(const Id &id)
 
 int LooseStorage::objectSizeFor(const Id &id)
 {
+	if (!id.isValid()) {
+		return -1;
+	}
+
 	loadHeaderDataFor(id);
 
 	return d->objectSizes[id];
@@ -133,6 +145,10 @@ int LooseStorage::objectSizeFor(const Id &id)
 
 ObjectType LooseStorage::objectTypeFor(const Id &id)
 {
+	if (!id.isValid()) {
+		return OBJ_NONE;
+	}
+
 	loadHeaderDataFor(id);
 
 	return d->objectTypes[id];
@@ -140,6 +156,8 @@ ObjectType LooseStorage::objectTypeFor(const Id &id)
 
 const QByteArray LooseStorage::rawDataFor(const Id &id, const qint64 maxRead)
 {
+	Q_ASSERT(id.isValid());
+
 	kDebug() << "Loading raw data for" << id.toString();
 
 	QFile objectFile(sourceFor(id));

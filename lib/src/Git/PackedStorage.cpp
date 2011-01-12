@@ -287,16 +287,28 @@ void PackedStorage::invalidateObjects()
 
 const QByteArray PackedStorage::objectDataFor(const Id &id)
 {
+	if (!id.isValid()) {
+		return QByteArray();
+	}
+
 	return packObjectFor(id)->finalData();
 }
 
 int PackedStorage::objectSizeFor(const Id &id)
 {
+	if (!id.isValid()) {
+		return -1;
+	}
+
 	return packObjectFor(id)->finalSize();
 }
 
 ObjectType PackedStorage::objectTypeFor(const Id &id)
 {
+	if (!id.isValid()) {
+		return OBJ_NONE;
+	}
+
 	return packObjectFor(id)->finalType();
 }
 
@@ -322,6 +334,8 @@ QFile& PackedStorage::packFile()
 
 PackedStorageObject* PackedStorage::packObjectFor(const Id &id)
 {
+	Q_ASSERT(id.isValid());
+
 	if (!d->packObjects.contains(id)) {
 		kDebug() << "loading pack object for" << id.toString() << "in" << d->name;
 
@@ -333,6 +347,10 @@ PackedStorageObject* PackedStorage::packObjectFor(const Id &id)
 
 RawObject& PackedStorage::objectFor(const Id &id)
 {
+	if (!id.isValid()) {
+		return RawObject::invalid();
+	}
+
 	if (!d->objects.contains(id)) {
 		kDebug() << "loading object" << id.toString() << "in" << d->name;
 		d->objects[id] = RawObject::newInstance(id, repo());
