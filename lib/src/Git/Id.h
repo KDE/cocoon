@@ -249,7 +249,7 @@ class KDE_EXPORT Id : public QObject
 		bool operator!=(const Id &other) const;
 
 	private:
-		QSharedDataPointer<IdPrivate> d;
+		QExplicitlySharedDataPointer<IdPrivate> d;
 
 	friend class ::IdTest;
 };
