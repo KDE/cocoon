@@ -40,7 +40,7 @@ class CommitPopulationTest : public GitTestBase
 		void init() {
 			GitTestBase::init();
 
-			Git::Id id("b462958a492e9abaaa3bd2725639932b5fd551d9", *repo);
+			Git::Id id = repo->idFor("b462958");
 			commit = new Git::Commit(id, *repo);
 		}
 

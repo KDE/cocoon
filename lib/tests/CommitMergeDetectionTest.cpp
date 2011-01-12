@@ -41,7 +41,7 @@ class CommitMergeDetectionTest : public GitTestBase
 		void init(){
 			GitTestBase::init();
 
-			Git::Id id("b462958a492e9abaaa3bd2725639932b5fd551d9", *repo);
+			Git::Id id = repo->idFor("b462958");
 			commit = new Git::Commit(id, *repo);
 			commit->d->message = "alibi"; // to inhibit automatic popultation
 		}
@@ -60,7 +60,7 @@ class CommitMergeDetectionTest : public GitTestBase
 
 		void testMergeDetectionWithOneParent()
 		{
-			commit->d->parentIds << Git::Id("abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d", *repo);
+			commit->d->parentIds << repo->idFor("abffc0a");
 			QCOMPARE(commit->d->parentIds.size(), 1);
 
 			QVERIFY(!commit->isMerge());
@@ -68,12 +68,12 @@ class CommitMergeDetectionTest : public GitTestBase
 
 		void testMergeDetectionWithMoreParents()
 		{
-			commit->d->parentIds << Git::Id("abffc0ae9ba476fe1e9a30fa2c8903113dbadb3d", *repo);
-			commit->d->parentIds << Git::Id("6421f09a627d8ea6a85a9155e481cae7ed483b50", *repo);
+			commit->d->parentIds << repo->idFor("abffc0a");
+			commit->d->parentIds << repo->idFor("6421f09");
 			QCOMPARE(commit->d->parentIds.size(), 2);
 			QVERIFY(commit->isMerge());
 
-			commit->d->parentIds << Git::Id("4262f0d5b0d062a0d655f16c2fc372c92689c853", *repo);
+			commit->d->parentIds << repo->idFor("4262f0d");
 			QCOMPARE(commit->d->parentIds.size(), 3);
 			QVERIFY(commit->isMerge());
 		}

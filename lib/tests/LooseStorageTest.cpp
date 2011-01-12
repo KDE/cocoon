@@ -60,14 +60,14 @@ class LooseStorageTest : public GitTestBase
 		}
 
 		void testSourceForIdIsCorrect() {
-			Git::Id id = Git::Id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *storage);
+			Git::Id id = repo->idFor("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8");
 			QString sourcePath = storage->sourceFor(id);
 
 			QCOMPARE(sourcePath, QString("%1/objects/c5/6dada2cf4f67b35ed0019ddd4651a8c8a337e8").arg(repo->gitDir()));
 		}
 
 		void testInflationIsWorking() {
-			Git::Id id = Git::Id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *storage);
+			Git::Id id = repo->idFor("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8");
 			QByteArray rawData = storage->rawDataFor(id);
 
 			QCOMPARE(QTest::toHexRepresentation(rawData, 16), QTest::toHexRepresentation("commit 212\0tree ", 16));

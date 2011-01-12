@@ -41,8 +41,7 @@ class RawObjectTest : public GitTestBase
 		void init() {
 			GitTestBase::init();
 
-			Git::Id id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *repo);
-			object = new Git::RawObject(id, *repo);
+			object = new Git::RawObject(repo->idFor("c56dada"), *repo);
 		}
 
 		void cleanup() {

@@ -54,7 +54,7 @@ class PackedStorageDeltifiedExtractionTest : public GitTestBase
 
 
 		void deltifiedObjectOffsetShouldBeCorrect() {
-			Git::Id id("7096645927485680189876d157c499423fd423a5", *storage);
+			Git::Id id = repo->idFor("7096645");
 			quint32 offset = storage->dataOffsetFor(id);
 
 			QCOMPARE(offset, (unsigned)0x1cd);
@@ -62,21 +62,21 @@ class PackedStorageDeltifiedExtractionTest : public GitTestBase
 
 
 		void deltifiedObjectTypeShouldBeCorrect() {
-			Git::Id id("7096645927485680189876d157c499423fd423a5", *storage);
+			Git::Id id = repo->idFor("7096645");
 			Git::ObjectType type = storage->objectTypeFor(id);
 
 			QCOMPARE(type, Git::OBJ_BLOB);
 		}
 
 		void deltifiedObjectSizeShouldBeCorrect() {
-			Git::Id id("7096645927485680189876d157c499423fd423a5", *storage);
+			Git::Id id = repo->idFor("7096645");
 			int size = storage->objectSizeFor(id);
 
 			QCOMPARE(size, 182);
 		}
 
 		void shouldExtractDeltifiedObject() {
-			Git::Id id("7096645927485680189876d157c499423fd423a5", *storage);
+			Git::Id id = repo->idFor("7096645");
 			QByteArray data = storage->objectDataFor(id);
 
 			QCOMPARE(QTest::toHexRepresentation(data, 27), QTest::toHexRepresentation("#!/bin/env/ruby\n\ndef do_foo", 27));

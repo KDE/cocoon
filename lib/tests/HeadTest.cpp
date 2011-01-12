@@ -74,7 +74,7 @@ class HeadTest : public GitTestBase
 		}
 
 		void shouldPointToCorrectCommit() {
-			QString id = "632851d69abeb631f6529b50452611b9915be7fb";
+			QLatin1String id("632851d69abeb631f6529b50452611b9915be7fb");
 
 			QCOMPARE(Git::Head("branch", *repo).commit().id().toSha1String(), id);
 		}

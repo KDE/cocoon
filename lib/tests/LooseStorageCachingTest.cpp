@@ -92,7 +92,7 @@ class LooseStorageCachingTest : public GitTestBase
 		}
 
 		void resetShouldClearObjects() {
-			Git::Id id = Git::Id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *storage);
+			Git::Id id = repo->idFor("c56dada");
 			Git::RawObject *pOldObject = &storage->objectFor(id);
 			storage->reset();
 			Git::RawObject *pNewObject = &storage->objectFor(id);
@@ -102,7 +102,7 @@ class LooseStorageCachingTest : public GitTestBase
 		}
 
 		void resetShouldClearObjectData() {
-			Git::Id id = Git::Id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *storage);
+			Git::Id id = repo->idFor("c56dada");
 			const char* oldData = storage->objectDataFor(id).constData();
 			storage->reset();
 			const char* newData = storage->objectDataFor(id).constData();
@@ -112,7 +112,7 @@ class LooseStorageCachingTest : public GitTestBase
 		}
 
 		void resetShouldClearObjectSizes() {
-			Git::Id id = Git::Id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *storage);
+			Git::Id id = repo->idFor("c56dada");
 			storage->objectSizeFor(id); // load data
 			storage->reset();
 
@@ -120,7 +120,7 @@ class LooseStorageCachingTest : public GitTestBase
 		}
 
 		void resetShouldClearObjectTypes() {
-			Git::Id id = Git::Id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *storage);
+			Git::Id id = repo->idFor("c56dada");
 			storage->objectTypeFor(id); // load data
 			storage->reset();
 

@@ -103,7 +103,7 @@ class PackedStorageTest : public GitTestBase
 		}
 
 		void shouldFindObjectById() {
-			Git::Id id = Git::Id("b7566b7883e0dd74baba8cb194ed5dacaed5bb62", *storage);
+			Git::Id id = repo->idFor("b7566b7883e0dd74baba8cb194ed5dacaed5bb62");
 
 			QCOMPARE(storage->objectFor(id).id().toSha1String(), QLatin1String("b7566b7883e0dd74baba8cb194ed5dacaed5bb62"));
 		}
