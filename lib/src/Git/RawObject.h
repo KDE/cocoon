@@ -138,6 +138,8 @@ class KDE_EXPORT RawObject : public QObject
 		 */
 		ObjectType type() const;
 
+		void invalidate();
+
 		/**
 		 * @brief Returns whether this object is a blob.
 		 *
