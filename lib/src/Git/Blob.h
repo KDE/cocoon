@@ -71,7 +71,6 @@ class KDE_EXPORT Blob : public RawObject
 		 */
 		explicit Blob(const RawObject &other);
 
-	public:
 		virtual ~Blob();
 
 
@@ -83,6 +82,16 @@ class KDE_EXPORT Blob : public RawObject
 		 * @return @a this.
 		 */
 		Blob& operator=(const Blob &id);
+
+	// static
+		/**
+		 * Returns an invalid Blob.
+		 *
+		 * @return An invalid Blob.
+		 *
+		 * @see isValid()
+		 */
+		static Blob& invalid();
 
 	private:
 		QExplicitlySharedDataPointer<RawObjectPrivate> d;

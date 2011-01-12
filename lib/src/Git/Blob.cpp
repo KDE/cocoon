@@ -55,6 +55,12 @@ Blob::~Blob()
 
 
 
+Blob& Blob::invalid()
+{
+	static Blob invalid;
+	return invalid;
+}
+
 Blob& Blob::operator=(const Blob &other)
 {
 	RawObject::operator=(other);

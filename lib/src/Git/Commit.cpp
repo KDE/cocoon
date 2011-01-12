@@ -269,6 +269,12 @@ bool Commit::hasBranchedOn(const QStringList &refs) const
 	return childrenOn(refs).size() > 1;
 }
 
+Commit& Commit::invalid()
+{
+	static Commit invalid;
+	return invalid;
+}
+
 bool Commit::isMerge()
 {
 	return parents().size() > 1;

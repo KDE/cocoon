@@ -101,8 +101,18 @@ class KDE_EXPORT Tree : public RawObject
 		const QList<Tree> trees();
 		const QMap<QString, Tree> treesByName();
 
+	//static
+		/**
+		 * Returns an invalid Tree.
+		 *
+		 * @return An invalid Tree.
+		 *
+		 * @see isValid()
+		 */
+		static Tree& invalid();
+
 	private:
-		// static
+	// static
 		/**
 		 * Populates the given tree with the data extracted from the raw data.
 		 *

@@ -134,7 +134,12 @@ void Tree::fillFromString(Tree *tree, const QByteArray &raw)
 		tree->d->entryModes[id] = mode;
 		tree->d->entryNames[id] = name;
 	}
+}
 
+Tree& Tree::invalid()
+{
+	static Tree invalid;
+	return invalid;
 }
 
 const QString Tree::nameFor(const QString &id)

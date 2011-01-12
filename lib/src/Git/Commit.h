@@ -196,6 +196,15 @@ class KDE_EXPORT Commit : public RawObject
 		 */
 		static QList<Commit> allReachableFrom(const Ref &branch);
 
+		/**
+		 * Returns an invalid Commit.
+		 *
+		 * @return An invalid Commit.
+		 *
+		 * @see isValid()
+		 */
+		static Commit& invalid();
+
 	private:
 		/**
 		 * @brief Populates the commit with the data extracted from the raw data.
