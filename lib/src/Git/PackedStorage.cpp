@@ -86,14 +86,17 @@ PackedStorage::~PackedStorage()
 	invalidateIds();
 	invalidateObjects();
 
-	d->objects.clear();
-
-	if (!d->packObjects.isEmpty()) {
-		foreach (PackedStorageObject *object, d->packObjects) {
-			delete object;
-		}
+	// manually delete pack objects
+	foreach (PackedStorageObject *object, d->packObjects) {
+		delete object;
 	}
 	d->packObjects.clear();
+
+	// manually delete objects
+	foreach (RawObject *object, d->objects) {
+		delete object;
+	}
+	d->objects.clear();
 }
 
 
@@ -277,8 +280,8 @@ void PackedStorage::invalidateIds()
 
 void PackedStorage::invalidateObjects()
 {
-	foreach (RawObject object, d->objects) {
-		object.invalidate();
+	foreach (RawObject *object, d->objects) {
+		object->invalidate();
 	}
 }
 
@@ -332,10 +335,10 @@ RawObject& PackedStorage::objectFor(const Id &id)
 {
 	if (!d->objects.contains(id)) {
 		kDebug() << "loading object" << id.toString() << "in" << d->name;
-		d->objects[id] = RawObject(id, repo());
+		d->objects[id] = RawObject::newInstance(id, repo());
 	}
 
-	return d->objects[id];
+	return *d->objects[id];
 }
 
 const QByteArray PackedStorage::readIndexFrom(int offset, int length)
@@ -351,10 +354,17 @@ void PackedStorage::reset()
 {
 	ObjectStorage::reset();
 
+	// manually delete pack objects
 	foreach (PackedStorageObject *object, d->packObjects) {
 		delete object;
 	}
 	d->packObjects.clear();
+
+	// manually delete objects
+	foreach (RawObject *object, d->objects) {
+		delete object;
+	}
+	d->objects.clear();
 
 	Repo *r = d->repo;
 	QString n = d->name;

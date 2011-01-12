@@ -76,7 +76,7 @@ public:
 	QFile indexFile;
 	quint32 indexVersion;
 	QString name;
-	QHash<Id, RawObject> objects;
+	QHash<Id, RawObject*> objects;
 	QFile packFile;
 	QHash<Id, PackedStorageObject*> packObjects;
 	quint32 size;
