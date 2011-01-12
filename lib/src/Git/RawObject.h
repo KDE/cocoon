@@ -234,7 +234,7 @@ class KDE_EXPORT RawObject : public QObject
 		 *
 		 * @see isBlob(), isValid()
 		 */
-		Blob toBlob() const;
+		Blob& toBlob() const;
 
 		/**
 		 * Converts this Git object to a Commit.
@@ -243,7 +243,7 @@ class KDE_EXPORT RawObject : public QObject
 		 *
 		 * @see isCommit(), isValid()
 		 */
-		Commit toCommit() const;
+		Commit& toCommit() const;
 
 		/**
 		 * Converts this Git object to a Tree.
@@ -252,7 +252,7 @@ class KDE_EXPORT RawObject : public QObject
 		 *
 		 * @see isTree(), isValid()
 		 */
-		Tree toTree() const;
+		Tree& toTree() const;
 
 	// static
 		static const QString extractHeaderForm(const QByteArray &rawData);

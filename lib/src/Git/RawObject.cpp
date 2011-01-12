@@ -211,19 +211,19 @@ int RawObject::size() const
 	return d->dataSize;
 }
 
-Blob RawObject::toBlob() const
+Blob& RawObject::toBlob() const
 {
-	return isBlob() ? Blob(*this) : Blob();
+	return isBlob() ? *(Blob*)this : Blob::invalid();
 }
 
-Commit RawObject::toCommit() const
+Commit& RawObject::toCommit() const
 {
-	return isCommit() ? Commit(*this) : Commit();
+	return isCommit() ? *(Commit*)this : Commit::invalid();
 }
 
-Tree RawObject::toTree() const
+Tree& RawObject::toTree() const
 {
-	return isTree() ? Tree(*this) : Tree();
+	return isTree() ? *(Tree*)this : Tree::invalid();
 }
 
 ObjectType RawObject::type() const
