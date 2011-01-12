@@ -273,7 +273,7 @@ class KDE_EXPORT RawObject : public QObject
 		/**
 		 * @deprecated
 		 */
-		static RawObject* newInstance(const Id& id, Repo &repo);
+		static RawObject* newInstance(const Id& id);
 		static ObjectType typeFromTypeName(const QString& name);
 		static const QString typeNameFromType(const ObjectType type);
 

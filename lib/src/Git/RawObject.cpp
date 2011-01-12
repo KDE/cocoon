@@ -153,7 +153,7 @@ bool RawObject::isValidHeader(const QString &possibleHeader)
 	return possibleHeader.contains(QRegExp("^(blob|commit|tag|tree) \\d+$"));
 }
 
-RawObject* RawObject::newInstance(const Id &id, Repo &repo)
+RawObject* RawObject::newInstance(const Id &id)
 {
 	Q_ASSERT(id.exists());
 
@@ -162,14 +162,14 @@ RawObject* RawObject::newInstance(const Id &id, Repo &repo)
 
 	switch(type) {
 	case OBJ_BLOB:
-		return new Blob(id, repo);
+		return new Blob(id, id.repo());
 	case OBJ_COMMIT:
-		return new Commit(id, repo);
+		return new Commit(id, id.repo());
 	case OBJ_TREE:
-		return new Tree(id, repo);
+		return new Tree(id, id.repo());
 	default:
 		// as long as all types are not yet implemented
-		return new RawObject(id, repo);
+		return &RawObject::invalid();
 	}
 }
 
