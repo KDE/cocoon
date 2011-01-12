@@ -102,7 +102,7 @@ bool Id::isValid() const
 
 RawObject& Id::object() const
 {
-	if (!isValid()) {
+	if (!&storage()) {
 		return RawObject::invalid();
 	}
 
