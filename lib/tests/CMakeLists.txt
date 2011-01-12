@@ -40,6 +40,7 @@ unit_tests(
 	PackedStorageNormalExtractionTest
 	PackedStorageDeltifiedExtractionTest
 	RawObjectTest
+	RawObjectConversionTest
 	RawObjectHeaderExtractionTest
 	RawObjectInstantiationTest
 	RawObjectTypeTest
