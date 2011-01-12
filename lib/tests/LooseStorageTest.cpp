@@ -87,6 +87,31 @@ class LooseStorageTest : public GitTestBase
 
 			QCOMPARE(size, 212);
 		}
+
+		void resetShouldInvalidateIds() {
+			QList<Git::Id> ids = storage->allIds();
+			QVERIFY(ids[1].isValid());
+			storage->reset();
+
+			QVERIFY(!ids[1].isValid());
+		}
+
+		void resetShouldInvalidateObjects() {
+			Git::RawObject obj = storage->objectFor(repo->idFor("c56dada"));
+			QVERIFY(obj.isValid());
+			storage->reset();
+
+			QVERIFY(!obj.isValid());
+		}
+
+		void resetShouldInvalidateCommit() {
+			Git::Commit commit = storage->objectFor(repo->idFor("c56dada")).toCommit();
+			QVERIFY(commit.isValid());
+
+			storage->reset();
+
+			QVERIFY(!commit.isValid());
+		}
 };
 
 QTEST_KDEMAIN_CORE(LooseStorageTest);

@@ -107,6 +107,31 @@ class PackedStorageTest : public GitTestBase
 
 			QCOMPARE(storage->objectFor(id).id().toSha1String(), QLatin1String("b7566b7883e0dd74baba8cb194ed5dacaed5bb62"));
 		}
+
+		void resetShouldInvalidateIds() {
+			QList<Git::Id> ids = storage->allIds();
+			QVERIFY(ids[1].isValid());
+			storage->reset();
+
+			QVERIFY(!ids[1].isValid());
+		}
+
+		void resetShouldInvalidateObjects() {
+			Git::RawObject obj = storage->objectFor(repo->idFor("b08e418"));
+			QVERIFY(obj.isValid());
+			storage->reset();
+
+			QVERIFY(!obj.isValid());
+		}
+
+		void resetShouldInvalidateCommit() {
+			Git::Commit commit = storage->objectFor(repo->idFor("b08e418")).toCommit();
+			QVERIFY(commit.isValid());
+
+			storage->reset();
+
+			QVERIFY(!commit.isValid());
+		}
 };
 
 QTEST_KDEMAIN_CORE(PackedStorageTest);
