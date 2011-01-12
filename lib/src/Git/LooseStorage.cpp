@@ -48,6 +48,12 @@ LooseStorage::~LooseStorage()
 {
 	invalidateIds();
 	invalidateObjects();
+
+	// manually delete objects
+	foreach (RawObject *obj, d->objects) {
+		delete obj;
+	}
+	d->objects.clear();
 }
 
 
@@ -71,7 +77,6 @@ const QList<Id> LooseStorage::allIds()
 
 void LooseStorage::invalidateIds()
 {
-
 	foreach (Id id, d->ids) {
 		id.invalidate();
 	}
@@ -79,8 +84,8 @@ void LooseStorage::invalidateIds()
 
 void LooseStorage::invalidateObjects()
 {
-	foreach (RawObject object, d->objects) {
-		object.invalidate();
+	foreach (RawObject *object, d->objects) {
+		object->invalidate();
 	}
 }
 
@@ -113,10 +118,10 @@ RawObject& LooseStorage::objectFor(const Id &id)
 {
 	if (!d->objects.contains(id)) {
 		kDebug() << "load object" << id.toString();
-		d->objects[id] = RawObject(id, repo());
+		d->objects[id] = RawObject::newInstance(id, repo());
 	}
 
-	return d->objects[id];
+	return *d->objects[id];
 }
 
 int LooseStorage::objectSizeFor(const Id &id)
@@ -160,6 +165,12 @@ const QByteArray LooseStorage::rawDataFor(const Id &id, const qint64 maxRead)
 void LooseStorage::reset()
 {
 	ObjectStorage::reset();
+
+	// manually delete objects
+	foreach (RawObject *obj, d->objects) {
+		delete obj;
+	}
+	d->objects.clear();
 
 	Repo *r = d->repo;
 	d = new LooseStoragePrivate();
