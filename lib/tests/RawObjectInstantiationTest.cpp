@@ -27,41 +27,37 @@ class RawObjectInstantiationTest : public GitTestBase
 {
 	Q_OBJECT
 
-	Git::RawObject *object;
-	Git::LooseStorage *storage;
-
 	private slots:
 		void initTestCase() {
 			GitTestBase::initTestCase();
 
-			storage = 0;
-
 			cloneFrom("RawObjectInstantiationTestRepo");
 		}
 
-		void init() {
-			GitTestBase::init();
-			storage = new Git::LooseStorage(*repo);
 
-			Git::Id id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *repo);
-			object = new Git::RawObject(id, *repo);
+
+		void shouldCreateInstanceOfBlob() {
+			Git::RawObject *obj = Git::RawObject::newInstance(repo->idFor("86e041d"));
+
+			Q_ASSERT(obj);
+			QCOMPARE(obj->type(), Git::OBJ_BLOB);
+			QCOMPARE(QString(obj->metaObject()->className()), QString("Git::Blob"));
 		}
-
-		void cleanup() {
-			delete object;
-			delete storage;
-			GitTestBase::cleanup();
-		}
-
-
 
 		void shouldCreateInstanceOfCommit() {
-			Git::Id id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *repo);
-			Git::RawObject *obj = Git::RawObject::newInstance(id, *repo);
+			Git::RawObject *obj = Git::RawObject::newInstance(repo->idFor("c56dada"));
 
 			Q_ASSERT(obj);
 			QCOMPARE(obj->type(), Git::OBJ_COMMIT);
 			QCOMPARE(QString(obj->metaObject()->className()), QString("Git::Commit"));
+		}
+
+		void shouldCreateInstanceOfTree() {
+			Git::RawObject *obj = Git::RawObject::newInstance(repo->idFor("5b36b1f"));
+
+			Q_ASSERT(obj);
+			QCOMPARE(obj->type(), Git::OBJ_TREE);
+			QCOMPARE(QString(obj->metaObject()->className()), QString("Git::Tree"));
 		}
 };
 
