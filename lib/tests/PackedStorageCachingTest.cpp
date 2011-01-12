@@ -95,7 +95,7 @@ class PackedStorageCachingTest : public GitTestBase
 		}
 
 		void resetShouldClearObjects() {
-			Git::Id id = Git::Id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *storage);
+			Git::Id id = storage->allIds()[0];
 			Git::RawObject *pOldObject = &storage->objectFor(id);
 			storage->reset();
 			Git::RawObject *pNewObject = &storage->objectFor(id);
@@ -104,7 +104,7 @@ class PackedStorageCachingTest : public GitTestBase
 		}
 
 		void resetShouldPackObjectSizes() {
-			Git::Id id = Git::Id("c56dada2cf4f67b35ed0019ddd4651a8c8a337e8", *storage);
+			Git::Id id = storage->allIds()[0];
 			storage->packObjectFor(id); // load data
 			storage->reset();
 
