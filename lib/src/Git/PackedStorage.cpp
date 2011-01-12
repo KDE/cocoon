@@ -353,7 +353,7 @@ RawObject& PackedStorage::objectFor(const Id &id)
 
 	if (!d->objects.contains(id)) {
 		kDebug() << "loading object" << id.toString() << "in" << d->name;
-		d->objects[id] = RawObject::newInstance(id, repo());
+		d->objects[id] = RawObject::newInstance(id);
 	}
 
 	return *d->objects[id];

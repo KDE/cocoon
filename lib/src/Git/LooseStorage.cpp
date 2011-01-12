@@ -125,8 +125,8 @@ RawObject& LooseStorage::objectFor(const Id &id)
 	}
 
 	if (!d->objects.contains(id)) {
-		kDebug() << "load object" << id.toString();
-		d->objects[id] = RawObject::newInstance(id, repo());
+		kDebug() << "loading object" << id.toString();
+		d->objects[id] = RawObject::newInstance(id);
 	}
 
 	return *d->objects[id];
