@@ -50,9 +50,7 @@ LooseStorage::~LooseStorage()
 	invalidateObjects();
 
 	// manually delete objects
-	foreach (RawObject *obj, d->objects) {
-		delete obj;
-	}
+	qDeleteAll(d->objects);
 	d->objects.clear();
 }
 
@@ -185,9 +183,7 @@ void LooseStorage::reset()
 	ObjectStorage::reset();
 
 	// manually delete objects
-	foreach (RawObject *obj, d->objects) {
-		delete obj;
-	}
+	qDeleteAll(d->objects);
 	d->objects.clear();
 
 	Repo *r = d->repo;

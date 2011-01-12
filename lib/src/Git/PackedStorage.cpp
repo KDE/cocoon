@@ -86,17 +86,13 @@ PackedStorage::~PackedStorage()
 	invalidateIds();
 	invalidateObjects();
 
-	// manually delete pack objects
-	foreach (PackedStorageObject *object, d->packObjects) {
-		delete object;
-	}
-	d->packObjects.clear();
-
 	// manually delete objects
-	foreach (RawObject *object, d->objects) {
-		delete object;
-	}
+	qDeleteAll(d->objects);
 	d->objects.clear();
+
+	// manually delete pack objects
+	qDeleteAll(d->packObjects);
+	d->packObjects.clear();
 }
 
 
@@ -373,15 +369,11 @@ void PackedStorage::reset()
 	ObjectStorage::reset();
 
 	// manually delete pack objects
-	foreach (PackedStorageObject *object, d->packObjects) {
-		delete object;
-	}
+	qDeleteAll(d->packObjects);
 	d->packObjects.clear();
 
 	// manually delete objects
-	foreach (RawObject *object, d->objects) {
-		delete object;
-	}
+	qDeleteAll(d->objects);
 	d->objects.clear();
 
 	Repo *r = d->repo;
