@@ -79,6 +79,10 @@ const KDateTime& Commit::authoredAt()
 
 QStringList Commit::childrenOf(const Commit &commit, const QStringList &refs)
 {
+	if (!commit.isValid()) {
+		return QStringList();
+	}
+
 	GitRunner runner;
 	runner.setDirectory(commit.repo().workingDir());
 
