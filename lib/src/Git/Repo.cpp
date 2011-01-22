@@ -263,10 +263,13 @@ void Repo::resetPackedStorages()
 {
 	if (!d->storages.isEmpty()) {
 		foreach (ObjectStorage *storage, d->storages) {
-			storage->deleteLater();
+			if (storage != d->looseStorage) {
+				storage->deleteLater();
+			}
 		}
 	}
 	d->storages.clear();
+	d->storages << d->looseStorage;
 }
 
 void Repo::stageFiles(const QStringList &paths)
