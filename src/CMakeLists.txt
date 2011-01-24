@@ -49,6 +49,6 @@ target_link_libraries(cocoon
 
 install(TARGETS cocoon ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-install( FILES cocoon.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR} )
+install( PROGRAMS cocoon.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR} )
 install( FILES cocoon.kcfg  DESTINATION  ${KCFG_INSTALL_DIR} )
 install( FILES cocoonui.rc  DESTINATION  ${DATA_INSTALL_DIR}/cocoon )
