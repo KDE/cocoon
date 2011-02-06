@@ -66,16 +66,26 @@ Ref::Ref(const QString &remote, const QString &prefix, const QString &name, Repo
 
 
 
-QList<Ref> Ref::all() const
+QList<Ref> Ref::all(const QString &remote, const QString &prefix) const
 {
 	QList<Ref> refs;
 
-	foreach (const QString &name, d->refsDir.entryList(QDir::Files)) {
+	QDir refsDir = QDir(d->repo->gitDir());
+	refsDir.cd("refs");
+	refsDir.cd(remote);
+	refsDir.cd(prefix);
+
+	foreach (const QString &name, refsDir.entryList(QDir::Files)) {
 		//kDebug() << "ref found:" << name;
-		refs << newInstance(remote(), prefix(), name, *d->repo);
+		refs << Ref(remote, prefix, name, *d->repo);
 	}
 
 	return refs;
+}
+
+QList<Ref> Ref::allHeads() const
+{
+	return all(QString(), "heads");
 }
 
 const QString& Ref::name() const

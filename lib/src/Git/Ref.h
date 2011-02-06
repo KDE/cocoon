@@ -63,6 +63,10 @@ class KDE_EXPORT Ref : public QObject
 		explicit Ref(Repo &repo);
 		explicit Ref(const QString &remote, const QString &prefix, const QString &name, Repo &repo);
 
+
+		QList<Ref> all(const QString &remote, const QString &prefix) const;
+		QList<Ref> allHeads() const;
+
 		/**
 		 * @brief Returns the commit the ref points to.
 		 *
@@ -118,8 +122,6 @@ class KDE_EXPORT Ref : public QObject
 		 * @return The remote of the ref.
 		 */
 		const QString& remote() const;
-
-		QList<Ref> all() const;
 
 		/**
 		 * @brief Assigns @a other to @a this.
