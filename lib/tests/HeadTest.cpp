@@ -19,15 +19,13 @@
 #include "GitTestBase.h"
 
 #include "Git/Commit.h"
-#include "Git/Head.h"
+#include "Git/Ref.h"
 
 
 
 class HeadTest : public GitTestBase
 {
 	Q_OBJECT
-
-	Git::Head *head;
 
 	private slots:
 		void initTestCase() {
@@ -47,26 +45,26 @@ class HeadTest : public GitTestBase
 
 
 		void shouldHaveRefsDir() {
-			Git::Ref head = Git::Head(*repo);
+			Git::Ref head = Git::Ref::head(QString(), *repo);
 
 			QCOMPARE(head.d->refsDir.path(), QString("%1/refs/heads").arg(repo->gitDir()));
 		}
 
 		void shouldNotBeRemote() {
-			Git::Ref head = Git::Head(*repo);
+			Git::Ref head = Git::Ref::head(QString(), *repo);
 
 			QVERIFY(head.remote().isEmpty());
 			QVERIFY(!head.isRemote());
 		}
 
 		void shouldHaveCorrectPrefix() {
-			Git::Ref head = Git::Head("master", *repo);
+			Git::Ref head = Git::Ref::head("master", *repo);
 
 			QCOMPARE(head.prefix(), QLatin1String("heads"));
 		}
 
 		void shouldFindAllHeads() {
-			QList<Git::Ref> heads = Git::Head(*repo).all();
+			QList<Git::Ref> heads = Git::Ref(*repo).allHeads();
 
 			QCOMPARE(heads.size(), 2);
 			QCOMPARE(heads[0].name(), QString("branch"));
@@ -76,7 +74,7 @@ class HeadTest : public GitTestBase
 		void shouldPointToCorrectCommit() {
 			QLatin1String id("632851d69abeb631f6529b50452611b9915be7fb");
 
-			QCOMPARE(Git::Head("branch", *repo).commit().id().toSha1String(), id);
+			QCOMPARE(Git::Ref::head("branch", *repo).commit().id().toSha1String(), id);
 		}
 };
 

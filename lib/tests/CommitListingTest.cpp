@@ -19,7 +19,7 @@
 #include "GitTestBase.h"
 
 #include "Git/Commit.h"
-#include "Git/Head.h"
+#include "Git/Ref.h"
 #include "Git/LooseStorage.h"
 
 
@@ -52,12 +52,12 @@ class CommitListingTest : public GitTestBase
 
 
 		void shouldHaveCorrectNumberOfCommitsOnMaster() {
-			QList<Git::Commit> commits = Git::Commit::allReachableFrom(Git::Head("master", *repo));
+			QList<Git::Commit> commits = Git::Commit::allReachableFrom(Git::Ref::head("master", *repo));
 			QCOMPARE(commits.size(), 4);
 		}
 
 		void shouldHaveCorrectNumberOfCommitsOnBranch() {
-			QList<Git::Commit> commits = Git::Commit::allReachableFrom(Git::Head("branch", *repo));
+			QList<Git::Commit> commits = Git::Commit::allReachableFrom(Git::Ref::head("branch", *repo));
 			QCOMPARE(commits.size(), 2);
 		}
 
