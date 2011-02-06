@@ -124,15 +124,6 @@ bool Ref::isValid() const
 	return !name().isEmpty();
 }
 
-Ref Ref::newInstance(const QString &remote, const QString &prefix, const QString &name, Repo &repo)
-{
-	if (prefix == "heads") {
-		return Head(remote, name, repo);
-	}
-
-	return Ref(remote, prefix, name, repo);
-}
-
 Ref& Ref::operator=(const Ref &other)
 {
 	setParent(other.parent());

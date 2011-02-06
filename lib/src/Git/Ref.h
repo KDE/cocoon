@@ -164,10 +164,6 @@ class KDE_EXPORT Ref : public QObject
 		 */
 		static QString fullNameFor(const QString &name, const Repo &repo);
 
-		/**
-		 * @deprecated
-		 */
-		static Ref newInstance(const QString &remote, const QString &prefix, const QString &name, Repo &repo);
 
 	protected:
 		void populate();
