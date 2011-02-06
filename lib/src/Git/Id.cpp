@@ -145,11 +145,6 @@ Repo& Id::repo() const
 
 ObjectStorage& Id::storage() const
 {
-	// check if the id has been invalidated
-	if (!d->storage && !d->sha1.isEmpty()) {
-		((Id*)this)->d->storage = repo().storageFor(toSha1String());
-	}
-
 	return *d->storage;
 }
 

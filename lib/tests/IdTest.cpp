@@ -231,15 +231,6 @@ class IdTest : public GitTestBase
 
 			QVERIFY(!id.d->storage);
 		}
-
-		void invalidatedShouldReassignStorage() {
-			Git::Id id("c56dada", *storage);
-			id.invalidate();
-			id.storage(); // reassigns storage
-
-			QCOMPARE(&id.storage(), storage);
-			QCOMPARE(id.d->storage, storage);
-		}
 };
 
 QTEST_KDEMAIN_CORE(IdTest);
