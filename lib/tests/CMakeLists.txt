@@ -51,7 +51,7 @@ unit_tests(
 	CommitMergeDetectionTest
 	CommitPopulationTest
 	CommitPopulationErrorsTest
-	#reeTest
+	TreeTest
 
 # Status tests
 	StatusDeletedFileTest
