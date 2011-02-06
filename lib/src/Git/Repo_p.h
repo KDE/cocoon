@@ -20,7 +20,6 @@
 #define REPO_P_H
 
 #include "Commit.h"
-#include "Head.h"
 #include "LooseStorage.h"
 #include "Ref.h"
 #include "Status.h"

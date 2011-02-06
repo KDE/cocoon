@@ -22,7 +22,6 @@
 #include "gitrunner.h"
 #include "Blob.h"
 #include "Commit.h"
-#include "Head.h"
 #include "LooseStorage.h"
 #include "PackedStorage.h"
 #include "Status.h"
@@ -170,7 +169,7 @@ QList<Ref> Repo::heads()
 	QList<Ref> refs;
 
 	if (d->refs.isEmpty()) {
-		foreach (const Ref &head, Head(*this).all()) {
+		foreach (const Ref &head, Ref(*this).allHeads()) {
 			d->refs[head.fullName()] = head;
 		}
 	}
@@ -208,10 +207,10 @@ const Ref& Repo::ref(const QString &name)
 		parts.removeFirst();
 
 		if (parts.size() == 2) {
-			ref = Ref::newInstance(QString(), parts[0], parts[1], *this);
+			ref = Ref(QString(), parts[0], parts[1], *this);
 		} else {
 			Q_ASSERT(parts.size() == 3);
-			ref = Ref::newInstance(parts[0], parts[1], parts[2], *this);
+			ref = Ref(parts[0], parts[1], parts[2], *this);
 		}
 
 		d->refs[fullName] = ref;
