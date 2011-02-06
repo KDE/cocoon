@@ -39,14 +39,14 @@ class TreeTest : public GitTestBase
 
 		void shouldBeInstanceOfTree() {
 			Git::Id id("273b4fb", *repo);
-			Git::RawObject *object = Git::RawObject::newInstance(id, *repo);
+			Git::RawObject *object = Git::RawObject::newInstance(id);
 
 			QCOMPARE(object->metaObject()->className(), "Git::Tree");
 		}
 
 		void shouldBeCorrectObject() {
 			Git::Id id("273b4fb", *repo);
-			Git::RawObject *object = Git::RawObject::newInstance(id, *repo);
+			Git::RawObject *object = Git::RawObject::newInstance(id);
 
 			QCOMPARE(object->id().toSha1String(), QLatin1String("273b4fbfa8910e2806d6999c8433f29c95c1ac86"));
 			QCOMPARE(object->data().size(), 97);
@@ -54,7 +54,7 @@ class TreeTest : public GitTestBase
 
 		void shouldNotPopulateOnConstruction() {
 			Git::Id id("273b4fb", *repo);
-			Git::Tree *tree = (Git::Tree*)Git::RawObject::newInstance(id, *repo);
+			Git::Tree *tree = (Git::Tree*)Git::RawObject::newInstance(id);
 
 			QVERIFY( tree->d->entries.isEmpty());
 			QVERIFY( tree->d->entryModes.isEmpty());
@@ -63,7 +63,7 @@ class TreeTest : public GitTestBase
 
 		void shouldPopulateOnPropertyAccess() {
 			Git::Id id("273b4fb", *repo);
-			Git::Tree *tree = (Git::Tree*)Git::RawObject::newInstance(id, *repo);
+			Git::Tree *tree = (Git::Tree*)Git::RawObject::newInstance(id);
 			tree->entries();
 
 			QVERIFY(!tree->d->entries.isEmpty());
