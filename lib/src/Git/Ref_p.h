@@ -19,14 +19,17 @@
 #ifndef REF_P_H
 #define REF_P_H
 
+#include <QSharedData>
+
 #include "Id.h"
-#include "Repo.h"
 
 #include <QDir>
 
 
 
 namespace Git {
+
+class Repo;
 
 
 
