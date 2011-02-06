@@ -19,7 +19,7 @@
 #include "Ref.h"
 #include "Ref_p.h"
 
-#include "Head.h"
+#include "Repo.h"
 
 #include <KDebug>
 
