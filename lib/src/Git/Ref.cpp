@@ -114,6 +114,11 @@ QString Ref::fullNameFor(const QString &name, const Repo &repo)
 	return QString();
 }
 
+Ref Ref::head(const QString &name, Repo &repo)
+{
+	return Ref(QString(), "heads", name, repo);
+}
+
 bool Ref::isRemote() const
 {
 	return !remote().isEmpty();

@@ -164,6 +164,7 @@ class KDE_EXPORT Ref : public QObject
 		 */
 		static QString fullNameFor(const QString &name, const Repo &repo);
 
+		static Ref head(const QString &name, Repo &repo);
 
 	protected:
 		void populate();
