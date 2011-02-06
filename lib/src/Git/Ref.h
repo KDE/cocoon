@@ -60,6 +60,7 @@ class KDE_EXPORT Ref : public QObject
 		 * @brief Copy constructor.
 		 */
 		Ref(const Ref &other);
+		explicit Ref(Repo &repo);
 		explicit Ref(const QString &remote, const QString &prefix, const QString &name, Repo &repo);
 
 		/**

@@ -39,6 +39,15 @@ Ref::Ref(const Ref &other)
 {
 }
 
+Ref::Ref(Repo &repo)
+	: QObject()
+	, d(new RefPrivate)
+{
+	d->repo = &repo;
+	d->refsDir = QDir(d->repo->gitDir());
+	d->refsDir.cd("refs");
+}
+
 Ref::Ref(const QString &remote, const QString &prefix, const QString &name, Repo &repo)
 	: QObject(&repo)
 	, d(new RefPrivate)
