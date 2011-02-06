@@ -19,7 +19,7 @@
 #include "GitTestBase.h"
 
 #include "Git/Commit.h"
-#include "Git/Head.h"
+#include "Git/Ref.h"
 
 
 
@@ -68,12 +68,6 @@ class RepoRefsTest : public GitTestBase
 			QCOMPARE(ref.fullName(), QLatin1String("refs/heads/branch"));
 		}
 
-		void shouldReturnHead() {
-			const Git::Head &ref = (const Git::Head&)repo->ref("branch");
-
-			QCOMPARE(ref.metaObject()->className(), "Git::Head");
-		}
-
 		void shouldFindFullyNamedTag() {
 			const Git::Ref &ref = repo->ref("refs/tags/commit2");
 
@@ -90,12 +84,6 @@ class RepoRefsTest : public GitTestBase
 			const Git::Ref &ref = repo->ref("commit2");
 
 			QCOMPARE(ref.fullName(), QLatin1String("refs/tags/commit2"));
-		}
-
-		void shouldReturnTag() {
-			const Git::Ref &ref = repo->ref("commit2");
-
-			QCOMPARE(ref.metaObject()->className(), "Git::TagRef");
 		}
 };
 
