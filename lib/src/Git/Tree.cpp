@@ -153,6 +153,15 @@ const QString Tree::nameFor(const RawObject &object)
 	return nameFor(object.id().toSha1String());
 }
 
+Tree& Tree::operator=(const Tree &other)
+{
+	RawObject::operator=(other);
+
+	d = other.d;
+
+	return *this;
+}
+
 const QList<Tree> Tree::trees()
 {
 	QList<Tree> result;
@@ -164,15 +173,6 @@ const QList<Tree> Tree::trees()
 	}
 
 	return result;
-}
-
-Tree& Tree::operator=(const Tree &other)
-{
-	RawObject::operator=(other);
-
-	d = other.d;
-
-	return *this;
 }
 
 const QMap<QString, Tree> Tree::treesByName()
