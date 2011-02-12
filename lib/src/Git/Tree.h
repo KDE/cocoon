@@ -27,8 +27,6 @@
 
 #include "RawObject.h"
 
-#include "Blob.h"
-
 #include <QHash>
 #include <QMap>
 
@@ -38,7 +36,7 @@ class TreeTest;
 
 namespace Git {
 
-class RawObject;
+class Blob;
 class TreePrivate;
 
 
