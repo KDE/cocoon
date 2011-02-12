@@ -40,10 +40,8 @@ class CommitPopulationErrorsTest;
 
 namespace Git {
 
-class Commit;
 class CommitPrivate;
 class Ref;
-class Repo;
 class Tree;
 
 
