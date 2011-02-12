@@ -18,6 +18,7 @@
 
 #include "GitTestBase.h"
 
+#include "Git/Blob.h"
 #include "Git/Tree.h"
 #include "Git/Tree_p.h"
 #include "Git/RawObject.h"
@@ -50,6 +51,28 @@ class TreeTest : public GitTestBase
 
 			QCOMPARE(object->id().toSha1String(), QLatin1String("273b4fbfa8910e2806d6999c8433f29c95c1ac86"));
 			QCOMPARE(object->data().size(), 97);
+		}
+
+		void constructedWithDefaultCtorShouldNotBeValid() {
+			Git::Tree tree;
+
+			QVERIFY(!tree.isValid());
+		}
+
+		void shouldBeCopyable() {
+			Git::Tree tree(repo->idFor("273b4fb"), *repo);
+			Git::Tree copyTree(repo->idFor("5b51924"), *repo);
+			copyTree = tree;
+
+			QCOMPARE(copyTree.d->id.toSha1String(), QLatin1String("273b4fbfa8910e2806d6999c8433f29c95c1ac86"));
+		}
+
+		void copyShouldShareInternalData() {
+			Git::Tree tree(repo->idFor("273b4fb"), *repo);
+			Git::Tree copyTree(repo->idFor("5b51924"), *repo);
+			copyTree = tree;
+
+			QCOMPARE(copyTree.d.constData(), tree.d.constData());
 		}
 
 		void shouldNotPopulateOnConstruction() {
