@@ -112,14 +112,14 @@ class KDE_EXPORT Tree : public RawObject
 		static Tree& invalid();
 
 	private:
-	// static
 		/**
-		 * Populates the given tree with the data extracted from the raw data.
+		 * @brief Populates the tree with the data extracted from the raw data.
 		 *
-		 * @param tree The tree to be populated.
-		 * @param raw The raw tree object data.
+		 * @param raw The raw tree data.
+		 *
+		 * @see data()
 		 */
-		static void fillFromString(Tree *tree, const QByteArray &raw);
+		void fillFromString(const QByteArray &raw);
 
 	private:
 		const QString& nameFor(const Id &id);

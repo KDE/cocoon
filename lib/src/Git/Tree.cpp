@@ -86,7 +86,7 @@ const QMap<QString, Blob> Tree::blobsByName()
 
 const QList<RawObject> Tree::entries()
 {
-	fillFromString(this, data());
+	fillFromString(data());
 	return d->entries;
 }
 
@@ -102,22 +102,22 @@ const QMap<QString, RawObject> Tree::entriesByName()
 	return result;
 }
 
-void Tree::fillFromString(Tree *tree, const QByteArray &raw)
+void Tree::fillFromString(const QByteArray &raw)
 {
 	// if commit has already been filled
-	if (tree->d->entries.size() > 0) {
+	if (d->entries.size() > 0) {
 		return;
 	}
 
-	qDebug() << "fill tree" << tree->id().toString();
+	qDebug() << "fill tree" << id().toString();
 
 	int pos = 0;
 	int modeLen = 0;
 	int nameLen = 0;
 
-	tree->d->entries.clear();
-	tree->d->entryModes.clear();
-	tree->d->entryNames.clear();
+	d->entries.clear();
+	d->entryModes.clear();
+	d->entryNames.clear();
 
 	while(pos < raw.size()) {
 		modeLen = raw.indexOf(" ", pos)-pos;
@@ -126,13 +126,13 @@ void Tree::fillFromString(Tree *tree, const QByteArray &raw)
 		nameLen = raw.indexOf('\0', pos)-pos;
 		QString name = raw.mid(pos, nameLen);
 		pos += nameLen+1; // skip the file name + "\0"
-		QString id = raw.mid(pos, 20).toHex();
+		QString idString = raw.mid(pos, 20).toHex();
 		pos += 20; // skip the id
 
-		RawObject &entry = tree->repo().object(tree->repo().idFor(id));
-		tree->d->entries << entry;
-		tree->d->entryModes[id] = mode;
-		tree->d->entryNames[id] = name;
+		RawObject &entry = repo().idFor(idString).object();
+		d->entries << entry;
+		d->entryModes[entry.id()] = mode;
+		d->entryNames[entry.id()] = name;
 	}
 }
 
