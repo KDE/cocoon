@@ -64,6 +64,7 @@
  *             }
  *         } else {
  *             // Deal with a unsuccessful git-add command
+ *         }
  *     }
  *
  *     // Now retrieve the available branches
@@ -82,7 +83,7 @@
  */
 class GitRunner
 {
-public:
+	public:
 		/**
 		 * Simple constructor; it initializes the class with some default parameters.
 		 * @see setDirectory()
@@ -110,7 +111,7 @@ public:
 		 * @note Since the main thread is blocked until the command is executed, this
 		 * method is useful when there are more threads running in the same app.
 		 */
-		bool isRunning() const;
+		bool isRunning();
 
 		/**
 		 * Sets the working directory for our class.
@@ -167,21 +168,6 @@ public:
 		DvcsJob::JobStatus commit(const QString &message);
 
 		/**
-		 * Lists all commits on the given branch in chronological order.
-		 * It will list all commits if branch isNull().
-		 * @param branch The branch to get the log of.
-		 * @return The status of the performed operation.
-		 */
-		DvcsJob::JobStatus commits(const QString &branch = QString());
-
-		/**
-		 * Get the diff for the given commit and it's parent.
-		 * @param sha1hash The sha1 hash string representing the commit we want the diff for.
-		 * @return The status of the performed operation.
-		 */
-		DvcsJob::JobStatus commitDiff(const QString &sha1hash);
-
-		/**
 		 * Move HEAD from the current stage, to the commit pointed by its sha1hash, and then
 		 * create a new branch so new changes won't affect the original branch history.
 		 * @param sha1hash The sha1 hash string representing the commit we want to point to.
@@ -201,12 +187,10 @@ public:
 		DvcsJob::JobStatus deleteCommit(const QString &sha1hash);
 
 		/**
-		 * Get the diff between the given commits.
-		 * @param sha1hash The sha1 hash string representing the first commit.
-		 * @param sha2hash The sha1 hash string representing the first commit.
+		 * Logs all git-related event, such as commits, merges and so on.
 		 * @return The status of the performed operation.
 		 */
-		DvcsJob::JobStatus diffCommits(const QString &sha1hash, const QString &sha2hash);
+		DvcsJob::JobStatus log();
 
 		/**
 		 * Init a new git repository tree in the given directory.
@@ -214,6 +198,12 @@ public:
 		 * @return The status of the performed operation.
 		 */
 		DvcsJob::JobStatus init(const KUrl &directory);
+
+		/**
+		 * It adds a new line inside the .gitignore file (if any, will be created too)
+		 * @param file extension to be ignored from git
+		 */
+		void addIgnoredFileExtension(const QString ignoredFileExtension);
 
 		/**
 		 * Create a new branch with the given name.
@@ -262,20 +252,6 @@ public:
 		 */
 		DvcsJob::JobStatus currentBranch();
 
-		DvcsJob::JobStatus add(const QStringList &paths, const QStringList &options = QStringList());
-		DvcsJob::JobStatus catFile(const QString &object, const QStringList &options = QStringList());
-		DvcsJob::JobStatus checkout(const QStringList &options = QStringList(), const QString &treeish = QString(), const QStringList &paths = QStringList());
-		DvcsJob::JobStatus clone(const QString &repository, const QStringList &options = QStringList(), const QString &directory = QString());
-		DvcsJob::JobStatus commit(const QStringList &options = QStringList(), const QStringList &files = QStringList());
-		DvcsJob::JobStatus diff(const QStringList &commits, const QStringList &options = QStringList(), const QStringList &paths = QStringList());
-		DvcsJob::JobStatus diffFiles(const QStringList &options = QStringList(), const QStringList &commits = QStringList(), const QStringList &paths = QStringList());
-		DvcsJob::JobStatus diffIndex(const QString &treeish, const QStringList &options = QStringList(), const QStringList &commits = QStringList(), const QStringList &paths = QStringList());
-		DvcsJob::JobStatus log(const QStringList &options = QStringList(), const QString &sinceId = QString(), const QString &untilId = QString(), const QStringList &paths = QStringList());
-		DvcsJob::JobStatus lsFiles(const QStringList &options = QStringList(), const QStringList &files = QStringList());
-		DvcsJob::JobStatus revList(const QStringList &options = QStringList(), const QStringList &commits = QStringList(), const QStringList &paths = QStringList());
-		DvcsJob::JobStatus reset(const QStringList &paths, const QStringList &options = QStringList(), const QString &commit = QString());
-		DvcsJob::JobStatus rm(const QStringList &paths, const QStringList &options = QStringList());
-
 		/**
 		 * Retrieves all the branches available in the current git repo.
 		 * @return The status of the performed operation.
@@ -303,6 +279,41 @@ public:
 		 * @return The string containing the result of the last action performed.
 		 */
 		QString& getResult();
+
+	// customized
+
+		DvcsJob::JobStatus add(const QStringList &paths, const QStringList &options = QStringList());
+		DvcsJob::JobStatus catFile(const QString &object, const QStringList &options = QStringList());
+		DvcsJob::JobStatus checkout(const QStringList &options = QStringList(), const QString &treeish = QString(), const QStringList &paths = QStringList());
+		DvcsJob::JobStatus clone(const QString &repository, const QStringList &options = QStringList(), const QString &directory = QString());
+		DvcsJob::JobStatus commit(const QStringList &options = QStringList(), const QStringList &files = QStringList());
+		/**
+		 * Get the diff for the given commit and it's parent.
+		 * @param sha1hash The sha1 hash string representing the commit we want the diff for.
+		 * @return The status of the performed operation.
+		 */
+		DvcsJob::JobStatus commitDiff(const QString &sha1hash);
+		/**
+		 * Lists all commits on the given branch in chronological order.
+		 * It will list all commits if branch isNull().
+		 * @param branch The branch to get the log of.
+		 * @return The status of the performed operation.
+		 */
+		DvcsJob::JobStatus commits(const QString &branch = QString());
+		DvcsJob::JobStatus diff(const QStringList &commits, const QStringList &options = QStringList(), const QStringList &paths = QStringList());
+		/**
+		 * Get the diff between the given commits.
+		 * @param sha1hash The sha1 hash string representing the first commit.
+		 * @param sha2hash The sha1 hash string representing the first commit.
+		 */
+		DvcsJob::JobStatus diffCommits(const QString &sha1hash, const QString &sha2hash);
+		DvcsJob::JobStatus diffFiles(const QStringList &options = QStringList(), const QStringList &commits = QStringList(), const QStringList &paths = QStringList());
+		DvcsJob::JobStatus diffIndex(const QString &treeish, const QStringList &options = QStringList(), const QStringList &commits = QStringList(), const QStringList &paths = QStringList());
+		DvcsJob::JobStatus log(const QStringList &options = QStringList(), const QString &sinceId = QString(), const QString &untilId = QString(), const QStringList &paths = QStringList());
+		DvcsJob::JobStatus lsFiles(const QStringList &options = QStringList(), const QStringList &files = QStringList());
+		DvcsJob::JobStatus revList(const QStringList &options = QStringList(), const QStringList &commits = QStringList(), const QStringList &paths = QStringList());
+		DvcsJob::JobStatus reset(const QStringList &paths, const QStringList &options = QStringList(), const QString &commit = QString());
+		DvcsJob::JobStatus rm(const QStringList &paths, const QStringList &options = QStringList());
 
 	private:
 
