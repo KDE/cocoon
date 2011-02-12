@@ -122,7 +122,7 @@ class KDE_EXPORT Tree : public RawObject
 		static void fillFromString(Tree *tree, const QByteArray &raw);
 
 	private:
-		const QString nameFor(const QString &id);
+		const QString& nameFor(const Id &id);
 
 	private:
 		QExplicitlySharedDataPointer<TreePrivate> d;

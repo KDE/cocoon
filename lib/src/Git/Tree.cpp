@@ -142,15 +142,15 @@ Tree& Tree::invalid()
 	return invalid;
 }
 
-const QString Tree::nameFor(const QString &id)
+const QString& Tree::nameFor(const Id &id)
 {
-	fillFromString(this, data());
+	fillFromString(data());
 	return d->entryNames[id];
 }
 
 const QString Tree::nameFor(const RawObject &object)
 {
-	return nameFor(object.id().toSha1String());
+	return nameFor(object.id());
 }
 
 Tree& Tree::operator=(const Tree &other)

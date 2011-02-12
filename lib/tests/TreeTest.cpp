@@ -140,7 +140,7 @@ class TreeTest : public GitTestBase
 			QFETCH(QString, entryId);
 			QFETCH(QString, entryName);
 
-			QCOMPARE(tree.nameFor(entryId), entryName);
+			QCOMPARE(tree.nameFor(repo->idFor(entryId)), entryName);
 		}
 };
 
