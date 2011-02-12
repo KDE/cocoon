@@ -128,7 +128,6 @@ class KDE_EXPORT Tree : public RawObject
 		 */
 		void lazyLoad();
 
-	private:
 		const QString& nameFor(const Id &id);
 
 	private:
