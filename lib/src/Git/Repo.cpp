@@ -57,7 +57,7 @@ Repo::~Repo()
 
 
 
-Blob Repo::blob(const Id &id)
+Blob& Repo::blob(const Id &id)
 {
 	return id.object().toBlob();
 }
@@ -90,7 +90,7 @@ void Repo::commitIndex(const QString &message, const QStringList &options)
 	emit historyChanged();
 }
 
-Commit Repo::commit(const Id &id)
+Commit& Repo::commit(const Id &id)
 {
 	return id.object().toCommit();
 }
@@ -316,7 +316,7 @@ const QList<ObjectStorage*> Repo::storages()
 	return d->storages;
 }
 
-Tree Repo::tree(const Id &id)
+Tree& Repo::tree(const Id &id)
 {
 	return id.object().toTree();
 }
