@@ -121,6 +121,13 @@ class KDE_EXPORT Tree : public RawObject
 		 */
 		void fillFromString(const QByteArray &raw);
 
+		/**
+		 * @brief Will lazy load this tree's data and fill it in.
+		 *
+		 * @see fillFromString()
+		 */
+		void lazyLoad();
+
 	private:
 		const QString& nameFor(const Id &id);
 

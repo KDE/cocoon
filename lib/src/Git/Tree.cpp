@@ -86,7 +86,7 @@ const QMap<QString, Blob> Tree::blobsByName()
 
 const QList<RawObject> Tree::entries()
 {
-	fillFromString(data());
+	lazyLoad();
 	return d->entries;
 }
 
@@ -104,11 +104,6 @@ const QMap<QString, RawObject> Tree::entriesByName()
 
 void Tree::fillFromString(const QByteArray &raw)
 {
-	// if commit has already been filled
-	if (d->entries.size() > 0) {
-		return;
-	}
-
 	qDebug() << "fill tree" << id().toString();
 
 	int pos = 0;
@@ -142,9 +137,19 @@ Tree& Tree::invalid()
 	return invalid;
 }
 
+void Tree::lazyLoad()
+{
+	// if tree has already been filled
+	if (d->entries.size() > 0) {
+		return;
+	}
+
+	fillFromString(data());
+}
+
 const QString& Tree::nameFor(const Id &id)
 {
-	fillFromString(data());
+	lazyLoad();
 	return d->entryNames[id];
 }
 
