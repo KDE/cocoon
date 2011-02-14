@@ -60,7 +60,7 @@ Tree::~Tree()
 
 
 
-const QList<Blob> Tree::blobs()
+const QList<Blob> Tree::blobs() const
 {
 	QList<Blob> result;
 
@@ -73,7 +73,7 @@ const QList<Blob> Tree::blobs()
 	return result;
 }
 
-const QMap<QString, Blob> Tree::blobsByName()
+const QMap<QString, Blob> Tree::blobsByName() const
 {
 	QMap<QString, Blob> result;
 
@@ -84,13 +84,13 @@ const QMap<QString, Blob> Tree::blobsByName()
 	return result;
 }
 
-const QList<RawObject> Tree::entries()
+const QList<RawObject> Tree::entries() const
 {
-	lazyLoad();
+	((Tree*)this)->lazyLoad();  // non-const access
 	return d->entries;
 }
 
-const QMap<QString, RawObject> Tree::entriesByName()
+const QMap<QString, RawObject> Tree::entriesByName() const
 {
 	QMap<QString, RawObject> result;
 
@@ -147,13 +147,13 @@ void Tree::lazyLoad()
 	fillFromString(data());
 }
 
-const QString& Tree::nameFor(const Id &id)
+const QString& Tree::nameFor(const Id &id) const
 {
-	lazyLoad();
+	((Tree*)this)->lazyLoad(); // non-const access
 	return d->entryNames[id];
 }
 
-const QString Tree::nameFor(const RawObject &object)
+const QString Tree::nameFor(const RawObject &object) const
 {
 	return nameFor(object.id());
 }
@@ -167,7 +167,7 @@ Tree& Tree::operator=(const Tree &other)
 	return *this;
 }
 
-const QList<Tree> Tree::trees()
+const QList<Tree> Tree::trees() const
 {
 	QList<Tree> result;
 
@@ -180,7 +180,7 @@ const QList<Tree> Tree::trees()
 	return result;
 }
 
-const QMap<QString, Tree> Tree::treesByName()
+const QMap<QString, Tree> Tree::treesByName() const
 {
 	QMap<QString, Tree> result;
 

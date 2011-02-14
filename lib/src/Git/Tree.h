@@ -83,11 +83,11 @@ class KDE_EXPORT Tree : public RawObject
 
 		virtual ~Tree();
 
-		const QList<Blob> blobs();
-		const QMap<QString, Blob> blobsByName();
-		const QList<RawObject> entries();
-		const QMap<QString, RawObject> entriesByName();
-		const QString nameFor(const RawObject &object);
+		const QList<Blob> blobs() const;
+		const QMap<QString, Blob> blobsByName() const;
+		const QList<RawObject> entries() const;
+		const QMap<QString, RawObject> entriesByName() const;
+		const QString nameFor(const RawObject &object) const;
 
 		/**
 		 * @brief Assigns @a other to @a this.
@@ -96,8 +96,8 @@ class KDE_EXPORT Tree : public RawObject
 		 * @return @a this.
 		 */
 		Tree& operator=(const Tree &other);
-		const QList<Tree> trees();
-		const QMap<QString, Tree> treesByName();
+		const QList<Tree> trees() const;
+		const QMap<QString, Tree> treesByName() const;
 
 	//static
 		/**
@@ -126,7 +126,7 @@ class KDE_EXPORT Tree : public RawObject
 		 */
 		void lazyLoad();
 
-		const QString& nameFor(const Id &id);
+		const QString& nameFor(const Id &id) const;
 
 	private:
 		QExplicitlySharedDataPointer<TreePrivate> d;
