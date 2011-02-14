@@ -83,9 +83,42 @@ class KDE_EXPORT Tree : public RawObject
 
 		virtual ~Tree();
 
+		/**
+		 * @brief Returns a list of all the blobs in this tree.
+		 *
+		 * @return The list of blobs.
+		 *
+		 * @see entries()
+		 */
 		const QList<Blob> blobs() const;
+
+		/**
+		 * @brief Returns a map of all the blobs with their entry names mapped to the associated objects.
+		 *
+		 * @return A map of name to blob.
+		 *
+		 * @see blobs(), nameFor()
+		 */
 		const QMap<QString, Blob> blobsByName() const;
+
+		/**
+		 * @brief Returns a list of all entries in this tree.
+		 *
+		 * Although it returns a list of objects these are only blobs and trees.
+		 *
+		 * @return The list of entries.
+		 *
+		 * @see blobs(), trees()
+		 */
 		const QList<RawObject> entries() const;
+
+		/**
+		 * @brief Returns a map of entry names with their associated objects.
+		 *
+		 * @return A map of name to object.
+		 *
+		 * @see entries(), nameFor()
+		 */
 		const QMap<QString, RawObject> entriesByName() const;
 
 		/**
@@ -106,7 +139,23 @@ class KDE_EXPORT Tree : public RawObject
 		 * @return @a this.
 		 */
 		Tree& operator=(const Tree &other);
+
+		/**
+		 * @brief Returns a list of all the (sub-)trees in this tree.
+		 *
+		 * @return The list of trees.
+		 *
+		 * @see entries()
+		 */
 		const QList<Tree> trees() const;
+
+		/**
+		 * @brief Returns a map of all the trees with their entry names mapped to the associated objects.
+		 *
+		 * @return A map of name to tree.
+		 *
+		 * @see nameFor(), trees()
+		 */
 		const QMap<QString, Tree> treesByName() const;
 
 	//static
