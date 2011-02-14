@@ -87,7 +87,17 @@ class KDE_EXPORT Tree : public RawObject
 		const QMap<QString, Blob> blobsByName() const;
 		const QList<RawObject> entries() const;
 		const QMap<QString, RawObject> entriesByName() const;
-		const QString nameFor(const RawObject &object) const;
+
+		/**
+		 * @brief Returns the name that is associated with the given object in this tree.
+		 *
+		 * @param object The object to get the name for.
+		 * @return The name of the object if it is an entry in this tree, an empty string otherwise.
+		 *
+		 * @see entries()
+		 */
+		const QString& nameFor(const RawObject &object) const;
+		const QString& nameFor(const Id &id) const;
 
 		/**
 		 * @brief Assigns @a other to @a this.
@@ -125,8 +135,6 @@ class KDE_EXPORT Tree : public RawObject
 		 * @see fillFromString()
 		 */
 		void lazyLoad();
-
-		const QString& nameFor(const Id &id) const;
 
 	private:
 		QExplicitlySharedDataPointer<TreePrivate> d;

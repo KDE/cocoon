@@ -153,7 +153,7 @@ const QString& Tree::nameFor(const Id &id) const
 	return d->entryNames[id];
 }
 
-const QString Tree::nameFor(const RawObject &object) const
+const QString& Tree::nameFor(const RawObject &object) const
 {
 	return nameFor(object.id());
 }
