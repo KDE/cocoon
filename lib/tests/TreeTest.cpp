@@ -104,13 +104,13 @@ class TreeTest : public GitTestBase
 		void shouldHaveCorrectEntries() {
 			Git::Tree tree = repo->tree(repo->idFor("273b4fb"));
 
-			QStringList entryIds;
-			entryIds << "5b51924c72272342a7490dd267ed022e90174480"; // dir0
-			entryIds << "a907ec3f431eeb6b1c75799a7e4ba73ca6dc627a"; // file1
-			entryIds << "eb697c0d58b8e5fce1855b606a665c4a2ad3a1c7"; // file2
+			QList<Git::Id> entryIds;
+			entryIds << repo->idFor("5b51924c72272342a7490dd267ed022e90174480"); // dir0
+			entryIds << repo->idFor("a907ec3f431eeb6b1c75799a7e4ba73ca6dc627a"); // file1
+			entryIds << repo->idFor("eb697c0d58b8e5fce1855b606a665c4a2ad3a1c7"); // file2
 
 			foreach(const Git::RawObject entry, tree.entries()) {
-				QVERIFY(entryIds.contains(entry.id().toSha1String()));
+				QVERIFY(entryIds.contains(entry.id()));
 			}
 		}
 
