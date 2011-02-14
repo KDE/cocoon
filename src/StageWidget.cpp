@@ -28,6 +28,7 @@
 #include "GitFileStatusModel.h"
 
 #include <QSortFilterProxyModel>
+#include <QMenu>
 #include <QModelIndex>
 
 
@@ -38,6 +39,10 @@ StageWidget::StageWidget(QWidget *parent)
 	, ui(new Ui::StageWidget)
 {
 	ui->setupUi(this);
+
+	setupActions();
+	ui->stagedChangesView->setContextMenuPolicy(Qt::CustomContextMenu);
+	ui->unstagedChangesView->setContextMenuPolicy(Qt::CustomContextMenu);
 
 	m_stagedFilesProxyModel = new QSortFilterProxyModel(this);
 	m_unstagedFilesProxyModel = new QSortFilterProxyModel(this);
@@ -78,6 +83,11 @@ void StageWidget::on_stagedChangesView_clicked(const QModelIndex &index)
 	ui->fileStatusWidget->setFile(*file);
 }
 
+void StageWidget::on_stagedChangesView_customContextMenuRequested(const QPoint &pos)
+{
+	m_stageWidgetContextMenu->exec(ui->stagedChangesView->mapToGlobal(pos));
+}
+
 void StageWidget::on_stagedChangesView_doubleClicked(const QModelIndex &index)
 {
 	Q_UNUSED(index);
@@ -90,6 +100,11 @@ void StageWidget::on_unstagedChangesView_clicked(const QModelIndex &index)
 	ui->stagedChangesView->clearSelection();
 	const Git::StatusFile *file = m_unstagedFilesModel->mapToStatusFile(m_unstagedFilesProxyModel->mapToSource(index));
 	ui->fileStatusWidget->setFile(*file);
+}
+
+void StageWidget::on_unstagedChangesView_customContextMenuRequested(const QPoint &pos)
+{
+	m_unstageWidgetContextMenu->exec(ui->unstagedChangesView->mapToGlobal(pos));
 }
 
 void StageWidget::on_unstagedChangesView_doubleClicked(const QModelIndex &index)
@@ -111,6 +126,15 @@ void StageWidget::setRepository(Git::Repo *repo)
 {
 	m_repo = repo;
 	loadModels();
+}
+
+void StageWidget::setupActions()
+{
+	m_stageWidgetContextMenu = new QMenu(this);
+	m_stageWidgetContextMenu->addAction(KIcon("git-file-unstage"), i18n("Unstage File from Commit"), this, SLOT(unstageFile()));
+
+	m_unstageWidgetContextMenu = new QMenu(this);
+	m_unstageWidgetContextMenu->addAction(KIcon("git-file-stage"), i18n("Stage File to Commit"), this, SLOT(stageFile()));
 }
 
 void StageWidget::stageFile()

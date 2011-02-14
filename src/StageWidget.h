@@ -31,6 +31,7 @@ namespace Ui {
 
 class GitFileStatusModel;
 
+class QMenu;
 class QModelIndex;
 class QSortFilterProxyModel;
 
@@ -53,19 +54,24 @@ class StageWidget : public QWidget
 
 	private:
 		void loadModels();
+		void setupActions();
 
 	private slots:
 		void on_stagedChangesView_clicked(const QModelIndex &index);
+		void on_stagedChangesView_customContextMenuRequested(const QPoint &pos);
 		void on_stagedChangesView_doubleClicked(const QModelIndex &index);
 		void on_unstagedChangesView_clicked(const QModelIndex &index);
+		void on_unstagedChangesView_customContextMenuRequested(const QPoint &pos);
 		void on_unstagedChangesView_doubleClicked(const QModelIndex &index);
 
 	private:
 		Git::Repo *m_repo;
 		GitFileStatusModel    *m_stagedFilesModel;
 		QSortFilterProxyModel *m_stagedFilesProxyModel;
+		QMenu                 *m_stageWidgetContextMenu;
 		GitFileStatusModel    *m_unstagedFilesModel;
 		QSortFilterProxyModel *m_unstagedFilesProxyModel;
+		QMenu                 *m_unstageWidgetContextMenu;
 		Ui::StageWidget *ui;
 };
 
