@@ -29,16 +29,16 @@ const QString DiffWidget::format(const QString &unformattedDiff) const
 	QStringList lines = Qt::escape(unformattedDiff).split("\n");
 
 	for(int i=0; i < lines.size(); ++i) {
-		lines[i] = lines[i].replace(QRegExp("^(diff --git .*)"),   "<span class=\"header\">\\1</span>");
-		lines[i] = lines[i].replace(QRegExp("^(index .*)"),        "<span class=\"header info\">\\1</span>");
-		lines[i] = lines[i].replace(QRegExp("^(new file .*)"),     "<span class=\"header add\">\\1</span>");
-		lines[i] = lines[i].replace(QRegExp("^(deleted file .*)"), "<span class=\"header remove\">\\1</span>");
-		lines[i] = lines[i].replace(QRegExp("^(\\+\\+\\+ .*)"),    "<span class=\"header add\">\\1</span>");
-		lines[i] = lines[i].replace(QRegExp("^(--- .*)"),          "<span class=\"header remove\">\\1</span>");
-		lines[i] = lines[i].replace(QRegExp("^(\\+.*)"),           "<span class=\"add\">\\1</span>");
-		lines[i] = lines[i].replace(QRegExp("^(-.*)"),             "<span class=\"remove\">\\1</span>");
-		lines[i] = lines[i].replace(QRegExp("^(@@.*)"),            "<span class=\"info\">\\1</span>");
-		lines[i] = lines[i].replace(QRegExp("^(\\.*)"),            "<span class=\"warning\">\\1</span>");
+		lines[i] = lines[i].replace(QRegExp("^(diff --git .*)"),   "<div class=\"header\">\\1</div>");
+		lines[i] = lines[i].replace(QRegExp("^(index .*)"),        "<div class=\"header info\">\\1</div>");
+		lines[i] = lines[i].replace(QRegExp("^(new file .*)"),     "<div class=\"header add\">\\1</div>");
+		lines[i] = lines[i].replace(QRegExp("^(deleted file .*)"), "<div class=\"header remove\">\\1</div>");
+		lines[i] = lines[i].replace(QRegExp("^(\\+\\+\\+ .*)"),    "<div class=\"header add\">\\1</div>");
+		lines[i] = lines[i].replace(QRegExp("^(--- .*)"),          "<div class=\"header remove\">\\1</div>");
+		lines[i] = lines[i].replace(QRegExp("^(\\+.*)"),           "<div class=\"add\">\\1</div>");
+		lines[i] = lines[i].replace(QRegExp("^(-.*)"),             "<div class=\"remove\">\\1</div>");
+		lines[i] = lines[i].replace(QRegExp("^(@@.*)"),            "<div class=\"info\">\\1</div>");
+		lines[i] = lines[i].replace(QRegExp("^(\\.*)"),            "<div class=\"warning\">\\1</div>");
 	}
 
 	QString fullyFormattedDiff =
@@ -49,7 +49,6 @@ const QString DiffWidget::format(const QString &unformattedDiff) const
 	"	   pre {\n"
 	"      font-family: 'Droid Sans Mono';\n"
 	"    }\n"
-	"    div { display: inline; }\n"
 	"    .add { color: #008C00; }\n"
 	"    .header { background-color: #EEEEEE; }\n"
 	"    .info { color: #0057AE; }\n"
