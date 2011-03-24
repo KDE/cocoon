@@ -21,6 +21,7 @@
 DiffWidget::DiffWidget(QWidget *parent)
 	: KTextBrowser(parent)
 {
+	setLineWrapMode(QTextEdit::NoWrap);
 }
 
 const QString DiffWidget::format(const QString &unformattedDiff) const
