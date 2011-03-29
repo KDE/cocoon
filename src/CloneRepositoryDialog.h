@@ -16,6 +16,12 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * @file
+ * @author Riyad Preukschas <riyad@informatik.uni-bremen.de>
+ * @brief The dialog for cloning a repository and showing the progress.
+ */
+
 #ifndef CLONEREPOSITORYDIALOG_H
 #define CLONEREPOSITORYDIALOG_H
 
@@ -29,6 +35,9 @@ namespace Ui {
 
 
 
+/**
+ * @brief The dialog for cloning a repository and showing the progress.
+ */
 class CloneRepositoryDialog : public QDialog
 {
 	Q_OBJECT

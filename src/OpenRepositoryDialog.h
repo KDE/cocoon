@@ -16,6 +16,12 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * @file
+ * @author Riyad Preukschas <riyad@informatik.uni-bremen.de>
+ * @brief The dialog for opening a new repo.
+ */
+
 #ifndef OPENREPOSITORYDIALOG_H
 #define OPENREPOSITORYDIALOG_H
 
@@ -25,6 +31,11 @@ namespace Ui {
 	class OpenRepositoryDialog;
 }
 
+
+
+/**
+ * @brief The dialog for opening a new repo.
+ */
 class OpenRepositoryDialog : public QDialog
 {
 	Q_OBJECT

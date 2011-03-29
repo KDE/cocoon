@@ -16,6 +16,12 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * @file
+ * @author Riyad Preukschas <riyad@informatik.uni-bremen.de>
+ * @brief The commit history tab.
+ */
+
 #ifndef HISTORYWIDGET_H
 #define HISTORYWIDGET_H
 
@@ -36,6 +42,9 @@ class QModelIndex;
 
 
 
+/**
+ * @brief The commit history tab.
+ */
 class HistoryWidget : public QWidget
 {
 	Q_OBJECT

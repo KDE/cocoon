@@ -16,6 +16,12 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * @file
+ * @author Riyad Preukschas <riyad@informatik.uni-bremen.de>
+ * @brief The stage tab.
+ */
+
 #ifndef STAGEWIDGET_H
 #define STAGEWIDGET_H
 
@@ -37,6 +43,9 @@ class QSortFilterProxyModel;
 
 
 
+/**
+ * @brief The stage tab.
+ */
 class StageWidget : public QWidget
 {
 	Q_OBJECT

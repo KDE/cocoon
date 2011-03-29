@@ -16,6 +16,12 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * @file
+ * @author Riyad Preukschas <riyad@informatik.uni-bremen.de>
+ * @brief A widget to commit a new revision.
+ */
+
 #ifndef COMMITWIDGET_H
 #define COMMITWIDGET_H
 
@@ -32,6 +38,9 @@ namespace Ui {
 
 
 
+/**
+ * @brief A widget to commit a new revision.
+ */
 class CommitWidget : public QWidget
 {
 	Q_OBJECT

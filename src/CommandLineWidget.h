@@ -16,6 +16,12 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * @file
+ * @author Riyad Preukschas <riyad@informatik.uni-bremen.de>
+ * @brief The command line tab.
+ */
+
 #ifndef COMMANDLINEWIDGET_H
 #define COMMANDLINEWIDGET_H
 
@@ -31,6 +37,9 @@ class QVBoxLayout;
 
 
 
+/**
+ * @brief The command line tab.
+ */
 class CommandLineWidget : public QWidget
 {
 	Q_OBJECT

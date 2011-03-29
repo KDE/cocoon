@@ -16,6 +16,12 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * @file
+ * @author Riyad Preukschas <riyad@informatik.uni-bremen.de>
+ * @brief A widget to show Git's status information of a single file.
+ */
+
 #ifndef FILESTATUSWIDGET_H
 #define FILESTATUSWIDGET_H
 
@@ -35,6 +41,9 @@ namespace Ui {
 
 
 
+/**
+ * @brief A widget to show Git's status information of a single file.
+ */
 class FileStatusWidget : public QWidget
 {
 	Q_OBJECT

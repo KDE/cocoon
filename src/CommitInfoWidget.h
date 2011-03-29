@@ -16,6 +16,12 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * @file
+ * @author Riyad Preukschas <riyad@informatik.uni-bremen.de>
+ * @brief A widget to show a commit's details.
+ */
+
 #ifndef COMITINFOWIDGET_H
 #define COMITINFOWIDGET_H
 
@@ -33,6 +39,9 @@ namespace Ui {
 
 
 
+/**
+ * @brief A widget to show a commit's details.
+ */
 class CommitInfoWidget : public QWidget
 {
 	Q_OBJECT

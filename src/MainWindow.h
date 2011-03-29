@@ -16,6 +16,12 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * @file
+ * @author Riyad Preukschas <riyad@informatik.uni-bremen.de>
+ * @brief Cocoon's main window containing the main tabs.
+ */
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -29,6 +35,11 @@ namespace Ui {
 	class MainWindow;
 }
 
+
+
+/**
+ * @brief Cocoon's main window containing the main tabs.
+ */
 class MainWindow : public KXmlGuiWindow
 {
 	Q_OBJECT

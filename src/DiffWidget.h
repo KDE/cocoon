@@ -16,17 +16,24 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * @file
+ * @author Riyad Preukschas <riyad@informatik.uni-bremen.de>
+ * @brief A widget to show a formatted diff output.
+ */
+
 #ifndef DIFFWIDGET_H
 #define DIFFWIDGET_H
 
 #include <KTextBrowser>
 
 
-
+/**
+ * @brief A widget to show a formatted diff output.
+ */
 class DiffWidget : public KTextBrowser
 {
 	Q_OBJECT
-
 
 	public:
 		explicit DiffWidget(QWidget *parent = 0);
