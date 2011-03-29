@@ -36,7 +36,7 @@ namespace Git {
 
 
 /**
- * @brief A Git blobl object.
+ * @brief A Git blob object.
  */
 class KDE_EXPORT Blob : public RawObject
 {
