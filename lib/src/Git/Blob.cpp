@@ -17,7 +17,6 @@
 */
 
 #include "Blob.h"
-
 #include "RawObject_p.h"
 
 using namespace Git;

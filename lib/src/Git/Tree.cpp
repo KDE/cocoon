@@ -22,7 +22,8 @@
 #include "Blob.h"
 #include "Repo.h"
 
-#include <QDebug>
+#include <KDebug>
+
 #include <QStringList>
 
 using namespace Git;
@@ -104,7 +105,7 @@ const QMap<QString, RawObject> Tree::entriesByName() const
 
 void Tree::fillFromString(const QByteArray &raw)
 {
-	qDebug() << "fill tree" << id().toString();
+	kDebug() << "fill tree" << id().toString();
 
 	int pos = 0;
 	int modeLen = 0;
