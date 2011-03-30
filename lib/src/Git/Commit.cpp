@@ -315,6 +315,8 @@ const QString& Commit::message()
 
 Commit& Commit::operator=(const Commit &other)
 {
+	Q_ASSERT(&other != this);
+
 	RawObject::operator=(other);
 
 	d = other.d;

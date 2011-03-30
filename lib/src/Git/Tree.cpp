@@ -161,6 +161,8 @@ const QString& Tree::nameFor(const RawObject &object) const
 
 Tree& Tree::operator=(const Tree &other)
 {
+	Q_ASSERT(&other != this);
+
 	RawObject::operator=(other);
 
 	d = other.d;

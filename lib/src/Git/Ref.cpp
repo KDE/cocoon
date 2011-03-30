@@ -95,6 +95,9 @@ const QString& Ref::name() const
 
 Commit Ref::commit() const
 {
+	Q_ASSERT(d->commitId.isValid());
+	Q_ASSERT(d->commitId.object().toCommit().isValid());
+
 	return d->commitId.object().toCommit();
 }
 

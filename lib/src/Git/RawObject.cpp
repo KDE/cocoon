@@ -175,6 +175,8 @@ RawObject* RawObject::newInstance(const Id &id)
 
 RawObject& RawObject::operator=(const RawObject &other)
 {
+	Q_ASSERT(&other != this);
+
 	setParent(other.parent());
 
 	d = other.d;

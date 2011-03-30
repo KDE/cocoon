@@ -62,6 +62,8 @@ Blob& Blob::invalid()
 
 Blob& Blob::operator=(const Blob &other)
 {
+	Q_ASSERT(&other != this);
+
 	RawObject::operator=(other);
 
 	d = other.d;
