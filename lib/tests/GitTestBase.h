@@ -55,7 +55,7 @@ class GitTestBase : public QObject
 		 * @brief Will be called before the first testfunction is executed
 		 *
 		 * This will reset #repo and set #workingDir to a new random temporary directory.
-		 * It will note copy the repository, you will have to do that on your own.
+		 * It will not copy the repository, you will have to do that on your own.
 		 *
 		 * @see cloneFrom()
 		 */
