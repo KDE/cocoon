@@ -34,13 +34,13 @@ Ref::Ref()
 }
 
 Ref::Ref(const Ref &other)
-	: QObject()
+	: QObject(other.parent())
 	, d(other.d)
 {
 }
 
 Ref::Ref(Repo &repo)
-	: QObject()
+	: QObject(&repo)
 	, d(new RefPrivate)
 {
 	d->repo = &repo;
