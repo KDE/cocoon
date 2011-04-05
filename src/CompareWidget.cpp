@@ -19,9 +19,9 @@
 #include "CompareWidget.h"
 #include "ui_CompareWidget.h"
 
-#include <Git/Commit.h>
-#include <Git/Ref.h>
-#include <Git/Repo.h>
+#include "Git/Commit.h"
+#include "Git/Ref.h"
+#include "Git/Repo.h"
 
 #include "GitBranchesModel.h"
 #include "GitHistoryModel.h"

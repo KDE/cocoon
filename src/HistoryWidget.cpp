@@ -19,8 +19,8 @@
 #include "HistoryWidget.h"
 #include "ui_HistoryWidget.h"
 
-#include <Git/Ref.h>
-#include <Git/Repo.h>
+#include "Git/Ref.h"
+#include "Git/Repo.h"
 
 #include "GitBranchesModel.h"
 #include "GitHistoryModel.h"
