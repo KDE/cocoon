@@ -78,6 +78,6 @@ class HeadTest : public GitTestBase
 		}
 };
 
-QTEST_KDEMAIN_CORE(HeadTest);
+QTEST_KDEMAIN_CORE(HeadTest)
 
 #include "HeadTest.moc"

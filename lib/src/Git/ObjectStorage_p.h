@@ -40,6 +40,6 @@ class ObjectStoragePrivate : public QSharedData {
 		Repo *repo;
 };
 
-};
+}
 
 #endif // OBJECTSTORAGE_P_H

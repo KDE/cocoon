@@ -61,6 +61,6 @@ class RawObjectInstantiationTest : public GitTestBase
 		}
 };
 
-QTEST_KDEMAIN_CORE(RawObjectInstantiationTest);
+QTEST_KDEMAIN_CORE(RawObjectInstantiationTest)
 
 #include "RawObjectInstantiationTest.moc"

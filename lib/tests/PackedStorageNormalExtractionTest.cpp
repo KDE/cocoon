@@ -83,7 +83,7 @@ class PackedStorageNormalExtractionTest : public GitTestBase
 		}
 };
 
-QTEST_KDEMAIN_CORE(PackedStorageNormalExtractionTest);
+QTEST_KDEMAIN_CORE(PackedStorageNormalExtractionTest)
 
 
 

@@ -87,6 +87,6 @@ class RepoRefsTest : public GitTestBase
 		}
 };
 
-QTEST_KDEMAIN_CORE(RepoRefsTest);
+QTEST_KDEMAIN_CORE(RepoRefsTest)
 
 #include "RepoRefsTest.moc"

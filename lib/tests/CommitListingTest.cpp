@@ -73,6 +73,6 @@ class CommitListingTest : public GitTestBase
 		}
 };
 
-QTEST_KDEMAIN_CORE(CommitListingTest);
+QTEST_KDEMAIN_CORE(CommitListingTest)
 
 #include "CommitListingTest.moc"

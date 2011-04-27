@@ -63,6 +63,6 @@ public:
 	Repo    *repo;
 };
 
-};
+}
 
 #endif // REF_P_H

@@ -71,6 +71,6 @@ public:
 	ObjectType type;
 };
 
-};
+}
 
 #endif // PACKEDSTORAGEOBJECT_P_H

@@ -62,7 +62,7 @@ class KDE_EXPORT StatusFile : public QObject
 		Modified  = 0x10,
 		Deleted   = 0x20
 	};
-	Q_DECLARE_FLAGS(Status, StatusFlag);
+	Q_DECLARE_FLAGS(Status, StatusFlag)
 
 
 		const QByteArray blob(QString type = QString()) const;

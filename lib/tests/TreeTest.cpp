@@ -167,6 +167,6 @@ class TreeTest : public GitTestBase
 		}
 };
 
-QTEST_KDEMAIN_CORE(TreeTest);
+QTEST_KDEMAIN_CORE(TreeTest)
 
 #include "TreeTest.moc"

@@ -289,6 +289,6 @@ class CommitPopulationTest : public GitTestBase
 		}
 };
 
-QTEST_KDEMAIN_CORE(CommitPopulationTest);
+QTEST_KDEMAIN_CORE(CommitPopulationTest)
 
 #include "CommitPopulationTest.moc"

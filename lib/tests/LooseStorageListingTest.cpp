@@ -92,7 +92,7 @@ class LooseStorageListingTest : public GitTestBase
 		}
 };
 
-QTEST_KDEMAIN_CORE(LooseStorageListingTest);
+QTEST_KDEMAIN_CORE(LooseStorageListingTest)
 
 
 

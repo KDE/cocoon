@@ -125,6 +125,6 @@ class RepoFileStagingTest : public GitTestBase
 		}
 };
 
-QTEST_KDEMAIN_CORE(RepoFileStagingTest);
+QTEST_KDEMAIN_CORE(RepoFileStagingTest)
 
 #include "RepoFileStagingTest.moc"

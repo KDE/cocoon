@@ -59,6 +59,6 @@ public:
 	QString workingDir;
 };
 
-};
+}
 
 #endif // REPO_P_H

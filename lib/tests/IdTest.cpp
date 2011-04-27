@@ -233,6 +233,6 @@ class IdTest : public GitTestBase
 		}
 };
 
-QTEST_KDEMAIN_CORE(IdTest);
+QTEST_KDEMAIN_CORE(IdTest)
 
 #include "IdTest.moc"

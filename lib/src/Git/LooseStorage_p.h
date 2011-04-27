@@ -66,6 +66,6 @@ public:
 	QHash<Id, ObjectType> objectTypes;
 };
 
-};
+}
 
 #endif // LOOSESTORAGE_P_H

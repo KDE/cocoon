@@ -70,6 +70,6 @@ class RepoStatusCachingTest : public GitTestBase
 		}
 };
 
-QTEST_KDEMAIN_CORE(RepoStatusCachingTest);
+QTEST_KDEMAIN_CORE(RepoStatusCachingTest)
 
 #include "RepoStatusCachingTest.moc"

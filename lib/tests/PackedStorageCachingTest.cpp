@@ -118,7 +118,7 @@ class PackedStorageCachingTest : public GitTestBase
 		}
 };
 
-QTEST_KDEMAIN_CORE(PackedStorageCachingTest);
+QTEST_KDEMAIN_CORE(PackedStorageCachingTest)
 
 
 

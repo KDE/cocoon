@@ -73,6 +73,6 @@ class RepoCommitIndexTest : public GitTestBase
 		}
 };
 
-QTEST_KDEMAIN_CORE(RepoCommitIndexTest);
+QTEST_KDEMAIN_CORE(RepoCommitIndexTest)
 
 #include "RepoCommitIndexTest.moc"

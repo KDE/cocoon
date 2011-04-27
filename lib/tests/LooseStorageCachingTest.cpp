@@ -132,7 +132,7 @@ class LooseStorageCachingTest : public GitTestBase
 		}
 };
 
-QTEST_KDEMAIN_CORE(LooseStorageCachingTest);
+QTEST_KDEMAIN_CORE(LooseStorageCachingTest)
 
 
 

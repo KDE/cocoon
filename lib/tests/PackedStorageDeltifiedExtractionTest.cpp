@@ -85,7 +85,7 @@ class PackedStorageDeltifiedExtractionTest : public GitTestBase
 		}
 };
 
-QTEST_KDEMAIN_CORE(PackedStorageDeltifiedExtractionTest);
+QTEST_KDEMAIN_CORE(PackedStorageDeltifiedExtractionTest)
 
 
 

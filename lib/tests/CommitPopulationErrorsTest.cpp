@@ -175,6 +175,6 @@ class CommitPopulationErrorsTest : public GitTestBase
 		}
 };
 
-QTEST_KDEMAIN_CORE(CommitPopulationErrorsTest);
+QTEST_KDEMAIN_CORE(CommitPopulationErrorsTest)
 
 #include "CommitPopulationErrorsTest.moc"

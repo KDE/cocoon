@@ -101,6 +101,6 @@ class RawObjectConversionTest : public GitTestBase
 		}
 };
 
-QTEST_KDEMAIN_CORE(RawObjectConversionTest);
+QTEST_KDEMAIN_CORE(RawObjectConversionTest)
 
 #include "RawObjectConversionTest.moc"

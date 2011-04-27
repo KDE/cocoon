@@ -131,6 +131,6 @@ class RawObjectHeaderExtractionTest : public GitTestBase
 		}
 };
 
-QTEST_KDEMAIN_CORE(RawObjectHeaderExtractionTest);
+QTEST_KDEMAIN_CORE(RawObjectHeaderExtractionTest)
 
 #include "RawObjectHeaderExtractionTest.moc"

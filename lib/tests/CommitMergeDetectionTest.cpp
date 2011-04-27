@@ -79,6 +79,6 @@ class CommitMergeDetectionTest : public GitTestBase
 		}
 };
 
-QTEST_KDEMAIN_CORE(CommitMergeDetectionTest);
+QTEST_KDEMAIN_CORE(CommitMergeDetectionTest)
 
 #include "CommitMergeDetectionTest.moc"

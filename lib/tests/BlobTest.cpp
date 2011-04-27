@@ -89,6 +89,6 @@ class BlobTest : public GitTestBase
 		}
 };
 
-QTEST_KDEMAIN_CORE(BlobTest);
+QTEST_KDEMAIN_CORE(BlobTest)
 
 #include "BlobTest.moc"

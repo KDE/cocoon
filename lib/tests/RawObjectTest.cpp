@@ -61,6 +61,6 @@ class RawObjectTest : public GitTestBase
 		}
 };
 
-QTEST_KDEMAIN_CORE(RawObjectTest);
+QTEST_KDEMAIN_CORE(RawObjectTest)
 
 #include "RawObjectTest.moc"

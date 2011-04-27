@@ -56,7 +56,7 @@ typedef enum {
 	OBJ_TAG = 4,
 //	OBJ_SOMETHING = 5, // reserved
 	OBJ_OFS_DELTA = 6,
-	OBJ_REF_DELTA = 7,
+	OBJ_REF_DELTA = 7
 } ObjectType;
 
 

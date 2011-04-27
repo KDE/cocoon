@@ -114,7 +114,7 @@ class LooseStorageTest : public GitTestBase
 		}
 };
 
-QTEST_KDEMAIN_CORE(LooseStorageTest);
+QTEST_KDEMAIN_CORE(LooseStorageTest)
 
 
 
