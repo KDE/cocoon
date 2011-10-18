@@ -27,6 +27,7 @@ Type=Application
 X-DocPath=cocoon/index.html
 GenericName=Git GUI for KDE
 GenericName[bg]=Програма за Git в KDE
+GenericName[cs]=Git GUI pro KDE
 GenericName[da]=Git-brugerflade til KDE
 GenericName[de]=Git-Oberfläche für KDE
 GenericName[en_GB]=Git GUI for KDE
