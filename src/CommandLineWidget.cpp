@@ -20,6 +20,7 @@
 #include "Git/Repo.h"
 
 #include <klibloader.h>
+#include <kservice.h>
 #include <kde_terminal_interface_v2.h>
 #include <KDebug>
 #include <KIO/Job>
@@ -48,7 +49,11 @@ CommandLineWidget::~CommandLineWidget()
 
 void CommandLineWidget::createTerminal()
 {
-	KPluginFactory* factory = KPluginLoader("libkonsolepart").factory();
+        KPluginFactory* factory = 0;
+        KService::Ptr service = KService::serviceByDesktopName("konsolepart");
+        if (service) {
+            factory = KPluginLoader(service->library()).factory();
+        }
 	KParts::ReadOnlyPart* part = factory ? (factory->create<KParts::ReadOnlyPart>(this)) : 0;
 	if (part != 0) {
 		connect(part, SIGNAL(destroyed(QObject*)), this, SLOT(terminalExited()));
