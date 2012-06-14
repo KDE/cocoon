@@ -4,7 +4,6 @@ project(Cocoon)
 #Project options, to provide a selective build process
 #Note that some of these are mutually exclusive or just
 #do not make a whole lot of sense combined.
-option(BUILD_LIB "Build libCocoonGit" ON)
 option(BUILD_GUI "Build the Cocoon GUI" ON)
 option(BUILD_DOC "Build the Documentation" OFF)
 option(BUILD_TESTS "Build the Tests" ON)
@@ -18,7 +17,6 @@ include(KDE4Defaults)
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}
 	${CMAKE_SOURCE_DIR}/src
-	${CMAKE_SOURCE_DIR}/lib/src
 	${KDE4_INCLUDES}
 	${QT_INCLUDES}
 )
@@ -28,11 +26,6 @@ if(BUILD_TESTS)
 	set(KDE4_BUILD_TESTS ON)
 	add_definitions(-DCMAKE_BUILD_TYPE=debug)
 endif(BUILD_TESTS)
-
-######### Library #########
-if(BUILD_LIB)
-	add_subdirectory( lib )
-endif()
 
 ########### GUI ###########
 if(BUILD_GUI)
@@ -48,7 +41,6 @@ endif()
 message(STATUS)
 message(STATUS "========= Cocoon Build Information =========")
 message(STATUS "Install Prefix: ${CMAKE_INSTALL_PREFIX}")
-message(STATUS "Build and install libCocoonGit (BUILD_LIB): ${BUILD_LIB}")
 message(STATUS "Build and install the Cocoon GUI (BUILD_GUI): ${BUILD_GUI}")
 message(STATUS "Build the unit tests (BUILD_TESTS): ${BUILD_TESTS}")
 message(STATUS "Build and install the useless Documentation (BUILD_DOC): ${BUILD_DOC}")
