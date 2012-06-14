@@ -9,8 +9,6 @@ option(BUILD_DOC "Build the Documentation" OFF)
 option(BUILD_TESTS "Build the Tests" ON)
 option(INSTALL_DEVEL_FILES "Install the devel files" ON)
 
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules" ${CMAKE_MODULE_PATH})
-
 find_package(KDE4 REQUIRED)
 include(KDE4Defaults)
 
@@ -61,7 +59,6 @@ message(STATUS)
 ###### INSTALL CMAKE ######
 if(INSTALL_DEVEL_FILES AND CMAKE_INSTALL_PREFIX STREQUAL "/usr")
 	install(FILES
-		cmake/modules/FindCocoonGit.cmake
 		DESTINATION
 		${CMAKE_ROOT}/Modules
 	)
