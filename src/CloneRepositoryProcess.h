@@ -23,10 +23,6 @@
 
 
 
-namespace Git {
-
-
-
 class KDE_EXPORT CloneRepositoryProcess : public KProcess
 {
 	Q_OBJECT
@@ -46,7 +42,5 @@ class KDE_EXPORT CloneRepositoryProcess : public KProcess
 		QString m_fromRepo;
 		QString m_toDirectory;
 };
-
-}
 
 #endif // CLONEREPOSITORYPROCESS_H

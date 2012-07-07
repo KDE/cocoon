@@ -71,7 +71,7 @@ void CloneRepositoryDialog::startCloning()
 	KIO::DeleteJob *deleteJob = KIO::del(path);
 	deleteJob->exec(); /** @todo error handling */
 
-	Git::CloneRepositoryProcess *thread = new Git::CloneRepositoryProcess(repoUrl, path, this);
+	CloneRepositoryProcess *thread = new CloneRepositoryProcess(repoUrl, path, this);
 
 //	connect(thread, SIGNAL(cloningProgress(int)), this, SLOT(slotCloningProgress(int)));
 	connect(thread, SIGNAL(cloningProgress(QString)), this, SLOT(slotCloningProgress(QString)));
