@@ -9,8 +9,8 @@
 
 int main(int argc, char **argv)
 {
-	KAboutData about("cocoon", 0, ki18n("Cocoon"), "0.1", ki18n("A Git GUI for KDE4"),
-		KAboutData::License_GPL_V3, ki18n("(C) 2009-2010 Riyad Preukschas"), KLocalizedString(), "riyad@informatik.uni-bremen.de");
+	KAboutData about("cocoon", 0, ki18n("Cocoon"), "0.2", ki18n("A Git GUI for KDE4"),
+		KAboutData::License_GPL_V3, ki18n("(C) 2009-2012 Riyad Preukschas"), KLocalizedString(), "riyad@informatik.uni-bremen.de");
 	about.addAuthor( ki18n("Riyad Preukschas"), KLocalizedString(), "riyad@informatik.uni-bremen.de" );
 	KCmdLineArgs::init(argc, argv, &about);
 
