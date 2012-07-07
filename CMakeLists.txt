@@ -9,7 +9,10 @@ option(BUILD_DOC "Build the Documentation" OFF)
 option(BUILD_TESTS "Build the Tests" ON)
 option(INSTALL_DEVEL_FILES "Install the devel files" ON)
 
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules" ${CMAKE_MODULE_PATH})
+
 find_package(KDE4 REQUIRED)
+find_package(QGit2 REQUIRED)
 include(KDE4Defaults)
 
 include_directories(
