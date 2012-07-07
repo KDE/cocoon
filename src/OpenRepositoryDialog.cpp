@@ -20,7 +20,8 @@
 #include "ui_OpenRepositoryDialog.h"
 
 #include "CloneRepositoryDialog.h"
-#include "Git/Repo.h"
+
+#include <QGit2/QGit2>
 
 #include <KMessageBox>
 
