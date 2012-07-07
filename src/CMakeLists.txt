@@ -41,7 +41,7 @@ target_link_libraries(cocoon
 	${KDE4_STRIGI_LIBS}
 	${STRIGI_STREAMANALYZER_LIBRARY}
 	${STRIGI_STREAMS_LIBRARY}
-	CocoonGit
+	${QGIT2_LIBRARY}
 )
 
 

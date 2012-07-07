@@ -18,6 +18,7 @@ include(KDE4Defaults)
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}
 	${CMAKE_SOURCE_DIR}/src
+	${QGIT2_INCLUDE_DIR}
 	${KDE4_INCLUDES}
 	${QT_INCLUDES}
 )
