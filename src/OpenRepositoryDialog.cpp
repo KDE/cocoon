@@ -29,6 +29,8 @@
 #include <QListWidgetItem>
 #include <QPainter>
 
+using namespace LibQGit2;
+
 
 
 OpenRepositoryDialog::OpenRepositoryDialog(QWidget *parent)
@@ -69,9 +71,7 @@ void OpenRepositoryDialog::addRepository(const QString &repoPath)
 	// make sure we only add a repo once
 	if (foundItems.isEmpty()) {
 		QListWidgetItem *item = new QListWidgetItem(repoPath, repoList);
-		if (Git::Repo::containsRepository(repoPath)) {
-			item->setIcon(KIcon("git-repo"));
-		} else {
+		if (QGitRepository::discover(repoPath).isEmpty()) {
 			item->setForeground(QBrush(Qt::red));
 			if (QDir(repoPath).exists()) {
 				item->setIcon(KIcon("folder"));
@@ -86,6 +86,8 @@ void OpenRepositoryDialog::addRepository(const QString &repoPath)
 				item->setIcon(iconPix);
 				item->setToolTip(i18n("This directory does not exist anymore."));
 			}
+		} else {
+			item->setIcon(KIcon("git-repo"));
 		}
 		repoList->addItem(item);
 	}
@@ -158,7 +160,8 @@ void OpenRepositoryDialog::on_newButton_clicked()
 	if (!path.isEmpty()) {
 		// make sure the directory exists and is empty
 		if (QDir(path).entryList(QDir::NoDotAndDotDot|QDir::Hidden).isEmpty()) {
-			Git::Repo::init(path);
+			QGitRepository repo = QGitRepository();
+			repo.init(path, false);
 			addRepository(path);
 		} else {
 			KMessageBox::sorry(this, i18n("Can not create a Git repository in %1.\nThe directory is not empty.", path));
@@ -178,7 +181,7 @@ void OpenRepositoryDialog::on_removeButton_clicked()
 void OpenRepositoryDialog::on_repositoriesListWidget_currentTextChanged(const QString &text)
 {
 	ui->removeButton->setEnabled(!text.isEmpty());
-	ui->openButton->setEnabled(Git::Repo::containsRepository(text));
+	ui->openButton->setEnabled(!QGitRepository::discover(text).isEmpty());
 }
 
 void OpenRepositoryDialog::reject()
