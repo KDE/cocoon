@@ -1,6 +1,6 @@
 /*
 	Cocoon - A GUI for Git.
-	Copyright (C) 2009  Riyad Preukschas <riyad@informatik.uni-bremen.de>
+	Copyright (C) 2009-2012  Riyad Preukschas <riyad@informatik.uni-bremen.de>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -27,9 +27,10 @@
 
 #include <KXmlGuiWindow>
 
-namespace Git {
-	class Repo;
+namespace LibQGit2 {
+	class QGitRepository;
 }
+using namespace LibQGit2;
 
 namespace Ui {
 	class MainWindow;
@@ -51,7 +52,7 @@ class MainWindow : public KXmlGuiWindow
 		void setRepository(const QString &repoPath);
 
 	signals:
-		void repositoryChanged(Git::Repo*);
+		void repositoryChanged(QGitRepository*);
 
 	protected:
 		void changeEvent(QEvent *e);
@@ -64,7 +65,7 @@ class MainWindow : public KXmlGuiWindow
 		void setupActions();
 
 	private:
-		Git::Repo *m_repo;
+		QGitRepository *m_repo;
 		Ui::MainWindow *ui;
 };
 

@@ -19,13 +19,16 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
-#include "Git/Repo.h"
 #include "OpenRepositoryDialog.h"
+
+#include <QGit2/QGit2>
 
 #include <KAction>
 #include <KActionCollection>
 #include <KApplication>
 #include <KStandardAction>
+
+using namespace LibQGit2;
 
 
 
@@ -80,7 +83,7 @@ void MainWindow::open()
 
 void MainWindow::reload()
 {
-	m_repo->reset();
+	m_repo->open(m_repo->path());
 
 	emit repositoryChanged(m_repo);
 
@@ -92,9 +95,10 @@ void MainWindow::reload()
 void MainWindow::setRepository(const QString &repoPath)
 {
 	// remember old repo for later deletion
-	Git::Repo *old_repo = m_repo;
+	QGitRepository *old_repo = m_repo;
 
-	m_repo = new Git::Repo(repoPath, this);
+	m_repo = new QGitRepository();
+	Q_ASSERT(m_repo->open(repoPath + "/.git/"));
 
 	emit repositoryChanged(m_repo);
 
