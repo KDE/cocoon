@@ -1,6 +1,6 @@
 /*
 	Cocoon - A GUI for Git.
-	Copyright (C) 2009  Riyad Preukschas <riyad@informatik.uni-bremen.de>
+	Copyright (C) 2009-2012  Riyad Preukschas <riyad@informatik.uni-bremen.de>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -27,9 +27,10 @@
 
 #include <QWidget>
 
-namespace Git {
-	class Repo;
+namespace LibQGit2 {
+	class QGitRepository;
 }
+using namespace LibQGit2;
 
 class TerminalInterfaceV2;
 
@@ -48,7 +49,7 @@ class CommandLineWidget : public QWidget
 		~CommandLineWidget();
 
 	public slots:
-		void setRepository(Git::Repo *repo);
+		void setRepository(QGitRepository *repo);
 		void terminalExited();
 
 	protected:
@@ -62,7 +63,7 @@ class CommandLineWidget : public QWidget
 
 	private:
 		QVBoxLayout* m_layout;
-		const Git::Repo *m_repo;
+		const QGitRepository *m_repo;
 		TerminalInterfaceV2* m_terminal;
 		QWidget* m_terminalWidget;
 };

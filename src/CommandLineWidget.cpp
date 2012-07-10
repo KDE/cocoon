@@ -1,6 +1,6 @@
 /*
 	Cocoon - A GUI for Git.
-	Copyright (C) 2009  Riyad Preukschas <riyad@informatik.uni-bremen.de>
+	Copyright (C) 2009-2012  Riyad Preukschas <riyad@informatik.uni-bremen.de>
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,7 +17,8 @@
 */
 
 #include "CommandLineWidget.h"
-#include "Git/Repo.h"
+
+#include <QGit2/QGit2>
 
 #include <klibloader.h>
 #include <kde_terminal_interface_v2.h>
@@ -58,7 +59,7 @@ void CommandLineWidget::createTerminal()
 	}
 }
 
-void CommandLineWidget::setRepository(Git::Repo *repo)
+void CommandLineWidget::setRepository(QGitRepository *repo)
 {
 	const bool sendInput = (m_terminal != 0)
 		&& (m_terminal->foregroundProcessId() == -1)
@@ -67,7 +68,7 @@ void CommandLineWidget::setRepository(Git::Repo *repo)
 	m_repo = repo;
 
 	if (sendInput) {
-		changeDirectory(m_repo->workingDir());
+		changeDirectory(m_repo->workDirPath());
 	}
 }
 
@@ -91,7 +92,7 @@ void CommandLineWidget::terminalExited()
 
 void CommandLineWidget::updateTerminal()
 {
-	m_terminal->showShellInDir(m_repo->workingDir());
+	m_terminal->showShellInDir(m_repo->workDirPath());
 	m_terminalWidget->setFocus();
 }
 
