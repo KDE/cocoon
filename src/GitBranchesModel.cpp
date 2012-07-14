@@ -18,18 +18,17 @@
 
 #include "GitBranchesModel.h"
 
-#include <Git/Ref.h>
-#include <Git/Repo.h>
+#include <QGit2/QGit2>
 
 #include <KLocalizedString>
 
 
 
-GitBranchesModel::GitBranchesModel(Git::Repo &repo, QObject *parent)
+GitBranchesModel::GitBranchesModel(QGitRepository &repo, QObject *parent)
 	: QAbstractTableModel(parent)
 	, m_repo(repo)
 {
-	connect(&m_repo, SIGNAL(headsChanged()), this, SLOT(reset()));
+//	connect(&m_repo, SIGNAL(headsChanged()), this, SLOT(reset()));
 
 	loadBranches();
 }
@@ -60,7 +59,7 @@ QVariant GitBranchesModel::data(const QModelIndex &index, int role) const
 	QString data;
 	switch (index.column()) {
 	case 0:
-		data = m_branches[index.row()].name();
+		data = m_branches[index.row()];
 		break;
 	}
 
@@ -88,7 +87,7 @@ QVariant GitBranchesModel::headerData(int section, Qt::Orientation orientation, 
 
 void GitBranchesModel::loadBranches()
 {
-	m_branches = m_repo.heads();
+	m_branches = m_repo.listReferences();
 }
 
 void GitBranchesModel::reset()

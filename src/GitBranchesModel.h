@@ -21,13 +21,12 @@
 
 #include <QtCore/QAbstractTableModel>
 
-#include "Git/Ref.h"
+#include <QtCore/QStringList>
 
-#include <QStringList>
-
-namespace Git {
-	class Repo;
+namespace LibQGit2 {
+	class QGitRepository;
 }
+using namespace LibQGit2;
 
 
 
@@ -36,7 +35,7 @@ class GitBranchesModel : public QAbstractTableModel
 	Q_OBJECT
 
 	public:
-		explicit GitBranchesModel(Git::Repo &repo, QObject *parent = 0);
+		explicit GitBranchesModel(QGitRepository &repo, QObject *parent = 0);
 
 		int columnCount(const QModelIndex &parent = QModelIndex()) const;
 		const QString& columnName(int column) const;
@@ -51,8 +50,8 @@ class GitBranchesModel : public QAbstractTableModel
 		void loadBranches();
 
 	private:
-		QList<Git::Ref> m_branches;
-		Git::Repo &m_repo;
+		QStringList m_branches;
+		QGitRepository &m_repo;
 };
 
 #endif // GITBRANCHESMODEL_H
