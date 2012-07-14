@@ -13,6 +13,7 @@ set(cocoon_SRCS
 	helpers/CommitHelper.cpp
 	main.cpp
 	CloneRepositoryDialog.cpp
+	CloneRepositoryProcess.cpp
 	CommandLineWidget.cpp
 	CommitInfoWidget.cpp
 	CommitWidget.cpp
