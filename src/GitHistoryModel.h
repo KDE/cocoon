@@ -19,7 +19,7 @@
 #ifndef GITHISTORYMODEL_H
 #define GITHISTORYMODEL_H
 
-#include <QAbstractTableModel>
+#include <QtCore/QAbstractTableModel>
 
 #include "Git/Commit.h"
 

@@ -25,9 +25,9 @@
 #ifndef CLONEREPOSITORYDIALOG_H
 #define CLONEREPOSITORYDIALOG_H
 
-#include <QDialog>
+#include <QtGui/QDialog>
 
-#include <QDir>
+#include <QtCore/QDir>
 
 namespace Ui {
 	class CloneRepositoryDialog;

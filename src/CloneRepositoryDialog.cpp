@@ -27,7 +27,7 @@
 #include <KIO/DeleteJob>
 #include <KMessageBox>
 
-#include <QFileDialog>
+#include <QtGui/QFileDialog>
 
 
 

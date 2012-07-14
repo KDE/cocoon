@@ -25,7 +25,7 @@
 #ifndef COMITINFOWIDGET_H
 #define COMITINFOWIDGET_H
 
-#include <QWidget>
+#include <QtGui/QWidget>
 
 #include "Git/Id.h"
 

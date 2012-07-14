@@ -19,7 +19,7 @@
 #ifndef GITBRANCHESMODEL_H
 #define GITBRANCHESMODEL_H
 
-#include <QAbstractTableModel>
+#include <QtCore/QAbstractTableModel>
 
 #include "Git/Ref.h"
 

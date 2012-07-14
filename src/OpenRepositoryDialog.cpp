@@ -25,9 +25,9 @@
 
 #include <KMessageBox>
 
-#include <QFileDialog>
-#include <QListWidgetItem>
-#include <QPainter>
+#include <QtGui/QFileDialog>
+#include <QtGui/QListWidgetItem>
+#include <QtGui/QPainter>
 
 using namespace LibQGit2;
 

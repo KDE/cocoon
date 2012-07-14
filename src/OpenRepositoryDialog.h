@@ -25,7 +25,7 @@
 #ifndef OPENREPOSITORYDIALOG_H
 #define OPENREPOSITORYDIALOG_H
 
-#include <QDialog>
+#include <QtGui/QDialog>
 
 namespace Ui {
 	class OpenRepositoryDialog;

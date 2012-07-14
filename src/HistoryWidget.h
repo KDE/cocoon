@@ -25,7 +25,7 @@
 #ifndef HISTORYWIDGET_H
 #define HISTORYWIDGET_H
 
-#include <QWidget>
+#include <QtGui/QWidget>
 
 namespace Git {
 	class Repo;

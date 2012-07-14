@@ -24,7 +24,7 @@
 #include <KIcon>
 #include <KLocalizedString>
 
-#include <QStringList>
+#include <QtCore/QStringList>
 
 
 

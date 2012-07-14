@@ -25,7 +25,7 @@
 #ifndef COMMANDLINEWIDGET_H
 #define COMMANDLINEWIDGET_H
 
-#include <QWidget>
+#include <QtGui/QWidget>
 
 namespace LibQGit2 {
 	class QGitRepository;
