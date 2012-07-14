@@ -19,11 +19,10 @@
 #include "HistoryWidget.h"
 #include "ui_HistoryWidget.h"
 
-#include "Git/Ref.h"
-#include "Git/Repo.h"
-
 #include "GitBranchesModel.h"
 #include "GitHistoryModel.h"
+
+#include <QGit2/QGit2>
 
 
 
@@ -82,7 +81,7 @@ void HistoryWidget::on_historyView_clicked(const QModelIndex &index)
 	ui->commitWidget->setCommit(m_historyModel->mapToCommit(index));
 }
 
-void HistoryWidget::setRepository(Git::Repo *repo)
+void HistoryWidget::setRepository(QGitRepository *repo)
 {
 	clear();
 	m_repo = repo;
@@ -91,7 +90,7 @@ void HistoryWidget::setRepository(Git::Repo *repo)
 
 void HistoryWidget::showCurrentBranch()
 {
-	int currentBranchIndex = ui->branchComboBox->findText(m_repo->currentHead().name());
+	int currentBranchIndex = ui->branchComboBox->findText(m_repo->head().name());
 	ui->branchComboBox->setCurrentIndex(currentBranchIndex);
 }
 

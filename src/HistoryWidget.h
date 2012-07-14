@@ -27,16 +27,17 @@
 
 #include <QtGui/QWidget>
 
-namespace Git {
-	class Repo;
-}
-
 namespace Ui {
 	class HistoryWidget;
 }
 
 class GitBranchesModel;
 class GitHistoryModel;
+
+namespace LibQGit2 {
+	class QGitRepository;
+}
+using namespace LibQGit2;
 
 class QModelIndex;
 
@@ -54,7 +55,7 @@ class HistoryWidget : public QWidget
 		~HistoryWidget();
 
 	public slots:
-		void setRepository(Git::Repo *repo);
+		void setRepository(QGitRepository *repo);
 
 	private:
 		void clear();
@@ -68,7 +69,7 @@ class HistoryWidget : public QWidget
 	private:
 		GitBranchesModel *m_branchesModel;
 		GitHistoryModel *m_historyModel;
-		Git::Repo *m_repo;
+		QGitRepository *m_repo;
 		Ui::HistoryWidget *ui;
 };
 
