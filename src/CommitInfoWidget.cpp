@@ -19,13 +19,16 @@
 #include "CommitInfoWidget.h"
 #include "ui_CommitInfoWidget.h"
 
-#include "Git/Commit.h"
+#include "CommitHelper.h"
+using namespace Cocoon;
+
+#include <QGit2/QGit2>
 
 
 
 CommitInfoWidget::CommitInfoWidget(QWidget *parent)
 	: QWidget(parent)
-	, m_commitId()
+	, m_commit()
 	, ui(new Ui::CommitInfoWidget)
 {
 	ui->setupUi(this);
@@ -46,21 +49,20 @@ void CommitInfoWidget::clear()
 
 void CommitInfoWidget::updateView()
 {
-	Git::Commit commit = m_commitId.object().toCommit();
-	if (!commit.isValid()) {
+	if (m_commit.isNull()) {
 		clear();
 		return;
 	}
 
-	ui->idLabel->setText(m_commitId.toSha1String());
-	ui->authorLabel->setText(i18n("%1 %2", commit.author(), commit.authoredAt().toString()));
-	ui->messageLabel->setText(commit.message());
-	ui->diffView->setDiff(commit.diff());
+	ui->idLabel->setText(m_commit.oid().format());
+	ui->authorLabel->setText(i18n("%1<%2> %3", m_commit.author().name(), m_commit.author().email(), m_commit.author().when().toString()));
+	ui->messageLabel->setText(m_commit.message());
+	ui->diffView->setDiff(CommitHelper::diffParent(m_commit));
 }
 
-void CommitInfoWidget::setCommit(const Git::Commit &commit)
+void CommitInfoWidget::setCommit(const QGitCommit &commit)
 {
-	m_commitId = commit.id();
+	m_commit = commit;
 	updateView();
 }
 

@@ -27,16 +27,16 @@
 
 #include <QtGui/QWidget>
 
-#include "Git/Id.h"
-
-namespace Git {
-	class Commit;
-}
-
 namespace Ui {
 	class CommitInfoWidget;
 }
 
+namespace LibQGit2 {
+	class QGitCommit;
+	class QGitRepository;
+}
+using namespace LibQGit2;
+#include <QGit2/QGitCommit>
 
 
 /**
@@ -50,14 +50,14 @@ class CommitInfoWidget : public QWidget
 		explicit CommitInfoWidget(QWidget *parent = 0);
 		~CommitInfoWidget();
 
-		void setCommit(const Git::Commit &commit);
+		void setCommit(const QGitCommit &commit);
 
 	public slots:
 		void clear();
 		void updateView();
 
 	private:
-		Git::Id m_commitId;
+		QGitCommit m_commit;
 		Ui::CommitInfoWidget *ui;
 };
 
