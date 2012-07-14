@@ -1,12 +1,16 @@
 
 add_subdirectory( 3rdparty )
+add_subdirectory( helpers )
+
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/3rdparty
+	${CMAKE_CURRENT_SOURCE_DIR}/helpers
 )
 
 set(cocoon_SRCS
 	3rdparty/dvcsjob.cpp
 	3rdparty/gitrunner.cpp
+	helpers/CommitHelper.cpp
 	main.cpp
 	CloneRepositoryDialog.cpp
 	CommandLineWidget.cpp
