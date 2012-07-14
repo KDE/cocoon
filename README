@@ -24,6 +24,7 @@ For compiling and using this application you will need:
 
  * KDE >= 4.5
  * Git >= 1.7.1
+ * LibQGit2
 
 ### Install needed packages ###
 
