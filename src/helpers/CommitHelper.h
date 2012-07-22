@@ -48,6 +48,8 @@ public:
 	 * @todo Does fail on the first commit.
 	 */
 	static QString diffParent(const QGitCommit &commit);
+
+	static bool isMerge(const QGitCommit &commit);
 };
 
 }

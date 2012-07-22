@@ -30,3 +30,8 @@ QString CommitHelper::diffParent(const QGitCommit &commit)
 	runner.commitDiff(commit.oid().format());
 	return runner.getResult();
 }
+
+bool CommitHelper::isMerge(const QGitCommit &commit)
+{
+	return commit.parentCount() > 1;
+}
