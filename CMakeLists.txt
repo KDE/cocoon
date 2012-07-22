@@ -13,12 +13,14 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules" ${CMAKE_MODULE_PATH})
 
 find_package(KDE4 REQUIRED)
 find_package(QGit2 REQUIRED)
+find_package(Git2 REQUIRED)
 include(KDE4Defaults)
 
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}
 	${CMAKE_SOURCE_DIR}/src
 	${QGIT2_INCLUDE_DIR}
+	${GIT2_INCLUDE_DIR}
 	${KDE4_INCLUDES}
 	${QT_INCLUDES}
 )

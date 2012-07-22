@@ -54,6 +54,7 @@ target_link_libraries(cocoon
 	${STRIGI_STREAMANALYZER_LIBRARY}
 	${STRIGI_STREAMS_LIBRARY}
 	${QGIT2_LIBRARY}
+	${GIT2_LIBRARY}
 )
 
 
