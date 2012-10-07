@@ -18,9 +18,12 @@
 
 #include "GitHistoryModel.h"
 
-#include <Git/Ref.h>
-#include <Git/Repo.h>
+#include "CommitHelper.h"
+using namespace Cocoon;
 
+#include <QGit2/QGit2>
+
+#include <KDebug>
 #include <KIcon>
 #include <KLocalizedString>
 
@@ -28,15 +31,24 @@
 
 
 
-GitHistoryModel::GitHistoryModel(Git::Repo &repo, QObject *parent)
+GitHistoryModel::GitHistoryModel(QGitRepository &repo, QObject *parent)
 	: QAbstractTableModel(parent)
-	, m_branch(repo.currentHead().name())
+	, m_branch()
 	, m_commits()
+	, m_loadingFinished(false)
 	, m_repo(repo)
+	, m_revWalk(repo)
 {
-	connect(&m_repo, SIGNAL(historyChanged()), this, SLOT(reset()));
+	m_revWalk.setSorting(QGitRevWalk::Topological | QGitRevWalk::Time);
 
 	setBranch(m_branch);
+}
+
+bool GitHistoryModel::canFetchMore(const QModelIndex &parent) const
+{
+	Q_UNUSED(parent);
+
+	return !m_loadingFinished;
 }
 
 int GitHistoryModel::columnCount(const QModelIndex &parent) const
@@ -62,18 +74,18 @@ QVariant GitHistoryModel::data(const QModelIndex &index, int role) const
 		return QVariant();
 	}
 
-	Git::Commit commit = mapToCommit(index);
+	QGitCommit commit = mapToCommit(index);
 
 	QString data;
 	switch (index.column()) {
 	case 0: // date
-		data = commit.authoredAt().toString();
+		data = commit.author().when().toString();
 		break;
 	case 1: // author
-		data = commit.author();
+		data = commit.author().name();
 		break;
 	case 2: // summary
-		data = commit.summary();
+		data = commit.shortMessage(commit.message().indexOf("\n"));
 		break;
 	}
 
@@ -82,9 +94,9 @@ QVariant GitHistoryModel::data(const QModelIndex &index, int role) const
 		return QVariant(data);
 	case Qt::DecorationRole: // Icon
 		if (index.column() == 2) { // in summary column
-			if (commit.isMerge()) {
+			if (CommitHelper::isMerge(commit)) {
 				return QVariant(KIcon("git-merge"));
-			} else if(commit.hasBranchedOn(QStringList() << m_branch)) {
+			} else if(hasBranchedOn(QStringList() << m_branch, commit)) {
 				return QVariant(KIcon("git-branch"));
 			} else {
 				return QVariant(KIcon("git-commit"));
@@ -95,6 +107,26 @@ QVariant GitHistoryModel::data(const QModelIndex &index, int role) const
 	default:
 		return QVariant();
 	}
+}
+
+void GitHistoryModel::fetchMore(const QModelIndex &parent)
+{
+	static const int BATCH_SIZE = 100;
+	QVector<QGitOId> newCommits = QVector<QGitOId>();
+	newCommits.reserve(BATCH_SIZE);
+
+	do {
+		QGitOId newId = m_revWalk.next();
+		if (!newId.isValid()) {
+			m_loadingFinished = true;
+		} else {
+			newCommits << newId;
+		}
+	} while (newCommits.size() < BATCH_SIZE && !m_loadingFinished);
+
+	beginInsertRows(parent, m_commits.size(), m_commits.size()+newCommits.size()-1);
+	m_commits << newCommits.toList();
+	endInsertRows();
 }
 
 QVariant GitHistoryModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -111,25 +143,32 @@ QVariant GitHistoryModel::headerData(int section, Qt::Orientation orientation, i
 	}
 }
 
-void GitHistoryModel::loadCommits()
+bool GitHistoryModel::hasBranchedOn(const QStringList &refs, const QGitCommit &commit) const
 {
-	m_commits = m_repo.commits(m_branch);
-	/** @todo change to m_repo.commits(m_branch, Git::NoLimit); */
+	Q_UNUSED(refs);
+	Q_UNUSED(commit);
+	// FIXME: implement
+	return false;
 }
 
-Git::Commit GitHistoryModel::mapToCommit(const QModelIndex &index) const
+QGitCommit GitHistoryModel::mapToCommit(const QModelIndex &index) const
 {
 	if (!index.isValid()) {
-		return Git::Commit();
+		return QGitCommit();
 	}
 
-	return m_commits[index.row()];
+	return m_repo.lookupCommit(m_commits[index.row()]);
 }
 
 void GitHistoryModel::reset()
 {
 	beginResetModel();
-	loadCommits();
+	m_commits.clear();
+	m_revWalk.reset();
+	int error = m_revWalk.pushRef(m_branch);
+	if (error) {
+		kDebug() << error << giterr_last();
+	}
 	endResetModel();
 }
 

@@ -21,12 +21,14 @@
 
 #include <QtCore/QAbstractTableModel>
 
-#include "Git/Commit.h"
-
-namespace Git {
-	class Commit;
-	class Repo;
+namespace LibQGit2 {
+	class QGitCommit;
+	class QGitRepository;
+	class QGitRevWalk;
 }
+using namespace LibQGit2;
+#include <QGit2/QGitRevWalk>
+
 
 
 class GitHistoryModel : public QAbstractTableModel
@@ -34,14 +36,16 @@ class GitHistoryModel : public QAbstractTableModel
 	Q_OBJECT
 
 	public:
-		explicit GitHistoryModel(Git::Repo &repo, QObject *parent = 0);
+		explicit GitHistoryModel(QGitRepository &repo, QObject *parent = 0);
 
 		const QString& branch();
+		bool canFetchMore(const QModelIndex &parent) const;
 		int columnCount(const QModelIndex &parent = QModelIndex()) const;
 		const QString& columnName(int column) const;
 		QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+		void fetchMore(const QModelIndex &parent);
 		QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-		Git::Commit mapToCommit(const QModelIndex &index) const;
+		QGitCommit mapToCommit(const QModelIndex &index) const;
 		int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
 	public slots:
@@ -51,12 +55,14 @@ class GitHistoryModel : public QAbstractTableModel
 		void reset();
 
 	private:
-		void loadCommits();
+		bool hasBranchedOn(const QStringList &refs, const QGitCommit &commit) const;
 
 	private:
 		QString m_branch;
-		QList<Git::Commit> m_commits;
-		Git::Repo &m_repo;
+		QList<QGitOId> m_commits;
+		bool m_loadingFinished;
+		QGitRepository &m_repo;
+		QGitRevWalk m_revWalk;
 };
 
 #endif // GITHISTORYMODEL_H
