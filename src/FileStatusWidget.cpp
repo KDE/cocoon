@@ -22,6 +22,8 @@
 #include "Git/Repo.h"
 #include "Git/Status.h"
 
+#include <KIcon>
+
 
 
 FileStatusWidget::FileStatusWidget(QWidget *parent)

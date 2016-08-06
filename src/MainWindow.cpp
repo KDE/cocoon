@@ -26,6 +26,7 @@
 #include <KActionCollection>
 #include <KApplication>
 #include <KStandardAction>
+#include <KIcon>
 
 
 
@@ -107,28 +108,28 @@ void MainWindow::setupActions()
 	KStandardAction::quit(KApplication::instance(), SLOT(quit()), actionCollection());
 
 // commit
-	KAction *commitAction = actionCollection()->addAction("commit", ui->stageWidget, SLOT(commit()));
+    QAction *commitAction = actionCollection()->addAction("commit", ui->stageWidget, SLOT(commit()));
 	commitAction->setText(i18n("Commit"));
-	commitAction->setIcon(KIcon("git-commit"));
+    commitAction->setIcon(KIcon("git-commit"));
 	commitAction->setShortcut(Qt::CTRL + Qt::Key_Return);
 
-	KAction *stageFileAction = actionCollection()->addAction("file_stage", ui->stageWidget, SLOT(stageFile()));
+    QAction *stageFileAction = actionCollection()->addAction("file_stage", ui->stageWidget, SLOT(stageFile()));
 	stageFileAction->setText(i18n("Stage File to Commit"));
 	stageFileAction->setIcon(KIcon("git-file-stage"));
 	stageFileAction->setShortcut(Qt::CTRL + Qt::Key_S);
 
-	KAction *unstageFileAction = actionCollection()->addAction("file_unstage", ui->stageWidget, SLOT(unstageFile()));
+    QAction *unstageFileAction = actionCollection()->addAction("file_unstage", ui->stageWidget, SLOT(unstageFile()));
 	unstageFileAction->setText(i18n("Unstage File from Commit"));
 	unstageFileAction->setIcon(KIcon("git-file-unstage"));
 	unstageFileAction->setShortcut(Qt::CTRL + Qt::Key_U);
 
 // repository
-	KAction *openRepoAction = actionCollection()->addAction("repository_open", this, SLOT(open()));
+    QAction *openRepoAction = actionCollection()->addAction("repository_open", this, SLOT(open()));
 	openRepoAction->setText(i18n("Open repository"));
 	openRepoAction->setIcon(KIcon("git-repo-open"));
 	openRepoAction->setShortcut(Qt::CTRL + Qt::Key_O);
 
-	KAction *reloadRepoAction = actionCollection()->addAction("repository_reload", this, SLOT(reload()));
+    QAction *reloadRepoAction = actionCollection()->addAction("repository_reload", this, SLOT(reload()));
 	reloadRepoAction->setText(i18n("Reload repository"));
 	reloadRepoAction->setIcon(KIcon("git-repo-reload"));
 	reloadRepoAction->setShortcut(Qt::Key_F5);

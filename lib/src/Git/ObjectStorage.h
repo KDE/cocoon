@@ -63,7 +63,10 @@ class KDE_EXPORT ObjectStorage : public QObject
 		virtual bool contains(const Id &id);
 		virtual bool contains(const QString &id);
 
-	public slots:
+    // static
+        static const QByteArray inflate(const QByteArray deflated);
+
+    public slots:
 		void reset();
 
 		/**
@@ -78,8 +81,6 @@ class KDE_EXPORT ObjectStorage : public QObject
 		virtual void invalidateIds() = 0;
 		virtual void invalidateObjects() = 0;
 
-	// static
-		static const QByteArray inflate(const QByteArray deflated);
 
 	protected:
 		QExplicitlySharedDataPointer<ObjectStoragePrivate> d;

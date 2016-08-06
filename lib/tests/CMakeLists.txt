@@ -10,9 +10,9 @@ MACRO(UNIT_TESTS)
 		)
 		target_link_libraries(${_testName}
 			CocoonGit
-			${QT_QTTEST_LIBRARY}
-			${QT_QTCORE_LIBRARY}
-			${KDE4_KDEUI_LIBS}
+			Qt5::Test
+			Qt5::Core
+			
 		)
 	ENDFOREACH(_className)
 ENDMACRO(UNIT_TESTS)

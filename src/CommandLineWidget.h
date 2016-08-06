@@ -31,7 +31,7 @@ namespace Git {
 	class Repo;
 }
 
-class TerminalInterfaceV2;
+class TerminalInterface;
 
 class QVBoxLayout;
 
@@ -63,7 +63,7 @@ class CommandLineWidget : public QWidget
 	private:
 		QVBoxLayout* m_layout;
 		const Git::Repo *m_repo;
-		TerminalInterfaceV2* m_terminal;
+        TerminalInterface* m_terminal;
 		QWidget* m_terminalWidget;
 };
 

@@ -21,12 +21,13 @@
 
 #include <klibloader.h>
 #include <kservice.h>
-#include <kde_terminal_interface_v2.h>
+#include <kde_terminal_interface.h>
 #include <KDebug>
 #include <KIO/Job>
 #include <KIO/JobUiDelegate>
 #include <kparts/part.h>
 #include <KShell>
+#include <KParts/ReadOnlyPart>
 
 #include <QBoxLayout>
 #include <QShowEvent>
@@ -59,7 +60,7 @@ void CommandLineWidget::createTerminal()
 		connect(part, SIGNAL(destroyed(QObject*)), this, SLOT(terminalExited()));
 		m_terminalWidget = part->widget();
 		m_layout->addWidget(m_terminalWidget);
-		m_terminal = qobject_cast<TerminalInterfaceV2 *>(part);
+        m_terminal = qobject_cast<TerminalInterface *>(part);
 	}
 }
 
