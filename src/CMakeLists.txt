@@ -17,7 +17,7 @@ set(cocoon_SRCS
 	StageWidget.cpp
 )
 
-ki18n_wrap_ui(cocoon_SRCS
+kde4_add_ui_files(cocoon_SRCS
 	CloneRepositoryDialog.ui
 	CommitInfoWidget.ui
 	CommitWidget.ui
@@ -29,15 +29,15 @@ ki18n_wrap_ui(cocoon_SRCS
 	StageWidget.ui
 )
 
-kconfig_add_kcfg_files(cocoon_SRCS settings.kcfgc)
+kde4_add_kcfg_files(cocoon_SRCS settings.kcfgc)
 
-add_executable(cocoon ${cocoon_SRCS})
+kde4_add_executable(cocoon ${cocoon_SRCS})
 
 target_link_libraries(cocoon
-	
-	
-	KF5::Parts
-	
+	${KDE4_KDEUI_LIBS}
+	${KDE4_KFILE_LIBS}
+	${KDE4_KPARTS_LIBS}
+	${KDE4_SOLID_LIBS}
 	${KDE4_STRIGI_LIBS}
 	${STRIGI_STREAMANALYZER_LIBRARY}
 	${STRIGI_STREAMS_LIBRARY}

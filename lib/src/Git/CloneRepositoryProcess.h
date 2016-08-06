@@ -20,7 +20,6 @@
 #define CLONEREPOSITORYPROCESS_H
 
 #include <KProcess>
-#include <kdemacros.h>
 
 
 

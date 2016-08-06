@@ -27,8 +27,6 @@
 
 #include "GitFileStatusModel.h"
 
-#include <KIcon>
-
 #include <QSortFilterProxyModel>
 #include <QMenu>
 #include <QModelIndex>

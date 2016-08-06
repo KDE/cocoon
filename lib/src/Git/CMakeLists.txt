@@ -23,14 +23,13 @@ set(cocoon_git_LIB_SRCS
 	Tree.cpp
 )
 
-add_library(CocoonGit
+kde4_add_library(CocoonGit
 	SHARED ${cocoon_git_LIB_SRCS}
 )
 
 target_link_libraries(CocoonGit
-    KF5::Archive
-    KF5::KDELibs4Support
-    Qt5::Core
+	${KDE4_KFILE_LIBS}
+	${QT_LIBRARIES}
 )
 
 set_target_properties(CocoonGit PROPERTIES VERSION ${LIB_VERSION_MAJOR}.${LIB_VERSION_MINOR}.${LIB_VERSION_PATCH} SOVERSION ${LIB_VERSION_MAJOR})

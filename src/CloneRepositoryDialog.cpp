@@ -25,8 +25,6 @@
 #include <KApplication>
 #include <KIO/DeleteJob>
 #include <KMessageBox>
-#include <KIcon>
-#include <KUrl>
 
 #include <QFileDialog>
 
@@ -67,7 +65,7 @@ CloneRepositoryDialog::~CloneRepositoryDialog()
 void CloneRepositoryDialog::startCloning()
 {
 	QString repoUrl = ui->cloneUrlRequester->url().url();
-    QString path = ui->localUrlRequester->url().toString(QUrl::StripTrailingSlash | QUrl::PreferLocalFile);
+	QString path = ui->localUrlRequester->url().pathOrUrl(KUrl::RemoveTrailingSlash);
 
 	KIO::DeleteJob *deleteJob = KIO::del(path);
 	deleteJob->exec(); /** @todo error handling */

@@ -22,7 +22,6 @@
 #include "RawObject.h"
 
 #include <KDebug>
-#include <KFilterDev>
 #include <KFilterBase>
 
 #include <QStringList>
@@ -122,7 +121,7 @@ const QByteArray ObjectStorage::inflate(QByteArray deflatedData)
 	QByteArray inflatedData;
 
 	// get gzip filter for inflation and set it to work on the object's file
-    KFilterBase *filter = KFilterDev::filterForCompressionType(KFilterDev::GZip);
+	KFilterBase *filter = KFilterBase::findFilterByMimeType("application/x-gzip");
 	Q_ASSERT(filter);
 
 	filter->init(QIODevice::ReadOnly);

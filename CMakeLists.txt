@@ -1,3 +1,4 @@
+cmake_minimum_required(VERSION 2.6)
 project(Cocoon)
 
 #Project options, to provide a selective build process
@@ -11,38 +12,15 @@ option(INSTALL_DEVEL_FILES "Install the devel files" ON)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules" ${CMAKE_MODULE_PATH})
 
-cmake_minimum_required (VERSION 2.8.12 FATAL_ERROR)
-
-find_package(ECM 1.3.0 REQUIRED NO_MODULE)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
-
-include(ECMGenerateHeaders)
-include(ECMInstallIcons)
-include(ECMMarkNonGuiExecutable)
-include(ECMOptionalAddSubdirectory)
-include(ECMSetupVersion)
-include(FeatureSummary)
-include(KDEInstallDirs)
-include(KDECMakeSettings)
-include(KDECompilerSettings NO_POLICY_SCOPE)
-
-find_package(Qt5 5.4 CONFIG REQUIRED Core Widgets Test)
-find_package(KF5 REQUIRED
-    Archive
-    XmlGui # For app
-    KIO # For part
-    Solid # For part
-    KDELibs4Support
-    Parts
-    DocTools
-    I18n
-)
-
+find_package(KDE4 REQUIRED)
+include(KDE4Defaults)
 
 include_directories(
-       ${CMAKE_CURRENT_SOURCE_DIR}
-       ${CMAKE_SOURCE_DIR}/src
-       ${CMAKE_SOURCE_DIR}/lib/src
+	${CMAKE_CURRENT_SOURCE_DIR}
+	${CMAKE_SOURCE_DIR}/src
+	${CMAKE_SOURCE_DIR}/lib/src
+	${KDE4_INCLUDES}
+	${QT_INCLUDES}
 )
 
 ########## Tests ##########

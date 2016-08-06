@@ -22,11 +22,7 @@
 #include "CloneRepositoryDialog.h"
 #include "Git/Repo.h"
 
-#include <KIcon>
 #include <KMessageBox>
-#include <KSharedConfig>
-#include <KConfigGroup>
-#include <KGlobal>
 
 #include <QFileDialog>
 #include <QListWidgetItem>

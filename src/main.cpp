@@ -3,14 +3,14 @@
 #include "OpenRepositoryDialog.h"
 
 #include <kapplication.h>
-#include <k4aboutdata.h>
+#include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <KDE/KLocale>
 
 int main(int argc, char **argv)
 {
-    K4AboutData about("cocoon", 0, ki18n("Cocoon"), "0.1", ki18n("A Git GUI for KDE4"),
-        K4AboutData::License_GPL_V3, ki18n("(C) 2009-2010 Riyad Preukschas"), KLocalizedString(), "riyad@informatik.uni-bremen.de");
+	KAboutData about("cocoon", 0, ki18n("Cocoon"), "0.1", ki18n("A Git GUI for KDE4"),
+		KAboutData::License_GPL_V3, ki18n("(C) 2009-2010 Riyad Preukschas"), KLocalizedString(), "riyad@informatik.uni-bremen.de");
 	about.addAuthor( ki18n("Riyad Preukschas"), KLocalizedString(), "riyad@informatik.uni-bremen.de" );
 	KCmdLineArgs::init(argc, argv, &about);
 
